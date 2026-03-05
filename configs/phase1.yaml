@@ -9,6 +9,8 @@ phase1:
 
   name_duplication:
     exact_full_name_people_pct: 58.0
+    collision_group_min_size: 3
+    collision_group_max_size: 7
 
   distributions:
     gender:

@@ -102,16 +102,22 @@ Notes:
 - `phase1.n_people`: row count
 - `phase1.seed`: random seed for reproducibility
 - `phase1.output`: output format/path/chunk size
+- `phase1.name_duplication.exact_full_name_people_pct`: target percent of rows that should have duplicated exact full name
+- `phase1.name_duplication.collision_group_min_size`: minimum people in one duplicate-name group
+- `phase1.name_duplication.collision_group_max_size`: maximum people in one duplicate-name group
 - `phase1.distributions.gender`: gender target percentages
 - `phase1.distributions.ethnicity`: optional override (if `null`, uses prepared demographics)
 - `phase1.age_bins`: active age ranges and percentages
 - `phase1.address`: house/apartment mix and mailing behavior
 - `phase1.fill_rates`: optional field fill rates (`0` to `1`)
 
+Note: min/max collision size settings apply to forced duplicate groups. A few natural collisions can still occur outside the requested range.
+
 ### Safe first edits
 1. Change `n_people` (example: `10000` -> `50000`)
 2. Keep same `seed` if you need reproducible reruns
 3. Keep `age_bins.auto_normalize: true` unless you want strict sum checks
+4. For mostly pair duplicates, set `collision_group_min_size: 2` and `collision_group_max_size: 2`
 
 ## 10) Validate Output Quality
 Open `outputs/Phase1_people_addresses.quality_report.json` and inspect:

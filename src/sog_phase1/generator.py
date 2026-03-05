@@ -546,6 +546,46 @@ def _name_with_optional_parts(first: str, middle: str, last: str, suffix: str) -
     return full
 
 
+def _largest_feasible_collision_people(target_people: int, min_group_size: int, max_group_size: int) -> int:
+    if target_people < min_group_size:
+        return 0
+    for people in range(target_people, min_group_size - 1, -1):
+        min_groups = math.ceil(people / max_group_size)
+        max_groups = people // min_group_size
+        if min_groups <= max_groups:
+            return people
+    return 0
+
+
+def _build_collision_group_sizes(
+    target_people: int,
+    min_group_size: int,
+    max_group_size: int,
+    rng: np.random.Generator,
+) -> list[int]:
+    feasible_people = _largest_feasible_collision_people(target_people, min_group_size, max_group_size)
+    if feasible_people <= 0:
+        return []
+
+    # Use the smallest possible number of groups so collisions are denser.
+    group_count = math.ceil(feasible_people / max_group_size)
+    sizes = [min_group_size] * group_count
+    remaining = feasible_people - (group_count * min_group_size)
+    capacities = [max_group_size - min_group_size] * group_count
+
+    while remaining > 0:
+        available = [i for i, cap in enumerate(capacities) if cap > 0]
+        if not available:
+            break
+        idx = int(rng.choice(np.array(available, dtype=np.int64)))
+        sizes[idx] += 1
+        capacities[idx] -= 1
+        remaining -= 1
+
+    rng.shuffle(sizes)
+    return sizes
+
+
 def _apply_forced_exact_name_duplicates(
     *,
     first_names: np.ndarray,
@@ -555,64 +595,96 @@ def _apply_forced_exact_name_duplicates(
     genders: np.ndarray,
     ethnicities: np.ndarray,
     duplicate_people_pct: float,
+    min_collision_size: int,
+    max_collision_size: int,
     rng: np.random.Generator,
 ) -> dict[str, int]:
     chunk_count = len(first_names)
     if chunk_count <= 1 or duplicate_people_pct <= 0:
-        return {"pairs": 0, "people": 0}
+        return {
+            "groups": 0,
+            "pair_equivalent": 0,
+            "people": 0,
+            "min_group_size_used": 0,
+            "max_group_size_used": 0,
+        }
+
+    min_group_size = max(2, int(min_collision_size))
+    max_group_size = max(min_group_size, int(max_collision_size))
 
     target_people = int(round(chunk_count * (duplicate_people_pct / 100.0)))
     target_people = max(0, min(chunk_count, target_people))
-    if target_people < 2:
-        return {"pairs": 0, "people": 0}
+    if target_people < min_group_size:
+        return {
+            "groups": 0,
+            "pair_equivalent": 0,
+            "people": 0,
+            "min_group_size_used": 0,
+            "max_group_size_used": 0,
+        }
 
-    target_pairs = target_people // 2
-    if target_pairs == 0:
-        return {"pairs": 0, "people": 0}
-
-    selected_pairs: list[tuple[int, int]] = []
-    used: set[int] = set()
+    group_sizes = _build_collision_group_sizes(
+        target_people=target_people,
+        min_group_size=min_group_size,
+        max_group_size=max_group_size,
+        rng=rng,
+    )
+    if not group_sizes:
+        return {
+            "groups": 0,
+            "pair_equivalent": 0,
+            "people": 0,
+            "min_group_size_used": 0,
+            "max_group_size_used": 0,
+        }
 
     bucket_members: dict[tuple[str, str], list[int]] = {}
     for idx in range(chunk_count):
         bucket_key = (str(genders[idx]).lower(), str(ethnicities[idx]))
         bucket_members.setdefault(bucket_key, []).append(idx)
+    for members in bucket_members.values():
+        rng.shuffle(members)
 
-    for indices in bucket_members.values():
-        rng.shuffle(indices)
-        i = 0
-        while i + 1 < len(indices) and len(selected_pairs) < target_pairs:
-            a = int(indices[i])
-            b = int(indices[i + 1])
-            if a not in used and b not in used:
-                selected_pairs.append((a, b))
-                used.add(a)
-                used.add(b)
-            i += 2
-        if len(selected_pairs) >= target_pairs:
-            break
+    selected_groups: list[list[int]] = []
+    for requested_size in group_sizes:
+        group_size = int(requested_size)
+        selected_key: tuple[str, str] | None = None
 
-    if len(selected_pairs) < target_pairs:
-        remaining = [idx for idx in range(chunk_count) if idx not in used]
-        rng.shuffle(remaining)
-        i = 0
-        while i + 1 < len(remaining) and len(selected_pairs) < target_pairs:
-            a = int(remaining[i])
-            b = int(remaining[i + 1])
-            selected_pairs.append((a, b))
-            used.add(a)
-            used.add(b)
-            i += 2
+        while group_size >= min_group_size:
+            candidate_keys = [k for k, members in bucket_members.items() if len(members) >= group_size]
+            if candidate_keys:
+                weights = np.array([len(bucket_members[k]) for k in candidate_keys], dtype=float)
+                probs = weights / float(weights.sum())
+                selected_key = candidate_keys[int(rng.choice(len(candidate_keys), p=probs))]
+                break
+            group_size -= 1
 
-    for src_idx, dst_idx in selected_pairs:
-        first_names[dst_idx] = first_names[src_idx]
-        middle_names[dst_idx] = middle_names[src_idx]
-        last_names[dst_idx] = last_names[src_idx]
-        suffixes[dst_idx] = suffixes[src_idx]
+        if selected_key is None:
+            continue
 
-    forced_pairs = len(selected_pairs)
-    forced_people = forced_pairs * 2
-    return {"pairs": forced_pairs, "people": forced_people}
+        members = bucket_members[selected_key]
+        picked = [int(members.pop()) for _ in range(group_size)]
+        selected_groups.append(picked)
+
+    for group in selected_groups:
+        src_idx = group[0]
+        for dst_idx in group[1:]:
+            first_names[dst_idx] = first_names[src_idx]
+            middle_names[dst_idx] = middle_names[src_idx]
+            last_names[dst_idx] = last_names[src_idx]
+            suffixes[dst_idx] = suffixes[src_idx]
+
+    forced_people = int(sum(len(group) for group in selected_groups))
+    forced_groups = int(len(selected_groups))
+    min_used = int(min((len(group) for group in selected_groups), default=0))
+    max_used = int(max((len(group) for group in selected_groups), default=0))
+    return {
+        "groups": forced_groups,
+        "pair_equivalent": forced_people // 2,
+        "people": forced_people,
+        "min_group_size_used": min_used,
+        "max_group_size_used": max_used,
+    }
 
 
 def generate_phase1_dataset(
@@ -691,7 +763,10 @@ def generate_phase1_dataset(
     middle_fill_rate = float(fill_rates.get("middle_name", 0.0))
     suffix_fill_rate = float(fill_rates.get("suffix", 0.0))
     phone_fill_rate = float(fill_rates.get("phone", 1.0))
-    duplicate_name_pct = float(phase1.get("name_duplication", {}).get("exact_full_name_people_pct", 0.0))
+    name_dup_cfg = phase1.get("name_duplication", {})
+    duplicate_name_pct = float(name_dup_cfg.get("exact_full_name_people_pct", 0.0))
+    collision_min_size = int(name_dup_cfg.get("collision_group_min_size", 2))
+    collision_max_size = int(name_dup_cfg.get("collision_group_max_size", 2))
 
     suffix_dist = normalize_distribution(
         phase1.get("suffix_distribution", {"Jr": 100.0}),
@@ -747,8 +822,11 @@ def generate_phase1_dataset(
     gender_counts: Counter[str] = Counter()
     ethnicity_counts: Counter[str] = Counter()
     age_bin_counts: Counter[str] = Counter()
-    forced_duplicate_name_pairs = 0
+    forced_duplicate_name_groups = 0
+    forced_duplicate_name_pairs_equivalent = 0
     forced_duplicate_name_people = 0
+    forced_collision_group_min_size_observed = 0
+    forced_collision_group_max_size_observed = 0
     chunk_files: list[str] = []
 
     for chunk_start in range(0, n_people, chunk_size):
@@ -794,10 +872,25 @@ def generate_phase1_dataset(
             genders=genders,
             ethnicities=ethnicities,
             duplicate_people_pct=duplicate_name_pct,
+            min_collision_size=collision_min_size,
+            max_collision_size=collision_max_size,
             rng=rng,
         )
-        forced_duplicate_name_pairs += int(dup_stats["pairs"])
+        forced_duplicate_name_groups += int(dup_stats["groups"])
+        forced_duplicate_name_pairs_equivalent += int(dup_stats["pair_equivalent"])
         forced_duplicate_name_people += int(dup_stats["people"])
+        if int(dup_stats["min_group_size_used"]) > 0:
+            if forced_collision_group_min_size_observed == 0:
+                forced_collision_group_min_size_observed = int(dup_stats["min_group_size_used"])
+            else:
+                forced_collision_group_min_size_observed = min(
+                    forced_collision_group_min_size_observed,
+                    int(dup_stats["min_group_size_used"]),
+                )
+        forced_collision_group_max_size_observed = max(
+            forced_collision_group_max_size_observed,
+            int(dup_stats["max_group_size_used"]),
+        )
 
         dobs = np.empty(chunk_count, dtype=object)
         ages = np.empty(chunk_count, dtype=np.int64)
@@ -927,10 +1020,20 @@ def generate_phase1_dataset(
     missingness_pct = {col: (count / n_people) * 100.0 for col, count in missing_counts.items()}
     name_duplication_metrics: dict[str, Any] = {
         "target_exact_full_name_people_pct": duplicate_name_pct,
-        "forced_duplicate_name_pairs": forced_duplicate_name_pairs,
+        "collision_group_min_size_requested": collision_min_size,
+        "collision_group_max_size_requested": collision_max_size,
+        "forced_duplicate_name_groups": forced_duplicate_name_groups,
+        "forced_duplicate_name_pair_equivalent": forced_duplicate_name_pairs_equivalent,
+        # Backward-compatible alias for older downstream consumers.
+        "forced_duplicate_name_pairs": forced_duplicate_name_pairs_equivalent,
         "forced_duplicate_name_people": forced_duplicate_name_people,
         "forced_duplicate_name_people_pct": (forced_duplicate_name_people / n_people) * 100.0,
+        "forced_collision_group_min_size_observed": forced_collision_group_min_size_observed,
+        "forced_collision_group_max_size_observed": forced_collision_group_max_size_observed,
         "actual_duplicate_name_people_pct": None,
+        "actual_collision_group_min_size": None,
+        "actual_collision_group_max_size": None,
+        "actual_collision_group_count": None,
     }
 
     exact_uniqueness_check_max = int(phase1.get("quality", {}).get("exact_uniqueness_check_max_rows", 250000))
@@ -967,7 +1070,12 @@ def generate_phase1_dataset(
         full_dups = int(check_df.duplicated(full_address_cols).sum())
         full_name_counts = check_df["FullName"].value_counts()
         dup_name_people = int(full_name_counts[full_name_counts > 1].sum())
+        duplicated_name_groups = full_name_counts[full_name_counts > 1]
         name_duplication_metrics["actual_duplicate_name_people_pct"] = (dup_name_people / n_people) * 100.0
+        name_duplication_metrics["actual_collision_group_count"] = int(len(duplicated_name_groups))
+        if len(duplicated_name_groups) > 0:
+            name_duplication_metrics["actual_collision_group_min_size"] = int(duplicated_name_groups.min())
+            name_duplication_metrics["actual_collision_group_max_size"] = int(duplicated_name_groups.max())
         uniqueness_checks = {
             "person_key_unique": person_dups == 0,
             "address_key_unique": address_dups == 0,
@@ -984,6 +1092,12 @@ def generate_phase1_dataset(
         name_duplication_metrics["actual_duplicate_name_people_pct"] = name_duplication_metrics[
             "forced_duplicate_name_people_pct"
         ]
+    if name_duplication_metrics["actual_collision_group_count"] is None:
+        name_duplication_metrics["actual_collision_group_count"] = forced_duplicate_name_groups
+    if name_duplication_metrics["actual_collision_group_min_size"] is None:
+        name_duplication_metrics["actual_collision_group_min_size"] = forced_collision_group_min_size_observed
+    if name_duplication_metrics["actual_collision_group_max_size"] is None:
+        name_duplication_metrics["actual_collision_group_max_size"] = forced_collision_group_max_size_observed
 
     stem = output_path.stem
     manifest_path = output_path.parent / f"{stem}.manifest.json"

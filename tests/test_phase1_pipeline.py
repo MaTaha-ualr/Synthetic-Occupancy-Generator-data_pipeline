@@ -28,6 +28,8 @@ def test_phase1_generation_smoke(tmp_path: Path) -> None:
     phase1["quality"]["distribution_tolerance_pct"] = 3.0
     phase1["quality"]["exact_uniqueness_check_max_rows"] = 50000
     phase1["name_duplication"]["exact_full_name_people_pct"] = 24.0
+    phase1["name_duplication"]["collision_group_min_size"] = 3
+    phase1["name_duplication"]["collision_group_max_size"] = 6
 
     run_config = tmp_path / "phase1_test.yaml"
     run_config.write_text(yaml.safe_dump(cfg, sort_keys=False), encoding="utf-8")
@@ -66,6 +68,7 @@ def test_phase1_generation_smoke(tmp_path: Path) -> None:
     full_name_counts = df["FullName"].value_counts()
     dup_name_people_pct = (full_name_counts[full_name_counts > 1].sum() / len(df)) * 100.0
     assert 20.0 <= dup_name_people_pct <= 30.0
+    assert (full_name_counts >= 3).any()
 
     gender_norm = normalize_distribution(
         phase1["distributions"]["gender"],

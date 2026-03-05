@@ -88,10 +88,14 @@ Most important fields:
 - `n_people`: how many rows to generate
 - `seed`: reproducibility key (same seed + config -> same output pattern)
 - `output.format`: `csv` or `parquet`
+- `name_duplication.exact_full_name_people_pct`: percent of rows that should be in duplicate full-name groups
+- `name_duplication.collision_group_min_size` / `collision_group_max_size`: min/max people allowed per exact full-name collision group
 - `distributions.gender`: target gender split
 - `age_bins`: active age groups + target percentages
 - `address.houses_pct` / `address.apartments_pct`: housing mix
 - `fill_rates`: probability of filling optional fields (`middle_name`, `suffix`, `phone`)
+
+Collision size bounds are applied to forced collision groups. Natural random sampling can still create a few groups outside that range.
 
 Detailed explanation is in [`docs/BEGINNER_GUIDE.md`](docs/BEGINNER_GUIDE.md).
 

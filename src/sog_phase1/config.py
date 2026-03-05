@@ -152,6 +152,15 @@ def validate_phase1_core(phase1: dict[str, Any]) -> None:
     exact_name_pct = float(name_dup_cfg.get("exact_full_name_people_pct", 0.0))
     if exact_name_pct < 0 or exact_name_pct > 100:
         raise ValueError("name_duplication.exact_full_name_people_pct must be between 0 and 100")
+    min_collision_size = int(name_dup_cfg.get("collision_group_min_size", 2))
+    max_collision_size = int(name_dup_cfg.get("collision_group_max_size", 2))
+    if min_collision_size < 2:
+        raise ValueError("name_duplication.collision_group_min_size must be >= 2")
+    if max_collision_size < min_collision_size:
+        raise ValueError(
+            "name_duplication.collision_group_max_size must be >= "
+            "name_duplication.collision_group_min_size"
+        )
 
     fill_rates = phase1.get("fill_rates", {})
     for key in ("middle_name", "suffix", "phone"):
