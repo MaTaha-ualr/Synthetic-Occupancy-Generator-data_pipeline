@@ -1,12 +1,12 @@
 {
-  "generated_at_utc": "2026-03-05T13:08:29Z",
+  "generated_at_utc": "2026-03-05T15:17:12Z",
   "run_id": "2026-03-14_roommates_split_seed20260314",
   "scenario_id": "roommates_split",
   "seed": 20260314,
   "phase1_input_csv": "outputs_phase1/Phase1_people_addresses.csv",
   "phase1_input_manifest": "outputs_phase1/Phase1_people_addresses.manifest.json",
-  "phase1_input_csv_resolved": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\outputs\\Phase1_people_addresses.csv",
-  "phase1_input_manifest_resolved": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\outputs\\Phase1_people_addresses.manifest.json",
+  "phase1_input_csv_resolved": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\outputs_phase1\\Phase1_people_addresses.csv",
+  "phase1_input_manifest_resolved": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\outputs_phase1\\Phase1_people_addresses.manifest.json",
   "scenario_yaml_source_path": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\phase2\\scenarios\\roommates_split.yaml",
   "scenario_population_path": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\phase2\\runs\\2026-03-14_roommates_split_seed20260314\\scenario_population.parquet",
   "truth_outputs": {

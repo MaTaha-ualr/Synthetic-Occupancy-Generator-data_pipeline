@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-03-05T13:07:38+00:00",
+  "generated_at_utc": "2026-03-05T15:16:31+00:00",
   "scenario_id": "roommates_split",
   "selection_seed": 20260314,
   "selection_config": {
@@ -52,6 +52,6 @@
   ],
   "run_id": "2026-03-14_roommates_split_seed20260314",
   "scenario_yaml_path": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\phase2\\scenarios\\roommates_split.yaml",
-  "phase1_csv_path": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\outputs\\Phase1_people_addresses.csv",
+  "phase1_csv_path": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\outputs_phase1\\Phase1_people_addresses.csv",
   "scenario_population_path": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\phase2\\runs\\2026-03-14_roommates_split_seed20260314\\scenario_population.parquet"
 }

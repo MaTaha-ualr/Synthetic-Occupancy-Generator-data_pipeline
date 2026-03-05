@@ -10,6 +10,8 @@ This repository is structured so a first-time user can:
 
 For a single end-to-end document covering Phase-1 and Phase-2 in detail, see:
 - [`docs/SOG_COMPLETE_USER_GUIDE.md`](docs/SOG_COMPLETE_USER_GUIDE.md)
+For the practical Phase-2 run sequence (step-by-step commands), see:
+- [`phase2/README.md`](phase2/README.md)
 
 ## Branches
 - Need old stable Phase-1 behavior: use `phase1-legacy`.

@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-03-05T12:43:32Z",
+  "generated_at_utc": "2026-03-05T15:00:40Z",
   "run_id": "2026-03-10_single_movers_seed20260310",
   "scenario_id": "single_movers",
   "seed": 20260310,
@@ -130,9 +130,9 @@
           "name_drift_rate_pct": 13.626572950912594,
           "address_drift_count": 73,
           "address_drift_rate_pct": 0.8275705702301326,
-          "phone_available": false,
-          "phone_drift_count": 0,
-          "phone_drift_rate_pct": 0.0
+          "phone_available": true,
+          "phone_drift_count": 71,
+          "phone_drift_rate_pct": 0.8048974039224577
         },
         "dataset_b": {
           "rows": 9540,
@@ -142,9 +142,9 @@
           "name_drift_rate_pct": 20.88050314465409,
           "address_drift_count": 208,
           "address_drift_rate_pct": 2.180293501048218,
-          "phone_available": false,
-          "phone_drift_count": 0,
-          "phone_drift_rate_pct": 0.0
+          "phone_available": true,
+          "phone_drift_count": 330,
+          "phone_drift_rate_pct": 3.459119496855346
         }
       },
       "crosswalk_ambiguity": {

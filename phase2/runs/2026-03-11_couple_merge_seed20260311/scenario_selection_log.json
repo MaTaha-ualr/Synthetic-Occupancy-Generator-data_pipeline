@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-03-05T12:23:36+00:00",
+  "generated_at_utc": "2026-03-05T15:13:16+00:00",
   "scenario_id": "couple_merge",
   "selection_seed": 20260311,
   "selection_config": {
@@ -52,6 +52,6 @@
   ],
   "run_id": "2026-03-11_couple_merge_seed20260311",
   "scenario_yaml_path": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\phase2\\scenarios\\couple_merge.yaml",
-  "phase1_csv_path": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\outputs\\Phase1_people_addresses.csv",
+  "phase1_csv_path": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\outputs_phase1\\Phase1_people_addresses.csv",
   "scenario_population_path": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\phase2\\runs\\2026-03-11_couple_merge_seed20260311\\scenario_population.parquet"
 }

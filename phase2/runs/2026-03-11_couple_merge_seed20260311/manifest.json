@@ -1,12 +1,12 @@
 {
-  "generated_at_utc": "2026-03-05T12:44:48Z",
+  "generated_at_utc": "2026-03-05T15:13:50Z",
   "run_id": "2026-03-11_couple_merge_seed20260311",
   "scenario_id": "couple_merge",
   "seed": 20260311,
   "phase1_input_csv": "outputs_phase1/Phase1_people_addresses.csv",
   "phase1_input_manifest": "outputs_phase1/Phase1_people_addresses.manifest.json",
-  "phase1_input_csv_resolved": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\outputs\\Phase1_people_addresses.csv",
-  "phase1_input_manifest_resolved": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\outputs\\Phase1_people_addresses.manifest.json",
+  "phase1_input_csv_resolved": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\outputs_phase1\\Phase1_people_addresses.csv",
+  "phase1_input_manifest_resolved": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\outputs_phase1\\Phase1_people_addresses.manifest.json",
   "scenario_yaml_source_path": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\phase2\\scenarios\\couple_merge.yaml",
   "scenario_population_path": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\phase2\\runs\\2026-03-11_couple_merge_seed20260311\\scenario_population.parquet",
   "truth_outputs": {
@@ -45,7 +45,7 @@
     "truth_crosswalk": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\phase2\\runs\\2026-03-11_couple_merge_seed20260311\\truth_crosswalk.csv"
   },
   "emission_meta": {
-    "scenario_yaml_path": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\phase2\\scenarios\\couple_merge.yaml",
+    "scenario_yaml_path": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\phase2\\runs\\2026-03-11_couple_merge_seed20260311\\scenario.yaml",
     "simulation_start_date": "2026-01-01",
     "simulation_end_date": "2027-01-01",
     "crossfile_match_mode": "one_to_many",

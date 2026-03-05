@@ -206,6 +206,25 @@ python scripts/validate_phase2_outputs.py --run phase2/runs/2026-03-14_roommates
 - Add `--overwrite` to replace existing files.
 
 ---
+Use this exact sequence from repo root h:\AAA_Taha\SOG_DATASETS\SOG.
+
+1. Setup env + deps
+
+..1..|python -m venv .venv
+..2..|.\.venv\Scripts\Activate.ps1
+..3..|pip install -r requirements.txt
+..4..|pip install -r requirements-dev.txt
+
+2. Build Phase-1 baseline (only needed if not already generated)
+..1..|python scripts/build_prepared.py --raw-root . --prepared-dir prepared
+..2..|python scripts/generate_phase1.py --config configs/phase1.yaml --prepared-dir prepared --overwrite
+3. Run one Phase-2 scenario (example: roommates_split)
+..1..|python scripts/generate_phase2_truth.py --run-id 2026-03-14_roommates_split_seed20260314
+..2..|python scripts/generate_phase2_observed.py --run-id 2026-03-14_roommates_split_seed20260314
+..3..|python scripts/validate_phase2_outputs.py --run-id 2026-03-14_roommates_split_seed20260314
+
+4. Run tests
+..1..|python -m pytest -q
 
 ## 8) Scenario Configuration (YAML) Deep Guide
 
