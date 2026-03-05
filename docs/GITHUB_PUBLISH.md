@@ -50,8 +50,8 @@ Open your repository page and confirm these files are visible:
 - `scripts/build_prepared.py`
 - `scripts/generate_phase1.py`
 
-## 7) Optional: Add A License
-If this project should be reusable publicly, add a `LICENSE` file (for example MIT).
+## 7) License
+The repository already includes an MIT `LICENSE` file.
 
 ## 8) Optional: Mark a First Release
 ```bash

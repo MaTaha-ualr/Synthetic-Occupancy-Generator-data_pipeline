@@ -128,4 +128,4 @@ If you have not pushed this project yet, use:
 - [`docs/GITHUB_PUBLISH.md`](docs/GITHUB_PUBLISH.md)
 
 ## License
-Add a license file before public release (for example MIT) so others clearly know reuse terms.
+This project is licensed under the MIT License. See [`LICENSE`](LICENSE).
