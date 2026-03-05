@@ -1,0 +1,17 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+
+# Generated pipeline artifacts
+prepared/
+outputs/
+outputs_v1/
+
+# OS/editor
+.DS_Store
+Thumbs.db

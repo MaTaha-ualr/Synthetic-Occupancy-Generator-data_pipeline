@@ -1,0 +1,37 @@
+section,category,label,metric,value
+GENDER BREAKDOWN,Gender,Female,percent,50.5%
+GENDER BREAKDOWN,Gender,Male,percent,49.5%
+AGE GROUPS,Age Group,0-17 (Children),percent,21.8%
+AGE GROUPS,Age Group,18-34 (Young Adults),percent,22.4%
+AGE GROUPS,Age Group,35-64 (Adults),percent,38.1%
+AGE GROUPS,Age Group,65+ (Seniors),percent,17.7%
+ETHNICITY / RACE BREAKDOWN,Ethnicity,White (Non-Hispanic),percent,57.8%
+ETHNICITY / RACE BREAKDOWN,Ethnicity,Hispanic / Latino,percent,20.0%
+ETHNICITY / RACE BREAKDOWN,Ethnicity,Black / African American,percent,12.6%
+ETHNICITY / RACE BREAKDOWN,Ethnicity,Asian,percent,6.7%
+ETHNICITY / RACE BREAKDOWN,Ethnicity,Multiracial / Other,percent,2.9%
+LGBTQ+ POPULATION BREAKDOWN,Heterosexual,Straight / Heterosexual,percent,85.7%
+LGBTQ+ POPULATION BREAKDOWN,LGBTQ+ Total,Total LGBTQ+ (All Identities),percent,9.3%
+LGBTQ+ POPULATION BREAKDOWN,LGBTQ+ Total,Total LGBTQ+ (All Identities),within_lgbtq_percent,100%
+LGBTQ+ POPULATION BREAKDOWN,Identity,Bisexual,percent,5.2%
+LGBTQ+ POPULATION BREAKDOWN,Identity,Bisexual,within_lgbtq_percent,56% of LGBTQ+
+LGBTQ+ POPULATION BREAKDOWN,Identity,Gay (Men),percent,2.0%
+LGBTQ+ POPULATION BREAKDOWN,Identity,Gay (Men),within_lgbtq_percent,21% of LGBTQ+
+LGBTQ+ POPULATION BREAKDOWN,Identity,Lesbian (Women),percent,1.4%
+LGBTQ+ POPULATION BREAKDOWN,Identity,Lesbian (Women),within_lgbtq_percent,15% of LGBTQ+
+LGBTQ+ POPULATION BREAKDOWN,Identity,Transgender,percent,1.3%
+LGBTQ+ POPULATION BREAKDOWN,Identity,Transgender,within_lgbtq_percent,14% of LGBTQ+
+LGBTQ+ POPULATION BREAKDOWN,Identity,"Other (Pan, Asexual, Queer)",percent,<1.0%
+LGBTQ+ POPULATION BREAKDOWN,Identity,"Other (Pan, Asexual, Queer)",within_lgbtq_percent,~6% of LGBTQ+
+LGBTQ+ POPULATION BREAKDOWN,No Answer,Declined to Answer,percent,5.0%
+GENERATION BREAKDOWN,Generation,Gen Alpha,birth_years,2013-present
+GENERATION BREAKDOWN,Generation,Gen Z,percent,23%
+GENERATION BREAKDOWN,Generation,Gen Z,birth_years,1997-2012
+GENERATION BREAKDOWN,Generation,Millennials,percent,14%
+GENERATION BREAKDOWN,Generation,Millennials,birth_years,1981-1996
+GENERATION BREAKDOWN,Generation,Generation X,percent,5%,
+GENERATION BREAKDOWN,Generation,Generation X,birth_years,1965-1980
+GENERATION BREAKDOWN,Generation,Baby Boomers,percent,2.6%
+GENERATION BREAKDOWN,Generation,Baby Boomers,birth_years,1946-1964
+GENERATION BREAKDOWN,Generation,Silent Generation,percent,1.8%
+GENERATION BREAKDOWN,Generation,Silent Generation,birth_years,Before 1946
