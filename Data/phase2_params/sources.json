@@ -1,0 +1,61 @@
+{
+  "generated_at_utc": "2026-03-05T11:11:46+00:00",
+  "sources": [
+    {
+      "source_id": "census_acs1_2024_b07001_api",
+      "title": "ACS 1-Year 2024 Table B07001: Geographical Mobility in the Past Year by Age",
+      "publisher": "U.S. Census Bureau",
+      "url": "https://api.census.gov/data/2024/acs/acs1?get=B07001_001E,B07001_017E,B07001_033E,B07001_049E,B07001_065E,B07001_081E&for=us:1",
+      "table_metadata_url": "https://api.census.gov/data/2024/acs/acs1/groups/B07001.json",
+      "data_year": 2024,
+      "accessed_utc": "2026-03-05T11:11:46+00:00",
+      "notes": "Used to compute moved-in-past-year rates overall and by age cohort."
+    },
+    {
+      "source_id": "census_acs1_2024_b11001_api",
+      "title": "ACS 1-Year 2024 Table B11001: Household Type (Including Living Alone)",
+      "publisher": "U.S. Census Bureau",
+      "url": "https://api.census.gov/data/2024/acs/acs1?get=B11001_001E,B11001_003E,B11001_005E,B11001_006E,B11001_007E,B11001_008E,B11001_009E&for=us:1",
+      "table_metadata_url": "https://api.census.gov/data/2024/acs/acs1/groups/B11001.json",
+      "data_year": 2024,
+      "accessed_utc": "2026-03-05T11:11:46+00:00",
+      "notes": "Used to derive household-type share priors."
+    },
+    {
+      "source_id": "census_acs_mobility_release_2024",
+      "title": "United States Migration/Geographic Mobility At A Glance: ACS 1-Year Estimates",
+      "publisher": "U.S. Census Bureau",
+      "url": "https://www.census.gov/topics/population/migration/guidance/acs-1yr.html",
+      "accessed_utc": "2026-03-05T11:11:46+00:00",
+      "notes": "Contextual ACS mobility brief; API table values are used for numeric inputs."
+    },
+    {
+      "source_id": "cdc_faststats_marriage_divorce_2023",
+      "title": "FastStats: Marriage and Divorce",
+      "publisher": "CDC / NCHS",
+      "url": "https://www.cdc.gov/nchs/fastats/marriage-divorce.htm",
+      "data_year": 2023,
+      "reviewed_date": "2025-03-17",
+      "accessed_utc": "2026-03-05T11:11:46+00:00",
+      "notes": "Provides provisional U.S. marriage/divorce rates and counts."
+    },
+    {
+      "source_id": "cdc_nchs_marriage_divorce_reporting_limitations",
+      "title": "National Marriage and Divorce Rate Trends (reporting limitations note)",
+      "publisher": "CDC / NCHS",
+      "url": "https://www.cdc.gov/nchs/nvss/marriage-divorce.htm",
+      "accessed_utc": "2026-03-05T11:11:46+00:00",
+      "notes": "Used for caveat that divorce data are from reporting areas only."
+    },
+    {
+      "source_id": "nchs_vsrr38_births_provisional_2024",
+      "title": "Vital Statistics Rapid Release Report No. 38: Births, Provisional Data for 2024 (Table 1)",
+      "publisher": "CDC / NCHS",
+      "url": "https://www.cdc.gov/nchs/data/vsrr/vsrr038.pdf",
+      "data_year": 2024,
+      "published_month": "2025-04",
+      "accessed_utc": "2026-03-05T11:11:46+00:00",
+      "notes": "Used for maternal age-specific birth rates and counts."
+    }
+  ]
+}

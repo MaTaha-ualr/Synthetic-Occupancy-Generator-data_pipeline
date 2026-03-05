@@ -1,0 +1,3 @@
+geography,year,status,metric_id,metric_label,value,count,unit,coverage_note,source_id
+United States,2023,provisional,marriage_rate_per_1000,"Marriage rate per 1,000 total population",6.1,2041926,rate_per_1000_population,All states report marriage counts to NVSS.,cdc_faststats_marriage_divorce_2023
+United States,2023,provisional,divorce_rate_per_1000,"Divorce rate per 1,000 population",2.4,672502,rate_per_1000_population,Divorce data come from reporting areas only; several states do not report divorce data to NVSS each year.,cdc_faststats_marriage_divorce_2023

@@ -1,0 +1,225 @@
+{
+  "generated_at_utc": "2026-03-05T13:08:29Z",
+  "run_id": "2026-03-14_roommates_split_seed20260314",
+  "scenario_id": "roommates_split",
+  "seed": 20260314,
+  "truth_counts": {
+    "truth_people": 10000,
+    "truth_households": 9792,
+    "truth_household_memberships": 10358,
+    "truth_residence_history": 11907,
+    "truth_events": 1895
+  },
+  "simulation_quality": {
+    "consistency_checks": {
+      "residence_intervals_non_overlapping": true,
+      "membership_intervals_non_overlapping": true,
+      "coupled_people_colocated": true
+    },
+    "violation_counts": {
+      "residence_overlap_or_date_order": 0,
+      "membership_overlap_or_date_order": 0,
+      "couple_colocation": 0
+    },
+    "event_counts": {
+      "MOVE": 1568,
+      "LEAVE_HOME": 296,
+      "COHABIT": 31
+    }
+  },
+  "phase2_quality": {
+    "truth_consistency": {
+      "event_age_validation": {
+        "checks_enabled": {
+          "min_marriage_age": true,
+          "fertility_age_range": true,
+          "leave_home_adult_check": true
+        },
+        "invalid_event_age_count": 0,
+        "invalid_event_age_by_rule": {},
+        "preview": []
+      },
+      "time_overlap_errors": {
+        "residence_overlap_or_date_order": 0,
+        "household_membership_overlap_or_date_order": 0,
+        "no_time_overlap_errors": true
+      },
+      "household_size_constraints": {
+        "household_size_range_config": {
+          "min": 1,
+          "max": 8
+        },
+        "households_evaluated": 9792,
+        "size_points_evaluated": 10082,
+        "violating_households": 0,
+        "violation_points": 0,
+        "peak_size_summary": {
+          "min": 1,
+          "mean": 1.0578022875816993,
+          "max": 5
+        },
+        "within_config_constraints": true
+      }
+    },
+    "scenario_metrics": {
+      "event_counts": {
+        "couples_formed": 31,
+        "divorces": 0,
+        "births": 0,
+        "moves": 1568
+      },
+      "moves_per_person_distribution": {
+        "people_evaluated": 10000,
+        "total_moves": 1569,
+        "moved_people": 1445,
+        "moved_people_pct": 14.45,
+        "mean_moves_per_person": 0.1569,
+        "max_moves_for_person": 3,
+        "distribution": {
+          "0": 8555,
+          "1": 1328,
+          "2": 110,
+          "3": 7
+        }
+      },
+      "household_type_shares": {
+        "shares_pct": {
+          "solo_house": 58.19035947712419,
+          "solo_apartment": 36.62173202614379,
+          "solo": 3.022875816993464,
+          "roommates": 1.8484477124183007,
+          "couple": 0.3165849673202614
+        },
+        "count": 9792
+      }
+    },
+    "er_benchmark_metrics": {
+      "available": true,
+      "cross_file_overlap": {
+        "overlap_entities": 6786,
+        "a_entities": 7983,
+        "b_entities": 8800,
+        "union_entities": 9997,
+        "overlap_pct_of_union": 67.88036410923277,
+        "overlap_pct_of_a": 85.00563697857947,
+        "overlap_pct_of_b": 77.11363636363636
+      },
+      "match_cardinality_achieved": {
+        "one_to_one": 0,
+        "one_to_many": 6031,
+        "many_to_one": 0,
+        "many_to_many": 755,
+        "evaluated_overlap_entities": 6786
+      },
+      "within_file_duplicate_rates": {
+        "dataset_a": {
+          "row_count": 8941,
+          "entity_count": 7983,
+          "duplicate_rows": 958,
+          "duplicate_row_rate_pct": 10.714685158259703,
+          "multi_record_entity_pct": 11.336590254290368
+        },
+        "dataset_b": {
+          "row_count": 15586,
+          "entity_count": 8800,
+          "duplicate_rows": 6786,
+          "duplicate_row_rate_pct": 43.5390735275247,
+          "multi_record_entity_pct": 77.11363636363636
+        }
+      },
+      "attribute_drift_rates": {
+        "dataset_a": {
+          "rows": 8941,
+          "mapped_rows": 8941,
+          "unmapped_rows": 0,
+          "name_drift_count": 1245,
+          "name_drift_rate_pct": 13.924616933228945,
+          "address_drift_count": 92,
+          "address_drift_rate_pct": 1.028967676993625,
+          "phone_available": true,
+          "phone_drift_count": 59,
+          "phone_drift_rate_pct": 0.6598814450285203
+        },
+        "dataset_b": {
+          "rows": 15586,
+          "mapped_rows": 15586,
+          "unmapped_rows": 0,
+          "name_drift_count": 3342,
+          "name_drift_rate_pct": 21.442320030796868,
+          "address_drift_count": 347,
+          "address_drift_rate_pct": 2.226356987039651,
+          "phone_available": true,
+          "phone_drift_count": 489,
+          "phone_drift_rate_pct": 3.1374310278455027
+        }
+      },
+      "crosswalk_ambiguity": {
+        "a_record_to_multiple_persons": 0,
+        "b_record_to_multiple_persons": 0
+      }
+    },
+    "quality_config": {
+      "household_size_min": 1,
+      "household_size_max": 8
+    }
+  },
+  "constraints_validation": {
+    "valid": true,
+    "violation_count": 0,
+    "violations": [],
+    "config": {
+      "min_marriage_age": 18,
+      "max_partner_age_gap": 25,
+      "partner_age_gap_distribution": null,
+      "fertility_age_min": 15,
+      "fertility_age_max": 49,
+      "allow_underage_marriage": false,
+      "allow_child_lives_alone": false,
+      "enforce_non_overlapping_residence_intervals": true
+    }
+  },
+  "status": "ok",
+  "observed_quality": {
+    "coverage": {
+      "base_entities": 9979,
+      "late_only_entities": 21,
+      "a_entities_base": 7983,
+      "b_entities_base": 8782,
+      "overlap_entities": 6786,
+      "a_only_entities": 1197,
+      "b_only_entities": 1996,
+      "late_only_in_b": 18
+    },
+    "dataset_a": {
+      "rows": 8941,
+      "entities": 7983,
+      "duplicates": 958,
+      "noise_counts": {
+        "name_typo": 86,
+        "dob_shift": 32,
+        "ssn_mask": 131,
+        "phone_mask": 62,
+        "address_missing": 92,
+        "middle_name_missing": 1790
+      }
+    },
+    "dataset_b": {
+      "rows": 15586,
+      "entities": 8800,
+      "duplicates": 6786,
+      "noise_counts": {
+        "name_typo": 381,
+        "dob_shift": 190,
+        "ssn_mask": 934,
+        "phone_mask": 497,
+        "address_missing": 347,
+        "middle_name_missing": 4714
+      }
+    },
+    "crosswalk_rows": 17741,
+    "overlap_entities": 6786,
+    "a_only_entities": 1197,
+    "b_only_entities": 2014,
+    "match_mode": "one_to_many"
+  }
+}

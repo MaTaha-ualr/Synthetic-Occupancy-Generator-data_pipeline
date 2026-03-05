@@ -1,0 +1,6 @@
+geography,geography_code,year,metric_id,metric_label,numerator,denominator,value_pct,table_id,source_variable,source_id
+United States,us:1,2024,moved_past_year_pct,Moved in past year (any move),39597954,336636468,11.762824,B07001,B07001_001E and B07001_017E,census_acs1_2024_b07001_api
+United States,us:1,2024,moved_within_same_county_pct,Moved within same county in past year,19924391,336636468,5.918667,B07001,B07001_033E,census_acs1_2024_b07001_api
+United States,us:1,2024,moved_from_different_county_same_state_pct,Moved from different county within same state in past year,9963763,336636468,2.959799,B07001,B07001_049E,census_acs1_2024_b07001_api
+United States,us:1,2024,moved_from_different_state_pct,Moved from different state in past year,7157607,336636468,2.126213,B07001,B07001_065E,census_acs1_2024_b07001_api
+United States,us:1,2024,moved_from_abroad_pct,Moved from abroad in past year,2552193,336636468,0.758145,B07001,B07001_081E,census_acs1_2024_b07001_api

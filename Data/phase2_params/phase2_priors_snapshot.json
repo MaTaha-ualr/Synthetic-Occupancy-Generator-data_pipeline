@@ -1,0 +1,45 @@
+{
+  "generated_at_utc": "2026-03-05T11:11:46+00:00",
+  "geography": "United States",
+  "params_version": "phase2_params_v1",
+  "mobility": {
+    "year": 2024,
+    "overall_moved_past_year_pct": 11.762824,
+    "age_cohort_moved_pct": {
+      "age_0_17": 10.510834,
+      "age_18_24": 25.376248,
+      "age_25_34": 20.691957,
+      "age_35_64": 8.891885,
+      "age_65_plus": 5.518441
+    }
+  },
+  "marriage_divorce": {
+    "year": 2023,
+    "marriage_rate_per_1000": 6.1,
+    "divorce_rate_per_1000": 2.4
+  },
+  "fertility": {
+    "year": 2024,
+    "birth_rate_per_1000_by_age_group": {
+      "10-14": 0.2,
+      "15-19": 12.7,
+      "15-17": 5.3,
+      "18-19": 23.9,
+      "20-24": 56.7,
+      "25-29": 91.4,
+      "30-34": 95.4,
+      "35-39": 55.0,
+      "40-44": 12.8,
+      "45-54": 1.1
+    }
+  },
+  "household_type_share": {
+    "year": 2024,
+    "share_pct_by_type": {
+      "married_couple_family": 46.69385,
+      "single_parent_male_householder": 5.208111,
+      "single_parent_female_householder": 12.109163,
+      "nonfamily_household": 35.988876
+    }
+  }
+}

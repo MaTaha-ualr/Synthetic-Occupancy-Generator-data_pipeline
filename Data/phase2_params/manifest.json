@@ -1,0 +1,13 @@
+{
+  "generated_at_utc": "2026-03-05T11:11:46+00:00",
+  "params_dir": "H:\\AAA_Taha\\SOG_DATASETS\\SOG\\Data\\phase2_params",
+  "files": [
+    "mobility_overall_acs_2024.csv",
+    "mobility_by_age_cohort_acs_2024.csv",
+    "marriage_divorce_rates_cdc_2023.csv",
+    "fertility_by_age_nchs_2024.csv",
+    "household_type_shares_acs_2024.csv",
+    "phase2_priors_snapshot.json",
+    "sources.json"
+  ]
+}

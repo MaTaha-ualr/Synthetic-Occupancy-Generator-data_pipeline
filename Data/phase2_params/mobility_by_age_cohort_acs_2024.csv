@@ -1,0 +1,6 @@
+geography,geography_code,year,age_cohort_id,age_cohort_label,population,moved_population,same_house_population,moved_past_year_pct,table_id,source_id
+United States,us:1,2024,age_0_17,Ages 0-17 (ACS proxy from 1-4 + 5-17),69454790,7300278,62154512,10.510834,B07001,census_acs1_2024_b07001_api
+United States,us:1,2024,age_18_24,Ages 18-24,31270959,7935396,23335563,25.376248,B07001,census_acs1_2024_b07001_api
+United States,us:1,2024,age_25_34,Ages 25-34,46198405,9559354,36639051,20.691957,B07001,census_acs1_2024_b07001_api
+United States,us:1,2024,age_35_64,Ages 35-64,128467031,11423141,117043890,8.891885,B07001,census_acs1_2024_b07001_api
+United States,us:1,2024,age_65_plus,Ages 65+,61245283,3379785,57865498,5.518441,B07001,census_acs1_2024_b07001_api

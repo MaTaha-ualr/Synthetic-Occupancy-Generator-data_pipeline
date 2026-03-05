@@ -1,0 +1,11 @@
+age_group,birth_count,birth_rate_per_1000_women,geography,year,status,unit,source_id,note
+10-14,1725,0.2,United States,2024,provisional,births_per_1000_women_in_age_group,nchs_vsrr38_births_provisional_2024,
+15-19,137020,12.7,United States,2024,provisional,births_per_1000_women_in_age_group,nchs_vsrr38_births_provisional_2024,
+15-17,34405,5.3,United States,2024,provisional,births_per_1000_women_in_age_group,nchs_vsrr38_births_provisional_2024,
+18-19,102615,23.9,United States,2024,provisional,births_per_1000_women_in_age_group,nchs_vsrr38_births_provisional_2024,
+20-24,610548,56.7,United States,2024,provisional,births_per_1000_women_in_age_group,nchs_vsrr38_births_provisional_2024,
+25-29,989140,91.4,United States,2024,provisional,births_per_1000_women_in_age_group,nchs_vsrr38_births_provisional_2024,
+30-34,1110643,95.4,United States,2024,provisional,births_per_1000_women_in_age_group,nchs_vsrr38_births_provisional_2024,
+35-39,621464,55.0,United States,2024,provisional,births_per_1000_women_in_age_group,nchs_vsrr38_births_provisional_2024,
+40-44,141204,12.8,United States,2024,provisional,births_per_1000_women_in_age_group,nchs_vsrr38_births_provisional_2024,
+45-54,10929,1.1,United States,2024,provisional,births_per_1000_women_in_age_group,nchs_vsrr38_births_provisional_2024,Rate is computed against the 45-49 female population in source table.

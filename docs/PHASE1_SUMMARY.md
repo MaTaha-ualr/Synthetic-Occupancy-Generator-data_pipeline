@@ -147,6 +147,13 @@ Phase-2 can now start from this stable baseline:
 - use current config/model patterns in `src/sog_phase1/` as template,
 - keep quality-report-driven validation approach,
 - extend in new Phase-2 modules/config paths without breaking Phase-1 outputs.
+- formalize Step-0 with a frozen Phase-1 contract in `docs/PHASE2_STEP0_CONTRACT.md` (canonical Phase-2 input = Entity view).
+- formalize Step-1 with required truth/observed scenario outputs in `docs/PHASE2_STEP1_OUTPUT_CONTRACT.md`.
+- formalize Step-2 with one baseline + scenario packaging in `docs/PHASE2_STEP2_PACKAGING_MODEL.md`.
+- formalize Step-3 with source-citable parameter tables in `docs/PHASE2_STEP3_PARAMETER_LAYER.md`.
+- formalize Step-4 with event grammar and row-level truth-event validation in `docs/PHASE2_STEP4_EVENT_GRAMMAR.md`.
+- formalize Step-5 with eligibility/constraints and novelty switches in `docs/PHASE2_STEP5_CONSTRAINTS_LAYER.md`.
+- formalize Step-6 with deterministic participant selection engine in `docs/PHASE2_STEP6_SELECTION_ENGINE.md`.
 
 ## 11) Phase-2 Extension (Local Implementation Status)
 Phase-2 extension has now been implemented locally (not pushed), adding:

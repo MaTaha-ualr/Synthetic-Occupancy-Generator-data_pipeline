@@ -1,0 +1,7 @@
+geography,geography_code,year,household_type_id,household_type_label,household_count,share_of_all_households_pct,table_id,source_variable,source_id
+United States,us:1,2024,married_couple_family,Married-couple family household,61980084,46.69385,B11001,B11001_003E,census_acs1_2024_b11001_api
+United States,us:1,2024,single_parent_male_householder,"Single-parent family household (male householder, no spouse present)",6913098,5.208111,B11001,B11001_005E,census_acs1_2024_b11001_api
+United States,us:1,2024,single_parent_female_householder,"Single-parent family household (female householder, no spouse present)",16073357,12.109163,B11001,B11001_006E,census_acs1_2024_b11001_api
+United States,us:1,2024,nonfamily_household,Nonfamily household,47770607,35.988876,B11001,B11001_007E,census_acs1_2024_b11001_api
+United States,us:1,2024,nonfamily_living_alone,Nonfamily household with householder living alone,38315363,28.865592,B11001,B11001_008E,census_acs1_2024_b11001_api
+United States,us:1,2024,nonfamily_not_alone,Nonfamily household with householder not living alone,9455244,7.123284,B11001,B11001_009E,census_acs1_2024_b11001_api

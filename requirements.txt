@@ -2,3 +2,4 @@
 pandas>=2.2,<3.0
 PyYAML>=6.0,<7.0
 pyarrow>=14.0,<20.0
+requests>=2.31,<3.0
