@@ -27,9 +27,19 @@ def main() -> int:
         default=project_root / "prepared",
         help="Output directory for prepared cache.",
     )
+    parser.add_argument(
+        "--nicknames-source-dir",
+        type=Path,
+        default=project_root / "Names" / "nick names",
+        help="Nickname source directory containing all_nick_names.json.",
+    )
     args = parser.parse_args()
 
-    manifest = build_prepared_cache(args.raw_root.resolve(), args.prepared_dir.resolve())
+    manifest = build_prepared_cache(
+        args.raw_root.resolve(),
+        args.prepared_dir.resolve(),
+        nicknames_source_dir=args.nicknames_source_dir.resolve(),
+    )
     print(json.dumps(manifest, indent=2))
     return 0
 

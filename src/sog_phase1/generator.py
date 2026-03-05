@@ -19,8 +19,11 @@ from .config import (
     load_phase1_config,
     normalize_distribution,
     resolve_age_bins,
+    resolve_entity_record_counts,
     validate_phase1_core,
 )
+from .nicknames import build_nickname_catalog, pick_display_first_name
+from .redundancy import allocate_records_per_entity, summarize_records_per_entity
 
 
 @dataclass(frozen=True)
@@ -37,6 +40,7 @@ class PreparedTables:
     cities: list[str]
     states: list[str]
     demographics: dict[str, Any]
+    nicknames: dict[str, Any]
 
 
 class AddressGenerator:
@@ -356,8 +360,20 @@ def _load_prepared(prepared_dir: Path) -> PreparedTables:
     cities_path = prepared_dir / "cities.parquet"
     states_path = prepared_dir / "states.parquet"
     demographics_path = prepared_dir / "demographics.json"
+    nicknames_path = prepared_dir / "nicknames.json"
 
-    missing = [p for p in [first_names_path, last_names_path, streets_path, cities_path, states_path, demographics_path] if not p.exists()]
+    missing = [
+        p
+        for p in [
+            first_names_path,
+            last_names_path,
+            streets_path,
+            cities_path,
+            states_path,
+            demographics_path,
+        ]
+        if not p.exists()
+    ]
     if missing:
         missing_list = ", ".join(str(p) for p in missing)
         raise FileNotFoundError(
@@ -370,6 +386,10 @@ def _load_prepared(prepared_dir: Path) -> PreparedTables:
     cities = pd.read_parquet(cities_path)["city_name"].astype(str).tolist()
     states = pd.read_parquet(states_path)["state_name"].astype(str).tolist()
     demographics = json.loads(demographics_path.read_text(encoding="utf-8"))
+    if nicknames_path.exists():
+        nicknames = json.loads(nicknames_path.read_text(encoding="utf-8"))
+    else:
+        nicknames = {}
     return PreparedTables(
         first_names=first_names,
         last_names=last_names,
@@ -377,6 +397,7 @@ def _load_prepared(prepared_dir: Path) -> PreparedTables:
         cities=cities,
         states=states,
         demographics=demographics,
+        nicknames=nicknames,
     )
 
 
@@ -687,6 +708,26 @@ def _apply_forced_exact_name_duplicates(
     }
 
 
+def _collision_metrics(values: np.ndarray) -> dict[str, Any]:
+    if len(values) == 0:
+        return {
+            "duplicate_people_pct": 0.0,
+            "collision_group_count": 0,
+            "collision_group_min_size": 0,
+            "collision_group_max_size": 0,
+        }
+    counts = pd.Series(values, dtype=str).value_counts()
+    dup_groups = counts[counts > 1]
+    dup_people = int(dup_groups.sum())
+    total = len(values)
+    return {
+        "duplicate_people_pct": (dup_people / total) * 100.0,
+        "collision_group_count": int(len(dup_groups)),
+        "collision_group_min_size": int(dup_groups.min()) if len(dup_groups) > 0 else 0,
+        "collision_group_max_size": int(dup_groups.max()) if len(dup_groups) > 0 else 0,
+    }
+
+
 def generate_phase1_dataset(
     *,
     project_root: Path,
@@ -697,6 +738,7 @@ def generate_phase1_dataset(
     phase1 = load_phase1_config(config_path)
     validate_phase1_core(phase1)
     prepared = _load_prepared(prepared_dir)
+    n_entities, n_records, count_source = resolve_entity_record_counts(phase1)
 
     gender_norm = normalize_distribution(
         phase1.get("distributions", {}).get("gender", {}),
@@ -710,10 +752,8 @@ def generate_phase1_dataset(
     )
     selected_age_bins, age_norm = resolve_age_bins(phase1.get("age_bins", {}))
     age_bin_lookup = {item["id"]: item for item in selected_age_bins}
-
     housing_norm = _normalize_housing_mix(phase1.get("address", {}))
 
-    n_people = int(phase1["n_people"])
     seed = int(phase1.get("seed", 0))
     chunk_size = int(phase1["output"]["chunk_size"])
     output_format = str(phase1["output"]["format"]).lower()
@@ -733,40 +773,23 @@ def generate_phase1_dataset(
             shutil.rmtree(parts_dir)
         parts_dir.mkdir(parents=True, exist_ok=True)
 
+    rng = np.random.default_rng(seed)
+    reference_date = date.today()
+
     first_name_pools, first_name_default_pool, middle_name_pool = _build_first_name_pools(
         prepared.first_names, float(phase1.get("distributions", {}).get("unisex_weight_multiplier", 0.35))
     )
     last_name_pools, last_name_default_pool = _build_last_name_pools(prepared.last_names)
 
-    address_gen = AddressGenerator(
-        prepared.streets,
-        prepared.cities,
-        prepared.states,
-        phase1["address"],
-        seed=seed,
-    )
-
-    n_houses = int(round(n_people * housing_norm.probabilities["houses"]))
-    n_houses = max(0, min(n_people, n_houses))
-    n_apartments = n_people - n_houses
-    address_gen.ensure_capacity(n_houses, n_apartments)
-
-    rng = np.random.default_rng(seed)
-    reference_date = date.today()
-
-    gender_keys, gender_probs = _distribution_to_choice_inputs(gender_norm)
-    ethnicity_keys, ethnicity_probs = _distribution_to_choice_inputs(ethnicity_norm)
-    age_keys = np.array([item["id"] for item in selected_age_bins], dtype=object)
-    age_probs = np.array([age_norm.probabilities[key] for key in age_keys], dtype=float)
+    name_dup_cfg = phase1.get("name_duplication", {})
+    duplicate_name_pct = float(name_dup_cfg.get("exact_full_name_people_pct", 0.0))
+    collision_min_size = int(name_dup_cfg.get("collision_group_min_size", 2))
+    collision_max_size = int(name_dup_cfg.get("collision_group_max_size", 2))
 
     fill_rates = phase1.get("fill_rates", {})
     middle_fill_rate = float(fill_rates.get("middle_name", 0.0))
     suffix_fill_rate = float(fill_rates.get("suffix", 0.0))
     phone_fill_rate = float(fill_rates.get("phone", 1.0))
-    name_dup_cfg = phase1.get("name_duplication", {})
-    duplicate_name_pct = float(name_dup_cfg.get("exact_full_name_people_pct", 0.0))
-    collision_min_size = int(name_dup_cfg.get("collision_group_min_size", 2))
-    collision_max_size = int(name_dup_cfg.get("collision_group_max_size", 2))
 
     suffix_dist = normalize_distribution(
         phase1.get("suffix_distribution", {"Jr": 100.0}),
@@ -775,21 +798,227 @@ def generate_phase1_dataset(
     )
     suffix_keys, suffix_probs = _distribution_to_choice_inputs(suffix_dist)
 
+    gender_keys, gender_probs = _distribution_to_choice_inputs(gender_norm)
+    ethnicity_keys, ethnicity_probs = _distribution_to_choice_inputs(ethnicity_norm)
+    age_keys = np.array([item["id"] for item in selected_age_bins], dtype=object)
+    age_probs = np.array([age_norm.probabilities[key] for key in age_keys], dtype=float)
+
+    entity_person_keys = np.arange(1, n_entities + 1, dtype=np.int64)
+    entity_genders = _draw_exact_categories(gender_keys, gender_probs, n_entities, rng)
+    entity_ethnicities = _draw_exact_categories(ethnicity_keys, ethnicity_probs, n_entities, rng)
+    entity_age_bins = _draw_exact_categories(age_keys, age_probs, n_entities, rng)
+
+    formal_first_names = np.empty(n_entities, dtype=object)
+    for gender_value in np.unique(entity_genders):
+        pool = first_name_pools.get(str(gender_value).lower(), first_name_default_pool)
+        idx = np.where(entity_genders == gender_value)[0]
+        formal_first_names[idx] = rng.choice(pool.names, size=len(idx), p=pool.probs)
+
+    entity_last_names = np.empty(n_entities, dtype=object)
+    for ethnicity_value in np.unique(entity_ethnicities):
+        pool = last_name_pools.get(str(ethnicity_value), last_name_default_pool)
+        idx = np.where(entity_ethnicities == ethnicity_value)[0]
+        entity_last_names[idx] = rng.choice(pool.names, size=len(idx), p=pool.probs)
+
+    middle_fill_mask = rng.random(n_entities) < middle_fill_rate
+    entity_middle_names = np.array([""] * n_entities, dtype=object)
+    sampled_middle_names = rng.choice(middle_name_pool.names, size=n_entities, p=middle_name_pool.probs)
+    entity_middle_names[middle_fill_mask] = sampled_middle_names[middle_fill_mask]
+
+    suffix_fill_mask = rng.random(n_entities) < suffix_fill_rate
+    entity_suffixes = np.array([""] * n_entities, dtype=object)
+    sampled_suffixes = rng.choice(suffix_keys, size=n_entities, p=suffix_probs)
+    entity_suffixes[suffix_fill_mask] = sampled_suffixes[suffix_fill_mask]
+
+    dup_stats = _apply_forced_exact_name_duplicates(
+        first_names=formal_first_names,
+        middle_names=entity_middle_names,
+        last_names=entity_last_names,
+        suffixes=entity_suffixes,
+        genders=entity_genders,
+        ethnicities=entity_ethnicities,
+        duplicate_people_pct=duplicate_name_pct,
+        min_collision_size=collision_min_size,
+        max_collision_size=collision_max_size,
+        rng=rng,
+    )
+
+    entity_dobs = np.empty(n_entities, dtype=object)
+    entity_ages = np.empty(n_entities, dtype=np.int64)
+    for age_bin_id in np.unique(entity_age_bins):
+        idx = np.where(entity_age_bins == age_bin_id)[0]
+        cfg = age_bin_lookup[str(age_bin_id)]
+        min_age = int(cfg["min_age"])
+        max_age = int(cfg["max_age"])
+        max_dob = _years_ago(reference_date, min_age)
+        min_dob = _years_ago(reference_date, max_age + 1) + timedelta(days=1)
+        sampled_ordinals = rng.integers(min_dob.toordinal(), max_dob.toordinal() + 1, size=len(idx))
+        sampled_dates = [date.fromordinal(int(v)) for v in sampled_ordinals]
+        entity_dobs[idx] = [d.isoformat() for d in sampled_dates]
+        entity_ages[idx] = [_age_on_date(d, reference_date) for d in sampled_dates]
+
+    entity_ssn = np.array([_make_ssn(int(k), seed) for k in entity_person_keys], dtype=object)
+    entity_phone = np.array([""] * n_entities, dtype=object)
+    phone_fill_mask = rng.random(n_entities) < phone_fill_rate
+    for i, key in enumerate(entity_person_keys):
+        if phone_fill_mask[i]:
+            entity_phone[i] = _make_phone(int(key), seed)
+
+    entity_formal_full_name = np.array(
+        [
+            _name_with_optional_parts(
+                str(formal_first_names[i]),
+                str(entity_middle_names[i]),
+                str(entity_last_names[i]),
+                str(entity_suffixes[i]),
+            )
+            for i in range(n_entities)
+        ],
+        dtype=object,
+    )
+
+    redundancy_cfg = phase1.get("redundancy", {})
+    redundancy_enabled = bool(redundancy_cfg.get("enabled", False))
+    min_records_per_entity = int(redundancy_cfg.get("min_records_per_entity", 1))
+    max_records_per_entity = int(redundancy_cfg.get("max_records_per_entity", 1))
+    redundancy_shape = str(redundancy_cfg.get("shape", "balanced")).strip().lower()
+    heavy_tail_alpha = float(redundancy_cfg.get("heavy_tail_alpha", 1.3))
+    records_per_entity = allocate_records_per_entity(
+        n_entities=n_entities,
+        n_records=n_records,
+        min_records_per_entity=min_records_per_entity,
+        max_records_per_entity=max_records_per_entity,
+        shape=redundancy_shape,
+        heavy_tail_alpha=heavy_tail_alpha,
+        rng=rng,
+    )
+    redundancy_stats = summarize_records_per_entity(records_per_entity)
+
+    person_keys = np.repeat(entity_person_keys, records_per_entity.astype(np.int64))
+    rng.shuffle(person_keys)
+    entity_indices = person_keys.astype(np.int64) - 1
+
+    record_keys = np.arange(1, n_records + 1, dtype=np.int64)
+    address_keys = record_keys.copy()
+
+    entity_record_index = np.empty(n_records, dtype=np.int64)
+    seen_per_entity = np.zeros(n_entities, dtype=np.int64)
+    for i, entity_idx in enumerate(entity_indices):
+        seen_per_entity[entity_idx] += 1
+        entity_record_index[i] = seen_per_entity[entity_idx]
+
+    nick_cfg = phase1.get("nicknames", {})
+    nickname_enabled = bool(nick_cfg.get("enabled", False))
+    nickname_mode = str(nick_cfg.get("mode", "per_record")).strip().lower()
+    nickname_usage_rate = float(nick_cfg.get("usage_pct", 0.0)) / 100.0
+    nickname_catalog = build_nickname_catalog(prepared.nicknames if nickname_enabled else {})
+
+    first_name = np.empty(n_records, dtype=object)
+    first_name_type = np.array(["FORMAL"] * n_records, dtype=object)
+    if nickname_enabled and nickname_mode == "per_person":
+        entity_first_name = np.empty(n_entities, dtype=object)
+        entity_first_type = np.array(["FORMAL"] * n_entities, dtype=object)
+        entity_use_mask = rng.random(n_entities) < nickname_usage_rate
+        for i in range(n_entities):
+            chosen_name, chosen_type = pick_display_first_name(
+                formal_first_name=str(formal_first_names[i]),
+                gender=str(entity_genders[i]),
+                use_nickname=bool(entity_use_mask[i]),
+                catalog=nickname_catalog,
+                rng=rng,
+            )
+            entity_first_name[i] = chosen_name
+            entity_first_type[i] = chosen_type
+        first_name = entity_first_name[entity_indices]
+        first_name_type = entity_first_type[entity_indices]
+    elif nickname_enabled and nickname_mode == "per_record":
+        row_use_mask = rng.random(n_records) < nickname_usage_rate
+        for i in range(n_records):
+            chosen_name, chosen_type = pick_display_first_name(
+                formal_first_name=str(formal_first_names[entity_indices[i]]),
+                gender=str(entity_genders[entity_indices[i]]),
+                use_nickname=bool(row_use_mask[i]),
+                catalog=nickname_catalog,
+                rng=rng,
+            )
+            first_name[i] = chosen_name
+            first_name_type[i] = chosen_type
+    else:
+        first_name = formal_first_names[entity_indices].astype(object)
+
+    row_middle_names = entity_middle_names[entity_indices]
+    row_last_names = entity_last_names[entity_indices]
+    row_suffixes = entity_suffixes[entity_indices]
+    row_formal_first_name = formal_first_names[entity_indices]
+    row_formal_full_name = entity_formal_full_name[entity_indices]
+    full_name = np.array(
+        [
+            _name_with_optional_parts(
+                str(first_name[i]),
+                str(row_middle_names[i]),
+                str(row_last_names[i]),
+                str(row_suffixes[i]),
+            )
+            for i in range(n_records)
+        ],
+        dtype=object,
+    )
+
+    row_gender = entity_genders[entity_indices]
+    row_ethnicity = entity_ethnicities[entity_indices]
+    row_dob = entity_dobs[entity_indices]
+    row_age = entity_ages[entity_indices]
+    row_age_bin = entity_age_bins[entity_indices]
+    row_ssn = entity_ssn[entity_indices]
+    row_phone = entity_phone[entity_indices]
+
     residence_cfg = phase1.get("residence_dates", {})
     start_year_min = int(residence_cfg.get("start_year_min", reference_date.year - 30))
-    start_min_date = date(start_year_min, 1, 1)
-    start_min_ordinal = start_min_date.toordinal()
+    start_min_ordinal = date(start_year_min, 1, 1).toordinal()
     ref_ordinal = reference_date.toordinal()
     open_ended_rate = float(residence_cfg.get("open_ended_pct", 80.0)) / 100.0
     min_duration_days = int(residence_cfg.get("min_duration_days", 90))
 
+    residence_start_ordinals = rng.integers(start_min_ordinal, ref_ordinal + 1, size=n_records)
+    residence_start_dates = np.array(
+        [date.fromordinal(int(v)).isoformat() for v in residence_start_ordinals],
+        dtype=object,
+    )
+    residence_end_dates = np.array([""] * n_records, dtype=object)
+    open_ended_mask = rng.random(n_records) < open_ended_rate
+    for i in range(n_records):
+        if open_ended_mask[i]:
+            continue
+        min_end_ordinal = int(residence_start_ordinals[i]) + min_duration_days
+        if min_end_ordinal > ref_ordinal:
+            continue
+        end_ordinal = int(rng.integers(min_end_ordinal, ref_ordinal + 1))
+        residence_end_dates[i] = date.fromordinal(end_ordinal).isoformat()
+
+    address_gen = AddressGenerator(
+        prepared.streets,
+        prepared.cities,
+        prepared.states,
+        phase1["address"],
+        seed=seed,
+    )
+    n_houses = int(round(n_records * housing_norm.probabilities["houses"]))
+    n_houses = max(0, min(n_records, n_houses))
+    n_apartments = n_records - n_houses
+    address_gen.ensure_capacity(n_houses, n_apartments)
+
     output_columns = [
+        "RecordKey",
         "PersonKey",
+        "EntityRecordIndex",
         "AddressKey",
+        "FormalFirstName",
         "FirstName",
+        "FirstNameType",
         "MiddleName",
         "LastName",
         "Suffix",
+        "FormalFullName",
         "FullName",
         "Gender",
         "Ethnicity",
@@ -822,129 +1051,10 @@ def generate_phase1_dataset(
     gender_counts: Counter[str] = Counter()
     ethnicity_counts: Counter[str] = Counter()
     age_bin_counts: Counter[str] = Counter()
-    forced_duplicate_name_groups = 0
-    forced_duplicate_name_pairs_equivalent = 0
-    forced_duplicate_name_people = 0
-    forced_collision_group_min_size_observed = 0
-    forced_collision_group_max_size_observed = 0
     chunk_files: list[str] = []
-
-    for chunk_start in range(0, n_people, chunk_size):
-        chunk_count = min(chunk_size, n_people - chunk_start)
-
-        person_keys = np.arange(chunk_start + 1, chunk_start + chunk_count + 1, dtype=np.int64)
-        address_keys = person_keys.copy()
-
-        genders = _draw_exact_categories(gender_keys, gender_probs, chunk_count, rng)
-        ethnicities = _draw_exact_categories(ethnicity_keys, ethnicity_probs, chunk_count, rng)
-        sampled_age_bin_ids = _draw_exact_categories(age_keys, age_probs, chunk_count, rng)
-
-        first_names = np.empty(chunk_count, dtype=object)
-        for gender_value in np.unique(genders):
-            key = str(gender_value).lower()
-            pool = first_name_pools.get(key, first_name_default_pool)
-            idx = np.where(genders == gender_value)[0]
-            first_names[idx] = rng.choice(pool.names, size=len(idx), p=pool.probs)
-
-        last_names = np.empty(chunk_count, dtype=object)
-        for ethnicity_value in np.unique(ethnicities):
-            pool = last_name_pools.get(str(ethnicity_value), last_name_default_pool)
-            idx = np.where(ethnicities == ethnicity_value)[0]
-            last_names[idx] = rng.choice(pool.names, size=len(idx), p=pool.probs)
-
-        middle_fill_mask = rng.random(chunk_count) < middle_fill_rate
-        middle_names = np.array([""] * chunk_count, dtype=object)
-        sampled_middle_names = rng.choice(
-            middle_name_pool.names, size=chunk_count, p=middle_name_pool.probs
-        )
-        middle_names[middle_fill_mask] = sampled_middle_names[middle_fill_mask]
-
-        suffix_fill_mask = rng.random(chunk_count) < suffix_fill_rate
-        suffixes = np.array([""] * chunk_count, dtype=object)
-        sampled_suffixes = rng.choice(suffix_keys, size=chunk_count, p=suffix_probs)
-        suffixes[suffix_fill_mask] = sampled_suffixes[suffix_fill_mask]
-
-        dup_stats = _apply_forced_exact_name_duplicates(
-            first_names=first_names,
-            middle_names=middle_names,
-            last_names=last_names,
-            suffixes=suffixes,
-            genders=genders,
-            ethnicities=ethnicities,
-            duplicate_people_pct=duplicate_name_pct,
-            min_collision_size=collision_min_size,
-            max_collision_size=collision_max_size,
-            rng=rng,
-        )
-        forced_duplicate_name_groups += int(dup_stats["groups"])
-        forced_duplicate_name_pairs_equivalent += int(dup_stats["pair_equivalent"])
-        forced_duplicate_name_people += int(dup_stats["people"])
-        if int(dup_stats["min_group_size_used"]) > 0:
-            if forced_collision_group_min_size_observed == 0:
-                forced_collision_group_min_size_observed = int(dup_stats["min_group_size_used"])
-            else:
-                forced_collision_group_min_size_observed = min(
-                    forced_collision_group_min_size_observed,
-                    int(dup_stats["min_group_size_used"]),
-                )
-        forced_collision_group_max_size_observed = max(
-            forced_collision_group_max_size_observed,
-            int(dup_stats["max_group_size_used"]),
-        )
-
-        dobs = np.empty(chunk_count, dtype=object)
-        ages = np.empty(chunk_count, dtype=np.int64)
-        for age_bin_id in np.unique(sampled_age_bin_ids):
-            idx = np.where(sampled_age_bin_ids == age_bin_id)[0]
-            cfg = age_bin_lookup[str(age_bin_id)]
-            min_age = int(cfg["min_age"])
-            max_age = int(cfg["max_age"])
-
-            max_dob = _years_ago(reference_date, min_age)
-            min_dob = _years_ago(reference_date, max_age + 1) + timedelta(days=1)
-            min_ordinal = min_dob.toordinal()
-            max_ordinal = max_dob.toordinal()
-            sampled_ordinals = rng.integers(min_ordinal, max_ordinal + 1, size=len(idx))
-            sampled_dates = [date.fromordinal(int(value)) for value in sampled_ordinals]
-            dobs[idx] = [d.isoformat() for d in sampled_dates]
-            ages[idx] = [_age_on_date(d, reference_date) for d in sampled_dates]
-
-        ssn_values = np.array([_make_ssn(int(k), seed) for k in person_keys], dtype=object)
-
-        phone_fill_mask = rng.random(chunk_count) < phone_fill_rate
-        phones = np.array([""] * chunk_count, dtype=object)
-        for i, key in enumerate(person_keys):
-            if phone_fill_mask[i]:
-                phones[i] = _make_phone(int(key), seed)
-
-        residence_start_ordinals = rng.integers(start_min_ordinal, ref_ordinal + 1, size=chunk_count)
-        residence_start_dates = np.array(
-            [date.fromordinal(int(value)).isoformat() for value in residence_start_ordinals], dtype=object
-        )
-        residence_end_dates = np.array([""] * chunk_count, dtype=object)
-        open_ended_mask = rng.random(chunk_count) < open_ended_rate
-        for i in range(chunk_count):
-            if open_ended_mask[i]:
-                continue
-            min_end_ordinal = int(residence_start_ordinals[i]) + min_duration_days
-            if min_end_ordinal > ref_ordinal:
-                continue
-            end_ordinal = int(rng.integers(min_end_ordinal, ref_ordinal + 1))
-            residence_end_dates[i] = date.fromordinal(end_ordinal).isoformat()
-
-        full_names = np.array(
-            [
-                _name_with_optional_parts(
-                    str(first_names[i]),
-                    str(middle_names[i]),
-                    str(last_names[i]),
-                    str(suffixes[i]),
-                )
-                for i in range(chunk_count)
-            ],
-            dtype=object,
-        )
-
+    for chunk_start in range(0, n_records, chunk_size):
+        chunk_count = min(chunk_size, n_records - chunk_start)
+        idx = slice(chunk_start, chunk_start + chunk_count)
         address_batch = address_gen.generate_batch(
             start_index=chunk_start,
             count=chunk_count,
@@ -954,20 +1064,25 @@ def generate_phase1_dataset(
 
         df = pd.DataFrame(
             {
-                "PersonKey": person_keys,
-                "AddressKey": address_keys,
-                "FirstName": first_names,
-                "MiddleName": middle_names,
-                "LastName": last_names,
-                "Suffix": suffixes,
-                "FullName": full_names,
-                "Gender": genders,
-                "Ethnicity": ethnicities,
-                "DOB": dobs,
-                "Age": ages,
-                "AgeBin": sampled_age_bin_ids,
-                "SSN": ssn_values,
-                "Phone": phones,
+                "RecordKey": record_keys[idx],
+                "PersonKey": person_keys[idx],
+                "EntityRecordIndex": entity_record_index[idx],
+                "AddressKey": address_keys[idx],
+                "FormalFirstName": row_formal_first_name[idx],
+                "FirstName": first_name[idx],
+                "FirstNameType": first_name_type[idx],
+                "MiddleName": row_middle_names[idx],
+                "LastName": row_last_names[idx],
+                "Suffix": row_suffixes[idx],
+                "FormalFullName": row_formal_full_name[idx],
+                "FullName": full_name[idx],
+                "Gender": row_gender[idx],
+                "Ethnicity": row_ethnicity[idx],
+                "DOB": row_dob[idx],
+                "Age": row_age[idx],
+                "AgeBin": row_age_bin[idx],
+                "SSN": row_ssn[idx],
+                "Phone": row_phone[idx],
                 "ResidenceType": address_batch["ResidenceType"],
                 "ResidenceStreetNumber": address_batch["ResidenceStreetNumber"],
                 "ResidenceStreetName": address_batch["ResidenceStreetName"],
@@ -976,8 +1091,8 @@ def generate_phase1_dataset(
                 "ResidenceCity": address_batch["ResidenceCity"],
                 "ResidenceState": address_batch["ResidenceState"],
                 "ResidencePostalCode": address_batch["ResidencePostalCode"],
-                "ResidenceStartDate": residence_start_dates,
-                "ResidenceEndDate": residence_end_dates,
+                "ResidenceStartDate": residence_start_dates[idx],
+                "ResidenceEndDate": residence_end_dates[idx],
                 "MailingAddressMode": address_batch["MailingAddressMode"],
                 "MailingStreetNumber": address_batch["MailingStreetNumber"],
                 "MailingStreetName": address_batch["MailingStreetName"],
@@ -1008,49 +1123,87 @@ def generate_phase1_dataset(
             else:
                 missing_counts[col] += int(series.fillna("").astype(str).str.strip().eq("").sum())
 
-    achieved_gender_pct = _distribution_pct(gender_counts, n_people)
-    achieved_ethnicity_pct = _distribution_pct(ethnicity_counts, n_people)
-    achieved_age_pct = _distribution_pct(age_bin_counts, n_people)
+    achieved_gender_pct = _distribution_pct(gender_counts, n_records)
+    achieved_ethnicity_pct = _distribution_pct(ethnicity_counts, n_records)
+    achieved_age_pct = _distribution_pct(age_bin_counts, n_records)
 
     tolerance_pct = float(phase1.get("quality", {}).get("distribution_tolerance_pct", 1.5))
     gender_checks = _within_tolerance(gender_norm.normalized_percentages, achieved_gender_pct, tolerance_pct)
     ethnicity_checks = _within_tolerance(ethnicity_norm.normalized_percentages, achieved_ethnicity_pct, tolerance_pct)
     age_checks = _within_tolerance(age_norm.normalized_percentages, achieved_age_pct, tolerance_pct)
 
-    missingness_pct = {col: (count / n_people) * 100.0 for col, count in missing_counts.items()}
+    missingness_pct = {col: (count / n_records) * 100.0 for col, count in missing_counts.items()}
+    entity_collision = _collision_metrics(entity_formal_full_name)
+    row_collision = _collision_metrics(full_name)
+
+    nickname_usage_achieved_pct = float((first_name_type == "NICKNAME").sum()) / float(n_records) * 100.0
+    if nickname_enabled and nickname_mode == "per_person":
+        per_person_name_consistency = bool(
+            (
+                pd.DataFrame(
+                    {"PersonKey": person_keys.astype(str), "FirstName": first_name.astype(str)}
+                )
+                .groupby("PersonKey")["FirstName"]
+                .nunique()
+                .le(1)
+                .all()
+            )
+        )
+    else:
+        per_person_name_consistency = None
+    nickname_metrics = {
+        "enabled": nickname_enabled,
+        "mode": nickname_mode,
+        "usage_pct_target": float(nick_cfg.get("usage_pct", 0.0)),
+        "usage_pct_achieved": nickname_usage_achieved_pct,
+        "per_person_consistency_check": per_person_name_consistency,
+    }
+
     name_duplication_metrics: dict[str, Any] = {
         "target_exact_full_name_people_pct": duplicate_name_pct,
         "collision_group_min_size_requested": collision_min_size,
         "collision_group_max_size_requested": collision_max_size,
-        "forced_duplicate_name_groups": forced_duplicate_name_groups,
-        "forced_duplicate_name_pair_equivalent": forced_duplicate_name_pairs_equivalent,
-        # Backward-compatible alias for older downstream consumers.
-        "forced_duplicate_name_pairs": forced_duplicate_name_pairs_equivalent,
-        "forced_duplicate_name_people": forced_duplicate_name_people,
-        "forced_duplicate_name_people_pct": (forced_duplicate_name_people / n_people) * 100.0,
-        "forced_collision_group_min_size_observed": forced_collision_group_min_size_observed,
-        "forced_collision_group_max_size_observed": forced_collision_group_max_size_observed,
-        "actual_duplicate_name_people_pct": None,
-        "actual_collision_group_min_size": None,
-        "actual_collision_group_max_size": None,
-        "actual_collision_group_count": None,
+        "forced_duplicate_name_groups": int(dup_stats["groups"]),
+        "forced_duplicate_name_pair_equivalent": int(dup_stats["pair_equivalent"]),
+        "forced_duplicate_name_pairs": int(dup_stats["pair_equivalent"]),
+        "forced_duplicate_name_people": int(dup_stats["people"]),
+        "forced_duplicate_name_people_pct": (float(dup_stats["people"]) / float(n_entities)) * 100.0,
+        "forced_collision_group_min_size_observed": int(dup_stats["min_group_size_used"]),
+        "forced_collision_group_max_size_observed": int(dup_stats["max_group_size_used"]),
+        "entity_actual_duplicate_name_people_pct": entity_collision["duplicate_people_pct"],
+        "entity_actual_collision_group_count": entity_collision["collision_group_count"],
+        "entity_actual_collision_group_min_size": entity_collision["collision_group_min_size"],
+        "entity_actual_collision_group_max_size": entity_collision["collision_group_max_size"],
+        "row_actual_duplicate_name_people_pct": row_collision["duplicate_people_pct"],
+        "row_actual_collision_group_count": row_collision["collision_group_count"],
+        "row_actual_collision_group_min_size": row_collision["collision_group_min_size"],
+        "row_actual_collision_group_max_size": row_collision["collision_group_max_size"],
+        "actual_duplicate_name_people_pct": row_collision["duplicate_people_pct"],
+        "actual_collision_group_count": row_collision["collision_group_count"],
+        "actual_collision_group_min_size": row_collision["collision_group_min_size"],
+        "actual_collision_group_max_size": row_collision["collision_group_max_size"],
     }
 
     exact_uniqueness_check_max = int(phase1.get("quality", {}).get("exact_uniqueness_check_max_rows", 250000))
     uniqueness_checks: dict[str, Any] = {
-        "person_key_unique": True,
+        "record_key_unique": True,
+        "person_key_unique": not redundancy_enabled,
+        "person_key_entity_count_matches": True,
+        "row_count_matches": True,
         "address_key_unique": True,
         "full_address_unique": True,
+        "records_per_entity_within_bounds": True,
+        "same_person_distinct_address": True,
         "method": "deterministic_by_construction",
         "checked_exactly": False,
         "duplicate_counts": {
+            "RecordKey": 0,
             "PersonKey": 0,
             "AddressKey": 0,
             "full_address": 0,
         },
     }
-
-    if n_people <= exact_uniqueness_check_max:
+    if n_records <= exact_uniqueness_check_max:
         if output_format == "csv":
             check_df = pd.read_csv(output_path, dtype=str)
         else:
@@ -1065,39 +1218,43 @@ def generate_phase1_dataset(
             "ResidenceState",
             "ResidencePostalCode",
         ]
+        record_dups = int(check_df.duplicated(["RecordKey"]).sum())
         person_dups = int(check_df.duplicated(["PersonKey"]).sum())
         address_dups = int(check_df.duplicated(["AddressKey"]).sum())
         full_dups = int(check_df.duplicated(full_address_cols).sum())
-        full_name_counts = check_df["FullName"].value_counts()
-        dup_name_people = int(full_name_counts[full_name_counts > 1].sum())
-        duplicated_name_groups = full_name_counts[full_name_counts > 1]
-        name_duplication_metrics["actual_duplicate_name_people_pct"] = (dup_name_people / n_people) * 100.0
-        name_duplication_metrics["actual_collision_group_count"] = int(len(duplicated_name_groups))
-        if len(duplicated_name_groups) > 0:
-            name_duplication_metrics["actual_collision_group_min_size"] = int(duplicated_name_groups.min())
-            name_duplication_metrics["actual_collision_group_max_size"] = int(duplicated_name_groups.max())
+        same_person_address_dups = int(check_df.duplicated(["PersonKey"] + full_address_cols).sum())
+        person_counts = check_df["PersonKey"].value_counts()
+        within_bounds = bool(
+            person_counts.ge(min_records_per_entity).all()
+            and person_counts.le(max_records_per_entity).all()
+        )
+        row_collision_check = _collision_metrics(check_df["FullName"].astype(str).to_numpy())
+        name_duplication_metrics["row_actual_duplicate_name_people_pct"] = row_collision_check["duplicate_people_pct"]
+        name_duplication_metrics["row_actual_collision_group_count"] = row_collision_check["collision_group_count"]
+        name_duplication_metrics["row_actual_collision_group_min_size"] = row_collision_check["collision_group_min_size"]
+        name_duplication_metrics["row_actual_collision_group_max_size"] = row_collision_check["collision_group_max_size"]
+        name_duplication_metrics["actual_duplicate_name_people_pct"] = row_collision_check["duplicate_people_pct"]
+        name_duplication_metrics["actual_collision_group_count"] = row_collision_check["collision_group_count"]
+        name_duplication_metrics["actual_collision_group_min_size"] = row_collision_check["collision_group_min_size"]
+        name_duplication_metrics["actual_collision_group_max_size"] = row_collision_check["collision_group_max_size"]
         uniqueness_checks = {
+            "record_key_unique": record_dups == 0,
             "person_key_unique": person_dups == 0,
+            "person_key_entity_count_matches": int(check_df["PersonKey"].nunique()) == n_entities,
+            "row_count_matches": int(len(check_df)) == n_records,
             "address_key_unique": address_dups == 0,
             "full_address_unique": full_dups == 0,
+            "records_per_entity_within_bounds": within_bounds,
+            "same_person_distinct_address": same_person_address_dups == 0,
             "method": "exact",
             "checked_exactly": True,
             "duplicate_counts": {
+                "RecordKey": record_dups,
                 "PersonKey": person_dups,
                 "AddressKey": address_dups,
                 "full_address": full_dups,
             },
         }
-    if name_duplication_metrics["actual_duplicate_name_people_pct"] is None:
-        name_duplication_metrics["actual_duplicate_name_people_pct"] = name_duplication_metrics[
-            "forced_duplicate_name_people_pct"
-        ]
-    if name_duplication_metrics["actual_collision_group_count"] is None:
-        name_duplication_metrics["actual_collision_group_count"] = forced_duplicate_name_groups
-    if name_duplication_metrics["actual_collision_group_min_size"] is None:
-        name_duplication_metrics["actual_collision_group_min_size"] = forced_collision_group_min_size_observed
-    if name_duplication_metrics["actual_collision_group_max_size"] is None:
-        name_duplication_metrics["actual_collision_group_max_size"] = forced_collision_group_max_size_observed
 
     stem = output_path.stem
     manifest_path = output_path.parent / f"{stem}.manifest.json"
@@ -1107,8 +1264,11 @@ def generate_phase1_dataset(
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "run_id": f"{stem}_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}",
         "seed": seed,
-        "records_requested": n_people,
-        "records_written": n_people,
+        "count_source": count_source,
+        "n_entities": n_entities,
+        "n_records": n_records,
+        "records_requested": n_records,
+        "records_written": n_records,
         "output_format": output_format,
         "output_path": str(output_path),
         "output_parts": chunk_files,
@@ -1117,6 +1277,22 @@ def generate_phase1_dataset(
             "houses": n_houses,
             "apartments": n_apartments,
         },
+        "redundancy": {
+            "enabled": redundancy_enabled,
+            "min_records_per_entity": min_records_per_entity,
+            "max_records_per_entity": max_records_per_entity,
+            "shape": redundancy_shape,
+            "heavy_tail_alpha": heavy_tail_alpha,
+            "records_per_entity_stats": {
+                "min": redundancy_stats.min_records_per_entity,
+                "max": redundancy_stats.max_records_per_entity,
+                "mean": redundancy_stats.mean_records_per_entity,
+                "records_per_entity_distribution": {
+                    str(k): int(v) for k, v in redundancy_stats.distribution.items()
+                },
+            },
+        },
+        "nicknames": nickname_metrics,
         "name_duplication": name_duplication_metrics,
         "normalization": {
             "gender": {
@@ -1153,7 +1329,8 @@ def generate_phase1_dataset(
 
     quality_report = {
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
-        "row_count": n_people,
+        "entity_count": n_entities,
+        "row_count": n_records,
         "tolerance_pct": tolerance_pct,
         "expected_distributions_pct": {
             "gender": gender_norm.normalized_percentages,
@@ -1171,6 +1348,7 @@ def generate_phase1_dataset(
             "age_bins": age_checks,
         },
         "name_duplication": name_duplication_metrics,
+        "nickname_metrics": nickname_metrics,
         "uniqueness_checks": uniqueness_checks,
         "missingness_pct": missingness_pct,
     }
@@ -1181,5 +1359,8 @@ def generate_phase1_dataset(
         "output_parts": chunk_files,
         "manifest_path": str(manifest_path),
         "quality_report_path": str(quality_path),
-        "n_people": n_people,
+        "n_entities": n_entities,
+        "n_records": n_records,
+        # Backward-compatible alias.
+        "n_people": n_records,
     }

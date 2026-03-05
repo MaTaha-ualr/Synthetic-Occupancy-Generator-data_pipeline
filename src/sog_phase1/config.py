@@ -16,6 +16,29 @@ class NormalizedDistribution:
     normalized: bool
 
 
+def resolve_entity_record_counts(phase1: dict[str, Any]) -> tuple[int, int, str]:
+    has_entities = phase1.get("n_entities") is not None
+    has_records = phase1.get("n_records") is not None
+
+    if has_entities and has_records:
+        n_entities = int(phase1["n_entities"])
+        n_records = int(phase1["n_records"])
+        source = "n_entities_n_records"
+    elif not has_entities and not has_records:
+        n_people = int(phase1.get("n_people", 0))
+        n_entities = n_people
+        n_records = n_people
+        source = "legacy_n_people"
+    else:
+        raise ValueError("phase1.n_entities and phase1.n_records must both be provided together")
+
+    if n_entities <= 0:
+        raise ValueError("phase1.n_entities must be > 0")
+    if n_records <= 0:
+        raise ValueError("phase1.n_records must be > 0")
+    return n_entities, n_records, source
+
+
 def load_phase1_config(config_path: Path) -> dict[str, Any]:
     with config_path.open("r", encoding="utf-8") as handle:
         data = yaml.safe_load(handle) or {}
@@ -113,9 +136,7 @@ def resolve_age_bins(age_cfg: dict[str, Any]) -> tuple[list[dict[str, Any]], Nor
 
 
 def validate_phase1_core(phase1: dict[str, Any]) -> None:
-    n_people = int(phase1.get("n_people", 0))
-    if n_people <= 0:
-        raise ValueError("phase1.n_people must be > 0")
+    n_entities, n_records, _ = resolve_entity_record_counts(phase1)
 
     seed = int(phase1.get("seed", 0))
     max_seed = (2**63) - 1
@@ -161,6 +182,45 @@ def validate_phase1_core(phase1: dict[str, Any]) -> None:
             "name_duplication.collision_group_max_size must be >= "
             "name_duplication.collision_group_min_size"
         )
+
+    redundancy_cfg = phase1.get("redundancy", {})
+    redundancy_enabled = bool(redundancy_cfg.get("enabled", False))
+    min_records_per_entity = int(redundancy_cfg.get("min_records_per_entity", 1))
+    max_records_per_entity = int(redundancy_cfg.get("max_records_per_entity", 1))
+    if min_records_per_entity < 1:
+        raise ValueError("redundancy.min_records_per_entity must be >= 1")
+    if max_records_per_entity < min_records_per_entity:
+        raise ValueError("redundancy.max_records_per_entity must be >= redundancy.min_records_per_entity")
+    shape = str(redundancy_cfg.get("shape", "balanced")).strip().lower()
+    if shape not in {"balanced", "heavy_tail"}:
+        raise ValueError("redundancy.shape must be one of: balanced, heavy_tail")
+    heavy_tail_alpha = float(redundancy_cfg.get("heavy_tail_alpha", 1.3))
+    if heavy_tail_alpha <= 0:
+        raise ValueError("redundancy.heavy_tail_alpha must be > 0")
+
+    if not redundancy_enabled and n_records != n_entities:
+        raise ValueError("When redundancy.enabled=false, phase1.n_records must equal phase1.n_entities")
+    if redundancy_enabled and n_records <= n_entities:
+        raise ValueError("When redundancy.enabled=true, phase1.n_records must be greater than phase1.n_entities")
+    min_total = n_entities * min_records_per_entity
+    max_total = n_entities * max_records_per_entity
+    if n_records < min_total or n_records > max_total:
+        raise ValueError(
+            "phase1.n_records must satisfy "
+            f"n_entities*min_records_per_entity <= n_records <= n_entities*max_records_per_entity "
+            f"(expected in [{min_total}, {max_total}], got {n_records})"
+        )
+
+    nick_cfg = phase1.get("nicknames", {})
+    nick_mode = str(nick_cfg.get("mode", "per_record")).strip().lower()
+    if nick_mode not in {"per_record", "per_person"}:
+        raise ValueError("nicknames.mode must be one of: per_record, per_person")
+    nick_usage_pct = float(nick_cfg.get("usage_pct", 0.0))
+    if nick_usage_pct < 0 or nick_usage_pct > 100:
+        raise ValueError("nicknames.usage_pct must be between 0 and 100")
+    source_dir = str(nick_cfg.get("source_dir", "Names/nick names")).strip()
+    if not source_dir:
+        raise ValueError("nicknames.source_dir must not be empty")
 
     fill_rates = phase1.get("fill_rates", {})
     for key in ("middle_name", "suffix", "phone"):

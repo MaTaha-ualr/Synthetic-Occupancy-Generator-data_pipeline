@@ -1,0 +1,551 @@
+formal_name,formal_count,nickname_count,nickname_count_sum,group_total_count,nickname_to_formal_ratio,top_nickname,top_nickname_count,nicknames_joined
+John,2467466,42,2296067,4763533,0.9305364288707524,Joan,240468,Joan; Jean; Jane; Juan; Jamie; Johnny; Jimmy; Joanne; June; Jon; Joann; Jenna; Jim; Johnnie; Jimmie; Jaime; Joanna; Jenny; Jonah; Jan; Janie; Johanna; Joni; Johnie; Jami; Janae; Juana; Jayme; Jaimie; Jamey; Jonnie; Johann; Jammie; Janee; Juno; Jin; Johnnye; Junie; Jimi; Jona; Jianni; Jamy
+Ryan,491988,35,299294,791282,0.6083359756742034,Ronnie,91795,Ronnie; Renee; Rowan; Rene; Remi; Remy; Ronny; Ryann; Rowen; Rayan; Rayne; Rian; Roma; Rome; Rayyan; Roni; Rain; Rana; Rowyn; Rhyan; Raine; Ren; Rumi; Riyan; Rayaan; Romie; Rooney; Remmy; Ryen; Rani; Rion; Rama; Rayn; Rennie; Renne
+Joshua,621830,29,1613572,2235402,2.594876413167586,Jack,365698,Jack; Jose; Joyce; Jesse; Jessie; Jackie; Josiah; Jake; Jace; Josie; Josue; Jayce; Jax; Jess; Jaycee; Jasiah; Jacey; Jessi; Jacky; Jesiah; Jessy; Jacque; Jessiah; Jacy; Josey; Jaziah; Jazz; Jasiyah; Jaquay
+Mike,99410,29,239767,339177,2.4119002112463535,Max,79662,Max; Micah; Maggie; Macy; Mickey; Messiah; Maxie; Mika; Mikah; Misha; Mckay; Micaiah; Mickie; Mecca; Myka; Makiah; Mazi; Mica; Mykah; Mischa; Micky; Miko; Mycah; Maika; Micha; Mackie; Maze; Maki; Maxi
+Sean,211354,26,433405,644759,2.0506117698269253,Shawn,167601,Shawn; Shane; Sam; Shaun; Sonia; Sammy; Sammie; Sonny; Sunny; Shayne; Sami; San; Shawnee; Sinai; Shan; Son; Sun; Seena; Simmie; Sina; Shaheen; Shian; Sani; Sonnie; Shine; Shaune
+Lisa,482893,24,1114244,1597137,2.307434566249666,Louis,188282,Louis; Lois; Luke; Luis; Louise; Lucy; Lewis; Luca; Lacey; Lucia; Leigh; Luz; Luka; Lacy; Lexie; Lessie; Lucca; Loyce; Lux; Lucky; Lake; Laakea; Loise; Luxe
+Donna,413754,24,1250235,1663989,3.0216867994025436,Diane,257746,Diane; Diana; Dawn; Danny; Dana; Dean; Don; Deanna; Duane; Dan; Donnie; Dion; Deon; Denny; Dionne; Dani; Dannie; Dennie; Dione; Dann; Deane; Dwan; Dany; Dayan
+Liam,168082,23,312651,480733,1.8601099463357171,Lynn,112926,Lynn; Leon; Lonnie; Lynne; Lane; Layne; Lenny; Lyn; Linnie; Lian; Leone; Lennie; Laine; Linh; Lannie; Lonie; Luan; Lan; Linn; Lowen; Lemmie; Lean; Loney
+Kim,104470,23,68101,172571,0.6518713506269742,Kenny,23702,Kenny; Kiana; Kenya; Kenna; Kenia; Keanu; Kohen; Keyon; Kainoa; Keona; Kiyomi; Kimi; Keena; Kym; Kimmie; Khanh; Kam; Kayan; Kona; Kawena; Kem; Kaena; Kahne
+Rose,218214,22,382357,600571,1.7522111321913352,Ricky,110528,Ricky; Rosa; Ross; Rosie; Rickey; Reese; Royce; Rocky; Reece; Rickie; Rocio; Rhys; Reggie; Reyes; Rikki; Richie; Ricki; Rosio; Rossie; Ricci; Riki; Rogue
+Julian,126554,22,154283,280837,1.219108048738088,Jillian,40718,Jillian; Juliana; Jaylen; Jalen; Jaylin; Jaelyn; Jayleen; Jaylon; Jaylynn; Jaylyn; Jalyn; Jaylan; Jailyn; Jalynn; Jelani; Jullian; Jalani; Jalin; Jaelin; Jaelen; Jahlani; Jaleen
+Tammy,164930,21,631112,796042,3.8265445946765295,Tina,143554,Tina; Tony; Tommy; Tom; Tonya; Tanya; Toni; Tommie; Tiana; Tania; Timmie; Tonie; Thanh; Tam; Thien; Tomie; Tien; Tanay; Tuyen; Tonnie; Thuan
+Kaylin,8578,21,33289,41867,3.88074143156913,Kellen,7354,Kellen; Kalani; Kellan; Kylan; Kaylen; Kalyn; Kylen; Kaylan; Kalen; Keelan; Kaelin; Kylin; Kallen; Kalin; Keylin; Kaylon; Kaelan; Kailen; Kailan; Keylen; Keelyn
+Kara,49684,20,154117,203801,3.101944287899525,Kerry,46018,Kerry; Kari; Kiara; Keri; Kyrie; Kori; Kory; Kairo; Korey; Kyree; Kairi; Khari; Karey; Kary; Kiari; Kree; Karry; Kaoru; Kior; Kyri
+Alice,253133,18,581942,835075,2.2989574650480185,Alyssa,156328,Alyssa; Alex; Alicia; Alexa; Alisha; Alec; Alexia; Alissa; Alijah; Alesha; Alize; Alexi; Alix; Alexie; Alika; Alexy; Alexx; Alik
+Michael,2211153,17,830005,3041158,0.37537203440919736,Michelle,407970,Michelle; Michele; Miguel; Micheal; Makayla; Maxwell; Michaela; Michel; Mikel; Michell; Michal; Mozell; Mykel; Mikal; Mychal; Mikell; Makell
+Jayden,134748,16,81404,216152,0.6041202837889987,Jaden,45942,Jaden; Jaiden; Jadyn; Jaidyn; Jaeden; Jaedyn; Jaydin; Jaydan; Jadin; Jadan; Jaydyn; Jaidan; Jaydn; Jaydenn; Jaydeen; Jaidin
+Terry,257350,15,313954,571304,1.219949485136973,Troy,106575,Troy; Tara; Terri; Tori; Tiara; Tierra; Tyree; Tory; Tru; Torrey; Tiera; True; Torey; Torrie; Troi
+Logan,204091,15,14931,219022,0.07315854202292114,Lawson,6670,Lawson; Lashawn; Laken; Laquan; Lashon; Lakin; Laiken; Lashaun; Layken; Lajuan; Lashun; Lugene; Leshawn; Loghan; Lasean
+Sue,68800,15,31099,99899,0.4520203488372093,Skye,10936,Skye; Shea; Sky; Shay; Shae; Shia; Shai; Shaya; Sia; Sai; Shaye; Shoua; Sha; Soua; Siah
+Amir,25346,15,44474,69820,1.7546752939319814,Amari,24200,Amari; Amara; Amare; Amiri; Amar; Amor; Amarie; Amauri; Ahmari; Amere; Amarii; Amaree; Amori; Amory; Aimar
+Muriel,23788,15,57063,80851,2.3988145283336135,Merle,17665,Merle; Marley; Marlee; Mariela; Merrill; Marlo; Marlowe; Meryl; Marlow; Myrle; Murl; Myrl; Murrell; Merril; Murel
+Christopher,1033974,14,1064603,2098577,1.0296226017288637,Christine,288397,Christine; Christina; Christian; Crystal; Christy; Cristian; Cristina; Christie; Cristal; Christen; Christin; Christan; Christain; Christia
+Kelly,274839,14,666131,940970,2.4237135195514465,Kyle,244176,Kyle; Kayla; Kaylee; Kylie; Kelli; Kylee; Kelley; Kali; Kailey; Kiley; Kayle; Kalei; Khali; Keala
+Carrie,111595,14,246221,357816,2.2063802141673015,Corey,94592,Corey; Cory; Cara; Ciara; Cierra; Cary; Carey; Cori; Cairo; Corrie; Corie; Cher; Corry; Cree
+Mark,679196,13,274700,953896,0.40444878945105683,Marc,68788,Marc; Maurice; Marissa; Marco; Morris; Marcy; Mercy; Merrick; Mars; Markie; Mirza; Myers; Marice
+Carol,408960,13,750260,1159220,1.8345559467918622,Carl,240162,Carl; Cheryl; Charlie; Carla; Carole; Carly; Carroll; Charley; Carlie; Carrol; Charly; Curley; Caroll
+Julie,253783,13,548897,802680,2.1628596084056064,Julia,217050,Julia; Joel; Jill; Julio; Jayla; Jewel; Jewell; Joelle; Jael; Joell; Jule; Juel; July
+Sheila,117706,13,223277,340983,1.8969041510203388,Sally,97917,Sally; Shelly; Shelley; Saul; Shayla; Shiloh; Sol; Shellie; Shilo; Sully; Soul; Salah; Shylo
+Daniel,981443,12,226688,1208131,0.230974188006843,Danielle,185031,Danielle; Daniela; Donnell; Donell; Daniele; Danyell; Danyel; Daniell; Denali; Danell; Danyale; Donelle
+Anna,381987,12,928794,1310781,2.431480652482938,Amy,345512,Amy; Ann; Anne; Annie; Ana; Ami; Ayan; Aime; Anay; Anh; An; Ameya
+Aaron,303773,12,65896,369669,0.2169251381788375,Ariana,58375,Ariana; Aryan; Arian; Arin; Airam; Arion; Aaryn; Aarin; Arnie; Ariyan; Aaren; Ariyon
+Megan,219149,12,247333,466482,1.1286065644835248,Mason,166538,Mason; Meghan; Mckenna; Meaghan; Makena; Mayson; Maison; Masyn; Macon; Makana; Maeson; Maysen
+Dylan,212608,12,62141,274749,0.29227968844069835,Dillon,31474,Dillon; Delaney; Delma; Dillan; Daylen; Delano; Dyllan; Daylin; Daelyn; Delaine; Dylann; Delane
+Riley,117389,12,101739,219128,0.8666825682133761,Raul,42192,Raul; Rylee; Rylie; Royal; Reilly; Ryley; Rilee; Royale; Rhiley; Rael; Rahil; Reiley
+Devin,84568,12,75113,159681,0.8881964809384164,Devon,43196,Devon; Devan; Devyn; Davion; Davon; Deven; Davian; Divine; Devine; Deavion; Devonne; Davonne
+Colleen,79638,12,114049,193687,1.432092719555991,Colin,64570,Colin; Collin; Callan; Callen; Callahan; Clemmie; Caelan; Colon; Collyn; Climmie; Collen; Caelin
+Darren,51014,12,47564,98578,0.9323715058611362,Darin,14834,Darin; Dorian; Darian; Darien; Dream; Darion; Darrian; Darrien; Dereon; Daryn; Derin; Daryan
+Kay,47474,12,51696,99170,1.0889328895816657,Kai,35108,Kai; Kaye; Kaya; Koa; Kia; Khai; Kc; Ka; Kao; Koi; Keahi; Koy
+Nikki,18209,12,23671,41880,1.29996155747158,Nico,8786,Nico; Niko; Nakia; Nicky; Nikia; Najee; Nickie; Nyjah; Nijah; Neko; Naziah; Nasiah
+Karen,493182,11,54020,547202,0.10953360017194463,Karina,29246,Karina; Kareem; Kieran; Karon; Karim; Karma; Karan; Kiran; Kareen; Kirin; Kayron
+Billy,191532,11,214832,406364,1.121650690224088,Bill,77164,Bill; Bailey; Billie; Baylee; Billye; Bayley; Baily; Blue; Bela; Blu; Bleu
+Judy,189406,11,230097,419503,1.2148347993199793,Jade,50744,Jade; Jody; Jodi; Jada; Jude; Judah; Jodie; Jett; Jayde; Jaydee; Joud
+Brittany,179683,11,159272,338955,0.8864055030247714,Brayden,67162,Brayden; Brittney; Braden; Britney; Braeden; Brittani; Britton; Braedyn; Brittan; Britain; Britten
+Holly,101250,11,238806,340056,2.3585777777777777,Hailey,88986,Hailey; Haley; Hayley; Hallie; Haylee; Hailee; Hollie; Halo; Halley; Hala; Haile
+Tyrone,38066,11,12222,50288,0.32107392423685177,Taryn,11389,Taryn; Terrion; Taran; Trine; Trini; Tarin; Terran; Tyrion; Terren; Toryn; Terin
+Brian,586792,10,417457,1004249,0.7114224461137848,Bryan,192831,Bryan; Brianna; Briana; Breanna; Bryn; Bernie; Breon; Brion; Brownie; Beren
+Adam,285978,10,314573,600551,1.0999902090370588,Aiden,126432,Aiden; Autumn; Aidan; Ayden; Aden; Aydan; Aidyn; Auden; Adonai; Adama
+Joe,216735,10,280330,497065,1.293422843564722,Jay,94998,Jay; Jo; Joy; Joey; Jai; Jia; Jaye; Jae; Ja; Jiayi
+Lee,136588,10,270457,407045,1.980093419626907,Leah,122828,Leah; Leo; Lou; Louie; Lue; Loy; La; Le; Ly; Li
+Demetrius,16944,10,21228,38172,1.2528328611898016,Deandre,13680,Deandre; Dimitri; Deandra; Demetri; Demetrice; Demetris; Deandrea; Demetric; Deondra; Deundra
+Mary,1882124,9,659901,2542025,0.35061504980543257,Maria,277488,Maria; Marie; Mario; Mariah; Mayra; Maira; Meyer; Mar; Mahari
+Brandon,384950,9,536758,921708,1.3943577087933499,Brenda,303206,Brenda; Brent; Brandy; Brandi; Brendan; Brantley; Brentley; Brandyn; Brantlee
+Ella,148245,9,141830,290075,0.9567270396977976,Eli,72014,Eli; Ellie; Eula; Elia; Ely; Elie; Eliyah; Eliah; Eliya
+Landon,90590,9,58695,149285,0.6479191963792913,London,24848,London; Londyn; Landen; Landyn; Lyndon; Linden; Lynden; Londen; Lunden
+Regina,87824,9,50028,137852,0.5696392785571143,Reagan,33930,Reagan; Regan; Reign; Rashawn; Rayshawn; Rashaun; Rasheen; Reegan; Roshawn
+Marshall,45058,9,44927,89985,0.997092636157841,Marisol,16264,Marisol; Miracle; Marcel; Maricela; Marisela; Marcell; Marcelle; Marshell; Marquelle
+Minnie,44669,9,6270,50939,0.14036580178647384,Mina,5496,Mina; Minh; Mana; Mena; Mannie; Moon; Min; Mayan; Man
+Sage,19763,9,24725,44488,1.2510752416131155,Sasha,18134,Sasha; Saige; Sequoia; Sacha; Swayze; Sascha; Sehaj; Sakae; Sequoyah
+Frank,413397,8,605231,1018628,1.464043038531968,Frances,269031,Frances; Francis; Francisco; Franklin; Frankie; Francesca; Francisca; Francesc
+Larry,402522,8,725361,1127883,1.8020406338038666,Laura,377992,Laura; Lori; Leroy; Laurie; Larue; Lory; Lior; Larrie
+Ruth,371900,8,194090,565990,0.521887604194676,Rita,138848,Rita; Rudy; Reid; Reed; Ryatt; Riot; Reda; Rudi
+Lauren,237588,8,162496,400084,0.683940266343418,Lorraine,102032,Lorraine; Loren; Lorena; Lauryn; Loraine; Lorin; Laramie; Loran
+Doris,224976,8,228532,453508,1.0158061304316905,Derek,118216,Derek; Derrick; Darius; Darcy; Dorris; Dorsey; Dorsie; Daris
+Roy,189778,8,116018,305796,0.6113353497244148,Ray,96374,Ray; Rae; Rhea; Rey; Rio; Rei; Rai; Rowe
+Elijah,182376,8,161373,343749,0.884836820634294,Elsie,71313,Elsie; Elise; Ellis; Elisa; Elisha; Elzie; Elza; Elgie
+Connie,133007,8,50676,183683,0.3810025036276286,Cheyenne,34540,Cheyenne; Cohen; Chaim; Cam; Cyan; Chaney; Chan; Chayanne
+Ellen,125848,8,191250,317098,1.5196904201894348,Eileen,91582,Eileen; Elena; Eliana; Elma; Elian; Elmo; Elan; Elim
+Kristen,108546,8,259517,368063,2.390848119691191,Kristin,88656,Kristin; Kristina; Krystal; Kristopher; Kirsten; Kristian; Khristian; Krystian
+Casey,93920,8,114620,208540,1.2204003407155026,Chase,89832,Chase; Cassie; Chaz; Chayse; Cache; Chaka; Cayce; Chaise
+Dominic,93398,8,80986,174384,0.8671063620206,Dominique,34430,Dominique; Dominick; Domingo; Dominik; Domonique; Dominque; Dominga; Domanique
+Brett,79024,8,176666,255690,2.235599311601539,Bertha,68524,Bertha; Brady; Brody; Barrett; Brodie; Bertie; Britt; Brit
+Daisy,65874,8,85003,150877,1.2903877098703587,Diego,60802,Diego; Dixie; Dessie; Dickie; Desi; Doyce; Dezi; Dossie
+Tristan,62686,8,25491,88177,0.4066458220336279,Tristen,11013,Tristen; Triston; Tristin; Tristian; Trystan; Tristyn; Trystin; Trust
+Selena,27204,8,27604,54808,1.0147037200411704,Sloane,10369,Sloane; Selma; Salem; Sloan; Salome; Shalom; Skylan; Salam
+Ty,22252,8,31848,54100,1.4312421355383786,Tia,15416,Tia; Theo; Tye; Tai; Thao; Toi; Toy; Tu
+Keegan,18930,8,15091,34021,0.7972002113048072,Kayson,6446,Kayson; Keagan; Kaysen; Keshawn; Kasyn; Kaisyn; Kijana; Kaegan
+Coy,6036,8,1010,7046,0.16732935719019218,Che,335,Che; Cai; Choua; Chee; Chi; Chau; Chai; Chia
+Andrew,654139,7,348167,1002306,0.5322523194611543,Andrea,222684,Andrea; Andre; Andres; Anderson; Andra; Andree; Andersen
+Scott,385672,7,99822,485494,0.25882615279304694,Seth,80625,Seth; Scotty; Scottie; Sade; Scout; Shade; Shadi
+Alexander,361420,7,483360,844780,1.3373914005865752,Allison,157580,Allison; Alexandra; Alejandro; Alison; Alexandria; Alejandra; Alexandr
+Angela,334186,7,336641,670827,1.0073462083989155,Angel,177868,Angel; Angelina; Angelica; Angelo; Ainsley; Angelita; Angeles
+Jerry,311426,7,3058,314484,0.009819347132224028,Jere,917,Jere; Jireh; Jrue; Jory; Jeriah; Jru; Jerre
+Keith,217746,7,292749,510495,1.3444517924554298,Kathy,165555,Kathy; Katie; Kody; Koda; Kodi; Kit; Kodie
+Austin,216326,7,59996,276322,0.27734068026959313,Ashton,51022,Ashton; Austyn; Austen; Ashtyn; Ashtin; Ashten; Astin
+Marilyn,185130,7,81738,266868,0.44151677199805545,Marlene,63254,Marlene; Marlin; Merlin; Marlyn; Marlen; Merlyn; Maryland
+Bonnie,161300,7,90504,251804,0.561091134531928,Ben,35701,Ben; Bennie; Benny; Bowen; Bonny; Bayan; Binh
+Chloe,121714,7,132535,254249,1.0889051382749724,Cole,74756,Cole; Callie; Cleo; Cali; Cielo; Callaway; Ciel
+Marion,113666,7,211885,325551,1.864101842239544,Maureen,69932,Maureen; Marian; Miriam; Mariana; Marin; Marne; Marrion
+Anita,104050,7,130378,234428,1.2530321960595867,Annette,81512,Annette; Andy; Andi; Andie; Amit; Ayomide; Anhad
+Lily,87854,7,201791,289645,2.2968902952625947,Layla,60968,Layla; Lillie; Lilly; Lula; Lyle; Loyal; Lael
+Clyde,65474,7,102892,168366,1.5714940281638512,Claudia,60938,Claudia; Claude; Claudio; Claudie; Cleotha; Child; Clide
+Nina,60084,7,10574,70658,0.17598695160109182,Nehemiah,9198,Nehemiah; Noam; Nana; Nima; Neema; Numa; Name
+Damian,51978,7,65000,116978,1.2505290699911502,Damon,32105,Damon; Damien; Denim; Damani; Damoni; Denym; Demani
+Aria,43971,7,28469,72440,0.6474494553228264,Arya,14004,Arya; Ari; Aarya; Arie; Arrow; Ara; Ary
+Kayden,38528,7,72125,110653,1.872015157807309,Kaden,33994,Kaden; Kaiden; Keaton; Kadyn; Kaidyn; Kaedyn; Kaydin
+Dawson,23912,7,13167,37079,0.5506440281030445,Deshawn,7040,Deshawn; Dashawn; Deshaun; Deshon; Dasani; Dawsyn; Deshone
+Kasey,19882,7,11694,31576,0.5881702042048084,Kacey,4923,Kacey; Kaycee; Kayce; Kacy; Kekoa; Khaza; Kazi
+Asia,15106,7,22027,37133,1.4581623196081028,Ace,10650,Ace; Asa; Asha; Asiyah; Asiah; Aziah; Acie
+Braylen,6015,7,6978,12993,1.1600997506234414,Braelyn,5019,Braelyn; Braylin; Berlin; Brailyn; Bralyn; Braylyn; Brylen
+Kymani,1694,7,1541,3235,0.9096812278630461,Kimani,575,Kimani; Kaimana; Kanon; Kamani; Khamani; Kemani; Kemoni
+Ocie,1512,7,2845,4357,1.8816137566137565,Ozzy,1233,Ozzy; Ossie; Ozzie; Ozie; Osie; Okie; Osa
+Young,274,7,598,872,2.1824817518248176,Yancy,254,Yancy; Yeng; Yong; Ying; Yannis; Yang; Ynes
+Sarah,523344,6,414228,937572,0.7915023388058332,Sara,211822,Sara; Sherry; Sierra; Sawyer; Sora; Surya
+Rachel,281166,6,269699,550865,0.9592162637018701,Russell,174538,Russell; Rachael; Raquel; Rochelle; Rogelio; Rozell
+Hannah,225050,6,19094,244144,0.08484336814041324,Hanna,18792,Hanna; Han; Hanh; Hien; Hani; Hyun
+Teresa,204280,6,400768,605048,1.9618562757000195,Theresa,194320,Theresa; Tracy; Tracey; Trace; Tyrese; Terez
+Gabriel,195006,6,176387,371393,0.9045208865368245,Gabrielle,67722,Gabrielle; Gabriella; Gabriela; Gabriele; Gabriell; Gabrial
+Cameron,166974,6,25894,192868,0.15507803610142898,Camryn,16142,Camryn; Camron; Camren; Cameryn; Cameran; Camrin
+Robin,165200,6,110588,275788,0.6694188861985472,Ruben,55224,Ruben; Robyn; Raven; Robbin; Revan; Ravon
+Cody,145478,6,138712,284190,0.9534912495360123,Chad,119138,Chad; Cade; Coty; Codi; Codie; Coda
+Peggy,144288,6,72567,216855,0.502931636726547,Paige,71858,Paige; Page; Peace; Paz; Posey; Phuc
+Evan,141249,6,19714,160963,0.13956912969295357,Ebony,18498,Ebony; Evin; Evon; Evyn; Evian; Evann
+Adrian,137414,6,83812,221226,0.609923297480606,Adriana,46544,Adriana; Adrienne; Adrien; Adriane; Adrain; Adrean
+Glenn,120596,6,67348,187944,0.5584596504029984,Glen,59697,Glen; Galen; Glynn; Gaylon; Gaylen; Glyn
+Savannah,93176,6,20291,113467,0.21777067055894223,Savanna,15618,Savanna; Sevyn; Shavon; Seven; Sivan; Sophana
+Lydia,83276,6,106527,189803,1.2792040924155819,Lloyd,75142,Lloyd; Latoya; Loyd; Ludie; Lattie; Luddie
+Nora,80758,6,5794,86552,0.07174521409643626,Noor,3216,Noor; Nori; Nour; Nery; Nuri; Neri
+Gina,74908,6,70986,145894,0.9476424413947776,Gene,62754,Gene; Gianni; Gennie; Gwyn; Gianny; Giani
+Aaliyah,53320,6,70699,124019,1.3259377344336083,Aliyah,23452,Aliyah; Allie; Ali; Al; Alaa; Aly
+Skylar,50310,6,40695,91005,0.8088849135360763,Skyler,32882,Skyler; Saylor; Sailor; Schuyler; Skylor; Schyler
+Ariel,47206,6,28201,75407,0.5974028725162056,Arielle,14096,Arielle; Arlo; Areli; Arlie; Arley; Arlee
+Drew,40394,6,46634,87028,1.154478387879388,Dora,38709,Dora; Dara; Dior; Dru; Drue; Diarra
+Sandy,35776,6,3578,39354,0.10001118067978533,Saint,2422,Saint; Shawnta; Shaunte; Shanti; Shonte; Summit
+Janelle,26240,6,20484,46724,0.780640243902439,Jamal,15388,Jamal; Jamel; Jonell; Janiel; Jamelle; Jamile
+Zane,25566,6,31544,57110,1.2338261753891888,Zion,24536,Zion; Zain; Zyon; Zen; Zhane; Zyan
+Rylan,18685,6,5011,23696,0.2681830345196682,Raylan,2956,Raylan; Rylen; Raylen; Rylin; Raylin; Rilyn
+Paris,17802,6,20085,37887,1.1282440175261206,Percy,11532,Percy; Pierce; Parrish; Parris; Praise; Perris
+Teagan,15480,6,3665,19145,0.23675710594315247,Tegan,2562,Tegan; Teegan; Teigan; Tashawn; Teagen; Teigen
+Thomas,1144248,5,19523,1163771,0.017061860715509226,Tamika,10546,Tamika; Tanisha; Townes; Tennessee; Tanis
+George,677288,5,361613,1038901,0.5339131949776166,Grace,231125,Grace; Georgia; Gracie; Gregg; Georgie
+Kenneth,638856,5,50167,689023,0.07852630326708993,Kennedy,47018,Kennedy; Kenyatta; Kenyetta; Kenyata; Kinta
+Susan,555649,5,117794,673443,0.2119935426861202,Suzanne,107774,Suzanne; Susana; Shaquan; Sekani; Sagan
+Eric,443542,5,291900,735442,0.658111294984466,Erica,114770,Erica; Erik; Erika; Erick; Eris
+Melissa,378342,5,137391,515733,0.3631396990024898,Miles,55320,Miles; Malachi; Myles; Malik; Mills
+Sharon,360380,5,12386,372766,0.03436927687441035,Sharron,7040,Sharron; Soren; Sheron; Sherron; Sharone
+Dennis,308025,5,193651,501676,0.6286859832805779,Denise,185264,Denise; Denis; Deniz; Dung; Donnis
+Willie,267122,5,49612,316734,0.1857278696625512,Willow,28901,Willow; Will; Wiley; Wylie; Wally
+Jordan,264406,5,43268,307674,0.16364227740671544,Jordyn,32236,Jordyn; Jordon; Jorden; Jordin; Jourdan
+Noah,253562,5,15787,269349,0.06226090660272438,Noe,10387,Noe; Noa; Nou; Nai; Nhia
+Jeremy,222133,5,197999,420132,0.8913533783814201,Jeremiah,108908,Jeremiah; Jerome; Journey; Jream; Jermiah
+Bruce,191142,5,191734,382876,1.0030971738288812,Brooke,98047,Brooke; Bryce; Brooks; Brice; Brook
+Shannon,170618,5,14973,185591,0.08775744645934193,Simone,11615,Simone; Shanon; Shannan; Shannen; Sonam
+Randy,164940,5,131762,296702,0.7988480659633806,Rhonda,102834,Rhonda; Ronda; Randi; Ronit; Rande
+Lucas,159293,5,32041,191334,0.20114505973269384,Lukas,20510,Lukas; Lakeisha; Legacy; Lexus; Legaci
+Avery,111920,5,83927,195847,0.7498838456040029,Aubrey,77358,Aubrey; Averie; Aubry; Abeer; Avry
+Thelma,100962,5,1422,102384,0.014084507042253521,Taylin,706,Taylin; Taylen; Talin; Talyn; Taylan
+Levi,99806,5,14342,114148,0.14369877562471195,Lupe,10768,Lupe; Lovie; Love; Levy; Lipa
+Blake,99579,5,6412,105991,0.06439108647405578,Blaze,2984,Blaze; Blaise; Blayke; Blaize; Bless
+Darrell,78186,5,78447,156633,1.003338193538485,Darryl,44431,Darryl; Daryl; Dariel; Darl; Darriel
+Asher,50989,5,9228,60217,0.18098021141814902,Azariah,5032,Azariah; Akira; Azari; Akari; Azure
+Roman,46852,5,73309,120161,1.5646930760693247,Ramon,35534,Ramon; Ramona; Ronin; Romaine; Rameen
+Kendall,46630,5,8895,55525,0.19075702337550932,Kendal,3810,Kendal; Kyndall; Kyndal; Kendell; Kendel
+Felicia,43470,5,38230,81700,0.8794570968484012,Felix,37114,Felix; Felice; Feliz; Floyce; Felis
+Beau,29244,5,7100,36344,0.24278484475447956,Bo,5698,Bo; Bowie; Bao; Bee; Bawi
+Archie,22320,5,5527,27847,0.24762544802867384,Ares,3066,Ares; Aries; Aris; Argie; Arshia
+Kameron,19429,5,17977,37406,0.9252663544186526,Kamryn,13492,Kamryn; Kamron; Kamren; Kameryn; Kamrin
+Mandy,18500,5,11012,29512,0.5952432432432433,Monte,8880,Monte; Monet; Mendy; Montie; Monta
+Semaj,3324,5,1323,4647,0.398014440433213,Simcha,787,Simcha; Seneca; Sang; Sung; Seng
+Adley,2546,5,2219,4765,0.8715632364493323,Adell,1702,Adell; Adel; Atlee; Atley; Ayodele
+Aven,938,5,1271,2209,1.3550106609808101,Avion,656,Avion; Avian; Ayven; Avon; Abyan
+Charles,1158250,4,151967,1310217,0.13120397150874163,Carlos,150702,Carlos; Charleston; Corliss; Carlisle
+Steven,645508,4,811988,1457496,1.2579054016371602,Stephen,428820,Stephen; Stephanie; Stephan; Stephane
+Jason,525108,4,197789,722897,0.376663467324817,Jackson,142696,Jackson; Jaxon; Jaxyn; Jasani
+Gary,450070,4,9851,459921,0.021887706356788945,Gerry,6954,Gerry; Grey; Gray; Ger
+Ashley,434068,4,27712,461780,0.06384253158491296,Ashlee,20886,Ashlee; Ashly; Azul; Aseel
+Kathleen,353008,4,184612,537620,0.522968317998459,Kaitlyn,82780,Kaitlyn; Katelyn; Kaitlin; Kaitlynn
+Tyler,307290,4,226793,534083,0.7380422402290996,Taylor,218414,Taylor; Tayler; Tylor; Tylar
+Martha,247198,4,22775,269973,0.09213262243222033,Marty,14921,Marty; Marta; Merritt; Merit
+Albert,223174,4,196924,420098,0.8823787717207201,Alfred,111982,Alfred; Alberto; Alberta; Alfredo
+Sophia,207988,4,149665,357653,0.7195847837375233,Sofia,87893,Sofia; Sophie; Saba; Shiva
+Alexis,203244,4,1559,204803,0.00767058314144575,Alexys,1278,Alexys; Alexsis; Alexes; Alexiz
+Alan,179528,4,228343,407871,1.2719074461922375,Allen,131616,Allen; Alma; Alana; Allyn
+Ava,165474,4,38088,203562,0.23017513325356248,Abby,29134,Abby; Abbie; Avi; Avo
+Audrey,149049,4,11191,160240,0.07508269092714477,Audra,10316,Audra; Audry; Adair; Autry
+Mia,148612,4,101265,249877,0.6814052700993191,Maya,59070,Maya; Mae; Mai; My
+Craig,148166,4,96975,245141,0.6545023824629133,Chris,80782,Chris; Cruz; Cris; Cherokee
+Amelia,127430,4,738,128168,0.005791414894451856,Anel,609,Anel; Anmol; Amil; Amel
+Isaiah,122436,4,2148,124584,0.017543859649122806,Isa,1220,Isa; Issa; Izzy; Ikea
+Gail,101942,4,65509,167451,0.6426105040120853,Gayle,30140,Gayle; Gael; Gale; Gal
+Claire,101138,4,18067,119205,0.17863710969170835,Clare,13074,Clare; Clair; Collier; Clary
+Debbie,92458,4,1561,94019,0.016883341625386662,Davi,574,Davi; Davie; Davey; Davy
+Molly,85018,4,35181,120199,0.41380648803782727,Milo,17870,Milo; Millie; Mel; Mallie
+Zoe,76288,4,56439,132727,0.7398149119127517,Zoey,55532,Zoey; Zia; Ziah; Zi
+Carmen,75300,4,5987,81287,0.07950863213811421,Carmine,5736,Carmine; Carman; Carmon; Carmin
+Tamara,64302,4,50173,114475,0.7802712201797767,Tanner,48260,Tanner; Tamar; Tamer; Tamari
+Grayson,61438,4,30350,91788,0.4939939451154009,Greyson,28290,Greyson; Graysen; Gracen; Graycen
+Brooklyn,61222,4,20622,81844,0.3368396981477247,Brooklynn,18176,Brooklynn; Berkley; Berkeley; Breslin
+Nevaeh,48228,4,28376,76604,0.5883719001409969,Nova,24393,Nova; Navy; Novah; Navi
+Summer,43903,4,948,44851,0.02159305742204405,Samar,326,Samar; Samari; Shamari; Shomari
+Bryson,39294,4,3266,42560,0.08311701532040515,Brecken,1898,Brecken; Brogan; Breckyn; Bergen
+Caden,34864,4,31389,66253,0.9003269848554383,Cayden,20211,Cayden; Caiden; Cadyn; Caidyn
+Harley,31192,4,10727,41919,0.34390228263657346,Harlow,6504,Harlow; Harlee; Harlie; Harlo
+Enrique,28742,4,39006,67748,1.3571080648528286,Emerson,28492,Emerson; Emersyn; Emmerson; Emrys
+Emery,25948,4,11624,37572,0.44797286881455217,Emory,10606,Emory; Emry; Emori; Emari
+Kinsley,23164,4,6652,29816,0.28716974615783114,Kensley,3756,Kensley; Kingsley; Kinsler; Kingslee
+Dewey,13407,4,7713,21120,0.5752964869098233,Dee,7524,Dee; De; Dao; Doua
+Lennox,8131,4,603,8734,0.07416061984995695,Lenox,484,Lenox; Lennis; Lynnox; Lennix
+Zuri,7234,4,9923,17157,1.3717168924523084,Zaire,4068,Zaire; Zyaire; Zora; Zahari
+Amani,6398,4,1133,7531,0.17708658955923726,Aman,567,Aman; Amen; Amoni; Aiman
+Coby,3166,4,1283,4449,0.4052432090966519,Chevy,982,Chevy; Cove; Cobi; Cobie
+Chosen,751,4,500,1251,0.6657789613848203,Chozen,354,Chozen; Chozyn; Chosyn; Chisom
+Yan,96,4,110,206,1.1458333333333333,Yen,66,Yen; Yuma; Yuan; Yihan
+James,2544998,3,201485,2746483,0.07916902095797325,Janice,201445,Janice; Jung; Jency
+Anthony,737964,3,154834,892798,0.209812402773035,Antonio,128552,Antonio; Antonia; Antoine
+Margaret,572466,3,147559,720025,0.25776028620040314,Marjorie,129759,Marjorie; Margarita; Mercer
+Emily,437308,3,22853,460161,0.052258362527097604,Emilee,10749,Emilee; Emilie; Emile
+Jonathan,433134,3,90206,523340,0.20826349351470907,Johnathan,47568,Johnathan; Jonathon; Johnathon
+Amanda,389126,3,318,389444,0.0008172160174339417,Amando,240,Amando; Amandeep; Anant
+Henry,344966,3,26375,371341,0.07645681023637112,Homer,24745,Homer; Henri; Honor
+Nicole,296428,3,4165,300593,0.014050629495189388,Nicola,1659,Nicola; Nichelle; Nikola
+Janet,275720,3,177122,452842,0.6423980850137821,Juanita,99330,Juanita; Jeanette; Jonte
+Carolyn,275238,3,137846,413084,0.5008247407698065,Caroline,116609,Caroline; Carolina; Carlin
+Victoria,257587,3,161588,419175,0.6273142666361268,Victor,160946,Victor; Vester; Victory
+Ethan,238496,3,258289,496785,1.0829909097007917,Edwin,117214,Edwin; Edna; Eden
+Leslie,185274,3,125384,310658,0.6767490311646535,Lucille,103240,Lucille; Lesley; Lesly
+Erin,160128,3,6676,166804,0.04169164668265388,Ernie,5926,Ernie; Erinn; Earnie
+Bobby,159110,3,55003,214113,0.3456916598579599,Bobbie,49498,Bobbie; Baby; Bobbye
+Dale,145958,3,13641,159599,0.09345839214020471,Delia,12892,Delia; Dell; Dayle
+Todd,139696,3,25565,165261,0.18300452410949491,Teddy,14023,Teddy; Tate; Teddie
+Earl,132092,3,4814,136906,0.03644429639947915,Earle,3189,Earle; Early; Earlie
+Melanie,129350,3,10786,140136,0.08338616157711636,Milan,10600,Milan; Mylan; Million
+Jasmine,128151,3,60891,189042,0.47515040850246976,Jasmin,21440,Jasmin; Jazmin; Jazmine
+Monica,123741,3,38142,161883,0.3082405993163139,Monique,37934,Monique; Meng; Ming
+Rodney,121893,3,7914,129807,0.06492579557480742,Raiden,5426,Raiden; Rayden; Rhythm
+Owen,116122,3,1544,117666,0.013296360724066068,Ona,1281,Ona; Onie; Onnie
+Herbert,104112,3,67867,171979,0.6518652989088674,Harper,67664,Harper; Harpreet; Harbor
+Barry,88826,3,1377,90203,0.015502217819107019,Berry,991,Berry; Barrie; Bora
+Sydney,88553,3,54759,143312,0.6183754361794631,Sidney,46839,Sidney; Sutton; Stoney
+Bernice,82689,3,4101,86790,0.04959547219098066,Berenice,3174,Berenice; Bronx; Burnice
+Kelsey,75189,3,16844,92033,0.22402213089680673,Kayleigh,16467,Kayleigh; Kelcey; Kelechi
+Mackenzie,72308,3,53648,125956,0.7419372683520495,Mckenzie,31688,Mckenzie; Makenzie; Mackenzi
+Hayden,69954,3,1931,71885,0.027603853961174485,Haiden,1501,Haiden; Haidyn; Hadyn
+Arlene,69058,3,2736,71794,0.03961887109386313,Arlen,1586,Arlen; Arlyn; Arlin
+Peyton,67525,3,41348,108873,0.6123361717882266,Payton,40281,Payton; Payten; Payden
+Garrett,65594,3,23237,88831,0.35425496234411685,Grady,23221,Grady; Gradie; Gordie
+Dakota,65030,3,6235,71265,0.09587882515761956,Dusty,4610,Dusty; Dakotah; Dakoda
+Caitlin,55226,3,39632,94858,0.7176329989497701,Caitlyn,25596,Caitlyn; Catalina; Catlin
+Pearl,52326,3,16616,68942,0.3175476818407675,Perla,9320,Perla; Pearlie; Pearly
+Karl,47437,3,47474,94911,1.0007799818706917,Karla,44126,Karla; Karol; Karel
+Rafael,42270,3,923,43193,0.021835817364561156,Ripley,680,Ripley; Rebel; Revel
+Kaleb,42141,3,5567,47708,0.13210412662252913,Kolby,4623,Kolby; Kelby; Kolbie
+Trinity,41752,3,31436,73188,0.7529220157118222,Trenton,27895,Trenton; Trinidad; Trenidad
+Armando,36330,3,12668,48998,0.34869254060005506,Armani,11834,Armani; Armoni; Armanii
+Camille,34859,3,8648,43507,0.248085143004676,Chanel,8038,Chanel; Conley; Camile
+Eunice,33220,3,531,33751,0.015984346779048766,Ennis,454,Ennis; Enes; Enis
+Braxton,30709,3,7658,38367,0.24937314793708684,Bristol,4860,Bristol; Brixton; Brighton
+Elliott,30513,3,38528,69041,1.262674925441615,Elliot,28680,Elliot; Elwood; Eliot
+Jameson,28518,3,16765,45283,0.5878743249877271,Jamison,9007,Jamison; Jensen; Jensyn
+Noel,27804,3,559,28363,0.020105020860307868,Nile,440,Nile; Nihal; Nolie
+Laverne,24894,3,6200,31094,0.24905599742909937,Lavern,5266,Lavern; Luverne; Levern
+Maddox,22846,3,1688,24534,0.0738860194344743,Maddux,1200,Maddux; Maddix; Matisse
+Mercedes,20299,3,4432,24731,0.21833587861471007,Marquita,4164,Marquita; Merced; Marquette
+Leticia,19597,3,22927,42524,1.1699239679542788,Latasha,14310,Latasha; Latisha; Lotus
+Phoenix,17982,3,269,18251,0.014959403848292738,Phuong,248,Phuong; Phenix; Pheonix
+Toby,17758,3,573,18331,0.032267147201261406,Tobi,425,Tobi; Tobey; Tobie
+Justice,17369,3,3498,20867,0.20139328689043698,Justus,2870,Justus; Justyce; Justis
+Cornelius,14721,3,2690,17411,0.18273215134841383,Carmel,1846,Carmel; Carnell; Cornelious
+Blaine,13592,3,7976,21568,0.5868157739846969,Belen,4872,Belen; Bellamy; Blayne
+Addie,13587,3,1375,14962,0.10119967616103628,Audie,1121,Audie; Adi; Atha
+Van,11545,3,1089,12634,0.09432654828930273,Von,636,Von; Vinnie; Vanna
+Kobe,10560,3,526,11086,0.04981060606060606,Kobi,348,Kobi; Kobie; Kippy
+Karson,9911,3,6578,16489,0.6637069922308546,Karsyn,4754,Karsyn; Karsen; Krishna
+Javon,7819,3,7427,15246,0.9498657117278424,Jovan,4067,Jovan; Jovani; Jovon
+Kamari,7564,3,1186,8750,0.156795346377578,Khamari,718,Khamari; Kemari; Kamauri
+Carina,6679,3,1997,8676,0.298996855816739,Carin,1125,Carin; Caron; Corin
+Alva,4946,3,2525,7471,0.5105135463000404,Alpha,1779,Alpha; Alvie; Albie
+Nixon,2901,3,346,3247,0.11926921751120304,Naseem,273,Naseem; Nasim; Negan
+Otha,2089,3,640,2729,0.3063666826232647,Odie,582,Odie; Ottie; Oddie
+Ascencion,144,3,131,275,0.9097222222222222,Asencion,118,Asencion; Ascension; Asuncion
+Yu,97,3,119,216,1.2268041237113403,Yee,72,Yee; Yi; Yue
+William,1986386,2,89136,2075522,0.04487345359864598,Wilma,65836,Wilma; Waylon
+Matthew,822738,2,46375,869113,0.05636666836830194,Mattie,46272,Mattie; Matty
+Patricia,786154,2,354524,1140678,0.4509599900273992,Patrick,338987,Patrick; Patrice
+Paul,686762,2,149140,835902,0.21716402480044034,Paula,137924,Paula; Paola
+Jessica,524793,2,122904,647697,0.23419519696337412,Jesus,120225,Jesus; Jacques
+Betty,493556,2,83538,577094,0.16925738923242753,Beth,77494,Beth; Bodhi
+Jeffrey,489484,2,166384,655868,0.3399171372302261,Jeffery,114064,Jeffery; Javier
+Helen,451738,2,272,452010,0.0006021189273428403,Halen,144,Halen; Haylen
+Shirley,343627,2,2699,346326,0.007854446827519374,Sherrill,2448,Sherrill; Shirl
+Katherine,310292,2,267590,577882,0.8623812408956725,Kathryn,218416,Kathryn; Katrina
+Peter,286996,2,49339,336335,0.17191528801795147,Pedro,44493,Pedro; Petra
+Lawrence,222407,2,18049,240456,0.08115302126281997,Laurence,16363,Laurence; Lorenza
+Roger,218948,2,24981,243929,0.11409558433966056,Ryker,19089,Ryker; Rosario
+Jacqueline,211924,2,77420,289344,0.3653196428908477,Jocelyn,54271,Jocelyn; Jaclyn
+Isabella,200259,2,109083,309342,0.5447096010666187,Isabel,60759,Isabel; Isabelle
+Wayne,175105,2,264,175369,0.001507666828474344,Wynn,248,Wynn; Wen
+Ruby,170858,2,17926,188784,0.1049175338585258,Robbie,17910,Robbie; Robie
+Irene,155290,2,31503,186793,0.20286560628501513,Irma,31316,Irma; Iran
+Martin,151399,2,6743,158142,0.04453794278694047,Martina,6190,Martina; Martine
+Fred,148924,2,38266,187190,0.2569498536166098,Freddie,38104,Freddie; Fredi
+Ernest,138328,2,45788,184116,0.3310103522063501,Earnest,25248,Earnest; Ernesto
+Morgan,130278,2,265,130543,0.0020341116688926755,Morgen,135,Morgen; Morrison
+Hazel,123206,2,1860,125066,0.015096667370095612,Huxley,1854,Huxley; Huxlee
+Marcus,118241,2,36084,154325,0.30517333243122097,Marcos,25156,Marcos; Marquis
+Connor,115932,2,27898,143830,0.2406410654521616,Conner,27456,Conner; Camari
+Sylvia,115874,2,86916,202790,0.7500906156687437,Shelby,78680,Shelby; Silvia
+Dustin,103290,2,76851,180141,0.7440313679930294,Destiny,74926,Destiny; Destin
+Madeline,97035,2,73738,170773,0.7599113721852939,Madelyn,53926,Madelyn; Madeleine
+Gavin,92798,2,44879,137677,0.48362033664518633,Giovanni,42233,Giovanni; Giovanny
+Lindsey,79380,2,64756,144136,0.8157722348198538,Lindsay,64690,Lindsay; Landis
+Carson,65525,2,2949,68474,0.04500572300648607,Carsyn,1749,Carsyn; Carsen
+Grant,64875,2,3509,68384,0.054088631984585744,Garnet,2090,Garnet; Garnett
+Priscilla,58292,2,15480,73772,0.26555959651410144,Presley,15440,Presley; Pressley
+Vickie,53690,2,27067,80757,0.5041348482026448,Vicky,25076,Vicky; Vickey
+Cecilia,50250,2,49921,100171,0.9934527363184079,Cecil,49838,Cecil; Chesley
+Ezra,48016,2,929,48945,0.01934771742752416,Ezrah,821,Ezrah; Ezri
+Kendra,47978,2,16185,64163,0.33734211513610407,Kendrick,14859,Kendrick; Kentrell
+Emmanuel,42814,2,24661,67475,0.5760031765310413,Emanuel,24435,Emanuel; Emmanuelle
+Hugh,35972,2,23710,59682,0.6591237629267208,Hugo,15964,Hugo; Hayes
+Terrence,34133,2,33880,68013,0.9925878182404125,Terrance,33124,Terrance; Torrance
+Bentley,29010,2,1824,30834,0.06287487073422958,Bentlee,1819,Bentlee; Bentlie
+August,29008,2,8981,37989,0.3096042471042471,Augustine,6154,Augustine; Augusta
+Verna,28574,2,2257,30831,0.07898789108980192,Verne,1389,Verne; Vernie
+Tessa,26268,2,1728,27996,0.0657834627683874,Taj,1722,Taj; Tashi
+Chance,26025,2,313,26338,0.012026897214217099,Cheng,183,Cheng; Chong
+Alondra,20340,2,138,20478,0.006784660766961652,Allante,82,Allante; Alante
+Junior,18915,2,7052,25967,0.37282579962992335,Jamari,6824,Jamari; Jamaria
+Ollie,18786,2,9830,28616,0.5232620036197169,Ola,9824,Ola; Olie
+Yesenia,18782,2,2942,21724,0.15663933553402193,Yessenia,2926,Yessenia; Yoshimi
+Finley,18686,2,3362,22048,0.17992079631809912,Finnley,2810,Finnley; Female
+Tatum,17578,2,17470,35048,0.9938559563090227,Tatiana,16327,Tatiana; Taytum
+Terrell,16314,2,662,16976,0.040578644109353926,Terrill,628,Terrill; Terryl
+Karter,15312,2,622,15934,0.04062173458725183,Kartier,562,Kartier; Kharter
+Lamar,14886,2,477,15363,0.03204353083434099,Lamarr,439,Lamarr; Lanier
+Fern,14135,2,1478,15613,0.10456314113901663,Fran,1470,Fran; Farron
+Blair,14008,2,4638,18646,0.33109651627641346,Baylor,4622,Baylor; Bayler
+Ora,13573,2,378,13951,0.02784940691077875,Ori,354,Ori; Orie
+Hillary,13026,2,10598,23624,0.8136035621065562,Hilary,10572,Hilary; Hillery
+Imani,12998,2,1936,14934,0.1489459916910294,Iman,1836,Iman; Imaan
+Knox,10444,2,9865,20309,0.9445614707008809,Kenzie,9679,Kenzie; Kinnick
+Oakley,10289,2,2706,12995,0.2629993196617747,Oaklee,2314,Oaklee; Ozell
+Latonya,10099,2,4589,14688,0.4544014258837509,Layton,4078,Layton; Leyton
+India,9976,2,2237,12213,0.2242381716118685,Indie,1577,Indie; Indy
+Harlan,9947,2,2090,12037,0.21011360209108274,Harlem,1600,Harlem; Harlyn
+Prince,9330,2,8282,17612,0.887674169346195,Princess,6074,Princess; Promise
+Kaydence,8470,2,6651,15121,0.7852420306965762,Kadence,5498,Kadence; Kaidence
+Graciela,6786,2,4193,10979,0.6178897730621868,Griselda,3718,Griselda; Grisel
+Haleigh,6282,2,6024,12306,0.958930276981853,Hollis,5984,Hollis; Halsey
+Alden,5620,2,67,5687,0.01192170818505338,Aldine,59,Aldine; Aldean
+Yahir,5598,2,1646,7244,0.29403358342265096,Yuri,1416,Yuri; Yer
+Lizette,5124,2,3959,9083,0.7726385636221702,Lizeth,3823,Lizeth; Lakota
+Brylee,4884,2,5801,10685,1.1877559377559377,Beryl,3045,Beryl; Briley
+Oaklynn,4696,2,2350,7046,0.5004258943781942,Oaklyn,2076,Oaklyn; Oakland
+Briar,4545,2,738,5283,0.16237623762376238,Bryer,459,Bryer; Bryar
+Kenley,2984,2,557,3541,0.18666219839142092,Kamil,521,Kamil; Kamalei
+Emani,2486,2,801,3287,0.32220434432823813,Eman,483,Eman; Emaan
+Damari,2110,2,878,2988,0.4161137440758294,Demari,862,Demari; Damaria
+Artie,2002,2,68,2070,0.03396603396603397,Arda,60,Arda; Artha
+Val,1378,2,92,1470,0.06676342525399129,Valley,62,Valley; Vola
+Tremaine,1311,2,448,1759,0.34172387490465295,Tramaine,298,Tramaine; Tiernan
+Verlin,650,2,384,1034,0.5907692307692308,Verlyn,238,Verlyn; Verlon
+Ajani,524,2,152,676,0.2900763358778626,Agam,86,Agam; Asani
+Lavell,462,2,818,1280,1.7705627705627707,Lavelle,430,Lavelle; Lovell
+Ova,340,2,32,372,0.09411764705882353,Ovie,24,Ovie; Opha
+Ridley,300,2,18,318,0.06,Rudell,10,Rudell; Redell
+Hoa,82,2,112,194,1.3658536585365855,Ha,75,Ha; Houa
+Oluwademilade,28,2,30,58,1.0714285714285714,Oluwatamilore,23,Oluwatamilore; Oluwadamilola
+Robert,2387446,1,54516,2441962,0.022834443166463242,Roberto,54516,Roberto
+Joseph,1288584,1,486032,1774616,0.37718301639629237,Jacob,486032,Jacob
+Richard,1277751,1,71422,1349173,0.05589664966022331,Ricardo,71422,Ricardo
+Elizabeth,791423,1,20431,811854,0.025815524694126908,Elisabeth,20431,Elisabeth
+Jennifer,736406,1,9116,745522,0.012379040909498294,Juniper,9116,Juniper
+Linda,725772,1,2276,728048,0.003135971076315978,Lindy,2276,Lindy
+Edward,616827,1,53504,670331,0.08674069066367068,Eduardo,53504,Eduardo
+Kevin,592080,1,358,592438,0.0006046480205377651,Kevyn,358,Kevyn
+Ronald,540292,1,24,540316,4.442042451119024e-05,Reynolds,24,Reynolds
+Timothy,540278,1,73,540351,0.00013511562565938275,Tandy,73,Tandy
+Kimberly,423127,1,3920,427047,0.009264357982355179,Kimber,3920,Kimber
+Justin,393762,1,16732,410494,0.04249267323916477,Justine,16732,Justine
+Samuel,393154,1,366,393520,0.0009309329168722688,Shamel,366,Shamel
+Rebecca,371666,1,1750,373416,0.004708528625163453,Refugio,1750,Refugio
+Deborah,369480,1,274040,643520,0.74169102522464,Debra,274040,Debra
+Gregory,354854,1,695,355549,0.0019585519678515673,Gregoria,695,Gregoria
+Cynthia,353716,1,127274,480990,0.35981974239220166,Cindy,127274,Cindy
+Walter,285782,1,3142,288924,0.010994394328544136,Wilder,3142,Wilder
+Zachary,274331,1,810,275141,0.0029526375072448977,Zakaria,810,Zakaria
+Arthur,248076,1,26700,274776,0.10762830745416727,Arturo,26700,Arturo
+Gerald,221945,1,102324,324269,0.4610331388407038,Geraldine,102324,Geraldine
+Charlotte,212102,1,21863,233965,0.10307776447181073,Carlton,21863,Carlton
+Abigail,202574,1,2147,204721,0.010598596068597154,Abigayle,2147,Abigayle
+Lillian,200620,1,35177,235797,0.1753414415312531,Liliana,35177,Liliana
+Beverly,188224,1,4966,193190,0.02638345800748045,Beverley,4966,Beverley
+Natalie,186186,1,40066,226252,0.21519340874179585,Natalia,40066,Natalia
+Eugene,182294,1,164,182458,0.0008996456273931122,Ekam,164,Ekam
+Harry,179568,1,36,179604,0.00020048115477145148,Haru,36,Haru
+Tiffany,168748,1,1282,170030,0.007597127077061654,Tavon,1282,Tavon
+Philip,167670,1,153244,320914,0.913961949066619,Phillip,153244,Phillip
+Caleb,158108,1,26270,184378,0.16615225036051307,Colby,26270,Colby
+Bradley,154851,1,488,155339,0.003151416522980155,Bradlee,488,Bradlee
+Eleanor,154726,1,54608,209334,0.3529335728966043,Elmer,54608,Elmer
+Josephine,142852,1,5472,148324,0.03830537899364377,Josefina,5472,Josefina
+Leonard,140550,1,44624,185174,0.3174955531839203,Leonardo,44624,Leonardo
+Wanda,138109,1,129961,268070,0.9410031207234866,Wendy,129961,Wendy
+Courtney,137072,1,8260,145332,0.06026030115559706,Cortney,8260,Cortney
+Hunter,134148,1,5996,140144,0.04469690192921251,Hendrix,5996,Hendrix
+Valerie,133986,1,36563,170549,0.2728867195080083,Valeria,36563,Valeria
+Vanessa,129790,1,278,130068,0.002141921565605979,Venice,278,Venice
+Marvin,123662,1,3652,127314,0.029532111723892546,Mervin,3652,Mervin
+April,120082,1,50,120132,0.00041638213887177093,Abriel,50,Abriel
+Wesley,118516,1,45,118561,0.0003796955685308313,Weslee,45,Weslee
+Eva,117917,1,8,117925,6.784433118210267e-05,Ebbie,8,Ebbie
+Steve,117546,1,11560,129106,0.0983444779065217,Stevie,11560,Stevie
+Esther,113919,1,5412,119331,0.047507439496484345,Ester,5412,Ester
+Veronica,108212,1,1853,110065,0.01712379403393339,Vernice,1853,Vernice
+Carter,101736,1,728,102464,0.007155775733270426,Cartier,728,Cartier
+Jared,101682,1,2340,104022,0.02301292264117543,Jordy,2340,Jordy
+Wyatt,99120,1,266,99386,0.0026836158192090395,Woodie,266,Woodie
+Ethel,97642,1,17,97659,0.00017410540546076484,Edell,17,Edell
+Randall,97436,1,12652,110088,0.1298493370006979,Randal,12652,Randal
+Manuel,91900,1,4044,95944,0.04400435255712731,Manuela,4044,Manuela
+Stacy,89632,1,77948,167580,0.8696447697250982,Stacey,77948,Stacey
+Warren,87888,1,5908,93796,0.06722191880575278,Wren,5908,Wren
+Beatrice,82501,1,7721,90222,0.09358674440309814,Beatriz,7721,Beatriz
+Chelsea,80486,1,87,80573,0.0010809333300201278,Clois,87,Clois
+Addison,76766,1,1004,77770,0.013078706719120444,Adison,1004,Adison
+Colton,73657,1,66750,140407,0.9062275140176765,Clayton,66750,Clayton
+Ivan,71378,1,236,71614,0.0033063408893496595,Ivon,236,Ivon
+Jorge,68120,1,1308,69428,0.019201409277745156,Jersey,1308,Jersey
+Everett,61378,1,2998,64376,0.04884486298022093,Everette,2998,Everette
+Gilbert,60918,1,12843,73761,0.2108243868807249,Gilberto,12843,Gilberto
+Spencer,60740,1,798,61538,0.01313796509713533,Spenser,798,Spenser
+Herman,59646,1,116,59762,0.0019448076987559936,Harman,116,Harman
+Preston,58457,1,42,58499,0.0007184768291222608,Prestyn,42,Prestyn
+Cooper,57563,1,12,57575,0.00020846724458419472,Copper,12,Copper
+Hector,52108,1,3898,56006,0.07480617179703693,Hester,3898,Hester
+Hudson,51804,1,82,51886,0.0015828893521735773,Hudsyn,82,Hudsyn
+Bessie,51493,1,665,52158,0.012914376711397666,Beaux,665,Beaux
+Omar,50584,1,5493,56077,0.10859164953344931,Omari,5493,Omari
+Whitney,48879,1,214,49093,0.00437815830929438,Witten,214,Witten
+Arnold,48584,1,44,48628,0.0009056479499423678,Arnell,44,Arnell
+Abraham,47440,1,102,47542,0.0021500843170320404,Auburn,102,Auburn
+Santiago,46805,1,8620,55425,0.18416835808140156,Santos,8620,Santos
+Guadalupe,42694,1,5,42699,0.00011711247482081792,Guadlupe,5,Guadlupe
+Candace,40961,1,32524,73485,0.7940235834086082,Candice,32524,Candice
+Quinn,40372,1,87,40459,0.002154958882393738,Quin,87,Quin
+Dallas,38084,1,33,38117,0.0008665056191576515,Dallis,33,Dallis
+Easton,37538,1,179,37717,0.004768501252064575,Eastyn,179,Eastyn
+Velma,37412,1,196,37608,0.005238960761253074,Valen,196,Valen
+Bianca,37210,1,2142,39352,0.05756517065305026,Banks,2142,Banks
+Ivy,35948,1,1572,37520,0.043729831979525985,Ivey,1572,Ivey
+Weston,33166,1,166,33332,0.005005125731170476,Wisdom,166,Wisdom
+Bennett,30756,1,5666,36422,0.1842242164130576,Benito,5666,Benito
+Pat,30166,1,29682,59848,0.9839554465292051,Patty,29682,Patty
+Opal,30105,1,67,30172,0.002225543929579804,Oval,67,Oval
+Cassidy,30007,1,2242,32249,0.0747158996234212,Chiquita,2242,Chiquita
+Gage,29718,1,3788,33506,0.12746483612625345,Gussie,3788,Gussie
+Camden,28948,1,1990,30938,0.06874395467735249,Camdyn,1990,Camdyn
+Mallory,28216,1,3648,31864,0.12928834703714204,Miller,3648,Miller
+Declan,27476,1,8,27484,0.00029116319697190275,Decklyn,8,Decklyn
+Fannie,27264,1,16122,43386,0.5913292253521126,Finn,16122,Finn
+Salvatore,26869,1,22760,49629,0.8470728348654584,Salvador,22760,Salvador
+Jasper,26526,1,156,26682,0.005881022393123728,Jaspreet,156,Jaspreet
+Inez,26503,1,1590,28093,0.059993208316039694,Ines,1590,Ines
+River,26218,1,114,26332,0.004348157754214661,Ryver,114,Ryver
+Otis,26092,1,2859,28951,0.10957381572895906,Odis,2859,Odis
+Ira,23449,1,732,24181,0.03121668301420103,Irie,732,Irie
+Ashlyn,23196,1,78,23274,0.003362648732540093,Ashlan,78,Ashlan
+Rudolph,23112,1,15254,38366,0.6600034614053306,Rodolfo,15254,Rodolfo
+Forrest,22883,1,5212,28095,0.22776733819866277,Forest,5212,Forest
+Clark,21806,1,453,22259,0.020774098871870126,Clarke,453,Clarke
+Willis,21728,1,2181,23909,0.10037739322533137,Wells,2181,Wells
+Nadia,21586,1,772,22358,0.03576392105994626,Nate,772,Nate
+Chandler,20411,1,1969,22380,0.09646759100485032,Chantelle,1969,Chantelle
+Corbin,18891,1,675,19566,0.03573130061934254,Corbyn,675,Corbyn
+Kyler,18812,1,387,19199,0.020571975334892623,Kylar,387,Kylar
+Winifred,17314,1,3307,20621,0.19100150167494512,Winfred,3307,Winfred
+Esteban,16152,1,1625,17777,0.10060673600792472,Estefani,1625,Estefani
+Diamond,16136,1,39,16175,0.002416955875061973,Diamante,39,Diamante
+Brennan,15465,1,3341,18806,0.21603621079857743,Brennen,3341,Brennen
+Heaven,14048,1,10642,24690,0.7575455580865603,Haven,10642,Haven
+Essie,13963,1,654,14617,0.046838072047554254,Echo,654,Echo
+Paxton,12917,1,17,12934,0.0013160950685143608,Paxtyn,17,Paxtyn
+Fay,12860,1,533,13393,0.041446345256609646,Foy,533,Foy
+Darnell,12710,1,8,12718,0.0006294256490952006,Darnelle,8,Darnelle
+Quincy,12704,1,132,12836,0.010390428211586901,Quincey,132,Quincey
+Elva,11188,1,344,11532,0.030747229174115123,Elvie,344,Elvie
+Lyric,11164,1,202,11366,0.018093873163740594,Lyrik,202,Lyrik
+Maribel,11034,1,1200,12234,0.10875475802066341,Marvel,1200,Marvel
+Kris,11014,1,8,11022,0.000726348284002179,Kriss,8,Kriss
+Ember,9300,1,72,9372,0.007741935483870968,Embry,72,Embry
+Grover,9174,1,101,9275,0.011009374318726837,Gurpreet,101,Gurpreet
+Blakely,9028,1,138,9166,0.015285777580859548,Blakeley,138,Blakeley
+Octavia,8830,1,94,8924,0.010645526613816535,October,94,October
+Lennon,7782,1,57,7839,0.007324595219737857,Lemon,57,Lemon
+Unknown,7478,1,45,7523,0.006017651778550415,Unkown,45,Unkown
+Vaughn,7468,1,62,7530,0.008302088912694162,Vashon,62,Vashon
+Virgie,7200,1,564,7764,0.07833333333333334,Versie,564,Versie
+Rusty,7167,1,943,8110,0.1315752755685782,Rashida,943,Rashida
+Ivory,7080,1,20,7100,0.002824858757062147,Ivery,20,Ivery
+Odell,6802,1,6,6808,0.0008820935019112026,Othello,6,Othello
+Avis,6150,1,222,6372,0.03609756097560975,Abisai,222,Abisai
+Kourtney,5788,1,1618,7406,0.2795438838977194,Kortney,1618,Kortney
+Kamden,5522,1,1731,7253,0.313473379210431,Kamdyn,1731,Kamdyn
+Ashanti,5312,1,111,5423,0.020896084337349397,Asante,111,Asante
+Damaris,4930,1,18,4948,0.0036511156186612576,Demaris,18,Demaris
+Hassan,4850,1,778,5628,0.16041237113402063,Hagen,778,Hagen
+Fallon,4474,1,2202,6676,0.4921770227983907,Flynn,2202,Flynn
+Sincere,4466,1,1018,5484,0.22794446932377968,Syncere,1018,Syncere
+Uriah,4306,1,36,4342,0.008360427310729215,Uriyah,36,Uriyah
+Arden,4198,1,990,5188,0.2358265840876608,Artemis,990,Artemis
+Infant,3877,1,62,3939,0.015991746195511993,Infantof,62,Infantof
+Vada,3666,1,8,3674,0.002182214948172395,Void,8,Void
+Basil,3652,1,1210,4862,0.3313253012048193,Bexley,1210,Bexley
+Amaris,3512,1,26,3538,0.007403189066059226,Americus,26,Americus
+Jules,2880,1,1148,4028,0.39861111111111114,Jaleesa,1148,Jaleesa
+Onyx,2793,1,145,2938,0.05191550304332259,Omega,145,Omega
+Noble,2230,1,333,2563,0.1493273542600897,Nabil,333,Nabil
+Concepcion,2167,1,57,2224,0.026303645592985696,Consepcion,57,Consepcion
+Stormy,2145,1,1180,3325,0.5501165501165501,Storm,1180,Storm
+Ardis,2102,1,1354,3456,0.6441484300666033,Artis,1354,Artis
+Lavon,2078,1,1046,3124,0.5033686236766122,Levon,1046,Levon
+Kooper,1167,1,234,1401,0.20051413881748073,Kapri,234,Kapri
+Azriel,1156,1,942,2098,0.8148788927335641,Azrael,942,Azrael
+Estell,1139,1,524,1663,0.46005267778753295,Estel,524,Estel
+Montgomery,969,1,632,1601,0.6522187822497421,Montez,632,Montez
+Majesty,866,1,5,871,0.005773672055427252,Majestic,5,Majestic
+Tenzin,866,1,66,932,0.07621247113163972,Tennyson,66,Tennyson
+Carrington,852,1,226,1078,0.2652582159624413,Crimson,226,Crimson
+Ezell,701,1,60,761,0.08559201141226819,Esli,60,Esli
+Cedar,682,1,54,736,0.07917888563049853,Chidera,54,Chidera
+Caprice,592,1,309,901,0.5219594594594594,Cypress,309,Cypress
+Neftali,558,1,41,599,0.07347670250896057,Neftaly,41,Neftaly
+Jovi,538,1,122,660,0.22676579925650558,Jeffie,122,Jeffie
+Clovis,534,1,41,575,0.07677902621722846,Cleofas,41,Cleofas
+Izel,485,1,114,599,0.23505154639175257,Isley,114,Isley
+Burnell,398,1,125,523,0.314070351758794,Bernell,125,Bernell
+Verl,392,1,232,624,0.5918367346938775,Verle,232,Verle
+Kashmir,382,1,52,434,0.13612565445026178,Kashmere,52,Kashmere
+Nazareth,369,1,10,379,0.02710027100271003,Nazaret,10,Nazaret
+Greer,314,1,13,327,0.041401273885350316,Grier,13,Grier
+Ziggy,300,1,10,310,0.03333333333333333,Zakiah,10,Zakiah
+Arlis,274,1,11,285,0.040145985401459854,Arleigh,11,Arleigh
+Renley,272,1,32,304,0.11764705882352941,Raynell,32,Raynell
+Tal,243,1,175,418,0.720164609053498,Tylee,175,Tylee
+Erie,233,1,38,271,0.1630901287553648,Eri,38,Eri
+Yuki,218,1,14,232,0.06422018348623854,Yoshi,14,Yoshi
+Timber,178,1,6,184,0.033707865168539325,Tanveer,6,Tanveer
+Winslow,152,1,8,160,0.05263157894736842,Winsley,8,Winsley
+Lyndell,136,1,50,186,0.36764705882352944,Lindley,50,Lindley
+Manpreet,122,1,26,148,0.21311475409836064,Manvir,26,Manvir
+Hoang,120,1,86,206,0.7166666666666667,Hong,86,Hong
+Navid,114,1,114,228,1.0,Nevada,114,Nevada
+Ilya,108,1,30,138,0.2777777777777778,Ilia,30,Ilia
+Yareth,94,1,60,154,0.6382978723404256,Yared,60,Yared
+Zaylin,76,1,16,92,0.21052631578947367,Zailyn,16,Zailyn
+Wei,58,1,40,98,0.6896551724137931,Wai,40,Wai
+Oreoluwa,20,1,19,39,0.95,Orel,19,Orel
+Shondell,16,1,14,30,0.875,Shawndell,14,Shawndell
+Xue,16,1,14,30,0.875,Xiao,14,Xiao

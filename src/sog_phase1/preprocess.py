@@ -236,8 +236,90 @@ def _build_demographics(raw_root: Path, prepared_dir: Path) -> dict[str, Any]:
     return {"path": str(out_path), "records": len(parsed_records)}
 
 
-def build_prepared_cache(raw_root: Path, prepared_dir: Path) -> dict[str, Any]:
+def _build_nicknames(nicknames_source_dir: Path, prepared_dir: Path) -> dict[str, Any]:
+    source_path = nicknames_source_dir / "all_nick_names.json"
+    payload: dict[str, Any] = {
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "source_file": str(source_path),
+        "categories": {},
+        "summary": {
+            "categories_present": [],
+            "formal_name_count": 0,
+            "nickname_name_count": 0,
+        },
+    }
+
+    if not source_path.exists():
+        out_path = prepared_dir / "nicknames.json"
+        out_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        return {
+            "path": str(out_path),
+            "source_exists": False,
+            "categories": 0,
+            "formal_names": 0,
+            "nickname_names": 0,
+        }
+
+    raw = json.loads(source_path.read_text(encoding="utf-8"))
+    datasets = raw.get("datasets", {})
+    categories: dict[str, dict[str, Any]] = {}
+    total_formal = 0
+    total_nicknames = 0
+
+    for category in ("female", "male", "unisex"):
+        bucket: dict[str, Any] = {}
+        groups = datasets.get(category, {}).get("groups", [])
+        for group in groups:
+            formal = _clean_name(str(group.get("formal_name", "")))
+            if not formal:
+                continue
+            nickname_rows = group.get("nicknames", [])
+            agg: dict[str, float] = {}
+            for row in nickname_rows:
+                nick = _clean_name(str(row.get("name", "")))
+                if not nick or nick == formal:
+                    continue
+                weight = float(row.get("count", 0.0))
+                if weight <= 0:
+                    continue
+                agg[nick] = agg.get(nick, 0.0) + weight
+            if not agg:
+                continue
+            items = sorted(agg.items(), key=lambda kv: kv[1], reverse=True)
+            bucket[formal] = {
+                "nicknames": [name for name, _ in items],
+                "weights": [weight for _, weight in items],
+            }
+            total_formal += 1
+            total_nicknames += len(items)
+        categories[category] = bucket
+
+    payload["categories"] = categories
+    payload["summary"] = {
+        "categories_present": [k for k, v in categories.items() if v],
+        "formal_name_count": total_formal,
+        "nickname_name_count": total_nicknames,
+    }
+
+    out_path = prepared_dir / "nicknames.json"
+    out_path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    return {
+        "path": str(out_path),
+        "source_exists": True,
+        "categories": len(payload["summary"]["categories_present"]),
+        "formal_names": total_formal,
+        "nickname_names": total_nicknames,
+    }
+
+
+def build_prepared_cache(
+    raw_root: Path,
+    prepared_dir: Path,
+    *,
+    nicknames_source_dir: Path | None = None,
+) -> dict[str, Any]:
     prepared_dir.mkdir(parents=True, exist_ok=True)
+    nick_src = nicknames_source_dir or (raw_root / "Names" / "nick names")
 
     outputs = {
         "first_names": _build_first_names(raw_root, prepared_dir),
@@ -267,12 +349,14 @@ def build_prepared_cache(raw_root: Path, prepared_dir: Path) -> dict[str, Any]:
             transform="title",
         ),
         "demographics": _build_demographics(raw_root, prepared_dir),
+        "nicknames": _build_nicknames(nick_src, prepared_dir),
     }
 
     manifest = {
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "raw_root": str(raw_root),
         "prepared_dir": str(prepared_dir),
+        "nicknames_source_dir": str(nick_src),
         "outputs": outputs,
     }
     manifest_path = prepared_dir / "prepared_manifest.json"

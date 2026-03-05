@@ -1,0 +1,1188 @@
+{
+  "generated_at_utc": "2026-02-28T11:47:19.613610+00:00",
+  "input_dir": "H:\\AAA_Taha\\SOG_DATASETS\\Names_USA\\nick names",
+  "categories": {
+    "female": {
+      "summary": {
+        "category": "female",
+        "input_unique_names": 21980,
+        "parent_names": 1496,
+        "total_nicknames": 19894,
+        "avg_nicknames_per_parent": 13.2981,
+        "median_nicknames_per_parent": 5.0,
+        "min_nicknames_per_parent": 1,
+        "max_nicknames_per_parent": 224,
+        "parents_with_1_to_2_nicknames": 459,
+        "parents_with_3_to_5_nicknames": 332,
+        "parents_with_6_to_10_nicknames": 235,
+        "parents_with_11_plus_nicknames": 470,
+        "total_parent_count_sum": 101417675,
+        "total_nickname_count_sum": 55432612,
+        "nickname_to_parent_count_ratio": 0.546577,
+        "unique_nickname_names": 19894,
+        "unique_parent_names": 1496,
+        "overlap_parent_and_nickname_names": 0,
+        "top_parent_by_nickname_count": "Sonia",
+        "top_parent_nickname_count": 224,
+        "top_parent_formal_count": 61611
+      },
+      "top_parents_by_nickname_count": [
+        {
+          "formal_name": "Sonia",
+          "formal_count": 61611,
+          "nickname_count": 224,
+          "nickname_count_sum": 432130
+        },
+        {
+          "formal_name": "Joan",
+          "formal_count": 476439,
+          "nickname_count": 202,
+          "nickname_count_sum": 2880473
+        },
+        {
+          "formal_name": "Lynn",
+          "formal_count": 178246,
+          "nickname_count": 167,
+          "nickname_count_sum": 631912
+        },
+        {
+          "formal_name": "Renee",
+          "formal_count": 182172,
+          "nickname_count": 161,
+          "nickname_count_sum": 256758
+        },
+        {
+          "formal_name": "Tammy",
+          "formal_count": 329631,
+          "nickname_count": 150,
+          "nickname_count_sum": 859777
+        },
+        {
+          "formal_name": "Kelly",
+          "formal_count": 471706,
+          "nickname_count": 147,
+          "nickname_count_sum": 1162572
+        },
+        {
+          "formal_name": "Maggie",
+          "formal_count": 94729,
+          "nickname_count": 146,
+          "nickname_count_sum": 148004
+        },
+        {
+          "formal_name": "Sarah",
+          "formal_count": 1045804,
+          "nickname_count": 140,
+          "nickname_count_sum": 1068038
+        },
+        {
+          "formal_name": "Donna",
+          "formal_count": 827154,
+          "nickname_count": 140,
+          "nickname_count_sum": 1876653
+        },
+        {
+          "formal_name": "Alice",
+          "formal_count": 506160,
+          "nickname_count": 139,
+          "nickname_count_sum": 957560
+        },
+        {
+          "formal_name": "Anna",
+          "formal_count": 763587,
+          "nickname_count": 131,
+          "nickname_count_sum": 2169988
+        },
+        {
+          "formal_name": "Alma",
+          "formal_count": 129272,
+          "nickname_count": 131,
+          "nickname_count_sum": 366632
+        },
+        {
+          "formal_name": "Kim",
+          "formal_count": 176852,
+          "nickname_count": 130,
+          "nickname_count_sum": 111465
+        },
+        {
+          "formal_name": "Michelle",
+          "formal_count": 814422,
+          "nickname_count": 128,
+          "nickname_count_sum": 540810
+        },
+        {
+          "formal_name": "Jacqueline",
+          "formal_count": 423612,
+          "nickname_count": 119,
+          "nickname_count_sum": 379828
+        },
+        {
+          "formal_name": "Jillian",
+          "formal_count": 81423,
+          "nickname_count": 118,
+          "nickname_count_sum": 266843
+        },
+        {
+          "formal_name": "Kaylin",
+          "formal_count": 17147,
+          "nickname_count": 118,
+          "nickname_count_sum": 135930
+        },
+        {
+          "formal_name": "Melanie",
+          "formal_count": 258665,
+          "nickname_count": 106,
+          "nickname_count_sum": 95895
+        },
+        {
+          "formal_name": "Tamika",
+          "formal_count": 21078,
+          "nickname_count": 105,
+          "nickname_count_sum": 71786
+        },
+        {
+          "formal_name": "Nikki",
+          "formal_count": 36371,
+          "nickname_count": 101,
+          "nickname_count_sum": 32446
+        }
+      ],
+      "top_parents_by_formal_count": [
+        {
+          "formal_name": "Mary",
+          "formal_count": 3754599,
+          "nickname_count": 70,
+          "nickname_count_sum": 1326165
+        },
+        {
+          "formal_name": "Elizabeth",
+          "formal_count": 1581213,
+          "nickname_count": 14,
+          "nickname_count_sum": 44821
+        },
+        {
+          "formal_name": "Patricia",
+          "formal_count": 1570143,
+          "nickname_count": 13,
+          "nickname_count_sum": 37962
+        },
+        {
+          "formal_name": "Jennifer",
+          "formal_count": 1469939,
+          "nickname_count": 18,
+          "nickname_count_sum": 45331
+        },
+        {
+          "formal_name": "Linda",
+          "formal_count": 1449783,
+          "nickname_count": 33,
+          "nickname_count_sum": 146009
+        },
+        {
+          "formal_name": "Barbara",
+          "formal_count": 1425933,
+          "nickname_count": 6,
+          "nickname_count_sum": 4329
+        },
+        {
+          "formal_name": "Margaret",
+          "formal_count": 1144173,
+          "nickname_count": 40,
+          "nickname_count_sum": 400047
+        },
+        {
+          "formal_name": "Susan",
+          "formal_count": 1110504,
+          "nickname_count": 51,
+          "nickname_count_sum": 295006
+        },
+        {
+          "formal_name": "Dorothy",
+          "formal_count": 1057041,
+          "nickname_count": 24,
+          "nickname_count_sum": 59612
+        },
+        {
+          "formal_name": "Jessica",
+          "formal_count": 1047479,
+          "nickname_count": 17,
+          "nickname_count_sum": 10876
+        },
+        {
+          "formal_name": "Sarah",
+          "formal_count": 1045804,
+          "nickname_count": 140,
+          "nickname_count_sum": 1068038
+        },
+        {
+          "formal_name": "Nancy",
+          "formal_count": 986473,
+          "nickname_count": 14,
+          "nickname_count_sum": 5817
+        },
+        {
+          "formal_name": "Karen",
+          "formal_count": 985582,
+          "nickname_count": 67,
+          "nickname_count_sum": 118278
+        },
+        {
+          "formal_name": "Betty",
+          "formal_count": 985540,
+          "nickname_count": 14,
+          "nickname_count_sum": 240237
+        },
+        {
+          "formal_name": "Lisa",
+          "formal_count": 964489,
+          "nickname_count": 100,
+          "nickname_count_sum": 1148810
+        },
+        {
+          "formal_name": "Helen",
+          "formal_count": 902868,
+          "nickname_count": 36,
+          "nickname_count_sum": 65513
+        },
+        {
+          "formal_name": "Emily",
+          "formal_count": 874273,
+          "nickname_count": 34,
+          "nickname_count_sum": 145574
+        },
+        {
+          "formal_name": "Sandra",
+          "formal_count": 872858,
+          "nickname_count": 34,
+          "nickname_count_sum": 41877
+        },
+        {
+          "formal_name": "Ashley",
+          "formal_count": 856789,
+          "nickname_count": 61,
+          "nickname_count_sum": 89587
+        },
+        {
+          "formal_name": "Kimberly",
+          "formal_count": 844405,
+          "nickname_count": 35,
+          "nickname_count_sum": 66292
+        }
+      ],
+      "top_groups_by_total_group_count": [
+        {
+          "formal_name": "Mary",
+          "group_total_count": 5080764,
+          "formal_count": 3754599,
+          "nickname_count_sum": 1326165
+        },
+        {
+          "formal_name": "Joan",
+          "group_total_count": 3356912,
+          "formal_count": 476439,
+          "nickname_count_sum": 2880473
+        },
+        {
+          "formal_name": "Anna",
+          "group_total_count": 2933575,
+          "formal_count": 763587,
+          "nickname_count_sum": 2169988
+        },
+        {
+          "formal_name": "Donna",
+          "group_total_count": 2703807,
+          "formal_count": 827154,
+          "nickname_count_sum": 1876653
+        },
+        {
+          "formal_name": "Sarah",
+          "group_total_count": 2113842,
+          "formal_count": 1045804,
+          "nickname_count_sum": 1068038
+        },
+        {
+          "formal_name": "Lisa",
+          "group_total_count": 2113299,
+          "formal_count": 964489,
+          "nickname_count_sum": 1148810
+        },
+        {
+          "formal_name": "Christine",
+          "group_total_count": 1715628,
+          "formal_count": 576435,
+          "nickname_count_sum": 1139193
+        },
+        {
+          "formal_name": "Carol",
+          "group_total_count": 1707544,
+          "formal_count": 812577,
+          "nickname_count_sum": 894967
+        },
+        {
+          "formal_name": "Kelly",
+          "group_total_count": 1634278,
+          "formal_count": 471706,
+          "nickname_count_sum": 1162572
+        },
+        {
+          "formal_name": "Elizabeth",
+          "group_total_count": 1626034,
+          "formal_count": 1581213,
+          "nickname_count_sum": 44821
+        },
+        {
+          "formal_name": "Patricia",
+          "group_total_count": 1608105,
+          "formal_count": 1570143,
+          "nickname_count_sum": 37962
+        },
+        {
+          "formal_name": "Linda",
+          "group_total_count": 1595792,
+          "formal_count": 1449783,
+          "nickname_count_sum": 146009
+        },
+        {
+          "formal_name": "Margaret",
+          "group_total_count": 1544220,
+          "formal_count": 1144173,
+          "nickname_count_sum": 400047
+        },
+        {
+          "formal_name": "Jennifer",
+          "group_total_count": 1515270,
+          "formal_count": 1469939,
+          "nickname_count_sum": 45331
+        },
+        {
+          "formal_name": "Alice",
+          "group_total_count": 1463720,
+          "formal_count": 506160,
+          "nickname_count_sum": 957560
+        },
+        {
+          "formal_name": "Barbara",
+          "group_total_count": 1430262,
+          "formal_count": 1425933,
+          "nickname_count_sum": 4329
+        },
+        {
+          "formal_name": "Susan",
+          "group_total_count": 1405510,
+          "formal_count": 1110504,
+          "nickname_count_sum": 295006
+        },
+        {
+          "formal_name": "Laura",
+          "group_total_count": 1400115,
+          "formal_count": 755383,
+          "nickname_count_sum": 644732
+        },
+        {
+          "formal_name": "Michelle",
+          "group_total_count": 1355232,
+          "formal_count": 814422,
+          "nickname_count_sum": 540810
+        },
+        {
+          "formal_name": "Teresa",
+          "group_total_count": 1338351,
+          "formal_count": 408440,
+          "nickname_count_sum": 929911
+        }
+      ],
+      "parent_details_file": "H:\\AAA_Taha\\SOG_DATASETS\\Names_USA\\nick names\\nickname_parent_details_female.csv"
+    },
+    "male": {
+      "summary": {
+        "category": "male",
+        "input_unique_names": 14662,
+        "parent_names": 1584,
+        "total_nicknames": 12388,
+        "avg_nicknames_per_parent": 7.8207,
+        "median_nicknames_per_parent": 4.0,
+        "min_nicknames_per_parent": 1,
+        "max_nicknames_per_parent": 103,
+        "parents_with_1_to_2_nicknames": 619,
+        "parents_with_3_to_5_nicknames": 364,
+        "parents_with_6_to_10_nicknames": 265,
+        "parents_with_11_plus_nicknames": 336,
+        "total_parent_count_sum": 134867295,
+        "total_nickname_count_sum": 35049911,
+        "nickname_to_parent_count_ratio": 0.259884,
+        "unique_nickname_names": 12388,
+        "unique_parent_names": 1584,
+        "overlap_parent_and_nickname_names": 0,
+        "top_parent_by_nickname_count": "Mike",
+        "top_parent_nickname_count": 103,
+        "top_parent_formal_count": 198780
+      },
+      "top_parents_by_nickname_count": [
+        {
+          "formal_name": "Mike",
+          "formal_count": 198780,
+          "nickname_count": 103,
+          "nickname_count_sum": 426112
+        },
+        {
+          "formal_name": "Joshua",
+          "formal_count": 1240648,
+          "nickname_count": 101,
+          "nickname_count_sum": 2455351
+        },
+        {
+          "formal_name": "John",
+          "formal_count": 4919267,
+          "nickname_count": 95,
+          "nickname_count_sum": 1789436
+        },
+        {
+          "formal_name": "Ryan",
+          "formal_count": 959100,
+          "nickname_count": 95,
+          "nickname_count_sum": 403190
+        },
+        {
+          "formal_name": "Kenny",
+          "formal_count": 47387,
+          "nickname_count": 94,
+          "nickname_count_sum": 137885
+        },
+        {
+          "formal_name": "Keegan",
+          "formal_count": 36344,
+          "nickname_count": 80,
+          "nickname_count_sum": 81414
+        },
+        {
+          "formal_name": "Jason",
+          "formal_count": 1046764,
+          "nickname_count": 77,
+          "nickname_count_sum": 567633
+        },
+        {
+          "formal_name": "Sean",
+          "formal_count": 421737,
+          "nickname_count": 76,
+          "nickname_count_sum": 763690
+        },
+        {
+          "formal_name": "Dawson",
+          "formal_count": 47522,
+          "nickname_count": 71,
+          "nickname_count_sum": 61742
+        },
+        {
+          "formal_name": "Ricky",
+          "formal_count": 220788,
+          "nickname_count": 66,
+          "nickname_count_sum": 456197
+        },
+        {
+          "formal_name": "Danny",
+          "formal_count": 283561,
+          "nickname_count": 65,
+          "nickname_count_sum": 866102
+        },
+        {
+          "formal_name": "Christopher",
+          "formal_count": 2061183,
+          "nickname_count": 61,
+          "nickname_count_sum": 550584
+        },
+        {
+          "formal_name": "Tony",
+          "formal_count": 246750,
+          "nickname_count": 61,
+          "nickname_count_sum": 438869
+        },
+        {
+          "formal_name": "Javon",
+          "formal_count": 15567,
+          "nickname_count": 61,
+          "nickname_count_sum": 51760
+        },
+        {
+          "formal_name": "Kellen",
+          "formal_count": 14603,
+          "nickname_count": 59,
+          "nickname_count_sum": 50142
+        },
+        {
+          "formal_name": "Reagan",
+          "formal_count": 5124,
+          "nickname_count": 58,
+          "nickname_count_sum": 23011
+        },
+        {
+          "formal_name": "Jeremy",
+          "formal_count": 443414,
+          "nickname_count": 56,
+          "nickname_count_sum": 407507
+        },
+        {
+          "formal_name": "Kerry",
+          "formal_count": 46408,
+          "nickname_count": 56,
+          "nickname_count_sum": 64599
+        },
+        {
+          "formal_name": "Michael",
+          "formal_count": 4405088,
+          "nickname_count": 55,
+          "nickname_count_sum": 476502
+        },
+        {
+          "formal_name": "Tracy",
+          "formal_count": 56574,
+          "nickname_count": 54,
+          "nickname_count_sum": 41311
+        }
+      ],
+      "top_parents_by_formal_count": [
+        {
+          "formal_name": "James",
+          "formal_count": 5071618,
+          "nickname_count": 21,
+          "nickname_count_sum": 29672
+        },
+        {
+          "formal_name": "John",
+          "formal_count": 4919267,
+          "nickname_count": 95,
+          "nickname_count_sum": 1789436
+        },
+        {
+          "formal_name": "Robert",
+          "formal_count": 4759774,
+          "nickname_count": 11,
+          "nickname_count_sum": 114749
+        },
+        {
+          "formal_name": "Michael",
+          "formal_count": 4405088,
+          "nickname_count": 55,
+          "nickname_count_sum": 476502
+        },
+        {
+          "formal_name": "William",
+          "formal_count": 3962559,
+          "nickname_count": 10,
+          "nickname_count_sum": 50030
+        },
+        {
+          "formal_name": "David",
+          "formal_count": 3646127,
+          "nickname_count": 8,
+          "nickname_count_sum": 3175
+        },
+        {
+          "formal_name": "Joseph",
+          "formal_count": 2571548,
+          "nickname_count": 29,
+          "nickname_count_sum": 1041042
+        },
+        {
+          "formal_name": "Richard",
+          "formal_count": 2550511,
+          "nickname_count": 12,
+          "nickname_count_sum": 145399
+        },
+        {
+          "formal_name": "Charles",
+          "formal_count": 2308974,
+          "nickname_count": 13,
+          "nickname_count_sum": 301579
+        },
+        {
+          "formal_name": "Thomas",
+          "formal_count": 2284902,
+          "nickname_count": 22,
+          "nickname_count_sum": 27032
+        },
+        {
+          "formal_name": "Christopher",
+          "formal_count": 2061183,
+          "nickname_count": 61,
+          "nickname_count_sum": 550584
+        },
+        {
+          "formal_name": "Daniel",
+          "formal_count": 1958418,
+          "nickname_count": 26,
+          "nickname_count_sum": 23022
+        },
+        {
+          "formal_name": "Matthew",
+          "formal_count": 1642191,
+          "nickname_count": 31,
+          "nickname_count_sum": 237956
+        },
+        {
+          "formal_name": "Anthony",
+          "formal_count": 1472148,
+          "nickname_count": 45,
+          "nickname_count_sum": 330152
+        },
+        {
+          "formal_name": "Donald",
+          "formal_count": 1406454,
+          "nickname_count": 3,
+          "nickname_count_sum": 47
+        },
+        {
+          "formal_name": "Paul",
+          "formal_count": 1371566,
+          "nickname_count": 11,
+          "nickname_count_sum": 20966
+        },
+        {
+          "formal_name": "Mark",
+          "formal_count": 1356556,
+          "nickname_count": 35,
+          "nickname_count_sum": 430906
+        },
+        {
+          "formal_name": "George",
+          "formal_count": 1349470,
+          "nickname_count": 19,
+          "nickname_count_sum": 113174
+        },
+        {
+          "formal_name": "Andrew",
+          "formal_count": 1306383,
+          "nickname_count": 35,
+          "nickname_count_sum": 271154
+        },
+        {
+          "formal_name": "Steven",
+          "formal_count": 1289119,
+          "nickname_count": 22,
+          "nickname_count_sum": 908179
+        }
+      ],
+      "top_groups_by_total_group_count": [
+        {
+          "formal_name": "John",
+          "group_total_count": 6708703,
+          "formal_count": 4919267,
+          "nickname_count_sum": 1789436
+        },
+        {
+          "formal_name": "James",
+          "group_total_count": 5101290,
+          "formal_count": 5071618,
+          "nickname_count_sum": 29672
+        },
+        {
+          "formal_name": "Michael",
+          "group_total_count": 4881590,
+          "formal_count": 4405088,
+          "nickname_count_sum": 476502
+        },
+        {
+          "formal_name": "Robert",
+          "group_total_count": 4874523,
+          "formal_count": 4759774,
+          "nickname_count_sum": 114749
+        },
+        {
+          "formal_name": "William",
+          "group_total_count": 4012589,
+          "formal_count": 3962559,
+          "nickname_count_sum": 50030
+        },
+        {
+          "formal_name": "Joshua",
+          "group_total_count": 3695999,
+          "formal_count": 1240648,
+          "nickname_count_sum": 2455351
+        },
+        {
+          "formal_name": "David",
+          "group_total_count": 3649302,
+          "formal_count": 3646127,
+          "nickname_count_sum": 3175
+        },
+        {
+          "formal_name": "Joseph",
+          "group_total_count": 3612590,
+          "formal_count": 2571548,
+          "nickname_count_sum": 1041042
+        },
+        {
+          "formal_name": "Richard",
+          "group_total_count": 2695910,
+          "formal_count": 2550511,
+          "nickname_count_sum": 145399
+        },
+        {
+          "formal_name": "Christopher",
+          "group_total_count": 2611767,
+          "formal_count": 2061183,
+          "nickname_count_sum": 550584
+        },
+        {
+          "formal_name": "Charles",
+          "group_total_count": 2610553,
+          "formal_count": 2308974,
+          "nickname_count_sum": 301579
+        },
+        {
+          "formal_name": "Thomas",
+          "group_total_count": 2311934,
+          "formal_count": 2284902,
+          "nickname_count_sum": 27032
+        },
+        {
+          "formal_name": "Steven",
+          "group_total_count": 2197298,
+          "formal_count": 1289119,
+          "nickname_count_sum": 908179
+        },
+        {
+          "formal_name": "Daniel",
+          "group_total_count": 1981440,
+          "formal_count": 1958418,
+          "nickname_count_sum": 23022
+        },
+        {
+          "formal_name": "Matthew",
+          "group_total_count": 1880147,
+          "formal_count": 1642191,
+          "nickname_count_sum": 237956
+        },
+        {
+          "formal_name": "Anthony",
+          "group_total_count": 1802300,
+          "formal_count": 1472148,
+          "nickname_count_sum": 330152
+        },
+        {
+          "formal_name": "Mark",
+          "group_total_count": 1787462,
+          "formal_count": 1356556,
+          "nickname_count_sum": 430906
+        },
+        {
+          "formal_name": "Brian",
+          "group_total_count": 1700887,
+          "formal_count": 1171261,
+          "nickname_count_sum": 529626
+        },
+        {
+          "formal_name": "Jason",
+          "group_total_count": 1614397,
+          "formal_count": 1046764,
+          "nickname_count_sum": 567633
+        },
+        {
+          "formal_name": "Andrew",
+          "group_total_count": 1577537,
+          "formal_count": 1306383,
+          "nickname_count_sum": 271154
+        }
+      ],
+      "parent_details_file": "H:\\AAA_Taha\\SOG_DATASETS\\Names_USA\\nick names\\nickname_parent_details_male.csv"
+    },
+    "unisex": {
+      "summary": {
+        "category": "unisex",
+        "input_unique_names": 3242,
+        "parent_names": 550,
+        "total_nicknames": 2282,
+        "avg_nicknames_per_parent": 4.1491,
+        "median_nicknames_per_parent": 2.0,
+        "min_nicknames_per_parent": 1,
+        "max_nicknames_per_parent": 42,
+        "parents_with_1_to_2_nicknames": 279,
+        "parents_with_3_to_5_nicknames": 142,
+        "parents_with_6_to_10_nicknames": 83,
+        "parents_with_11_plus_nicknames": 46,
+        "total_parent_count_sum": 83995372,
+        "total_nickname_count_sum": 40878559,
+        "nickname_to_parent_count_ratio": 0.486676,
+        "unique_nickname_names": 2282,
+        "unique_parent_names": 550,
+        "overlap_parent_and_nickname_names": 0,
+        "top_parent_by_nickname_count": "John",
+        "top_parent_nickname_count": 42,
+        "top_parent_formal_count": 2467466
+      },
+      "top_parents_by_nickname_count": [
+        {
+          "formal_name": "John",
+          "formal_count": 2467466,
+          "nickname_count": 42,
+          "nickname_count_sum": 2296067
+        },
+        {
+          "formal_name": "Ryan",
+          "formal_count": 491988,
+          "nickname_count": 35,
+          "nickname_count_sum": 299294
+        },
+        {
+          "formal_name": "Joshua",
+          "formal_count": 621830,
+          "nickname_count": 29,
+          "nickname_count_sum": 1613572
+        },
+        {
+          "formal_name": "Mike",
+          "formal_count": 99410,
+          "nickname_count": 29,
+          "nickname_count_sum": 239767
+        },
+        {
+          "formal_name": "Sean",
+          "formal_count": 211354,
+          "nickname_count": 26,
+          "nickname_count_sum": 433405
+        },
+        {
+          "formal_name": "Lisa",
+          "formal_count": 482893,
+          "nickname_count": 24,
+          "nickname_count_sum": 1114244
+        },
+        {
+          "formal_name": "Donna",
+          "formal_count": 413754,
+          "nickname_count": 24,
+          "nickname_count_sum": 1250235
+        },
+        {
+          "formal_name": "Liam",
+          "formal_count": 168082,
+          "nickname_count": 23,
+          "nickname_count_sum": 312651
+        },
+        {
+          "formal_name": "Kim",
+          "formal_count": 104470,
+          "nickname_count": 23,
+          "nickname_count_sum": 68101
+        },
+        {
+          "formal_name": "Rose",
+          "formal_count": 218214,
+          "nickname_count": 22,
+          "nickname_count_sum": 382357
+        },
+        {
+          "formal_name": "Julian",
+          "formal_count": 126554,
+          "nickname_count": 22,
+          "nickname_count_sum": 154283
+        },
+        {
+          "formal_name": "Tammy",
+          "formal_count": 164930,
+          "nickname_count": 21,
+          "nickname_count_sum": 631112
+        },
+        {
+          "formal_name": "Kaylin",
+          "formal_count": 8578,
+          "nickname_count": 21,
+          "nickname_count_sum": 33289
+        },
+        {
+          "formal_name": "Kara",
+          "formal_count": 49684,
+          "nickname_count": 20,
+          "nickname_count_sum": 154117
+        },
+        {
+          "formal_name": "Alice",
+          "formal_count": 253133,
+          "nickname_count": 18,
+          "nickname_count_sum": 581942
+        },
+        {
+          "formal_name": "Michael",
+          "formal_count": 2211153,
+          "nickname_count": 17,
+          "nickname_count_sum": 830005
+        },
+        {
+          "formal_name": "Jayden",
+          "formal_count": 134748,
+          "nickname_count": 16,
+          "nickname_count_sum": 81404
+        },
+        {
+          "formal_name": "Terry",
+          "formal_count": 257350,
+          "nickname_count": 15,
+          "nickname_count_sum": 313954
+        },
+        {
+          "formal_name": "Logan",
+          "formal_count": 204091,
+          "nickname_count": 15,
+          "nickname_count_sum": 14931
+        },
+        {
+          "formal_name": "Sue",
+          "formal_count": 68800,
+          "nickname_count": 15,
+          "nickname_count_sum": 31099
+        }
+      ],
+      "top_parents_by_formal_count": [
+        {
+          "formal_name": "James",
+          "formal_count": 2544998,
+          "nickname_count": 3,
+          "nickname_count_sum": 201485
+        },
+        {
+          "formal_name": "John",
+          "formal_count": 2467466,
+          "nickname_count": 42,
+          "nickname_count_sum": 2296067
+        },
+        {
+          "formal_name": "Robert",
+          "formal_count": 2387446,
+          "nickname_count": 1,
+          "nickname_count_sum": 54516
+        },
+        {
+          "formal_name": "Michael",
+          "formal_count": 2211153,
+          "nickname_count": 17,
+          "nickname_count_sum": 830005
+        },
+        {
+          "formal_name": "William",
+          "formal_count": 1986386,
+          "nickname_count": 2,
+          "nickname_count_sum": 89136
+        },
+        {
+          "formal_name": "Mary",
+          "formal_count": 1882124,
+          "nickname_count": 9,
+          "nickname_count_sum": 659901
+        },
+        {
+          "formal_name": "Joseph",
+          "formal_count": 1288584,
+          "nickname_count": 1,
+          "nickname_count_sum": 486032
+        },
+        {
+          "formal_name": "Richard",
+          "formal_count": 1277751,
+          "nickname_count": 1,
+          "nickname_count_sum": 71422
+        },
+        {
+          "formal_name": "Charles",
+          "formal_count": 1158250,
+          "nickname_count": 4,
+          "nickname_count_sum": 151967
+        },
+        {
+          "formal_name": "Thomas",
+          "formal_count": 1144248,
+          "nickname_count": 5,
+          "nickname_count_sum": 19523
+        },
+        {
+          "formal_name": "Christopher",
+          "formal_count": 1033974,
+          "nickname_count": 14,
+          "nickname_count_sum": 1064603
+        },
+        {
+          "formal_name": "Daniel",
+          "formal_count": 981443,
+          "nickname_count": 12,
+          "nickname_count_sum": 226688
+        },
+        {
+          "formal_name": "Matthew",
+          "formal_count": 822738,
+          "nickname_count": 2,
+          "nickname_count_sum": 46375
+        },
+        {
+          "formal_name": "Elizabeth",
+          "formal_count": 791423,
+          "nickname_count": 1,
+          "nickname_count_sum": 20431
+        },
+        {
+          "formal_name": "Patricia",
+          "formal_count": 786154,
+          "nickname_count": 2,
+          "nickname_count_sum": 354524
+        },
+        {
+          "formal_name": "Anthony",
+          "formal_count": 737964,
+          "nickname_count": 3,
+          "nickname_count_sum": 154834
+        },
+        {
+          "formal_name": "Jennifer",
+          "formal_count": 736406,
+          "nickname_count": 1,
+          "nickname_count_sum": 9116
+        },
+        {
+          "formal_name": "Linda",
+          "formal_count": 725772,
+          "nickname_count": 1,
+          "nickname_count_sum": 2276
+        },
+        {
+          "formal_name": "Paul",
+          "formal_count": 686762,
+          "nickname_count": 2,
+          "nickname_count_sum": 149140
+        },
+        {
+          "formal_name": "Mark",
+          "formal_count": 679196,
+          "nickname_count": 13,
+          "nickname_count_sum": 274700
+        }
+      ],
+      "top_groups_by_total_group_count": [
+        {
+          "formal_name": "John",
+          "group_total_count": 4763533,
+          "formal_count": 2467466,
+          "nickname_count_sum": 2296067
+        },
+        {
+          "formal_name": "Michael",
+          "group_total_count": 3041158,
+          "formal_count": 2211153,
+          "nickname_count_sum": 830005
+        },
+        {
+          "formal_name": "James",
+          "group_total_count": 2746483,
+          "formal_count": 2544998,
+          "nickname_count_sum": 201485
+        },
+        {
+          "formal_name": "Mary",
+          "group_total_count": 2542025,
+          "formal_count": 1882124,
+          "nickname_count_sum": 659901
+        },
+        {
+          "formal_name": "Robert",
+          "group_total_count": 2441962,
+          "formal_count": 2387446,
+          "nickname_count_sum": 54516
+        },
+        {
+          "formal_name": "Joshua",
+          "group_total_count": 2235402,
+          "formal_count": 621830,
+          "nickname_count_sum": 1613572
+        },
+        {
+          "formal_name": "Christopher",
+          "group_total_count": 2098577,
+          "formal_count": 1033974,
+          "nickname_count_sum": 1064603
+        },
+        {
+          "formal_name": "William",
+          "group_total_count": 2075522,
+          "formal_count": 1986386,
+          "nickname_count_sum": 89136
+        },
+        {
+          "formal_name": "Joseph",
+          "group_total_count": 1774616,
+          "formal_count": 1288584,
+          "nickname_count_sum": 486032
+        },
+        {
+          "formal_name": "Donna",
+          "group_total_count": 1663989,
+          "formal_count": 413754,
+          "nickname_count_sum": 1250235
+        },
+        {
+          "formal_name": "Lisa",
+          "group_total_count": 1597137,
+          "formal_count": 482893,
+          "nickname_count_sum": 1114244
+        },
+        {
+          "formal_name": "Steven",
+          "group_total_count": 1457496,
+          "formal_count": 645508,
+          "nickname_count_sum": 811988
+        },
+        {
+          "formal_name": "Richard",
+          "group_total_count": 1349173,
+          "formal_count": 1277751,
+          "nickname_count_sum": 71422
+        },
+        {
+          "formal_name": "Anna",
+          "group_total_count": 1310781,
+          "formal_count": 381987,
+          "nickname_count_sum": 928794
+        },
+        {
+          "formal_name": "Charles",
+          "group_total_count": 1310217,
+          "formal_count": 1158250,
+          "nickname_count_sum": 151967
+        },
+        {
+          "formal_name": "Daniel",
+          "group_total_count": 1208131,
+          "formal_count": 981443,
+          "nickname_count_sum": 226688
+        },
+        {
+          "formal_name": "Thomas",
+          "group_total_count": 1163771,
+          "formal_count": 1144248,
+          "nickname_count_sum": 19523
+        },
+        {
+          "formal_name": "Carol",
+          "group_total_count": 1159220,
+          "formal_count": 408960,
+          "nickname_count_sum": 750260
+        },
+        {
+          "formal_name": "Patricia",
+          "group_total_count": 1140678,
+          "formal_count": 786154,
+          "nickname_count_sum": 354524
+        },
+        {
+          "formal_name": "Larry",
+          "group_total_count": 1127883,
+          "formal_count": 402522,
+          "nickname_count_sum": 725361
+        }
+      ],
+      "parent_details_file": "H:\\AAA_Taha\\SOG_DATASETS\\Names_USA\\nick names\\nickname_parent_details_unisex.csv"
+    }
+  },
+  "cross_category_totals": {
+    "total_parent_names_all_categories": 3630,
+    "total_nicknames_all_categories": 34564,
+    "total_parent_count_sum_all_categories": 320280342,
+    "total_nickname_count_sum_all_categories": 131361082
+  }
+}

@@ -1,4 +1,4 @@
-﻿# SOG Phase-1 Synthetic Data Pipeline
+# SOG Synthetic Data Pipeline
 
 SOG is a reproducible pipeline for generating synthetic person + address records from the included reference datasets.
 
@@ -8,16 +8,26 @@ This repository is structured so a first-time user can:
 - customize generation settings in one YAML file,
 - validate quality using built-in reports and tests.
 
+## Branches
+- Need old stable Phase-1 behavior: use `phase1-legacy`.
+- Need latest features (entity/record redundancy + nickname variants): use `main`.
+- Full branch and tag guide: [`BRANCHES.md`](BRANCHES.md).
+
 ## What You Can Generate
 The main output is:
 
 - `outputs/Phase1_people_addresses.csv`
 
-Each row is one synthetic person with:
-- identity fields (`PersonKey`, names, gender, ethnicity),
+Each row is one synthetic person record with:
+- identity fields (`RecordKey`, `PersonKey`, names, gender, ethnicity),
 - demographic fields (`DOB`, `Age`, `AgeBin`),
 - contact fields (`SSN`, `Phone`),
 - residence and mailing address fields.
+
+Notes:
+- `PersonKey` identifies the entity (person) and can repeat when redundancy is enabled.
+- `RecordKey` is always unique per row.
+- `AddressKey` is always unique per row.
 
 The run also writes:
 - `outputs/Phase1_people_addresses.manifest.json` (settings + run metadata)
@@ -34,8 +44,10 @@ SOG/
 |-- scripts/generate_phase1.py          # prepared cache + config -> generated dataset
 |-- src/sog_phase1/                     # pipeline implementation
 |-- tests/test_phase1_pipeline.py       # smoke/integration test
+|-- BRANCHES.md                         # branch/tag purpose and checkout guide
 |-- docs/BEGINNER_GUIDE.md              # full start-from-zero tutorial
 |-- docs/GITHUB_PUBLISH.md              # step-by-step GitHub upload guide
+|-- docs/PHASE1_SUMMARY.md              # detailed summary of completed Phase-1 work
 |-- requirements.txt
 `-- requirements-dev.txt
 ```
@@ -85,7 +97,13 @@ python scripts/generate_phase1.py --config configs/phase1.yaml --prepared-dir pr
 Edit [`configs/phase1.yaml`](configs/phase1.yaml).
 
 Most important fields:
-- `n_people`: how many rows to generate
+- `n_entities`: number of unique people
+- `n_records`: number of output rows (`>= n_entities`)
+- `redundancy.enabled`: if `true`, repeated `PersonKey` rows are allowed; if `false`, `n_records` must equal `n_entities`
+- `redundancy.min_records_per_entity` / `max_records_per_entity`: bounds for records per person
+- `nicknames.enabled`: enable nickname-based first-name variation
+- `nicknames.mode`: `per_record` or `per_person`
+- `nicknames.usage_pct`: target percent of rows using nickname first names
 - `seed`: reproducibility key (same seed + config -> same output pattern)
 - `output.format`: `csv` or `parquet`
 - `name_duplication.exact_full_name_people_pct`: percent of rows that should be in duplicate full-name groups
@@ -98,6 +116,7 @@ Most important fields:
 Collision size bounds are applied to forced collision groups. Natural random sampling can still create a few groups outside that range.
 
 Detailed explanation is in [`docs/BEGINNER_GUIDE.md`](docs/BEGINNER_GUIDE.md).
+Completed Phase-1 delivery summary is in [`docs/PHASE1_SUMMARY.md`](docs/PHASE1_SUMMARY.md).
 
 ## Validate Results
 Run tests:
@@ -111,7 +130,7 @@ Check generated quality report:
 
 Focus on:
 - `distribution_checks` (expected vs achieved percentages)
-- `uniqueness_checks` (PersonKey, AddressKey, full address uniqueness)
+- `uniqueness_checks` (`RecordKey`, `AddressKey`, full address uniqueness, person/address constraints)
 - `missingness_pct` (blank-rate profile)
 
 ## Reproducibility Notes

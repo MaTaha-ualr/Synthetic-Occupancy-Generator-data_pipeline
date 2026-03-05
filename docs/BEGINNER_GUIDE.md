@@ -68,6 +68,7 @@ Expected outputs in `prepared/`:
 - `cities.parquet`
 - `states.parquet`
 - `demographics.json`
+- `nicknames.json`
 - `prepared_manifest.json`
 
 ## 7) Generate Synthetic Data
@@ -82,10 +83,10 @@ Default output files in `outputs/`:
 - `Phase1_people_addresses.quality_report.json`
 
 ## 8) Understand The Main Output
-`Phase1_people_addresses.csv` contains one row per person.
+`Phase1_people_addresses.csv` contains one row per person-record.
 
 Key column groups:
-- Identity: `PersonKey`, `FirstName`, `MiddleName`, `LastName`, `Suffix`, `FullName`, `Gender`, `Ethnicity`
+- Identity: `RecordKey`, `PersonKey`, `EntityRecordIndex`, `FormalFirstName`, `FirstName`, `FirstNameType`, `MiddleName`, `LastName`, `Suffix`, `FormalFullName`, `FullName`, `Gender`, `Ethnicity`
 - Demographics: `DOB`, `Age`, `AgeBin`
 - Contact: `SSN`, `Phone`
 - Residence: `Residence*` columns
@@ -94,12 +95,22 @@ Key column groups:
 Notes:
 - `ResidencePostalCode` and `MailingPostalCode` are 5-digit strings.
 - `MailingAddressMode` is usually blank or `PO BOX`.
-- `AddressKey` is 1:1 with `PersonKey` in this phase.
+- `RecordKey` is unique per row.
+- `AddressKey` is unique per row.
+- `PersonKey` can repeat when redundancy is enabled.
 
 ## 9) Customize Behavior In `configs/phase1.yaml`
 
 ### Most important settings
-- `phase1.n_people`: row count
+- `phase1.n_people`: legacy fallback (used only when `n_entities` and `n_records` are not set)
+- `phase1.n_entities`: unique people count
+- `phase1.n_records`: output row count
+- `phase1.redundancy.enabled`: strict rule `n_records == n_entities` when false, `n_records > n_entities` when true
+- `phase1.redundancy.min_records_per_entity` / `max_records_per_entity`: bounds for records per person
+- `phase1.redundancy.shape`: `balanced` or `heavy_tail`
+- `phase1.nicknames.enabled`: turn nickname variation on/off
+- `phase1.nicknames.mode`: `per_record` or `per_person`
+- `phase1.nicknames.usage_pct`: target percentage of rows using nickname first names
 - `phase1.seed`: random seed for reproducibility
 - `phase1.output`: output format/path/chunk size
 - `phase1.name_duplication.exact_full_name_people_pct`: target percent of rows that should have duplicated exact full name
@@ -114,10 +125,11 @@ Notes:
 Note: min/max collision size settings apply to forced duplicate groups. A few natural collisions can still occur outside the requested range.
 
 ### Safe first edits
-1. Change `n_people` (example: `10000` -> `50000`)
-2. Keep same `seed` if you need reproducible reruns
-3. Keep `age_bins.auto_normalize: true` unless you want strict sum checks
-4. For mostly pair duplicates, set `collision_group_min_size: 2` and `collision_group_max_size: 2`
+1. Prefer changing `n_entities` and `n_records` together for new runs
+2. For redundancy runs, set `n_entities` and `n_records` together
+3. Keep same `seed` if you need reproducible reruns
+4. Keep `age_bins.auto_normalize: true` unless you want strict sum checks
+5. For mostly pair duplicates, set `collision_group_min_size: 2` and `collision_group_max_size: 2`
 
 ## 10) Validate Output Quality
 Open `outputs/Phase1_people_addresses.quality_report.json` and inspect:
