@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import json
 from dataclasses import asdict, dataclass
 from datetime import date
+from functools import lru_cache
+from pathlib import Path
 from typing import Any
 
 import numpy as np
@@ -15,15 +18,89 @@ MATCH_MODES: tuple[str, ...] = (
     "many_to_many",
 )
 
+# ---------------------------------------------------------------------------
+# Nickname map — loaded lazily from phase1/prepared/nicknames.json
+# ---------------------------------------------------------------------------
+
+@lru_cache(maxsize=1)
+def _load_nickname_map() -> dict[str, list[str]]:
+    """Build formal→[nickname, ...] map from the prepared nicknames file."""
+    candidates = [
+        Path(__file__).resolve().parents[2] / "phase1" / "prepared" / "nicknames.json",
+        Path(__file__).resolve().parents[3] / "phase1" / "prepared" / "nicknames.json",
+    ]
+    for path in candidates:
+        if path.exists():
+            try:
+                raw = json.loads(path.read_text(encoding="utf-8"))
+                result: dict[str, list[str]] = {}
+                for _cat, entries in raw.get("categories", {}).items():
+                    if not isinstance(entries, dict):
+                        continue
+                    for formal, payload in entries.items():
+                        formal_key = str(formal).strip().title()
+                        nicks = list(zip(
+                            payload.get("nicknames", []),
+                            payload.get("weights", []),
+                        ))
+                        nicks_sorted = sorted(nicks, key=lambda x: -float(x[1]))
+                        top = [str(n).strip().title() for n, w in nicks_sorted
+                               if float(w) > 5000 and str(n).strip().title() != formal_key][:2]
+                        if top:
+                            result[formal_key] = top
+                return result
+            except Exception:
+                pass
+    return {}
+
+
+# ---------------------------------------------------------------------------
+# OCR confusion table — character pairs commonly confused in scanned text
+# ---------------------------------------------------------------------------
+
+_OCR_CONFUSIONS: dict[str, list[str]] = {
+    "O": ["0"], "0": ["O"],
+    "l": ["1", "I"], "1": ["l", "I"], "I": ["l", "1"],
+    "B": ["8"], "8": ["B"],
+    "S": ["5"], "5": ["S"],
+    "G": ["6"], "6": ["G"],
+    "Z": ["2"], "2": ["Z"],
+    "rn": ["m"], "m": ["rn"],
+    "cl": ["d"], "vv": ["w"],
+    "li": ["h"],
+}
+
+# Phonetic substitution clusters (consonant groups that sound similar)
+_PHONETIC_SUBS: list[tuple[str, str]] = [
+    ("ph", "f"), ("f", "ph"),
+    ("ck", "k"), ("k", "ck"),
+    ("ie", "y"), ("y", "ie"),
+    ("th", "d"), ("d", "th"),
+    ("v", "w"), ("w", "v"),
+    ("sm", "zm"), ("sch", "sh"), ("sh", "sch"),
+    ("ey", "ay"), ("ay", "ey"),
+    ("yn", "in"), ("in", "yn"),
+    ("ow", "o"), ("o", "ow"),
+    ("er", "ar"), ("ar", "er"),
+]
+
 
 @dataclass(frozen=True)
 class DatasetNoiseConfig:
+    # Original noise types
     name_typo_pct: float = 1.0
     dob_shift_pct: float = 0.5
     ssn_mask_pct: float = 2.0
     phone_mask_pct: float = 1.0
     address_missing_pct: float = 1.0
     middle_name_missing_pct: float = 20.0
+    # Enhanced noise types (default 0.0 — backward-compatible)
+    phonetic_error_pct: float = 0.0
+    ocr_error_pct: float = 0.0
+    date_swap_pct: float = 0.0
+    zip_digit_error_pct: float = 0.0
+    nickname_pct: float = 0.0
+    suffix_missing_pct: float = 0.0
 
 
 @dataclass(frozen=True)
@@ -79,6 +156,12 @@ def get_emission_schema() -> dict[str, Any]:
                     "phone_mask_pct": "float in [0,100]",
                     "address_missing_pct": "float in [0,100]",
                     "middle_name_missing_pct": "float in [0,100]",
+                    "phonetic_error_pct": "float in [0,100] — phonetic name variants",
+                    "ocr_error_pct": "float in [0,100] — OCR character confusion (O/0, l/1, etc.)",
+                    "date_swap_pct": "float in [0,100] — MM/DD transposition in DOB",
+                    "zip_digit_error_pct": "float in [0,100] — single digit error in ZIP",
+                    "nickname_pct": "float in [0,100] — replace formal name with nickname",
+                    "suffix_missing_pct": "float in [0,100] — remove Jr./Sr./III suffix",
                 },
                 "B": {
                     "name_typo_pct": "float in [0,100]",
@@ -87,6 +170,12 @@ def get_emission_schema() -> dict[str, Any]:
                     "phone_mask_pct": "float in [0,100]",
                     "address_missing_pct": "float in [0,100]",
                     "middle_name_missing_pct": "float in [0,100]",
+                    "phonetic_error_pct": "float in [0,100] — phonetic name variants",
+                    "ocr_error_pct": "float in [0,100] — OCR character confusion (O/0, l/1, etc.)",
+                    "date_swap_pct": "float in [0,100] — MM/DD transposition in DOB",
+                    "zip_digit_error_pct": "float in [0,100] — single digit error in ZIP",
+                    "nickname_pct": "float in [0,100] — replace formal name with nickname",
+                    "suffix_missing_pct": "float in [0,100] — remove Jr./Sr./III suffix",
                 },
             },
         },
@@ -123,6 +212,30 @@ def _parse_noise(raw: dict[str, Any] | None, defaults: DatasetNoiseConfig, label
         middle_name_missing_pct=_parse_pct(
             cfg.get("middle_name_missing_pct", defaults.middle_name_missing_pct),
             f"noise.{label}.middle_name_missing_pct",
+        ),
+        phonetic_error_pct=_parse_pct(
+            cfg.get("phonetic_error_pct", defaults.phonetic_error_pct),
+            f"noise.{label}.phonetic_error_pct",
+        ),
+        ocr_error_pct=_parse_pct(
+            cfg.get("ocr_error_pct", defaults.ocr_error_pct),
+            f"noise.{label}.ocr_error_pct",
+        ),
+        date_swap_pct=_parse_pct(
+            cfg.get("date_swap_pct", defaults.date_swap_pct),
+            f"noise.{label}.date_swap_pct",
+        ),
+        zip_digit_error_pct=_parse_pct(
+            cfg.get("zip_digit_error_pct", defaults.zip_digit_error_pct),
+            f"noise.{label}.zip_digit_error_pct",
+        ),
+        nickname_pct=_parse_pct(
+            cfg.get("nickname_pct", defaults.nickname_pct),
+            f"noise.{label}.nickname_pct",
+        ),
+        suffix_missing_pct=_parse_pct(
+            cfg.get("suffix_missing_pct", defaults.suffix_missing_pct),
+            f"noise.{label}.suffix_missing_pct",
         ),
     )
 
@@ -308,6 +421,97 @@ def _allocate_record_counts(
     return counts
 
 
+def _apply_phonetic_error(name: str, rng: np.random.Generator) -> str:
+    """Replace a phonetic cluster in a name with a similar-sounding alternative."""
+    if len(name) < 3:
+        return name
+    lower = name.lower()
+    # Collect all valid (pattern, replacement) substitutions for this name
+    candidates: list[tuple[int, str, str]] = []
+    for pattern, replacement in _PHONETIC_SUBS:
+        idx = lower.find(pattern)
+        if idx >= 0:
+            candidates.append((idx, pattern, replacement))
+    if not candidates:
+        return name
+    idx, pattern, replacement = candidates[int(rng.integers(0, len(candidates)))]
+    mutated = name[:idx] + replacement + name[idx + len(pattern):]
+    # Preserve original title-case
+    if name[0].isupper():
+        mutated = mutated[0].upper() + mutated[1:]
+    return mutated
+
+
+def _apply_ocr_error(text: str, rng: np.random.Generator) -> str:
+    """Substitute one character (or digraph) in text using the OCR confusion table."""
+    if not text:
+        return text
+    # Try multi-char confusions first (digraphs)
+    digraph_positions: list[tuple[int, str]] = []
+    for pattern in _OCR_CONFUSIONS:
+        if len(pattern) > 1:
+            idx = text.find(pattern)
+            if idx >= 0:
+                digraph_positions.append((idx, pattern))
+    if digraph_positions:
+        idx, pattern = digraph_positions[int(rng.integers(0, len(digraph_positions)))]
+        replacement = _OCR_CONFUSIONS[pattern][0]
+        return text[:idx] + replacement + text[idx + len(pattern):]
+    # Fall back to single-char confusion
+    char_positions = [(i, ch) for i, ch in enumerate(text) if ch in _OCR_CONFUSIONS]
+    if not char_positions:
+        return text
+    pos, ch = char_positions[int(rng.integers(0, len(char_positions)))]
+    options = _OCR_CONFUSIONS[ch]
+    replacement = options[int(rng.integers(0, len(options)))]
+    return text[:pos] + replacement + text[pos + 1:]
+
+
+def _apply_date_swap(dob_str: str, rng: np.random.Generator) -> str:  # noqa: ARG001
+    """Swap month and day in a DOB string if both are valid as day/month."""
+    parsed = pd.to_datetime(str(dob_str).strip(), errors="coerce")
+    if pd.isna(parsed):
+        return dob_str
+    month = parsed.month
+    day = parsed.day
+    # Only swap when the swapped values are still valid (day ≤ 12 means it could be a month)
+    if day <= 12 and month != day:
+        try:
+            swapped = parsed.replace(month=day, day=month)
+            return swapped.date().isoformat()
+        except ValueError:
+            pass
+    return dob_str
+
+
+def _apply_zip_error(zip_str: str, rng: np.random.Generator) -> str:
+    """Replace one digit in a ZIP code with an adjacent digit (±1)."""
+    digits = [ch for ch in zip_str if ch.isdigit()]
+    if not digits:
+        return zip_str
+    # Pick a random digit position
+    positions = [i for i, ch in enumerate(zip_str) if ch.isdigit()]
+    pos = positions[int(rng.integers(0, len(positions)))]
+    original_digit = int(zip_str[pos])
+    # Adjacent digit: wrap within 0-9
+    delta = 1 if rng.random() < 0.5 else -1
+    new_digit = (original_digit + delta) % 10
+    return zip_str[:pos] + str(new_digit) + zip_str[pos + 1:]
+
+
+def _apply_nickname(
+    name: str,
+    rng: np.random.Generator,
+    nickname_map: dict[str, list[str]],
+) -> str:
+    """Replace a formal name with one of its nickname variants."""
+    key = name.strip().title()
+    variants = nickname_map.get(key)
+    if not variants:
+        return name
+    return variants[int(rng.integers(0, len(variants)))]
+
+
 def _inject_typo(text: str, rng: np.random.Generator) -> str:
     value = str(text)
     if not value:
@@ -343,6 +547,7 @@ def _build_dataset_rows(
     noise: DatasetNoiseConfig,
     rng: np.random.Generator,
 ) -> tuple[pd.DataFrame, dict[str, list[str]], dict[str, Any]]:
+    nickname_map = _load_nickname_map()
     rows: list[dict[str, Any]] = []
     person_to_records: dict[str, list[str]] = {}
     record_counter = 0
@@ -353,6 +558,12 @@ def _build_dataset_rows(
         "phone_mask": 0,
         "address_missing": 0,
         "middle_name_missing": 0,
+        "phonetic_error": 0,
+        "ocr_error": 0,
+        "date_swap": 0,
+        "zip_digit_error": 0,
+        "nickname": 0,
+        "suffix_missing": 0,
     }
 
     for person_key in sorted(record_counts.keys(), key=_stable_key):
@@ -366,11 +577,13 @@ def _build_dataset_rows(
             first_name = str(base.get("FormalFirstName", "")).strip()
             middle_name = str(base.get("MiddleName", "")).strip()
             last_name = str(base.get("LastName", "")).strip()
+            suffix = str(base.get("Suffix", "")).strip()
             dob = str(base.get("DOB", "")).strip()
             ssn = str(base.get("SSN", "")).strip()
             phone = str(base.get("Phone", "")).strip()
             address_key = str(base.get("AddressKey", "")).strip()
 
+            # --- Original noise types ---
             if rng.random() < (noise.name_typo_pct / 100.0):
                 if rng.random() < 0.5:
                     first_name = _inject_typo(first_name, rng)
@@ -393,13 +606,44 @@ def _build_dataset_rows(
                 address_key = ""
                 noise_counts["address_missing"] += 1
 
+            # --- Enhanced noise types ---
+            if noise.ocr_error_pct > 0.0 and rng.random() < (noise.ocr_error_pct / 100.0):
+                if rng.random() < 0.5:
+                    first_name = _apply_ocr_error(first_name, rng)
+                else:
+                    last_name = _apply_ocr_error(last_name, rng)
+                noise_counts["ocr_error"] += 1
+
+            if noise.phonetic_error_pct > 0.0 and rng.random() < (noise.phonetic_error_pct / 100.0):
+                if rng.random() < 0.6:
+                    first_name = _apply_phonetic_error(first_name, rng)
+                else:
+                    last_name = _apply_phonetic_error(last_name, rng)
+                noise_counts["phonetic_error"] += 1
+
+            if noise.nickname_pct > 0.0 and rng.random() < (noise.nickname_pct / 100.0):
+                first_name = _apply_nickname(first_name, rng, nickname_map)
+                noise_counts["nickname"] += 1
+
+            if noise.date_swap_pct > 0.0 and rng.random() < (noise.date_swap_pct / 100.0):
+                dob = _apply_date_swap(dob, rng)
+                noise_counts["date_swap"] += 1
+
+            if noise.zip_digit_error_pct > 0.0 and rng.random() < (noise.zip_digit_error_pct / 100.0):
+                address_key = _apply_zip_error(address_key, rng)
+                noise_counts["zip_digit_error"] += 1
+
+            if noise.suffix_missing_pct > 0.0 and rng.random() < (noise.suffix_missing_pct / 100.0):
+                suffix = ""
+                noise_counts["suffix_missing"] += 1
+
             full_name = " ".join(part for part in [first_name, middle_name, last_name] if part).strip()
             payload = {
                 f"{side}_RecordKey": record_key,
                 "FirstName": first_name,
                 "MiddleName": middle_name,
                 "LastName": last_name,
-                "Suffix": str(base.get("Suffix", "")).strip(),
+                "Suffix": suffix,
                 "FullName": full_name,
                 "Gender": str(base.get("Gender", "")).strip(),
                 "Ethnicity": str(base.get("Ethnicity", "")).strip(),

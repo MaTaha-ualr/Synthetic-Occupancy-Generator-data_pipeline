@@ -1,5 +1,6 @@
 """Phase-2 contracts and utilities."""
 
+from .pipeline import run_scenario_pipeline
 from .output_contract import (
     build_run_id,
     expected_phase2_run_artifact_paths,
@@ -64,6 +65,7 @@ from .quality import (
 )
 
 __all__ = [
+    "run_scenario_pipeline",
     "build_run_id",
     "expected_phase2_run_artifact_paths",
     "expected_phase2_run_output_paths",

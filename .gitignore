@@ -11,7 +11,15 @@ venv/
 prepared/
 outputs/
 outputs_v1/
+.frontend_state/
 
 # OS/editor
 .DS_Store
 Thumbs.db
+
+# Secrets — never commit
+.env
+.streamlit/secrets.toml
+
+# Phase-2 run outputs (large data files)
+phase2/runs/

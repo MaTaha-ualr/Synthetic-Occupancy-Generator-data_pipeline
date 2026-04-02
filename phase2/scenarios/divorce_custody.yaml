@@ -1,8 +1,8 @@
 scenario_id: divorce_custody
 seed: 20260313
 phase1:
-  data_path: outputs_phase1/Phase1_people_addresses.csv
-  manifest_path: outputs_phase1/Phase1_people_addresses.manifest.json
+  data_path: phase1/outputs_phase1/Phase1_people_addresses.csv
+  manifest_path: phase1/outputs_phase1/Phase1_people_addresses.manifest.json
 parameters:
   cohabit_rate_pct: 8.0
   divorce_rate_pct: 18.0
@@ -17,6 +17,33 @@ emission:
   appearance_B_pct: 88.0
   duplication_in_A_pct: 14.0
   duplication_in_B_pct: 14.0
+  noise:
+    A:
+      name_typo_pct: 1.0
+      dob_shift_pct: 0.4
+      ssn_mask_pct: 1.5
+      phone_mask_pct: 0.8
+      address_missing_pct: 0.8
+      middle_name_missing_pct: 20.0
+      phonetic_error_pct: 0.0
+      ocr_error_pct: 0.0
+      date_swap_pct: 0.0
+      zip_digit_error_pct: 0.0
+      nickname_pct: 0.0
+      suffix_missing_pct: 0.0
+    B:
+      name_typo_pct: 2.5
+      dob_shift_pct: 1.2
+      ssn_mask_pct: 6.0
+      phone_mask_pct: 3.0
+      address_missing_pct: 2.2
+      middle_name_missing_pct: 30.0
+      phonetic_error_pct: 2.5
+      ocr_error_pct: 0.0
+      date_swap_pct: 2.0
+      zip_digit_error_pct: 0.0
+      nickname_pct: 0.0
+      suffix_missing_pct: 0.0
 quality:
   household_size_range:
     min: 1
