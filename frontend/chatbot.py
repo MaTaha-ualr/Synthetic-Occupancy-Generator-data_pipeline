@@ -9,6 +9,7 @@ Requires ANTHROPIC_API_KEY environment variable.
 
 from __future__ import annotations
 
+import datetime
 import json
 import os
 import sys
@@ -225,6 +226,13 @@ Dataset A is typically cleaner; Dataset B is noisier. Set higher values in B.
 # Tool dispatcher
 # ---------------------------------------------------------------------------
 
+def _json_serial(obj: Any) -> str:
+    """Fallback JSON serializer for types not handled by default (e.g. date objects from YAML)."""
+    if isinstance(obj, (datetime.date, datetime.datetime)):
+        return obj.isoformat()
+    raise TypeError(f"Object of type {type(obj).__name__} is not JSON serializable")
+
+
 def _dispatch_tool(name: str, inputs: dict[str, Any]) -> dict[str, Any]:
     try:
         if name == "list_scenarios":
@@ -286,7 +294,7 @@ def _run_claude_turn(messages: list[dict]) -> tuple[str, dict[str, str]]:
                     tool_results.append({
                         "type": "tool_result",
                         "tool_use_id": block.id,
-                        "content": json.dumps(result),
+                        "content": json.dumps(result, default=_json_serial),
                     })
             working.append({"role": "assistant", "content": response.content})
             working.append({"role": "user", "content": tool_results})
