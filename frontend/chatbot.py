@@ -324,12 +324,18 @@ if st.session_state.last_run_downloads:
 # ---------------------------------------------------------------------------
 
 if not os.environ.get("ANTHROPIC_API_KEY"):
-    st.error(
-        "ANTHROPIC_API_KEY environment variable is not set. "
-        "Set it before running: `set ANTHROPIC_API_KEY=sk-ant-...` (Windows) "
-        "or `export ANTHROPIC_API_KEY=sk-ant-...` (Unix)."
+    st.warning("No API key found. Enter your Anthropic API key to continue.")
+    key_input = st.text_input(
+        "Anthropic API key",
+        type="password",
+        placeholder="sk-ant-...",
+        help="Get your key at console.anthropic.com — it is only stored in your browser session.",
     )
-    st.stop()
+    if key_input.strip():
+        os.environ["ANTHROPIC_API_KEY"] = key_input.strip()
+        st.rerun()
+    else:
+        st.stop()
 
 if prompt := st.chat_input("Describe what you want to generate…"):
     # Append and display user message
