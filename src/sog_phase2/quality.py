@@ -3,6 +3,7 @@ from __future__ import annotations
 from collections import defaultdict
 from dataclasses import asdict, dataclass
 from datetime import date, timedelta
+from itertools import combinations
 from typing import Any
 
 import numpy as np
@@ -359,6 +360,32 @@ def _record_person_counts(crosswalk_df: pd.DataFrame, record_col: str) -> tuple[
     return ({key: len(value) for key, value in person_counts.items()}, record_to_person, ambiguous)
 
 
+def _record_person_counts_for_dataset(
+    entity_record_map_df: pd.DataFrame,
+    dataset_id: str,
+) -> tuple[dict[str, int], dict[str, str], int]:
+    if entity_record_map_df.empty:
+        return {}, {}, 0
+    subset = entity_record_map_df[
+        entity_record_map_df["DatasetId"].astype(str).map(_text) == str(dataset_id).strip()
+    ]
+    person_counts: dict[str, set[str]] = defaultdict(set)
+    record_to_person: dict[str, str] = {}
+    ambiguous = 0
+    for _, row in subset.iterrows():
+        person = _text(row.get("PersonKey"))
+        record = _text(row.get("RecordKey"))
+        if not person or not record:
+            continue
+        person_counts[person].add(record)
+        existing = record_to_person.get(record)
+        if existing is None:
+            record_to_person[record] = person
+        elif existing != person:
+            ambiguous += 1
+    return ({key: len(value) for key, value in person_counts.items()}, record_to_person, ambiguous)
+
+
 def _address_map_for_snapshot(residence_df: pd.DataFrame, snapshot: date) -> dict[str, str]:
     working = residence_df.copy()
     if working.empty:
@@ -477,6 +504,31 @@ def _dataset_drift_metrics(
     }
 
 
+def _cardinality_counts_for_pair(
+    first_counts: dict[str, int],
+    second_counts: dict[str, int],
+) -> tuple[dict[str, int], set[str]]:
+    overlap_entities = set(first_counts.keys()) & set(second_counts.keys())
+    cardinality_counts = {
+        "one_to_one": 0,
+        "one_to_many": 0,
+        "many_to_one": 0,
+        "many_to_many": 0,
+    }
+    for person in overlap_entities:
+        first_n = int(first_counts.get(person, 0))
+        second_n = int(second_counts.get(person, 0))
+        if first_n <= 1 and second_n <= 1:
+            cardinality_counts["one_to_one"] += 1
+        elif first_n <= 1 and second_n > 1:
+            cardinality_counts["one_to_many"] += 1
+        elif first_n > 1 and second_n <= 1:
+            cardinality_counts["many_to_one"] += 1
+        else:
+            cardinality_counts["many_to_many"] += 1
+    return cardinality_counts, overlap_entities
+
+
 def compute_phase2_quality_report(
     *,
     truth_people_df: pd.DataFrame,
@@ -489,6 +541,9 @@ def compute_phase2_quality_report(
     dataset_a_df: pd.DataFrame | None = None,
     dataset_b_df: pd.DataFrame | None = None,
     truth_crosswalk_df: pd.DataFrame | None = None,
+    observed_datasets: dict[str, pd.DataFrame] | None = None,
+    entity_record_map_df: pd.DataFrame | None = None,
+    observed_relationship_mode: str | None = None,
 ) -> dict[str, Any]:
     age_map = _age_map(truth_people_df)
     event_age = _event_age_violations(
@@ -544,7 +599,115 @@ def compute_phase2_quality_report(
     }
 
     er_metrics: dict[str, Any]
-    if dataset_a_df is None or dataset_b_df is None or truth_crosswalk_df is None:
+    if observed_datasets is not None and entity_record_map_df is not None:
+        dataset_ids = list(observed_datasets.keys())
+        per_dataset_duplicates: dict[str, Any] = {}
+        per_dataset_drifts: dict[str, Any] = {}
+        person_counts_by_dataset: dict[str, dict[str, int]] = {}
+        record_to_person_by_dataset: dict[str, dict[str, str]] = {}
+        ambiguity_by_dataset: dict[str, int] = {}
+
+        for dataset_id, dataset_df in observed_datasets.items():
+            counts, record_to_person, ambiguous = _record_person_counts_for_dataset(entity_record_map_df, dataset_id)
+            person_counts_by_dataset[dataset_id] = counts
+            record_to_person_by_dataset[dataset_id] = record_to_person
+            ambiguity_by_dataset[dataset_id] = ambiguous
+            dup_rows = sum(max(0, count - 1) for count in counts.values())
+            multi_entities = sum(1 for count in counts.values() if count > 1)
+            per_dataset_duplicates[dataset_id] = {
+                "row_count": int(len(dataset_df)),
+                "entity_count": int(len(counts)),
+                "duplicate_rows": int(dup_rows),
+                "duplicate_row_rate_pct": float((dup_rows / len(dataset_df)) * 100.0 if len(dataset_df) else 0.0),
+                "multi_record_entity_pct": float((multi_entities / len(counts)) * 100.0 if counts else 0.0),
+            }
+            per_dataset_drifts[dataset_id] = _dataset_drift_metrics(
+                dataset_df=dataset_df,
+                record_col="RecordKey",
+                record_to_person=record_to_person,
+                truth_people_df=truth_people_df,
+                truth_residence_history_df=truth_residence_history_df,
+            )
+
+        er_metrics = {
+            "available": True,
+            "topology": {
+                "dataset_count": int(len(dataset_ids)),
+                "dataset_ids": dataset_ids,
+                "relationship_mode": str(observed_relationship_mode or "").strip(),
+            },
+            "per_dataset": {
+                dataset_id: {
+                    **per_dataset_duplicates[dataset_id],
+                    "attribute_drift": per_dataset_drifts[dataset_id],
+                    "crosswalk_ambiguity_records": int(ambiguity_by_dataset.get(dataset_id, 0)),
+                }
+                for dataset_id in dataset_ids
+            },
+            "within_file_duplicate_rates": dict(per_dataset_duplicates),
+            "attribute_drift_rates": dict(per_dataset_drifts),
+            "crosswalk_ambiguity": {
+                dataset_id: int(ambiguity_by_dataset.get(dataset_id, 0))
+                for dataset_id in dataset_ids
+            },
+        }
+
+        if len(dataset_ids) >= 2:
+            pairwise_overlap_metrics: dict[str, Any] = {}
+            pairwise_cardinality_metrics: dict[str, Any] = {}
+            for first_id, second_id in combinations(dataset_ids, 2):
+                first_counts = person_counts_by_dataset[first_id]
+                second_counts = person_counts_by_dataset[second_id]
+                cardinality_counts, overlap_entities = _cardinality_counts_for_pair(first_counts, second_counts)
+                union_entities = set(first_counts.keys()) | set(second_counts.keys())
+                pair_key = f"{first_id}__{second_id}"
+                pairwise_overlap_metrics[pair_key] = {
+                    "dataset_ids": [first_id, second_id],
+                    "overlap_entities": int(len(overlap_entities)),
+                    "a_entities": int(len(first_counts)),
+                    "b_entities": int(len(second_counts)),
+                    "union_entities": int(len(union_entities)),
+                    "overlap_pct_of_union": float((len(overlap_entities) / len(union_entities)) * 100.0 if union_entities else 0.0),
+                    "overlap_pct_of_a": float((len(overlap_entities) / len(first_counts)) * 100.0 if first_counts else 0.0),
+                    "overlap_pct_of_b": float((len(overlap_entities) / len(second_counts)) * 100.0 if second_counts else 0.0),
+                }
+                pairwise_cardinality_metrics[pair_key] = {
+                    **cardinality_counts,
+                    "evaluated_overlap_entities": int(len(overlap_entities)),
+                    "dataset_ids": [first_id, second_id],
+                }
+
+            if len(dataset_ids) == 2:
+                first_id, second_id = dataset_ids
+                pair_key = f"{first_id}__{second_id}"
+                er_metrics["cross_file_overlap"] = pairwise_overlap_metrics[pair_key]
+                er_metrics["match_cardinality_achieved"] = pairwise_cardinality_metrics[pair_key]
+            else:
+                all_dataset_entities = set.intersection(
+                    *(set(person_counts_by_dataset[dataset_id].keys()) for dataset_id in dataset_ids)
+                )
+                union_entities = set.union(
+                    *(set(person_counts_by_dataset[dataset_id].keys()) for dataset_id in dataset_ids)
+                )
+                er_metrics["multi_dataset_overlap"] = {
+                    "dataset_ids": list(dataset_ids),
+                    "all_dataset_overlap_entities": int(len(all_dataset_entities)),
+                    "union_entities": int(len(union_entities)),
+                    "all_dataset_overlap_pct_of_union": float((len(all_dataset_entities) / len(union_entities)) * 100.0 if union_entities else 0.0),
+                    "pairwise_overlap": pairwise_overlap_metrics,
+                }
+                er_metrics["pairwise_match_cardinality"] = pairwise_cardinality_metrics
+
+            if len(dataset_ids) == 2:
+                first_id, second_id = dataset_ids
+            # Backward-compatible aliases for older consumers that assume the first two datasets are A/B.
+                er_metrics["within_file_duplicate_rates"]["dataset_a"] = per_dataset_duplicates[first_id]
+                er_metrics["within_file_duplicate_rates"]["dataset_b"] = per_dataset_duplicates[second_id]
+                er_metrics["attribute_drift_rates"]["dataset_a"] = per_dataset_drifts[first_id]
+                er_metrics["attribute_drift_rates"]["dataset_b"] = per_dataset_drifts[second_id]
+                er_metrics["crosswalk_ambiguity"]["a_record_to_multiple_persons"] = int(ambiguity_by_dataset.get(first_id, 0))
+                er_metrics["crosswalk_ambiguity"]["b_record_to_multiple_persons"] = int(ambiguity_by_dataset.get(second_id, 0))
+    elif dataset_a_df is None or dataset_b_df is None or truth_crosswalk_df is None:
         er_metrics = {"available": False, "reason": "observed datasets not provided"}
     else:
         a_counts, a_record_to_person, a_ambiguous = _record_person_counts(truth_crosswalk_df, "A_RecordKey")

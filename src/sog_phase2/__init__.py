@@ -63,6 +63,12 @@ from .quality import (
     get_quality_schema,
     parse_quality_config,
 )
+from .scenario_catalog import (
+    get_scenario_catalog_by_id,
+    get_scenario_catalog_entries,
+    get_scenario_catalog_summary,
+    load_scenario_catalog,
+)
 
 __all__ = [
     "run_scenario_pipeline",
@@ -112,4 +118,8 @@ __all__ = [
     "get_quality_schema",
     "parse_quality_config",
     "compute_phase2_quality_report",
+    "load_scenario_catalog",
+    "get_scenario_catalog_entries",
+    "get_scenario_catalog_by_id",
+    "get_scenario_catalog_summary",
 ]

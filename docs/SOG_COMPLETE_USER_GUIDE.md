@@ -20,7 +20,7 @@ SOG (Synthetic Occupancy Generator) is a synthetic data pipeline for:
 
 1. Generating a baseline person-address dataset (Phase-1).
 2. Simulating temporal life/household events on top of that baseline (Phase-2 truth layer).
-3. Emitting two observed datasets (Dataset A, Dataset B) plus a truth crosswalk for entity-resolution benchmarking.
+3. Emitting one or more observed datasets plus canonical truth mappings for entity-resolution benchmarking.
 
 The project is designed for reproducibility and benchmarking. Every scenario run is deterministic given:
 
@@ -48,7 +48,7 @@ This is intentional and used to stress entity-resolution systems.
 ### 2.3 Truth vs observed
 
 - **Truth layer**: normalized, latent simulation state and event history.
-- **Observed layer**: what two systems would "see" after sampling, duplication, and noise.
+- **Observed layer**: what one or more systems would "see" after sampling, duplication, and noise.
 
 Phase-2 simulates on truth entities first, then emits observed records.
 
@@ -62,7 +62,7 @@ SOG is split into major layers:
 2. **Phase-2 parameter layer** (public-source priors in `Data/phase2_params/`).
 3. **Scenario selection layer** (deterministic participant selection and latent traits).
 4. **Truth simulation layer** (event-driven timeline: MOVE, COHABIT, BIRTH, DIVORCE, LEAVE_HOME).
-5. **Observed emission layer** (Dataset A/B + crosswalk under configurable overlap/cardinality/noise).
+5. **Observed emission layer** (observed dataset CSVs plus truth mappings under configurable overlap/cardinality/noise).
 6. **Quality layer** (truth consistency + scenario metrics + ER benchmark metrics).
 7. **Validation and regression tests** (contract validation and scenario behavior tests).
 
@@ -82,7 +82,7 @@ Key directories and files:
   - `constraints.py`: eligibility and realism/novelty constraint checks.
   - `event_grammar.py`: truth event schema and validators.
   - `simulator.py`: truth event-driven simulator.
-  - `emission.py`: observed A/B emission engine.
+  - `emission.py`: observed dataset emission engine.
   - `quality.py`: Phase-2 quality report metrics.
   - `output_contract.py`: required artifact schemas + run validator.
 - `scripts/`:
@@ -275,15 +275,22 @@ Special keys in `roommates_split`:
 
 ### 8.4 `emission`
 
-- `crossfile_match_mode`: `one_to_one | one_to_many | many_to_one | many_to_many`
-- `overlap_entity_pct`
-- `appearance_A_pct`
-- `appearance_B_pct`
-- `duplication_in_A_pct`
-- `duplication_in_B_pct`
-- Optional noise:
-  - `noise.A.*`
-  - `noise.B.*`
+- `crossfile_match_mode`: `single_dataset | one_to_one | one_to_many | many_to_one | many_to_many`
+- Canonical dataset-list schema:
+  - `datasets[*].dataset_id`
+  - `datasets[*].filename`
+  - `datasets[*].snapshot`: `simulation_start | simulation_end`
+  - `datasets[*].appearance_pct`
+  - `datasets[*].duplication_pct`
+  - optional `datasets[*].noise.*`
+- Legacy A/B schema is still supported for backward compatibility:
+  - `overlap_entity_pct`
+  - `appearance_A_pct`
+  - `appearance_B_pct`
+  - `duplication_in_A_pct`
+  - `duplication_in_B_pct`
+  - optional `noise.A.*`
+  - optional `noise.B.*`
 
 ### 8.5 `selection`
 
@@ -345,25 +352,39 @@ Simulator and quality checks enforce:
 
 Each run emits:
 
-- `DatasetA.csv`
-- `DatasetB.csv`
-- `truth_crosswalk.csv`
+- one or more observed dataset CSVs
+- `entity_record_map.csv`
+- `truth_crosswalk.csv` only for pairwise two-dataset runs
 
-### 10.1 A vs B snapshot model
+### 10.1 Dataset topology
 
-- Dataset A: baseline/system-A style snapshot at simulation start.
-- Dataset B: later snapshot at simulation end.
+- In canonical mode, each dataset entry chooses its own snapshot with `simulation_start` or `simulation_end`.
+- In the legacy pairwise scenarios shipped with the repo:
+  - Dataset A is the start snapshot
+  - Dataset B is the end snapshot
+- `single_dataset` mode emits one observed CSV and no crosswalk.
 
 ### 10.2 Match cardinality modes
 
 Controlled by `crossfile_match_mode`:
 
+- `single_dataset`
 - `one_to_one`
 - `one_to_many`
 - `many_to_one`
 - `many_to_many`
 
-### 10.3 Crosswalk meaning
+### 10.3 Canonical truth mapping
+
+`entity_record_map.csv` links:
+
+- `PersonKey`
+- `DatasetId`
+- `RecordKey`
+
+This is the canonical mapping from truth entities to observed records.
+
+### 10.4 Pairwise crosswalk meaning
 
 `truth_crosswalk.csv` links:
 
@@ -436,31 +457,33 @@ python scripts/validate_phase2_outputs.py --run-id <run_id>
 
 ## 13) Current Scenario Catalog and What Each Stresses
 
-As of March 5, 2026:
+The built-in Phase-2 scenario catalog is:
 
 1. `single_movers`
-2. `couple_merge`
-3. `family_birth`
-4. `divorce_custody`
-5. `roommates_split`
+2. `clean_baseline_linkage`
+3. `couple_merge`
+4. `family_birth`
+5. `divorce_custody`
+6. `roommates_split`
+7. `high_noise_identity_drift`
+8. `low_overlap_sparse_coverage`
+9. `asymmetric_source_coverage`
+10. `high_duplication_dedup`
+11. `three_source_partial_overlap`
 
-### 13.1 Emission profile summary
+Use the dedicated scenario guide for the detailed interpretation of each one:
 
-| Scenario | Match Mode | Overlap % | A Appearance % | B Appearance % | Dup A % | Dup B % |
-|---|---|---:|---:|---:|---:|---:|
-| single_movers | one_to_one | 70.0 | 85.0 | 90.0 | 4.0 | 6.0 |
-| couple_merge | one_to_many | 65.0 | 80.0 | 90.0 | 3.0 | 12.0 |
-| family_birth | many_to_one | 72.0 | 88.0 | 86.0 | 10.0 | 4.0 |
-| divorce_custody | many_to_many | 60.0 | 82.0 | 88.0 | 14.0 | 14.0 |
-| roommates_split | one_to_many | 58.0 | 80.0 | 88.0 | 12.0 | 24.0 |
+- `docs/SCENARIO_USE_CASES_AND_TESTING.md`
 
-### 13.2 Behavior profile summary
+That guide covers:
 
-- `single_movers`: mobility-focused.
-- `couple_merge`: cohabitation-focused.
-- `family_birth`: birth-focused.
-- `divorce_custody`: cohabit + divorce dynamics.
-- `roommates_split`: high mobility + roommate baseline grouping + split stress for false-positive household signals.
+- which benchmark goal each scenario fits,
+- which truth events should appear,
+- which observed-layer match pattern should appear,
+- which files and metrics to inspect after a run,
+- and how each scenario maps to regression coverage.
+
+Use `phase2/scenarios/*.yaml` as the canonical source for scenario settings such as overlap, duplication, noise, and cross-file match mode.
 
 ---
 
@@ -535,6 +558,12 @@ Expected files include truth outputs, observed outputs, and metadata:
 
 ## 17) Testing Strategy and Commands
 
+The main user-facing scenario and testing workflow now lives in:
+
+- `docs/SCENARIO_USE_CASES_AND_TESTING.md`
+
+Keep this section as the command index.
+
 ### 17.1 Full test suite
 
 ```bash
@@ -549,11 +578,9 @@ python -m pytest -q tests/test_phase2_scenario_regression.py
 
 ### 17.3 What regression tests protect
 
-- scenario-specific event expectations
-- co-residence logic checks
-- crosswalk overlap math
-- cardinality mode behavior
-- roommates split dynamics and multi-member household patterns
+- `tests/test_phase2_scenario_regression.py`: scenario-specific event and observed-behavior checks
+- `tests/test_phase2_quality.py`: quality-report completeness and ER metric coverage
+- broader `tests/test_phase2_*.py`: pipeline, contract, and validation behavior
 
 ---
 
@@ -613,24 +640,29 @@ Check these are aligned for the run:
 
 ## 20) How to Add a New Scenario
 
+For the scenario field schema, use:
+
+- `phase2/scenarios/README.md`
+
+For the user-facing benchmark expectations and the files/metrics to inspect after a run, use:
+
+- `docs/SCENARIO_USE_CASES_AND_TESTING.md`
+
+Minimum process:
+
 1. Copy an existing file in `phase2/scenarios/`.
-2. Set a unique `scenario_id` and default `seed`.
-3. Configure:
-   - `parameters`
-   - `selection`
-   - `constraints`
-   - `simulation`
-   - `emission`
-   - `quality`
-4. Run truth + observed generation.
-5. Validate with `validate_phase2_outputs.py`.
-6. Add scenario regression test coverage in `tests/test_phase2_scenario_regression.py`.
+2. Set a unique `scenario_id` and seed.
+3. Update `parameters`, `selection`, `constraints`, `simulation`, `emission`, and `quality`.
+4. Run truth generation, observed emission, and validation.
+5. Add or update scenario regression coverage in `tests/test_phase2_scenario_regression.py`.
 
-Recommendation:
+Do not treat a new scenario as complete until:
 
-- Start with one deterministic seed.
-- Ensure at least one non-trivial event occurs for the scenario.
-- Confirm crosswalk metrics match intended overlap/cardinality behavior.
+- the YAML is canonical and committed,
+- the primary event pattern appears in `truth_events.parquet`,
+- the intended observed topology is visible in `entity_record_map.csv`,
+- and, for pairwise runs, the intended cross-file cardinality is visible in `truth_crosswalk.csv`,
+- and `quality_report.json` exposes the expected overlap, duplication, and drift behavior.
 
 ---
 
@@ -640,7 +672,8 @@ Recommendation:
 - `monthly` simulation is default for cost/performance.
 - Event grammar currently includes minimum active set (MOVE/COHABIT/BIRTH/DIVORCE/LEAVE_HOME).
 - Optional-later events (DEATH/NAME_CHANGE/ADOPTION) are defined but not enabled in minimum grammar checks.
-- Observed emission is snapshot-based (A at start, B at end), not full longitudinal export.
+- Observed emission is snapshot-based, not full longitudinal export.
+- Canonical observed emission supports single-dataset, pairwise, and N-way dataset-list runs, with `truth_crosswalk.csv` reserved for pairwise compatibility and `entity_record_map.csv` remaining the canonical truth mapping.
 
 ---
 
@@ -648,9 +681,10 @@ Recommendation:
 
 - **Entity view**: one row per `PersonKey` truth person.
 - **Record view**: potentially many rows per `PersonKey`.
-- **Crosswalk**: ground-truth mapping from person/entity to record ids across datasets.
-- **Overlap**: entities appearing in both A and B.
-- **Cardinality**: how many records per entity across files (1-1, 1-many, many-1, many-many).
+- **Entity-record map**: canonical ground-truth mapping from person/entity to record ids across datasets.
+- **Crosswalk**: pairwise A/B projection of the entity-record map for two-dataset runs.
+- **Overlap**: entities appearing in both observed datasets for pairwise runs.
+- **Cardinality**: how many observed records an entity has across one or more datasets.
 - **Drift**: attribute differences between observed records and truth.
 
 ---
@@ -663,7 +697,7 @@ This repository now contains a full Phase-1 baseline + Phase-2 simulation and ER
 - source-backed parameter priors,
 - deterministic scenario selection,
 - event-driven truth simulation,
-- dual-observed dataset emission with cardinality controls,
+- generalized observed-dataset emission with pairwise backward compatibility,
 - comprehensive quality metrics,
 - and regression tests.
 

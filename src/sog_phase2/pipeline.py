@@ -108,14 +108,25 @@ def _load_yaml(path: Path) -> dict[str, Any]:
 
 def _build_emission_yaml_payload(emission_cfg: Any) -> dict[str, Any]:
     payload = asdict(emission_cfg)
-    payload["appearance_A_pct"] = payload.pop("appearance_a_pct")
-    payload["appearance_B_pct"] = payload.pop("appearance_b_pct")
-    payload["duplication_in_A_pct"] = payload.pop("duplication_in_a_pct")
-    payload["duplication_in_B_pct"] = payload.pop("duplication_in_b_pct")
-    payload["noise"] = {
-        "A": payload.pop("dataset_a_noise"),
-        "B": payload.pop("dataset_b_noise"),
-    }
+    is_legacy = bool(payload.pop("is_legacy_pairwise", False))
+    datasets = payload.pop("datasets", [])
+    if is_legacy:
+        payload["appearance_A_pct"] = payload.pop("appearance_a_pct")
+        payload["appearance_B_pct"] = payload.pop("appearance_b_pct")
+        payload["duplication_in_A_pct"] = payload.pop("duplication_in_a_pct")
+        payload["duplication_in_B_pct"] = payload.pop("duplication_in_b_pct")
+        payload["noise"] = {
+            "A": payload.pop("dataset_a_noise"),
+            "B": payload.pop("dataset_b_noise"),
+        }
+        return payload
+    payload.pop("appearance_a_pct", None)
+    payload.pop("appearance_b_pct", None)
+    payload.pop("duplication_in_a_pct", None)
+    payload.pop("duplication_in_b_pct", None)
+    payload.pop("dataset_a_noise", None)
+    payload.pop("dataset_b_noise", None)
+    payload["datasets"] = datasets
     return payload
 
 
@@ -153,6 +164,8 @@ def run_scenario_pipeline(
     from sog_phase2.emission import parse_emission_config, emit_observed_datasets
     from sog_phase2.output_contract import (
         build_run_id,
+        expected_observed_dataset_paths,
+        expected_pairwise_crosswalk_paths,
         expected_phase2_run_artifact_paths,
         parse_run_id,
         validate_phase2_run,
@@ -288,12 +301,16 @@ def run_scenario_pipeline(
     # ------------------------------------------------------------------
     # Stage 4: Observed emission
     # ------------------------------------------------------------------
-    dataset_a_path = artifact_paths["dataset_a"]
-    dataset_b_path = artifact_paths["dataset_b"]
-    crosswalk_path = artifact_paths["truth_crosswalk"]
+    observed_dataset_paths = expected_observed_dataset_paths(run_dir, emission_config)
+    pairwise_crosswalk_paths = expected_pairwise_crosswalk_paths(run_dir, emission_config)
+    entity_record_map_path = artifact_paths["entity_record_map"]
+    crosswalk_path = artifact_paths["truth_crosswalk"] if len(emission_config.datasets) == 2 else None
 
     if not overwrite:
-        existing_obs = [str(p) for p in (dataset_a_path, dataset_b_path, crosswalk_path) if p.exists()]
+        observed_targets = [entity_record_map_path, *observed_dataset_paths.values(), *pairwise_crosswalk_paths.values()]
+        if crosswalk_path is not None:
+            observed_targets.append(crosswalk_path)
+        existing_obs = [str(p) for p in observed_targets if p.exists()]
         if existing_obs:
             raise FileExistsError(
                 "Observed outputs already exist. Re-run with overwrite=True: "
@@ -307,11 +324,21 @@ def run_scenario_pipeline(
         simulation_end_date=simulation_end,
         emission_config=emission_config,
         seed=run_seed,
+        phase1_df=phase1_df,
     )
 
-    emitted["dataset_a"].to_csv(dataset_a_path, index=False)
-    emitted["dataset_b"].to_csv(dataset_b_path, index=False)
-    emitted["truth_crosswalk"].to_csv(crosswalk_path, index=False)
+    for dataset in emission_config.datasets:
+        emitted["datasets"][dataset.dataset_id].to_csv(
+            observed_dataset_paths[f"dataset__{dataset.dataset_id}"],
+            index=False,
+        )
+    emitted["entity_record_map"].to_csv(entity_record_map_path, index=False)
+    if crosswalk_path is not None and emitted["truth_crosswalk"] is not None:
+        emitted["truth_crosswalk"].to_csv(crosswalk_path, index=False)
+    for pair_key, path in pairwise_crosswalk_paths.items():
+        crosswalk_df = emitted["pairwise_crosswalks"].get(pair_key)
+        if crosswalk_df is not None:
+            crosswalk_df.to_csv(path, index=False)
 
     # ------------------------------------------------------------------
     # Stage 5: Quality + manifest (single consolidated write)
@@ -338,9 +365,10 @@ def run_scenario_pipeline(
         truth_events_df=truth_result["truth_events"],
         constraints_config=constraints_config,
         quality_config=quality_config,
-        dataset_a_df=emitted["dataset_a"],
-        dataset_b_df=emitted["dataset_b"],
+        observed_datasets=emitted["datasets"],
+        entity_record_map_df=emitted["entity_record_map"],
         truth_crosswalk_df=emitted["truth_crosswalk"],
+        observed_relationship_mode=emission_config.crossfile_match_mode,
     )
 
     quality_status = _compute_quality_status(constraints_validation, phase2_quality)
@@ -408,18 +436,44 @@ def run_scenario_pipeline(
         "truth_outputs": {name: str(path) for name, path in truth_outputs.items()},
         "simulation_meta": truth_result["simulation_meta"],
         "observed_outputs": {
-            "dataset_a": str(dataset_a_path),
-            "dataset_b": str(dataset_b_path),
-            "truth_crosswalk": str(crosswalk_path),
+            "datasets": [
+                {
+                    "dataset_id": dataset.dataset_id,
+                    "filename": dataset.filename,
+                    "path": str(observed_dataset_paths[f"dataset__{dataset.dataset_id}"]),
+                }
+                for dataset in emission_config.datasets
+            ],
+            "entity_record_map": str(entity_record_map_path),
+            "truth_crosswalk": str(crosswalk_path) if crosswalk_path is not None else "",
+            "pairwise_crosswalks": [
+                {
+                    "dataset_ids": [first.dataset_id, second.dataset_id],
+                    "filename": pairwise_crosswalk_paths[f"{first.dataset_id}__{second.dataset_id}"].name,
+                    "path": str(pairwise_crosswalk_paths[f"{first.dataset_id}__{second.dataset_id}"]),
+                }
+                for idx, first in enumerate(emission_config.datasets)
+                for second in emission_config.datasets[idx + 1 :]
+                if f"{first.dataset_id}__{second.dataset_id}" in pairwise_crosswalk_paths
+            ],
         },
         "emission_meta": {
             "scenario_yaml_path": str(scenario_yaml_path),
             "simulation_start_date": simulation_config.start_date.isoformat(),
             "simulation_end_date": simulation_end.isoformat(),
             "crossfile_match_mode": emission_config.crossfile_match_mode,
+            "dataset_ids": [dataset.dataset_id for dataset in emission_config.datasets],
             "coverage": emitted["metrics"]["coverage"],
         },
     }
+    dataset_path_by_id = {
+        dataset.dataset_id: str(observed_dataset_paths[f"dataset__{dataset.dataset_id}"])
+        for dataset in emission_config.datasets
+    }
+    if "A" in dataset_path_by_id:
+        manifest["observed_outputs"]["dataset_a"] = dataset_path_by_id["A"]
+    if "B" in dataset_path_by_id:
+        manifest["observed_outputs"]["dataset_b"] = dataset_path_by_id["B"]
     artifact_paths["manifest_json"].write_text(
         json.dumps(manifest, indent=2), encoding="utf-8"
     )
@@ -437,17 +491,28 @@ def run_scenario_pipeline(
         "truth_counts": truth_counts,
         "event_counts": truth_result["quality"]["event_counts"],
         "observed_counts": {
-            "dataset_a_rows": int(len(emitted["dataset_a"])),
-            "dataset_b_rows": int(len(emitted["dataset_b"])),
-            "crosswalk_rows": int(len(emitted["truth_crosswalk"])),
+            "datasets": {
+                dataset_id: int(len(df))
+                for dataset_id, df in emitted["datasets"].items()
+            },
+            "entity_record_map_rows": int(len(emitted["entity_record_map"])),
+            "crosswalk_rows": int(len(emitted["truth_crosswalk"])) if emitted["truth_crosswalk"] is not None else 0,
+            "pairwise_crosswalk_rows": {
+                pair_key: int(len(df))
+                for pair_key, df in emitted["pairwise_crosswalks"].items()
+            },
         },
         "quality_status": quality_status,
         "validation_valid": bool(validation.get("valid", False)),
         "paths": {
             "run_dir": str(run_dir),
-            "dataset_a": str(dataset_a_path),
-            "dataset_b": str(dataset_b_path),
-            "truth_crosswalk": str(crosswalk_path),
+            "datasets": dataset_path_by_id,
+            "entity_record_map": str(entity_record_map_path),
+            "truth_crosswalk": str(crosswalk_path) if crosswalk_path is not None else "",
+            "pairwise_crosswalks": {
+                pair_key: str(path)
+                for pair_key, path in pairwise_crosswalk_paths.items()
+            },
             "quality_report": str(artifact_paths["quality_report_json"]),
             "manifest": str(artifact_paths["manifest_json"]),
         },

@@ -1,0 +1,74 @@
+scenario_id: clean_baseline_linkage
+seed: 20260410
+phase1:
+  data_path: phase1/outputs_phase1/Phase1_people_addresses.csv
+  manifest_path: phase1/outputs_phase1/Phase1_people_addresses.manifest.json
+parameters:
+  move_rate_pct: 8.0
+simulation:
+  granularity: monthly
+  start_date: 2026-01-01
+  periods: 12
+emission:
+  crossfile_match_mode: one_to_one
+  overlap_entity_pct: 92.0
+  appearance_A_pct: 96.0
+  appearance_B_pct: 97.0
+  duplication_in_A_pct: 1.0
+  duplication_in_B_pct: 2.0
+  noise:
+    A:
+      name_typo_pct: 0.2
+      dob_shift_pct: 0.0
+      ssn_mask_pct: 0.2
+      phone_mask_pct: 0.1
+      address_missing_pct: 0.1
+      middle_name_missing_pct: 5.0
+      phonetic_error_pct: 0.0
+      ocr_error_pct: 0.0
+      date_swap_pct: 0.0
+      zip_digit_error_pct: 0.0
+      nickname_pct: 0.0
+      suffix_missing_pct: 0.0
+    B:
+      name_typo_pct: 0.5
+      dob_shift_pct: 0.2
+      ssn_mask_pct: 0.5
+      phone_mask_pct: 0.2
+      address_missing_pct: 0.2
+      middle_name_missing_pct: 8.0
+      phonetic_error_pct: 0.0
+      ocr_error_pct: 0.0
+      date_swap_pct: 0.0
+      zip_digit_error_pct: 0.2
+      nickname_pct: 0.0
+      suffix_missing_pct: 0.0
+quality:
+  household_size_range:
+    min: 1
+    max: 8
+selection:
+  sample:
+    mode: pct
+    value: 100.0
+  filters:
+    age_bins: []
+    genders: []
+    ethnicities: []
+    residence_types: []
+    redundancy_profiles: []
+    mobility_propensity_buckets: []
+  thresholds:
+    mobility_low_max: 0.09
+    mobility_high_min: 0.18
+    trait_low_max: 0.33
+    trait_high_min: 0.66
+constraints:
+  min_marriage_age: 18
+  max_partner_age_gap: 25
+  fertility_age_range:
+    min: 15
+    max: 49
+  allow_underage_marriage: false
+  allow_child_lives_alone: false
+  enforce_non_overlapping_residence_intervals: true

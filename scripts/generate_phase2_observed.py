@@ -12,6 +12,22 @@ import pandas as pd
 import yaml
 
 
+def _resolve_with_legacy_fallback(project_root: Path, configured_path: str) -> Path:
+    candidate = (project_root / configured_path).resolve()
+    if candidate.exists():
+        return candidate
+    legacy_map = {
+        "outputs_phase1/Phase1_people_addresses.csv": "phase1/outputs_phase1/Phase1_people_addresses.csv",
+        "outputs_phase1/Phase1_people_addresses.manifest.json": "phase1/outputs_phase1/Phase1_people_addresses.manifest.json",
+        "outputs/Phase1_people_addresses.csv": "phase1/outputs_phase1/Phase1_people_addresses.csv",
+        "outputs/Phase1_people_addresses.manifest.json": "phase1/outputs_phase1/Phase1_people_addresses.manifest.json",
+    }
+    normalized = configured_path.replace("\\", "/")
+    if normalized in legacy_map:
+        return (project_root / legacy_map[normalized]).resolve()
+    return candidate
+
+
 def _load_yaml(path: Path) -> dict[str, Any]:
     with path.open("r", encoding="utf-8") as handle:
         data = yaml.safe_load(handle) or {}
@@ -50,6 +66,30 @@ def _simulation_end_date(start_date: date, periods: int, granularity: str) -> da
     return start_date + pd.Timedelta(days=periods).to_pytimedelta()
 
 
+def _build_emission_yaml_payload(emission_cfg: Any) -> dict[str, Any]:
+    payload = asdict(emission_cfg)
+    is_legacy = bool(payload.pop("is_legacy_pairwise", False))
+    datasets = payload.pop("datasets", [])
+    if is_legacy:
+        payload["appearance_A_pct"] = payload.pop("appearance_a_pct")
+        payload["appearance_B_pct"] = payload.pop("appearance_b_pct")
+        payload["duplication_in_A_pct"] = payload.pop("duplication_in_a_pct")
+        payload["duplication_in_B_pct"] = payload.pop("duplication_in_b_pct")
+        payload["noise"] = {
+            "A": payload.pop("dataset_a_noise"),
+            "B": payload.pop("dataset_b_noise"),
+        }
+        return payload
+    payload.pop("appearance_a_pct", None)
+    payload.pop("appearance_b_pct", None)
+    payload.pop("duplication_in_a_pct", None)
+    payload.pop("duplication_in_b_pct", None)
+    payload.pop("dataset_a_noise", None)
+    payload.pop("dataset_b_noise", None)
+    payload["datasets"] = datasets
+    return payload
+
+
 def main() -> int:
     script_path = Path(__file__).resolve()
     project_root = script_path.parents[1]
@@ -58,12 +98,17 @@ def main() -> int:
 
     from sog_phase2.constraints import parse_constraints_config
     from sog_phase2.emission import emit_observed_datasets, parse_emission_config
-    from sog_phase2.output_contract import expected_phase2_run_artifact_paths, parse_run_id
+    from sog_phase2.output_contract import (
+        expected_observed_dataset_paths,
+        expected_pairwise_crosswalk_paths,
+        expected_phase2_run_artifact_paths,
+        parse_run_id,
+    )
     from sog_phase2.quality import compute_phase2_quality_report, parse_quality_config
     from sog_phase2.simulator import parse_simulation_config
 
     parser = argparse.ArgumentParser(
-        description="Generate Phase-2 observed datasets (DatasetA, DatasetB, truth_crosswalk) from truth layer."
+        description="Generate Phase-2 observed datasets and canonical entity_record_map from the truth layer."
     )
     parser.add_argument(
         "--run-id",
@@ -90,7 +135,7 @@ def main() -> int:
     parser.add_argument(
         "--overwrite",
         action="store_true",
-        help="Overwrite DatasetA/DatasetB/truth_crosswalk if they already exist.",
+        help="Overwrite observed dataset files, entity_record_map, and truth_crosswalk if they already exist.",
     )
     args = parser.parse_args()
 
@@ -140,11 +185,15 @@ def main() -> int:
         simulation_cfg.granularity,
     )
 
-    dataset_a_path = artifact_paths["dataset_a"]
-    dataset_b_path = artifact_paths["dataset_b"]
-    crosswalk_path = artifact_paths["truth_crosswalk"]
+    observed_dataset_paths = expected_observed_dataset_paths(run_dir, emission_cfg)
+    pairwise_crosswalk_paths = expected_pairwise_crosswalk_paths(run_dir, emission_cfg)
+    entity_record_map_path = artifact_paths["entity_record_map"]
+    crosswalk_path = artifact_paths["truth_crosswalk"] if len(emission_cfg.datasets) == 2 else None
     if not args.overwrite:
-        existing = [str(path) for path in (dataset_a_path, dataset_b_path, crosswalk_path) if path.exists()]
+        observed_targets = [entity_record_map_path, *observed_dataset_paths.values(), *pairwise_crosswalk_paths.values()]
+        if crosswalk_path is not None:
+            observed_targets.append(crosswalk_path)
+        existing = [str(path) for path in observed_targets if path.exists()]
         if existing:
             raise FileExistsError(
                 "Observed outputs already exist. Re-run with --overwrite to replace: "
@@ -153,6 +202,13 @@ def main() -> int:
 
     truth_people_df = pd.read_parquet(truth_people_path)
     truth_residence_df = pd.read_parquet(truth_residence_path)
+    phase1_cfg = scenario.get("phase1", {}) if isinstance(scenario.get("phase1"), dict) else {}
+    phase1_data_path_cfg = str(phase1_cfg.get("data_path", "")).strip()
+    phase1_df = None
+    if phase1_data_path_cfg:
+        phase1_csv_path = _resolve_with_legacy_fallback(project_root, phase1_data_path_cfg)
+        if phase1_csv_path.exists():
+            phase1_df = pd.read_csv(phase1_csv_path, dtype=str)
     emitted = emit_observed_datasets(
         truth_people_df=truth_people_df,
         truth_residence_history_df=truth_residence_df,
@@ -160,11 +216,21 @@ def main() -> int:
         simulation_end_date=simulation_end,
         emission_config=emission_cfg,
         seed=int(run_info["seed"]),
+        phase1_df=phase1_df,
     )
 
-    emitted["dataset_a"].to_csv(dataset_a_path, index=False)
-    emitted["dataset_b"].to_csv(dataset_b_path, index=False)
-    emitted["truth_crosswalk"].to_csv(crosswalk_path, index=False)
+    for dataset in emission_cfg.datasets:
+        emitted["datasets"][dataset.dataset_id].to_csv(
+            observed_dataset_paths[f"dataset__{dataset.dataset_id}"],
+            index=False,
+        )
+    emitted["entity_record_map"].to_csv(entity_record_map_path, index=False)
+    if crosswalk_path is not None and emitted["truth_crosswalk"] is not None:
+        emitted["truth_crosswalk"].to_csv(crosswalk_path, index=False)
+    for pair_key, path in pairwise_crosswalk_paths.items():
+        crosswalk_df = emitted["pairwise_crosswalks"].get(pair_key)
+        if crosswalk_df is not None:
+            crosswalk_df.to_csv(path, index=False)
 
     resolved_scenario = dict(scenario)
     resolved_scenario["scenario_id"] = run_info["scenario_id"]
@@ -174,16 +240,7 @@ def main() -> int:
         "start_date": simulation_cfg.start_date.isoformat(),
         "periods": simulation_cfg.periods,
     }
-    emission_payload = asdict(emission_cfg)
-    emission_payload["appearance_A_pct"] = emission_payload.pop("appearance_a_pct")
-    emission_payload["appearance_B_pct"] = emission_payload.pop("appearance_b_pct")
-    emission_payload["duplication_in_A_pct"] = emission_payload.pop("duplication_in_a_pct")
-    emission_payload["duplication_in_B_pct"] = emission_payload.pop("duplication_in_b_pct")
-    emission_payload["noise"] = {
-        "A": emission_payload.pop("dataset_a_noise"),
-        "B": emission_payload.pop("dataset_b_noise"),
-    }
-    resolved_scenario["emission"] = emission_payload
+    resolved_scenario["emission"] = _build_emission_yaml_payload(emission_cfg)
     resolved_scenario["quality"] = {
         "household_size_range": {
             "min": quality_cfg.household_size_min,
@@ -200,26 +257,56 @@ def main() -> int:
     )
 
     manifest = _load_json(artifact_paths["manifest_json"])
+    phase1_data_path_cfg = str(phase1_cfg.get("data_path", "")).strip()
+    phase1_manifest_path_cfg = str(phase1_cfg.get("manifest_path", "")).strip()
     manifest.update(
         {
             "generated_at_utc": generated_at_utc,
             "run_id": run_info["run_id"],
             "scenario_id": run_info["scenario_id"],
             "seed": int(run_info["seed"]),
+            "phase1_input_csv": phase1_data_path_cfg,
+            "phase1_input_manifest": phase1_manifest_path_cfg,
             "observed_outputs": {
-                "dataset_a": str(dataset_a_path),
-                "dataset_b": str(dataset_b_path),
-                "truth_crosswalk": str(crosswalk_path),
+                "datasets": [
+                    {
+                        "dataset_id": dataset.dataset_id,
+                        "filename": dataset.filename,
+                        "path": str(observed_dataset_paths[f"dataset__{dataset.dataset_id}"]),
+                    }
+                    for dataset in emission_cfg.datasets
+                ],
+                "entity_record_map": str(entity_record_map_path),
+                "truth_crosswalk": str(crosswalk_path) if crosswalk_path is not None else "",
+                "pairwise_crosswalks": [
+                    {
+                        "dataset_ids": [first.dataset_id, second.dataset_id],
+                        "filename": pairwise_crosswalk_paths[f"{first.dataset_id}__{second.dataset_id}"].name,
+                        "path": str(pairwise_crosswalk_paths[f"{first.dataset_id}__{second.dataset_id}"]),
+                    }
+                    for idx, first in enumerate(emission_cfg.datasets)
+                    for second in emission_cfg.datasets[idx + 1 :]
+                    if f"{first.dataset_id}__{second.dataset_id}" in pairwise_crosswalk_paths
+                ],
             },
             "emission_meta": {
                 "scenario_yaml_path": str(scenario_yaml_path),
                 "simulation_start_date": simulation_start.isoformat(),
                 "simulation_end_date": simulation_end.isoformat(),
                 "crossfile_match_mode": emission_cfg.crossfile_match_mode,
+                "dataset_ids": [dataset.dataset_id for dataset in emission_cfg.datasets],
                 "coverage": emitted["metrics"]["coverage"],
             },
         }
     )
+    dataset_path_by_id = {
+        dataset.dataset_id: str(observed_dataset_paths[f"dataset__{dataset.dataset_id}"])
+        for dataset in emission_cfg.datasets
+    }
+    if "A" in dataset_path_by_id:
+        manifest["observed_outputs"]["dataset_a"] = dataset_path_by_id["A"]
+    if "B" in dataset_path_by_id:
+        manifest["observed_outputs"]["dataset_b"] = dataset_path_by_id["B"]
     _write_json(artifact_paths["manifest_json"], manifest)
 
     truth_households_df = pd.read_parquet(artifact_paths["truth_households"])
@@ -233,9 +320,10 @@ def main() -> int:
         truth_events_df=truth_events_df,
         constraints_config=constraints_cfg,
         quality_config=quality_cfg,
-        dataset_a_df=emitted["dataset_a"],
-        dataset_b_df=emitted["dataset_b"],
+        observed_datasets=emitted["datasets"],
+        entity_record_map_df=emitted["entity_record_map"],
         truth_crosswalk_df=emitted["truth_crosswalk"],
+        observed_relationship_mode=emission_cfg.crossfile_match_mode,
     )
     truth_consistency = phase2_quality.get("truth_consistency", {})
     event_age_count = int((truth_consistency.get("event_age_validation") or {}).get("invalid_event_age_count", 0))
@@ -263,14 +351,25 @@ def main() -> int:
         "run_id": run_info["run_id"],
         "scenario_id": run_info["scenario_id"],
         "seed": int(run_info["seed"]),
-        "dataset_a_rows": int(len(emitted["dataset_a"])),
-        "dataset_b_rows": int(len(emitted["dataset_b"])),
-        "crosswalk_rows": int(len(emitted["truth_crosswalk"])),
+        "dataset_rows": {
+            dataset_id: int(len(df))
+            for dataset_id, df in emitted["datasets"].items()
+        },
+        "entity_record_map_rows": int(len(emitted["entity_record_map"])),
+        "crosswalk_rows": int(len(emitted["truth_crosswalk"])) if emitted["truth_crosswalk"] is not None else 0,
+        "pairwise_crosswalk_rows": {
+            pair_key: int(len(df))
+            for pair_key, df in emitted["pairwise_crosswalks"].items()
+        },
         "match_mode": emission_cfg.crossfile_match_mode,
         "paths": {
-            "DatasetA": str(dataset_a_path),
-            "DatasetB": str(dataset_b_path),
-            "truth_crosswalk": str(crosswalk_path),
+            **dataset_path_by_id,
+            "entity_record_map": str(entity_record_map_path),
+            "truth_crosswalk": str(crosswalk_path) if crosswalk_path is not None else "",
+            "pairwise_crosswalks": {
+                pair_key: str(path)
+                for pair_key, path in pairwise_crosswalk_paths.items()
+            },
         },
     }
     print(json.dumps(result, indent=2))

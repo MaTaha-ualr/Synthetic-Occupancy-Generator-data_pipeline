@@ -1,0 +1,61 @@
+scenario_id: high_duplication_dedup
+seed: 20260412
+phase1:
+  data_path: phase1/outputs_phase1/Phase1_people_addresses.csv
+  manifest_path: phase1/outputs_phase1/Phase1_people_addresses.manifest.json
+parameters:
+  move_rate_pct: 6.0
+simulation:
+  granularity: monthly
+  start_date: 2026-01-01
+  periods: 12
+emission:
+  crossfile_match_mode: single_dataset
+  datasets:
+    - dataset_id: registry
+      filename: observed_registry.csv
+      snapshot: simulation_end
+      appearance_pct: 100.0
+      duplication_pct: 68.0
+      noise:
+        name_typo_pct: 3.0
+        dob_shift_pct: 1.0
+        ssn_mask_pct: 3.0
+        phone_mask_pct: 2.0
+        address_missing_pct: 1.5
+        middle_name_missing_pct: 25.0
+        phonetic_error_pct: 2.0
+        ocr_error_pct: 2.0
+        date_swap_pct: 1.0
+        zip_digit_error_pct: 1.5
+        nickname_pct: 4.0
+        suffix_missing_pct: 2.0
+quality:
+  household_size_range:
+    min: 1
+    max: 8
+selection:
+  sample:
+    mode: pct
+    value: 100.0
+  filters:
+    age_bins: []
+    genders: []
+    ethnicities: []
+    residence_types: []
+    redundancy_profiles: []
+    mobility_propensity_buckets: []
+  thresholds:
+    mobility_low_max: 0.09
+    mobility_high_min: 0.18
+    trait_low_max: 0.33
+    trait_high_min: 0.66
+constraints:
+  min_marriage_age: 18
+  max_partner_age_gap: 25
+  fertility_age_range:
+    min: 15
+    max: 49
+  allow_underage_marriage: false
+  allow_child_lives_alone: false
+  enforce_non_overlapping_residence_intervals: true

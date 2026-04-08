@@ -1,5 +1,11 @@
 # Phase-2 Scenario Definitions
 
+The machine-readable scenario support plan lives in:
+- `phase2/scenarios/catalog.yaml`
+
+The user-facing support matrix is:
+- `docs/SCENARIO_SUPPORT_MATRIX.md`
+
 Each scenario YAML should minimally define:
 - `scenario_id`
 - `seed`
@@ -35,17 +41,32 @@ Simulation keys:
 - `periods` (`> 0`)
 
 Emission keys:
-- `crossfile_match_mode` in `one_to_one | one_to_many | many_to_one | many_to_many`
-- `overlap_entity_pct`
-- `appearance_A_pct`, `appearance_B_pct`
-- `duplication_in_A_pct`, `duplication_in_B_pct`
-- optional `noise.A.*` and `noise.B.*` controls
+- `crossfile_match_mode` in `single_dataset | one_to_one | one_to_many | many_to_one | many_to_many`
+- Canonical schema:
+  - `datasets[*].dataset_id`
+  - `datasets[*].filename`
+  - `datasets[*].snapshot` in `simulation_start | simulation_end`
+  - `datasets[*].appearance_pct`
+  - `datasets[*].duplication_pct`
+  - optional `datasets[*].noise.*` controls
+- Legacy A/B schema is still accepted for backward compatibility:
+  - `overlap_entity_pct`
+  - `appearance_A_pct`, `appearance_B_pct`
+  - `duplication_in_A_pct`, `duplication_in_B_pct`
+  - optional `noise.A.*` and `noise.B.*` controls
+
+Observed output topology:
+- all runs emit one or more observed dataset CSVs plus `entity_record_map.csv`
+- pairwise two-dataset runs also emit `truth_crosswalk.csv`
+- `single_dataset` runs emit exactly one observed CSV and no crosswalk
 
 Quality keys:
 - `household_size_range.min`
 - `household_size_range.max`
 
-Runs are materialized under `phase2/runs/` and validated with:
+Runs are materialized under `phase2/runs/`. That directory is generated output and is intentionally not versioned.
+
+Validate a run with:
 `python scripts/validate_phase2_outputs.py --run-id <run_id>`
 
 Scenario population generation command:

@@ -120,8 +120,55 @@ def _write_minimal_valid_run_artifacts(runs_root: Path, run_id: str) -> dict[str
         ]
     ).to_parquet(paths["scenario_population"], index=False)
 
-    pd.DataFrame([{"A_RecordKey": "A-1"}]).to_csv(paths["dataset_a"], index=False)
-    pd.DataFrame([{"B_RecordKey": "B-1"}]).to_csv(paths["dataset_b"], index=False)
+    run_dir = paths["truth_people"].parent
+    pd.DataFrame(
+        [
+            {
+                "A_RecordKey": "A-1",
+                "DatasetId": "A",
+                "FirstName": "Ava",
+                "LastName": "Smith",
+                "DOB": "1990-01-01",
+                "AddressKey": "A1",
+                "HouseNumber": "101",
+                "StreetName": "Main St",
+                "UnitType": "",
+                "UnitNumber": "",
+                "StreetAddress": "101 Main St",
+                "City": "Little Rock",
+                "State": "AR",
+                "ZipCode": "72201",
+                "SourceSnapshotDate": "2024-01-01",
+            }
+        ]
+    ).to_csv(run_dir / "DatasetA.csv", index=False)
+    pd.DataFrame(
+        [
+            {
+                "B_RecordKey": "B-1",
+                "DatasetId": "B",
+                "FirstName": "Ava",
+                "LastName": "Smith",
+                "DOB": "1990-01-01",
+                "AddressKey": "A1",
+                "HouseNumber": "101",
+                "StreetName": "Main St",
+                "UnitType": "",
+                "UnitNumber": "",
+                "StreetAddress": "101 Main St",
+                "City": "Little Rock",
+                "State": "AR",
+                "ZipCode": "72201",
+                "SourceSnapshotDate": "2024-02-01",
+            }
+        ]
+    ).to_csv(run_dir / "DatasetB.csv", index=False)
+    pd.DataFrame(
+        [
+            {"PersonKey": "1", "DatasetId": "A", "RecordKey": "A-1"},
+            {"PersonKey": "1", "DatasetId": "B", "RecordKey": "B-1"},
+        ]
+    ).to_csv(paths["entity_record_map"], index=False)
     pd.DataFrame(
         [{"PersonKey": "1", "A_RecordKey": "A-1", "B_RecordKey": "B-1"}]
     ).to_csv(paths["truth_crosswalk"], index=False)
@@ -134,8 +181,8 @@ def _write_minimal_valid_run_artifacts(runs_root: Path, run_id: str) -> dict[str
         "scenario_id": scenario_id,
         "seed": seed,
         "phase1": {
-            "data_path": "outputs_phase1/Phase1_people_addresses.csv",
-            "manifest_path": "outputs_phase1/Phase1_people_addresses.manifest.json",
+            "data_path": "phase1/outputs_phase1/Phase1_people_addresses.csv",
+            "manifest_path": "phase1/outputs_phase1/Phase1_people_addresses.manifest.json",
         },
         "selection": {
             "sample": {"mode": "pct", "value": 100.0},
@@ -165,8 +212,8 @@ def _write_minimal_valid_run_artifacts(runs_root: Path, run_id: str) -> dict[str
         "run_id": run_id,
         "scenario_id": scenario_id,
         "seed": seed,
-        "phase1_input_csv": "outputs_phase1/Phase1_people_addresses.csv",
-        "phase1_input_manifest": "outputs_phase1/Phase1_people_addresses.manifest.json",
+        "phase1_input_csv": "phase1/outputs_phase1/Phase1_people_addresses.csv",
+        "phase1_input_manifest": "phase1/outputs_phase1/Phase1_people_addresses.manifest.json",
     }
     paths["manifest_json"].write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
@@ -202,6 +249,82 @@ def _write_minimal_valid_run_artifacts(runs_root: Path, run_id: str) -> dict[str
     return paths
 
 
+def _write_minimal_multi_dataset_run_artifacts(runs_root: Path, run_id: str) -> Path:
+    paths = _write_minimal_valid_run_artifacts(runs_root, run_id)
+    run_dir = paths["truth_people"].parent
+
+    pair_ab_path = run_dir / "truth_crosswalk__A__B.csv"
+    pd.read_csv(paths["truth_crosswalk"], dtype=str).to_csv(pair_ab_path, index=False)
+
+    pd.DataFrame(
+        [
+            {
+                "RecordKey": "C-1",
+                "DatasetId": "benefits",
+                "FirstName": "Ava",
+                "LastName": "Smith",
+                "DOB": "1990-01-01",
+                "AddressKey": "A1",
+                "HouseNumber": "101",
+                "StreetName": "Main St",
+                "UnitType": "",
+                "UnitNumber": "",
+                "StreetAddress": "101 Main St",
+                "City": "Little Rock",
+                "State": "AR",
+                "ZipCode": "72201",
+                "SourceSnapshotDate": "2024-03-01",
+            }
+        ]
+    ).to_csv(run_dir / "observed_benefits.csv", index=False)
+    pd.DataFrame(
+        [
+            {"PersonKey": "1", "DatasetId": "benefits", "RecordKey": "C-1"},
+        ]
+    ).to_csv(paths["entity_record_map"], mode="a", index=False, header=False)
+
+    pair_paths = {
+        "A__benefits": run_dir / "truth_crosswalk__A__benefits.csv",
+        "B__benefits": run_dir / "truth_crosswalk__B__benefits.csv",
+    }
+    pd.DataFrame(
+        [{"PersonKey": "1", "A_RecordKey": "A-1", "B_RecordKey": "C-1"}]
+    ).to_csv(pair_paths["A__benefits"], index=False)
+    pd.DataFrame(
+        [{"PersonKey": "1", "A_RecordKey": "B-1", "B_RecordKey": "C-1"}]
+    ).to_csv(pair_paths["B__benefits"], index=False)
+
+    scenario = yaml.safe_load(paths["scenario_yaml"].read_text(encoding="utf-8"))
+    scenario["emission"] = {
+        "crossfile_match_mode": "many_to_many",
+        "overlap_entity_pct": 100.0,
+        "datasets": [
+            {"dataset_id": "A", "filename": "DatasetA.csv", "snapshot": "simulation_start", "appearance_pct": 100.0, "duplication_pct": 0.0},
+            {"dataset_id": "B", "filename": "DatasetB.csv", "snapshot": "simulation_end", "appearance_pct": 100.0, "duplication_pct": 0.0},
+            {"dataset_id": "benefits", "filename": "observed_benefits.csv", "snapshot": "simulation_end", "appearance_pct": 100.0, "duplication_pct": 0.0},
+        ],
+    }
+    paths["scenario_yaml"].write_text(yaml.safe_dump(scenario, sort_keys=False), encoding="utf-8")
+
+    manifest = json.loads(paths["manifest_json"].read_text(encoding="utf-8"))
+    manifest["observed_outputs"] = {
+        "datasets": [
+            {"dataset_id": "A", "filename": "DatasetA.csv", "path": str(run_dir / "DatasetA.csv")},
+            {"dataset_id": "B", "filename": "DatasetB.csv", "path": str(run_dir / "DatasetB.csv")},
+            {"dataset_id": "benefits", "filename": "observed_benefits.csv", "path": str(run_dir / "observed_benefits.csv")},
+        ],
+        "entity_record_map": str(paths["entity_record_map"]),
+        "truth_crosswalk": "",
+        "pairwise_crosswalks": [
+            {"dataset_ids": ["A", "B"], "filename": pair_ab_path.name, "path": str(pair_ab_path)},
+            {"dataset_ids": ["A", "benefits"], "filename": pair_paths["A__benefits"].name, "path": str(pair_paths["A__benefits"])},
+            {"dataset_ids": ["B", "benefits"], "filename": pair_paths["B__benefits"].name, "path": str(pair_paths["B__benefits"])},
+        ],
+    }
+    paths["manifest_json"].write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    return run_dir
+
+
 def test_phase2_output_contract_valid_minimal_run(tmp_path: Path) -> None:
     runs_root = tmp_path / "phase2" / "runs"
     run_id = build_run_id("single_movers", 20260310, "2026-03-10")
@@ -226,6 +349,29 @@ def test_phase2_output_contract_crosswalk_accepts_entity_key_alias(tmp_path: Pat
     result = validate_phase2_run(runs_root=runs_root, run_id=run_id)
     assert result["valid"] is True
     assert result["schema_errors"] == {}
+
+
+def test_phase2_output_contract_validates_manifest_pairwise_crosswalks_for_multi_dataset_run(tmp_path: Path) -> None:
+    runs_root = tmp_path / "phase2" / "runs"
+    run_id = build_run_id("multi_dataset", 20260318, "2026-03-18")
+    _write_minimal_multi_dataset_run_artifacts(runs_root, run_id)
+
+    result = validate_phase2_run(runs_root=runs_root, run_id=run_id)
+    assert result["valid"] is True
+    assert result["schema_errors"] == {}
+
+
+def test_phase2_output_contract_detects_missing_manifest_pairwise_crosswalk_file(tmp_path: Path) -> None:
+    runs_root = tmp_path / "phase2" / "runs"
+    run_id = build_run_id("multi_dataset", 20260319, "2026-03-19")
+    run_dir = _write_minimal_multi_dataset_run_artifacts(runs_root, run_id)
+
+    missing_path = run_dir / "truth_crosswalk__A__benefits.csv"
+    missing_path.unlink()
+
+    result = validate_phase2_run(runs_root=runs_root, run_id=run_id)
+    assert result["valid"] is False
+    assert "pairwise_crosswalk__A__benefits" in result["missing_files"]
 
 
 def test_phase2_output_contract_detects_missing_required_columns(tmp_path: Path) -> None:
@@ -255,6 +401,39 @@ def test_phase2_output_contract_detects_seed_mismatch(tmp_path: Path) -> None:
     result = validate_phase2_run(runs_root=runs_root, run_id=run_id)
     assert result["valid"] is False
     assert "reproducibility" in result["metadata_errors"]
+
+
+def test_phase2_output_contract_detects_empty_manifest_phase1_fields(tmp_path: Path) -> None:
+    runs_root = tmp_path / "phase2" / "runs"
+    run_id = build_run_id("single_movers", 20260314, "2026-03-14")
+    paths = _write_minimal_valid_run_artifacts(runs_root, run_id)
+
+    manifest = json.loads(paths["manifest_json"].read_text(encoding="utf-8"))
+    manifest["phase1_input_csv"] = ""
+    paths["manifest_json"].write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+
+    result = validate_phase2_run(runs_root=runs_root, run_id=run_id)
+    assert result["valid"] is False
+    assert "manifest_json" in result["metadata_errors"]
+    assert any("must be non-empty" in msg for msg in result["metadata_errors"]["manifest_json"])
+
+
+def test_phase2_output_contract_detects_invalid_selection_log_counts_shape(tmp_path: Path) -> None:
+    runs_root = tmp_path / "phase2" / "runs"
+    run_id = build_run_id("single_movers", 20260317, "2026-03-17")
+    paths = _write_minimal_valid_run_artifacts(runs_root, run_id)
+
+    selection_log = json.loads(paths["scenario_selection_log_json"].read_text(encoding="utf-8"))
+    selection_log["counts"] = "bad-shape"
+    paths["scenario_selection_log_json"].write_text(
+        json.dumps(selection_log, indent=2),
+        encoding="utf-8",
+    )
+
+    result = validate_phase2_run(runs_root=runs_root, run_id=run_id)
+    assert result["valid"] is False
+    assert "scenario_selection_log_json" in result["metadata_errors"]
+    assert any("counts' must be a JSON object" in msg for msg in result["metadata_errors"]["scenario_selection_log_json"])
 
 
 def test_phase2_output_contract_detects_invalid_event_grammar(tmp_path: Path) -> None:

@@ -1,4 +1,4 @@
-﻿# Python
+# Python
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -12,14 +12,26 @@ prepared/
 outputs/
 outputs_v1/
 .frontend_state/
+phase1/prepared/
+phase1/outputs/
+phase1/outputs_phase1/*
+!phase1/outputs_phase1/README.md
+
+# Local frontend/runtime state
+.streamlit/
+phase2/.sog_jobs/
+phase2/.sog_sessions/
+phase2/.sog_charts/
+phase2/.sog_exports/
+phase2/scenarios/_working_*.yaml
+
+# Phase-2 run outputs (keep only the placeholder)
+phase2/runs/*
+!phase2/runs/.gitkeep
 
 # OS/editor
 .DS_Store
 Thumbs.db
 
-# Secrets — never commit
+# Secrets - never commit
 .env
-.streamlit/secrets.toml
-
-# Phase-2 run outputs (large data files)
-phase2/runs/

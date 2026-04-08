@@ -25,6 +25,12 @@ SCENARIO_IDS = (
     "family_birth",
     "divorce_custody",
     "roommates_split",
+    "clean_baseline_linkage",
+    "high_noise_identity_drift",
+    "low_overlap_sparse_coverage",
+    "asymmetric_source_coverage",
+    "high_duplication_dedup",
+    "three_source_partial_overlap",
 )
 
 
@@ -42,6 +48,18 @@ def _load_scenario(scenario_id: str) -> dict[str, Any]:
     if not isinstance(payload, dict):
         raise ValueError(f"Scenario YAML must be mapping: {path}")
     return payload
+
+
+def _resolve_phase1_csv() -> Path:
+    candidates = (
+        PROJECT_ROOT / "outputs" / "Phase1_people_addresses.csv",
+        PROJECT_ROOT / "outputs_phase1" / "Phase1_people_addresses.csv",
+        PROJECT_ROOT / "phase1" / "outputs_phase1" / "Phase1_people_addresses.csv",
+    )
+    for path in candidates:
+        if path.exists():
+            return path
+    raise FileNotFoundError("Could not find Phase-1 baseline CSV in outputs/, outputs_phase1/, or phase1/outputs_phase1/")
 
 
 def _add_months(value: date, months: int) -> date:
@@ -141,9 +159,24 @@ def _max_household_size_over_time(membership_df: pd.DataFrame) -> int:
     return max_size
 
 
+def _linked_crosswalk(crosswalk: pd.DataFrame) -> pd.DataFrame:
+    return crosswalk[
+        (crosswalk["A_RecordKey"].astype(str).str.strip() != "")
+        & (crosswalk["B_RecordKey"].astype(str).str.strip() != "")
+    ].copy()
+
+
+def _duplicate_rate(stats: dict[str, Any]) -> float:
+    rows = int(stats["rows"])
+    duplicates = int(stats["duplicates"])
+    if rows <= 0:
+        return 0.0
+    return duplicates / rows
+
+
 @pytest.fixture(scope="module")
 def scenario_results() -> dict[str, dict[str, Any]]:
-    phase1_path = PROJECT_ROOT / "outputs" / "Phase1_people_addresses.csv"
+    phase1_path = _resolve_phase1_csv()
     phase1_df = pd.read_csv(phase1_path, dtype=str)
     keys = sorted(
         phase1_df["PersonKey"].astype(str).str.strip().unique().tolist(),
@@ -208,6 +241,33 @@ def test_single_movers_produces_moves(scenario_results: dict[str, dict[str, Any]
     assert move_count > 0
 
 
+def test_clean_baseline_linkage_stays_low_noise_one_to_one(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    result = scenario_results["clean_baseline_linkage"]
+    events = result["truth"]["truth_events"]
+    observed = result["observed"]
+    crosswalk = observed["truth_crosswalk"]
+    linked = _linked_crosswalk(crosswalk)
+
+    move_count = int((events["EventType"].astype(str).str.upper() == "MOVE").sum())
+    assert move_count > 0
+    assert observed["metrics"]["match_mode"] == "one_to_one"
+    assert not linked.empty
+
+    counts = linked.groupby("PersonKey").agg(
+        a_count=("A_RecordKey", "nunique"),
+        b_count=("B_RecordKey", "nunique"),
+    )
+    assert int(counts["a_count"].max()) == 1
+    assert int(counts["b_count"].max()) == 1
+
+    dataset_a = observed["metrics"]["datasets"]["A"]
+    dataset_b = observed["metrics"]["datasets"]["B"]
+    assert _duplicate_rate(dataset_a) <= 0.02
+    assert _duplicate_rate(dataset_b) <= 0.03
+
+
 def test_couple_merge_produces_cohabit_and_shared_residence(
     scenario_results: dict[str, dict[str, Any]]
 ) -> None:
@@ -228,6 +288,16 @@ def test_couple_merge_produces_cohabit_and_shared_residence(
         assert address_a == address_b
 
 
+def test_couple_merge_exposes_one_to_many_crosswalk_behavior(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    crosswalk = scenario_results["couple_merge"]["observed"]["truth_crosswalk"]
+    linked = _linked_crosswalk(crosswalk)
+    assert not linked.empty
+    b_counts = linked.groupby("PersonKey")["B_RecordKey"].nunique()
+    assert int(b_counts.max()) >= 2
+
+
 def test_family_birth_produces_birth_events(scenario_results: dict[str, dict[str, Any]]) -> None:
     truth = scenario_results["family_birth"]["truth"]
     events = truth["truth_events"]
@@ -236,6 +306,16 @@ def test_family_birth_produces_birth_events(scenario_results: dict[str, dict[str
     child_keys = set(births["ChildPersonKey"].astype(str).str.strip().tolist())
     people_keys = set(truth["truth_people"]["PersonKey"].astype(str).str.strip().tolist())
     assert child_keys.issubset(people_keys)
+
+
+def test_family_birth_exposes_many_to_one_crosswalk_behavior(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    crosswalk = scenario_results["family_birth"]["observed"]["truth_crosswalk"]
+    linked = _linked_crosswalk(crosswalk)
+    assert not linked.empty
+    a_counts = linked.groupby("PersonKey")["A_RecordKey"].nunique()
+    assert int(a_counts.max()) >= 2
 
 
 def test_divorce_custody_produces_divorce_and_split_households(
@@ -249,13 +329,23 @@ def test_divorce_custody_produces_divorce_and_split_households(
     assert (households["HouseholdType"].astype(str).str.strip() == "post_divorce").any()
 
 
+def test_divorce_custody_exposes_many_to_many_crosswalk_behavior(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    crosswalk = scenario_results["divorce_custody"]["observed"]["truth_crosswalk"]
+    linked = _linked_crosswalk(crosswalk)
+    assert not linked.empty
+    counts = linked.groupby("PersonKey").agg(
+        a_count=("A_RecordKey", "nunique"),
+        b_count=("B_RecordKey", "nunique"),
+    )
+    assert ((counts["a_count"] >= 2) & (counts["b_count"] >= 2)).any()
+
+
 def test_one_to_many_mode_yields_multi_b_records(scenario_results: dict[str, dict[str, Any]]) -> None:
     observed = scenario_results["roommates_split"]["observed"]
     crosswalk = observed["truth_crosswalk"]
-    linked = crosswalk[
-        (crosswalk["A_RecordKey"].astype(str).str.strip() != "")
-        & (crosswalk["B_RecordKey"].astype(str).str.strip() != "")
-    ]
+    linked = _linked_crosswalk(crosswalk)
     assert not linked.empty
     b_counts = linked.groupby("PersonKey")["B_RecordKey"].nunique()
     assert int(b_counts.max()) >= 2
@@ -311,29 +401,165 @@ def test_roommates_split_contains_split_household_pattern(
 def test_crosswalk_overlap_matches_claimed_overlap_pct(
     scenario_results: dict[str, dict[str, Any]]
 ) -> None:
-    result = scenario_results["single_movers"]
-    scenario = result["scenario"]
+    for scenario_id in (
+        "single_movers",
+        "clean_baseline_linkage",
+        "high_noise_identity_drift",
+        "low_overlap_sparse_coverage",
+        "asymmetric_source_coverage",
+    ):
+        result = scenario_results[scenario_id]
+        scenario = result["scenario"]
+        observed = result["observed"]
+        coverage = observed["metrics"]["coverage"]
+        crosswalk = observed["truth_crosswalk"]
+
+        overlap_people = set(_linked_crosswalk(crosswalk)["PersonKey"].astype(str).str.strip().tolist())
+        actual_overlap = len(overlap_people)
+
+        n_base = int(coverage["base_entities"])
+        overlap_pct = float(scenario["emission"]["overlap_entity_pct"])
+        appearance_a_pct = float(scenario["emission"]["appearance_A_pct"])
+        appearance_b_pct = float(scenario["emission"]["appearance_B_pct"])
+        target_a = min(n_base, max(0, int(round((appearance_a_pct / 100.0) * n_base))))
+        target_b = min(n_base, max(0, int(round((appearance_b_pct / 100.0) * n_base))))
+        expected_overlap = min(n_base, max(0, int(round((overlap_pct / 100.0) * n_base))))
+        expected_overlap = min(expected_overlap, target_a, target_b)
+        expected_overlap = max(expected_overlap, max(0, target_a + target_b - n_base))
+
+        assert actual_overlap == int(coverage["overlap_entities"])
+        assert actual_overlap == expected_overlap
+
+
+def test_high_noise_identity_drift_realizes_biased_noise_in_dataset_b(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    result = scenario_results["high_noise_identity_drift"]
+    events = result["truth"]["truth_events"]
+    observed = result["observed"]
+    crosswalk = observed["truth_crosswalk"]
+    linked = _linked_crosswalk(crosswalk)
+    dataset_a = observed["metrics"]["datasets"]["A"]
+    dataset_b = observed["metrics"]["datasets"]["B"]
+    noise_a = dataset_a["noise_counts"]
+    noise_b = dataset_b["noise_counts"]
+
+    move_count = int((events["EventType"].astype(str).str.upper() == "MOVE").sum())
+    assert move_count > 0
+    assert observed["metrics"]["match_mode"] == "one_to_one"
+    assert not linked.empty
+
+    counts = linked.groupby("PersonKey").agg(
+        a_count=("A_RecordKey", "nunique"),
+        b_count=("B_RecordKey", "nunique"),
+    )
+    assert int(counts["a_count"].max()) == 1
+    assert int(counts["b_count"].max()) == 1
+
+    for field in ("phonetic_error", "ocr_error", "date_swap", "nickname", "suffix_missing"):
+        assert int(noise_b[field]) > 0
+        assert int(noise_b[field]) > int(noise_a[field])
+
+    b_name_drift = sum(int(noise_b[field]) for field in ("name_typo", "phonetic_error", "ocr_error", "nickname"))
+    a_name_drift = sum(int(noise_a[field]) for field in ("name_typo", "phonetic_error", "ocr_error", "nickname"))
+    assert b_name_drift >= (a_name_drift * 5)
+
+
+def test_low_overlap_sparse_coverage_realizes_large_unmatched_populations(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    result = scenario_results["low_overlap_sparse_coverage"]
+    events = result["truth"]["truth_events"]
     observed = result["observed"]
     coverage = observed["metrics"]["coverage"]
-    crosswalk = observed["truth_crosswalk"]
+    linked = _linked_crosswalk(observed["truth_crosswalk"])
 
-    overlap_people = set(
-        crosswalk[
-            (crosswalk["A_RecordKey"].astype(str).str.strip() != "")
-            & (crosswalk["B_RecordKey"].astype(str).str.strip() != "")
-        ]["PersonKey"].astype(str).str.strip().tolist()
+    move_count = int((events["EventType"].astype(str).str.upper() == "MOVE").sum())
+    assert move_count > 0
+    assert observed["metrics"]["match_mode"] == "one_to_one"
+    assert not linked.empty
+    assert int(coverage["overlap_entities"]) < int(coverage["a_only_entities"])
+    assert int(coverage["overlap_entities"]) < int(coverage["b_only_entities"])
+
+    union_entities = (
+        int(coverage["overlap_entities"])
+        + int(coverage["a_only_entities"])
+        + int(coverage["b_only_entities"])
     )
-    actual_overlap = len(overlap_people)
+    overlap_pct_of_union = (int(coverage["overlap_entities"]) / union_entities) * 100.0 if union_entities else 0.0
+    assert overlap_pct_of_union <= 30.0
 
-    n_base = int(coverage["base_entities"])
-    overlap_pct = float(scenario["emission"]["overlap_entity_pct"])
-    appearance_a_pct = float(scenario["emission"]["appearance_A_pct"])
-    appearance_b_pct = float(scenario["emission"]["appearance_B_pct"])
-    target_a = min(n_base, max(0, int(round((appearance_a_pct / 100.0) * n_base))))
-    target_b = min(n_base, max(0, int(round((appearance_b_pct / 100.0) * n_base))))
-    expected_overlap = min(n_base, max(0, int(round((overlap_pct / 100.0) * n_base))))
-    expected_overlap = min(expected_overlap, target_a, target_b)
-    expected_overlap = max(expected_overlap, max(0, target_a + target_b - n_base))
+    counts = linked.groupby("PersonKey").agg(
+        a_count=("A_RecordKey", "nunique"),
+        b_count=("B_RecordKey", "nunique"),
+    )
+    assert int(counts["a_count"].max()) == 1
+    assert int(counts["b_count"].max()) == 1
 
-    assert actual_overlap == int(coverage["overlap_entities"])
-    assert actual_overlap == expected_overlap
+
+def test_asymmetric_source_coverage_realizes_source_imbalance(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    result = scenario_results["asymmetric_source_coverage"]
+    events = result["truth"]["truth_events"]
+    observed = result["observed"]
+    coverage = observed["metrics"]["coverage"]
+    dataset_a = observed["metrics"]["datasets"]["A"]
+    dataset_b = observed["metrics"]["datasets"]["B"]
+    linked = _linked_crosswalk(observed["truth_crosswalk"])
+
+    move_count = int((events["EventType"].astype(str).str.upper() == "MOVE").sum())
+    assert move_count > 0
+    assert observed["metrics"]["match_mode"] == "one_to_one"
+    assert not linked.empty
+    assert int(coverage["a_entities_base"]) >= (int(coverage["b_entities_base"]) * 2)
+    assert int(coverage["a_only_entities"]) > int(coverage["b_only_entities"])
+
+    assert _duplicate_rate(dataset_a) > 0.0
+    assert _duplicate_rate(dataset_a) <= 0.05
+    assert _duplicate_rate(dataset_b) <= 0.05
+
+
+def test_high_duplication_dedup_is_single_dataset_with_large_duplicate_pressure(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    observed = scenario_results["high_duplication_dedup"]["observed"]
+    dataset = observed["datasets"]["registry"]
+    entity_record_map = observed["entity_record_map"]
+    registry_stats = observed["metrics"]["datasets"]["registry"]
+
+    assert observed["truth_crosswalk"] is None
+    assert observed["metrics"]["match_mode"] == "single_dataset"
+    assert observed["metrics"]["dataset_count"] == 1
+    assert observed["metrics"]["dataset_ids"] == ["registry"]
+    assert _duplicate_rate(registry_stats) >= 0.35
+    assert set(entity_record_map["DatasetId"].astype(str).str.strip().tolist()) == {"registry"}
+    assert len(dataset) == len(entity_record_map)
+
+
+def test_three_source_partial_overlap_emits_n_way_pairwise_artifacts(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    result = scenario_results["three_source_partial_overlap"]
+    events = result["truth"]["truth_events"]
+    observed = result["observed"]
+    coverage = observed["metrics"]["coverage"]
+    pairwise = observed["pairwise_crosswalks"]
+
+    move_count = int((events["EventType"].astype(str).str.upper() == "MOVE").sum())
+    assert move_count > 0
+    assert observed["truth_crosswalk"] is None
+    assert observed["metrics"]["match_mode"] == "one_to_one"
+    assert observed["metrics"]["dataset_count"] == 3
+    assert observed["metrics"]["dataset_ids"] == ["registry", "claims", "benefits"]
+    assert set(pairwise.keys()) == {"registry__claims", "registry__benefits", "claims__benefits"}
+    assert all(not df.empty for df in pairwise.values())
+
+    pair_overlap = coverage["pairwise_overlap"]
+    registry_claims = int(pair_overlap["registry__claims"]["overlap_entities"])
+    registry_benefits = int(pair_overlap["registry__benefits"]["overlap_entities"])
+    claims_benefits = int(pair_overlap["claims__benefits"]["overlap_entities"])
+    all_overlap = int(coverage["all_dataset_overlap_entities"])
+
+    assert registry_claims > registry_benefits > claims_benefits
+    assert all_overlap < claims_benefits

@@ -214,5 +214,17 @@ def test_phase2_quality_report_includes_er_metrics() -> None:
     assert "truth_consistency" in report
     assert "scenario_metrics" in report
     assert "er_benchmark_metrics" in report
+    assert report["truth_consistency"]["time_overlap_errors"]["no_time_overlap_errors"] is True
+    assert report["truth_consistency"]["household_size_constraints"]["within_config_constraints"] is True
+    assert report["scenario_metrics"]["event_counts"]["couples_formed"] == 1
+    assert report["scenario_metrics"]["event_counts"]["moves"] == 1
+    assert report["scenario_metrics"]["moves_per_person_distribution"]["moved_people"] >= 1
     assert report["er_benchmark_metrics"]["available"] is True
+    assert report["er_benchmark_metrics"]["cross_file_overlap"]["overlap_entities"] == 2
     assert report["er_benchmark_metrics"]["match_cardinality_achieved"]["one_to_many"] >= 1
+    assert report["er_benchmark_metrics"]["match_cardinality_achieved"]["evaluated_overlap_entities"] == 2
+    assert report["er_benchmark_metrics"]["within_file_duplicate_rates"]["dataset_b"]["duplicate_rows"] >= 1
+    assert "dataset_a" in report["er_benchmark_metrics"]["attribute_drift_rates"]
+    assert "dataset_b" in report["er_benchmark_metrics"]["attribute_drift_rates"]
+    assert report["er_benchmark_metrics"]["crosswalk_ambiguity"]["a_record_to_multiple_persons"] == 0
+    assert report["er_benchmark_metrics"]["crosswalk_ambiguity"]["b_record_to_multiple_persons"] == 0

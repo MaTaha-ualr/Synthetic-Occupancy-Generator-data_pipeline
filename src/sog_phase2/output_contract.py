@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from itertools import combinations
 import json
 from pathlib import Path
 import re
@@ -125,17 +126,11 @@ PHASE2_TRUTH_OUTPUTS: dict[str, OutputSchema] = {
     ),
 }
 
-PHASE2_OBSERVED_OUTPUTS: dict[str, OutputSchema] = {
-    "dataset_a": OutputSchema(
-        filename="DatasetA.csv",
+PHASE2_STATIC_OBSERVED_OUTPUTS: dict[str, OutputSchema] = {
+    "entity_record_map": OutputSchema(
+        filename="entity_record_map.csv",
         file_format="csv",
-        required_columns=("A_RecordKey",),
-        layer="observed",
-    ),
-    "dataset_b": OutputSchema(
-        filename="DatasetB.csv",
-        file_format="csv",
-        required_columns=("B_RecordKey",),
+        required_columns=("PersonKey", "DatasetId", "RecordKey"),
         layer="observed",
     ),
     "truth_crosswalk": OutputSchema(
@@ -149,7 +144,7 @@ PHASE2_OBSERVED_OUTPUTS: dict[str, OutputSchema] = {
 
 PHASE2_OUTPUT_CONTRACT: dict[str, OutputSchema] = {
     **PHASE2_TRUTH_OUTPUTS,
-    **PHASE2_OBSERVED_OUTPUTS,
+    **PHASE2_STATIC_OBSERVED_OUTPUTS,
 }
 
 PHASE2_RUN_META_FILES: dict[str, str] = {
@@ -158,6 +153,17 @@ PHASE2_RUN_META_FILES: dict[str, str] = {
     "manifest_json": "manifest.json",
     "quality_report_json": "quality_report.json",
 }
+
+OBSERVED_ADDRESS_COLUMNS: tuple[str, ...] = (
+    "HouseNumber",
+    "StreetName",
+    "UnitType",
+    "UnitNumber",
+    "StreetAddress",
+    "City",
+    "State",
+    "ZipCode",
+)
 
 
 def validate_scenario_id(scenario_id: str) -> str:
@@ -227,8 +233,93 @@ def expected_phase2_run_artifact_paths(runs_root: Path, run_id: str) -> dict[str
     return paths
 
 
+def expected_observed_dataset_paths(run_dir: Path, emission_config: Any) -> dict[str, Path]:
+    paths: dict[str, Path] = {}
+    for dataset in getattr(emission_config, "datasets", ()):
+        paths[f"dataset__{dataset.dataset_id}"] = run_dir / dataset.filename
+    return paths
+
+
+def pairwise_crosswalk_filename(first_dataset_id: str, second_dataset_id: str) -> str:
+    return f"truth_crosswalk__{first_dataset_id}__{second_dataset_id}.csv"
+
+
+def expected_pairwise_crosswalk_paths(run_dir: Path, emission_config: Any) -> dict[str, Path]:
+    datasets = list(getattr(emission_config, "datasets", ()))
+    if len(datasets) <= 2:
+        return {}
+    return {
+        f"{first.dataset_id}__{second.dataset_id}": run_dir / pairwise_crosswalk_filename(first.dataset_id, second.dataset_id)
+        for first, second in combinations(datasets, 2)
+    }
+
+
+def get_observed_output_schemas(emission_config: Any) -> dict[str, OutputSchema]:
+    schemas: dict[str, OutputSchema] = {
+        "entity_record_map": PHASE2_STATIC_OBSERVED_OUTPUTS["entity_record_map"],
+    }
+    datasets = list(getattr(emission_config, "datasets", ()))
+    for dataset in datasets:
+        required_columns = (
+            "DatasetId",
+            "FirstName",
+            "LastName",
+            "DOB",
+            "AddressKey",
+            *OBSERVED_ADDRESS_COLUMNS,
+            "SourceSnapshotDate",
+        )
+        required_any_of: tuple[tuple[str, ...], ...] = (("RecordKey",),)
+        if dataset.filename == "DatasetA.csv":
+            required_any_of = (("RecordKey", "A_RecordKey"),)
+        elif dataset.filename == "DatasetB.csv":
+            required_any_of = (("RecordKey", "B_RecordKey"),)
+        schemas[f"dataset__{dataset.dataset_id}"] = OutputSchema(
+            filename=dataset.filename,
+            file_format="csv",
+            required_columns=required_columns,
+            required_any_of=required_any_of,
+            layer="observed",
+        )
+    if len(datasets) == 2:
+        schemas["truth_crosswalk"] = PHASE2_STATIC_OBSERVED_OUTPUTS["truth_crosswalk"]
+    return schemas
+
+
 def get_phase2_output_contract() -> dict[str, dict[str, Any]]:
-    output_contract = {
+    truth_outputs = {
+        logical_name: {
+            "filename": schema.filename,
+            "file_format": schema.file_format,
+            "required_columns": list(schema.required_columns),
+            "required_any_of": [list(group) for group in schema.required_any_of],
+            "layer": schema.layer,
+        }
+        for logical_name, schema in PHASE2_TRUTH_OUTPUTS.items()
+    }
+    canonical_observed_outputs = {
+        "entity_record_map": {
+            "filename": PHASE2_STATIC_OBSERVED_OUTPUTS["entity_record_map"].filename,
+            "file_format": PHASE2_STATIC_OBSERVED_OUTPUTS["entity_record_map"].file_format,
+            "required_columns": list(PHASE2_STATIC_OBSERVED_OUTPUTS["entity_record_map"].required_columns),
+            "required_any_of": [
+                list(group) for group in PHASE2_STATIC_OBSERVED_OUTPUTS["entity_record_map"].required_any_of
+            ],
+            "layer": PHASE2_STATIC_OBSERVED_OUTPUTS["entity_record_map"].layer,
+        }
+    }
+    pairwise_observed_outputs = {
+        "truth_crosswalk": {
+            "filename": PHASE2_STATIC_OBSERVED_OUTPUTS["truth_crosswalk"].filename,
+            "file_format": PHASE2_STATIC_OBSERVED_OUTPUTS["truth_crosswalk"].file_format,
+            "required_columns": list(PHASE2_STATIC_OBSERVED_OUTPUTS["truth_crosswalk"].required_columns),
+            "required_any_of": [
+                list(group) for group in PHASE2_STATIC_OBSERVED_OUTPUTS["truth_crosswalk"].required_any_of
+            ],
+            "layer": PHASE2_STATIC_OBSERVED_OUTPUTS["truth_crosswalk"].layer,
+        }
+    }
+    legacy_contract = {
         logical_name: {
             "filename": schema.filename,
             "file_format": schema.file_format,
@@ -241,7 +332,18 @@ def get_phase2_output_contract() -> dict[str, dict[str, Any]]:
     return {
         "run_id_pattern": "YYYY-MM-DD_<scenario_id>_seed<seed>",
         "runs_root_default": "phase2/runs",
-        "required_outputs": output_contract,
+        "required_outputs": {
+            **truth_outputs,
+            **canonical_observed_outputs,
+        },
+        "pairwise_observed_outputs": pairwise_observed_outputs,
+        "observed_outputs_dynamic": {
+            "dataset_files": "Derived from scenario.emission.datasets[*].filename",
+            "entity_record_map": "Always required for canonical observed truth mapping",
+            "truth_crosswalk": "Required only for two-dataset runs as a backward-compatible pairwise artifact",
+            "pairwise_crosswalks": "Optional per-pair crosswalk files for runs with more than two datasets",
+        },
+        "legacy_internal_contract": legacy_contract,
         "required_meta_files": PHASE2_RUN_META_FILES,
         "truth_event_grammar": get_truth_event_grammar(),
         "constraints_schema": get_constraints_schema(),
@@ -397,7 +499,7 @@ def validate_phase2_run(runs_root: Path, run_id: str) -> dict[str, Any]:
     metadata_errors: dict[str, list[str]] = {}
     files: dict[str, Any] = {}
 
-    for logical_name, schema in PHASE2_OUTPUT_CONTRACT.items():
+    for logical_name, schema in PHASE2_TRUTH_OUTPUTS.items():
         path = paths[logical_name]
         exists = path.exists()
         files[logical_name] = {
@@ -572,6 +674,115 @@ def validate_phase2_run(runs_root: Path, run_id: str) -> dict[str, Any]:
                     )
     if selection_checks:
         metadata_errors["selection"] = selection_checks
+
+    if scenario_payload is not None and isinstance(scenario_payload, dict):
+        try:
+            emission_cfg = parse_emission_config(scenario_payload.get("emission"))
+        except Exception as exc:
+            metadata_errors.setdefault("scenario_yaml", []).append(
+                f"Unable to derive observed output contract from emission config: {exc}"
+            )
+        else:
+            observed_paths = {"entity_record_map": paths["entity_record_map"]}
+            observed_paths.update(expected_observed_dataset_paths(run_dir, emission_cfg))
+            if len(emission_cfg.datasets) == 2:
+                observed_paths["truth_crosswalk"] = paths["truth_crosswalk"]
+            observed_schemas = get_observed_output_schemas(emission_cfg)
+
+            for logical_name, schema in observed_schemas.items():
+                path = observed_paths[logical_name]
+                exists = path.exists()
+                files[logical_name] = {
+                    "path": str(path),
+                    "file_format": schema.file_format,
+                    "layer": schema.layer,
+                    "exists": exists,
+                }
+                if not exists:
+                    missing_files.append(logical_name)
+                    continue
+
+                try:
+                    available_columns = _read_columns(path, schema.file_format)
+                except Exception as exc:  # pragma: no cover
+                    schema_errors[logical_name] = {
+                        "path": str(path),
+                        "read_error": str(exc),
+                    }
+                    continue
+
+                missing_required = [
+                    column for column in schema.required_columns if column not in available_columns
+                ]
+                missing_any_of = [
+                    list(group)
+                    for group in schema.required_any_of
+                    if not any(col in available_columns for col in group)
+                ]
+                if missing_required or missing_any_of:
+                    schema_errors[logical_name] = {
+                        "path": str(path),
+                        "missing_required_columns": missing_required,
+                        "missing_any_of_groups": missing_any_of,
+                        "available_columns": available_columns,
+                    }
+
+            observed_outputs = manifest_payload.get("observed_outputs", {}) if isinstance(manifest_payload, dict) else {}
+            pairwise_crosswalks = observed_outputs.get("pairwise_crosswalks", []) if isinstance(observed_outputs, dict) else []
+            if pairwise_crosswalks not in (None, []) and not isinstance(pairwise_crosswalks, list):
+                metadata_errors.setdefault("manifest_json", []).append(
+                    "manifest.json observed_outputs.pairwise_crosswalks must be a list when provided"
+                )
+            elif isinstance(pairwise_crosswalks, list):
+                pairwise_schema = PHASE2_STATIC_OBSERVED_OUTPUTS["truth_crosswalk"]
+                for item in pairwise_crosswalks:
+                    if not isinstance(item, dict):
+                        metadata_errors.setdefault("manifest_json", []).append(
+                            "manifest.json observed_outputs.pairwise_crosswalks entries must be objects"
+                        )
+                        continue
+                    dataset_ids = item.get("dataset_ids", [])
+                    raw_path = str(item.get("path", "")).strip()
+                    if not isinstance(dataset_ids, list) or len(dataset_ids) != 2 or not all(str(v).strip() for v in dataset_ids):
+                        metadata_errors.setdefault("manifest_json", []).append(
+                            "manifest.json pairwise_crosswalk entries must include exactly two dataset_ids"
+                        )
+                        continue
+                    logical_name = f"pairwise_crosswalk__{str(dataset_ids[0]).strip()}__{str(dataset_ids[1]).strip()}"
+                    path = Path(raw_path) if raw_path else Path()
+                    exists = bool(raw_path) and path.exists()
+                    files[logical_name] = {
+                        "path": raw_path,
+                        "file_format": pairwise_schema.file_format,
+                        "layer": pairwise_schema.layer,
+                        "exists": exists,
+                    }
+                    if not exists:
+                        missing_files.append(logical_name)
+                        continue
+                    try:
+                        available_columns = _read_columns(path, pairwise_schema.file_format)
+                    except Exception as exc:  # pragma: no cover
+                        schema_errors[logical_name] = {
+                            "path": str(path),
+                            "read_error": str(exc),
+                        }
+                        continue
+                    missing_required = [
+                        column for column in pairwise_schema.required_columns if column not in available_columns
+                    ]
+                    missing_any_of = [
+                        list(group)
+                        for group in pairwise_schema.required_any_of
+                        if not any(col in available_columns for col in group)
+                    ]
+                    if missing_required or missing_any_of:
+                        schema_errors[logical_name] = {
+                            "path": str(path),
+                            "missing_required_columns": missing_required,
+                            "missing_any_of_groups": missing_any_of,
+                            "available_columns": available_columns,
+                        }
 
     constraints_validation: dict[str, Any] | None = None
     constraints_config_errors: list[str] = []

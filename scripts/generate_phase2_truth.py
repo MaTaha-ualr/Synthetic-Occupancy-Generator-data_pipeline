@@ -25,9 +25,14 @@ def _resolve_with_legacy_fallback(project_root: Path, configured_path: str) -> P
         return candidate
 
     legacy_map = {
-        "outputs_phase1/Phase1_people_addresses.csv": "outputs/Phase1_people_addresses.csv",
-        "outputs_phase1/Phase1_people_addresses.manifest.json": "outputs/Phase1_people_addresses.manifest.json",
-        "outputs_phase1/Phase1_people_addresses.quality_report.json": "outputs/Phase1_people_addresses.quality_report.json",
+        # Pre-reorganization paths → new location under phase1/
+        "outputs_phase1/Phase1_people_addresses.csv": "phase1/outputs_phase1/Phase1_people_addresses.csv",
+        "outputs_phase1/Phase1_people_addresses.manifest.json": "phase1/outputs_phase1/Phase1_people_addresses.manifest.json",
+        "outputs_phase1/Phase1_people_addresses.quality_report.json": "phase1/outputs_phase1/Phase1_people_addresses.quality_report.json",
+        # Even older pre-reorganization paths
+        "outputs/Phase1_people_addresses.csv": "phase1/outputs_phase1/Phase1_people_addresses.csv",
+        "outputs/Phase1_people_addresses.manifest.json": "phase1/outputs_phase1/Phase1_people_addresses.manifest.json",
+        "outputs/Phase1_people_addresses.quality_report.json": "phase1/outputs_phase1/Phase1_people_addresses.quality_report.json",
     }
     normalized = configured_path.replace("\\", "/")
     if normalized in legacy_map:
