@@ -1,8 +1,8 @@
 # SOG Engineering Test Report and Production Readiness Guide
 
-**Last updated**: April 7, 2026
-**Test suite version**: 318 tests, all passing
-**Runtime**: ~130 seconds on Windows 11, Python 3.12
+**Last updated**: April 8, 2026
+**Test suite version**: 322 tests, all passing
+**Runtime**: ~112 seconds on Windows 11, Python 3.12
 
 This document is the single source of truth for engineers working on the SOG synthetic data pipeline. It covers what the system does, how it is tested, what works well, what has known issues, and what must be addressed before or after publishing.
 

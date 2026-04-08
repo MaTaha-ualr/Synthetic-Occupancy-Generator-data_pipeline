@@ -9,6 +9,7 @@ It has two phases:
 
 ## Start Here
 
+- `docs/HANDOFF.md`: final ownership-transfer summary and operational starting points
 - `phase1/README.md`: practical Phase-1 setup and baseline generation
 - `phase2/README.md`: practical Phase-2 run sequence
 - `docs/README.md`: documentation index

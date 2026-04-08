@@ -2,6 +2,7 @@
 
 ## Active
 
+- `HANDOFF.md` - final owner handoff summary, validation snapshot, and where to start operating the project
 - `SOG_TECHNICAL_WALKTHROUGH.md` - complete technical stakeholder walkthrough of what SOG is, how the pipeline works, what is novel, and how V2 differs from the paper-era system
 - `SCENARIO_USE_CASES_AND_TESTING.md` - primary guide for choosing scenarios and benchmarking with them
 - `SCENARIO_SUPPORT_MATRIX.md` - runnable-vs-planned scenario support matrix for end-user intents
