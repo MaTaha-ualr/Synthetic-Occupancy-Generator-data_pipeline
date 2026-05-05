@@ -676,7 +676,7 @@ The methodological point of this schema is that truth is normalized and observed
 
 ## 6) Complete Test Suite
 
-### 6.1 Test inventory (318 tests, 28 test files)
+### 6.1 Test inventory (322 tests, 28 test files)
 
 | Test File | Count | Category | What It Validates |
 |---|---|---|---|
@@ -851,7 +851,7 @@ The quality report provides actionable metrics: event counts, overlap rates, dup
 python -m pytest tests/ -v
 ```
 
-Expected: 318 passed in ~130 seconds.
+Expected: 322 passed in ~130 seconds.
 
 ### 9.2 By category
 
@@ -936,7 +936,7 @@ Noise types are defined in [emission.py](src/sog_phase2/emission.py) `DatasetNoi
 
 **What earns the score:**
 - Core pipeline is functionally complete and produces valid, reproducible output
-- 318 tests pass covering unit, integration, regression, and end-to-end scenarios
+- 322 tests pass covering unit, integration, regression, and end-to-end scenarios
 - All 11 canonical scenarios validate end-to-end
 - Noise injection, demographic constraints, and quality reporting all work correctly
 - Deterministic seeding ensures reproducible benchmarks
@@ -1012,7 +1012,7 @@ SOG/
 |   |-- scenario_catalog.py   # Scenario registry
 |
 |-- scripts/                  # CLI entry points
-|-- tests/                    # 318 tests (this report details all of them)
+|-- tests/                    # 322 tests (this report details all of them)
 |-- phase2/scenarios/         # 11 canonical scenario YAMLs + catalog.yaml + optional _working_ copies
 |-- phase2/runs/              # Run output directories
 |-- Data/phase2_params/       # Demographic priors (Census, CDC, NCHS)

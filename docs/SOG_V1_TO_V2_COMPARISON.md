@@ -15,7 +15,7 @@ This is intentionally separate from the user guides. The user guides explain how
 
 This memo uses only two evidence sources:
 
-- the original paper: `C:\Users\mataha\Downloads\ICIQ-09_SOG.pdf`
+- the original ICIQ-09 SOG paper (referenced externally; not committed to this repository)
 - the current repository contracts, code, and active documentation
 
 For Version 2, the main repository-backed sources are:

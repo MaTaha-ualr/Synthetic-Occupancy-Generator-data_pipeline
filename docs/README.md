@@ -20,8 +20,6 @@
 
 ## Archive
 
-- `archive/phase-design/` - historical design notes for Phase-1 and Phase-2 architecture
 - `archive/ops/` - older operational and publishing notes
-- `archive/misc/` - superseded notes preserved during repo cleanup
 
 Use the active docs first. Reference and archive material is kept for context, not as the primary starting point.
