@@ -52,6 +52,14 @@ ANTHROPIC_API_KEY=...
 SOG_LLM_MODEL=claude-opus-4-7
 ```
 
+NVIDIA NIM remains supported as the quality hosted trial/free-endpoint option:
+
+```powershell
+SOG_LLM_PROVIDER=nvidia
+NVIDIA_API_KEY=...
+SOG_LLM_MODEL=moonshotai/kimi-k2.6
+```
+
 Every assistant role uses the same selected quality model. There is no fast/basic classifier or cheap routing model.
 
 Allowed models:
@@ -62,6 +70,9 @@ SOG_LLM_MODEL=zai-org/GLM-5.1
 
 SOG_LLM_PROVIDER=anthropic
 SOG_LLM_MODEL=claude-opus-4-7
+
+SOG_LLM_PROVIDER=nvidia
+SOG_LLM_MODEL=moonshotai/kimi-k2.6
 ```
 
 The app rejects lower-tier or route-optimized model overrides, including `SOG_LLM_FAST_MODEL`, `SOG_LLM_CLASSIFY_MODEL`, `SOG_LLM_SMART_MODEL`, `instant`, `fastest`, Haiku, and 8B classifier models.
@@ -103,8 +114,8 @@ These folders are generated local state. They can be cleared before a fresh run 
 ## Troubleshooting
 
 - Import or module errors: start the app from the repository root.
-- The page loads but actions are disabled: set `TOGETHER_API_KEY` or `ANTHROPIC_API_KEY`, or enter the selected provider key in the UI.
-- Hosted provider errors: confirm `SOG_LLM_PROVIDER` is `together` or `anthropic`, and that `SOG_LLM_MODEL` is the approved model for that provider.
+- The page loads but actions are disabled: set `TOGETHER_API_KEY`, `NVIDIA_API_KEY`, or `ANTHROPIC_API_KEY`, or enter the selected provider key in the UI.
+- Hosted provider errors: confirm `SOG_LLM_PROVIDER` is `together`, `nvidia`, or `anthropic`, and that `SOG_LLM_MODEL` is the approved model for that provider.
 - A job appears stuck: inspect the newest file under `phase2/.sog_jobs/` and refresh the page.
 - Charts or exports look stale: clear the generated `.sog_*` folders and rerun the scenario.
 - No URL appears in the terminal: use `python -u` or `.\run_frontend.ps1` so startup logs flush immediately.

@@ -1000,7 +1000,7 @@ def _render_access_gate() -> tuple[str, str, str]:
         provider_ids,
         index=provider_ids.index(current_provider) if current_provider in provider_ids else 0,
         format_func=provider_label,
-        help="Together uses GLM-5.1. Anthropic uses Claude Opus 4.7. Fast/basic model routes are disabled.",
+        help="Together uses GLM-5.1, NVIDIA uses Kimi K2.6, and Anthropic uses Claude Opus 4.7. Fast/basic routes are disabled.",
     )
     key = st.text_input(
         f"{provider_label(provider)} API key",

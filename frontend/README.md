@@ -48,6 +48,14 @@ ANTHROPIC_API_KEY=...
 SOG_LLM_MODEL=claude-opus-4-7
 ```
 
+NVIDIA NIM remains supported for hosted Kimi testing without local model downloads:
+
+```powershell
+SOG_LLM_PROVIDER=nvidia
+NVIDIA_API_KEY=...
+SOG_LLM_MODEL=moonshotai/kimi-k2.6
+```
+
 Fast/basic role-specific overrides are intentionally disabled. See `docs/FRONTEND_RUNBOOK.md` for the full policy.
 
 ## Runtime State

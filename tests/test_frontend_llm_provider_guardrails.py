@@ -36,6 +36,25 @@ def test_anthropic_provider_uses_opus_quality_model(monkeypatch):
     assert config.model == "claude-opus-4-7"
 
 
+def test_nvidia_provider_uses_kimi_quality_model(monkeypatch):
+    monkeypatch.setenv("SOG_LLM_PROVIDER", "nvidia")
+    monkeypatch.setenv("NVIDIA_API_KEY", "nvapi-test-key-1234567890")
+    monkeypatch.delenv("SOG_LLM_MODEL", raising=False)
+    monkeypatch.delenv("SOG_LLM_SMART_MODEL", raising=False)
+    monkeypatch.delenv("SOG_LLM_FAST_MODEL", raising=False)
+    monkeypatch.delenv("SOG_LLM_CLASSIFY_MODEL", raising=False)
+
+    config = resolve_llm_config()
+
+    assert config.provider == "nvidia"
+    assert config.base_url == "https://integrate.api.nvidia.com/v1"
+    assert config.model == "moonshotai/kimi-k2.6"
+    assert config.extra_headers["Accept"] == "text/event-stream"
+    assert config.extra_body == {"stream": True, "chat_template_kwargs": {"thinking": False}}
+    assert config.timeout_seconds == 180
+    assert config.temperature == 0.0
+
+
 def test_quality_policy_rejects_fast_or_unapproved_models(monkeypatch):
     monkeypatch.setenv("SOG_LLM_PROVIDER", "together")
     monkeypatch.setenv("TOGETHER_API_KEY", "tgp_test_key_1234567890")
@@ -75,11 +94,12 @@ def test_openai_compatible_client_sends_tool_schema(monkeypatch):
     captured = {}
     monkeypatch.setenv("SOG_OPENAI_COMPAT_BASE_URL", "https://example.test/v1")
 
-    def fake_post(endpoint, headers, json, timeout):
+    def fake_post(endpoint, headers, json, timeout, stream=False):
         captured["endpoint"] = endpoint
         captured["headers"] = headers
         captured["json"] = json
         captured["timeout"] = timeout
+        captured["stream"] = stream
         return SimpleNamespace(
             status_code=200,
             json=lambda: {
@@ -113,6 +133,8 @@ def test_openai_compatible_client_sends_tool_schema(monkeypatch):
         api_key_env="SOG_OPENAI_COMPAT_API_KEY",
         model="test-model",
         base_url="https://example.test/v1",
+        extra_headers={"Accept": "application/json"},
+        extra_body={"chat_template_kwargs": {"thinking": True}},
     )
     client = OpenAICompatibleLLMClient(config)
 
@@ -134,9 +156,59 @@ def test_openai_compatible_client_sends_tool_schema(monkeypatch):
 
     assert captured["endpoint"].endswith("/chat/completions")
     assert captured["json"]["messages"][0] == {"role": "system", "content": "system"}
+    assert captured["headers"]["Accept"] == "application/json"
+    assert captured["json"]["chat_template_kwargs"] == {"thinking": True}
+    assert captured["stream"] is False
     assert captured["json"]["tools"][0]["function"]["name"] == "fake_tool"
     assert response.tool_calls[0].name == "fake_tool"
     assert response.tool_calls[0].input == {"scenario_id": "single_movers"}
+
+
+def test_openai_compatible_client_parses_streaming_tool_calls(monkeypatch):
+    def fake_post(endpoint, headers, json, timeout, stream=False):
+        assert stream is True
+        chunks = [
+            b'data: {"choices":[{"delta":{"role":"assistant","content":null,"tool_calls":[{"index":0,"id":"call-1","type":"function","function":{"name":"pick_scenario","arguments":"{\\"scenario_id\\":"}}]},"finish_reason":null}]}',
+            b'data: {"choices":[{"delta":{"tool_calls":[{"index":0,"function":{"arguments":"\\"clean_baseline_linkage\\"}"}}]},"finish_reason":"tool_calls"}]}',
+            b"data: [DONE]",
+        ]
+        return SimpleNamespace(
+            status_code=200,
+            iter_lines=lambda: iter(chunks),
+        )
+
+    monkeypatch.setattr("requests.post", fake_post)
+    config = LLMProviderConfig(
+        provider="nvidia",
+        label="NVIDIA NIM",
+        api_key="test-key",
+        api_key_env="NVIDIA_API_KEY",
+        model="moonshotai/kimi-k2.6",
+        base_url="https://integrate.api.nvidia.com/v1",
+        extra_headers={"Accept": "text/event-stream"},
+        extra_body={"stream": True, "chat_template_kwargs": {"thinking": False}},
+    )
+    client = OpenAICompatibleLLMClient(config)
+
+    response = client.complete(
+        messages=[{"role": "user", "content": "pick scenario"}],
+        system="system",
+        tools=[
+            {
+                "name": "pick_scenario",
+                "description": "Pick a SOG scenario id.",
+                "input_schema": {
+                    "type": "object",
+                    "properties": {"scenario_id": {"type": "string"}},
+                },
+            }
+        ],
+        max_tokens=100,
+    )
+
+    assert response.stop_reason == "tool_use"
+    assert response.tool_calls[0].name == "pick_scenario"
+    assert response.tool_calls[0].input == {"scenario_id": "clean_baseline_linkage"}
 
 
 def test_openai_compatible_client_requires_base_url():

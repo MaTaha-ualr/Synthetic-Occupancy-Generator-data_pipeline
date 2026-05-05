@@ -24,6 +24,10 @@ class ProviderProfile:
     quality_model: str
     api_key_placeholder: str
     description: str
+    extra_headers: dict[str, str] = field(default_factory=dict)
+    extra_body: dict[str, Any] = field(default_factory=dict)
+    timeout_seconds: int = 90
+    temperature: float = 0.2
 
 
 _PROFILES: dict[str, ProviderProfile] = {
@@ -45,6 +49,19 @@ _PROFILES: dict[str, ProviderProfile] = {
         api_key_placeholder="tgp_...",
         description="Hosted open-model backend using GLM-5.1 for every assistant role.",
     ),
+    "nvidia": ProviderProfile(
+        provider="nvidia",
+        label="NVIDIA NIM",
+        api_key_env="NVIDIA_API_KEY",
+        base_url="https://integrate.api.nvidia.com/v1",
+        quality_model="moonshotai/kimi-k2.6",
+        api_key_placeholder="nvapi-...",
+        description="Hosted NVIDIA NIM endpoint using Moonshot Kimi K2.6 for every assistant role.",
+        extra_headers={"Accept": "text/event-stream"},
+        extra_body={"stream": True, "chat_template_kwargs": {"thinking": False}},
+        timeout_seconds=180,
+        temperature=0.0,
+    ),
 }
 
 _ALIASES = {
@@ -52,6 +69,11 @@ _ALIASES = {
     "anthropic": "anthropic",
     "togetherai": "together",
     "together": "together",
+    "nvidia": "nvidia",
+    "nim": "nvidia",
+    "nvidia_nim": "nvidia",
+    "kimi": "nvidia",
+    "moonshot": "nvidia",
 }
 
 
@@ -66,6 +88,7 @@ class LLMProviderConfig:
     timeout_seconds: int = 90
     temperature: float = 0.2
     extra_headers: dict[str, str] = field(default_factory=dict)
+    extra_body: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -163,8 +186,10 @@ def resolve_llm_config(
         api_key_env=profile.api_key_env,
         model=resolved_model,
         base_url=base_url,
-        timeout_seconds=int(os.environ.get("SOG_LLM_TIMEOUT_SECONDS", "90")),
-        temperature=float(os.environ.get("SOG_LLM_TEMPERATURE", "0.2")),
+        timeout_seconds=int(os.environ.get("SOG_LLM_TIMEOUT_SECONDS", str(profile.timeout_seconds))),
+        temperature=float(os.environ.get("SOG_LLM_TEMPERATURE", str(profile.temperature))),
+        extra_headers=dict(profile.extra_headers),
+        extra_body=dict(profile.extra_body),
     )
 
 
@@ -278,6 +303,7 @@ class OpenAICompatibleLLMClient:
             "max_tokens": max_tokens,
             "temperature": self.config.temperature,
         }
+        payload.update(self.config.extra_body)
         if tools:
             payload["tools"] = _openai_tools(tools)
             payload["tool_choice"] = "auto"
@@ -292,6 +318,7 @@ class OpenAICompatibleLLMClient:
             endpoint,
             headers=headers,
             json=payload,
+            stream=bool(payload.get("stream")),
             timeout=self.config.timeout_seconds,
         )
         if response.status_code >= 400:
@@ -299,6 +326,8 @@ class OpenAICompatibleLLMClient:
                 f"{self.config.label} request failed with HTTP {response.status_code}: "
                 f"{redact_secrets(response.text[:500])}"
             )
+        if payload.get("stream"):
+            return self._parse_streaming_response(response)
 
         data = response.json()
         try:
@@ -331,6 +360,102 @@ class OpenAICompatibleLLMClient:
         return LLMResponse(
             text=str(message.get("content") or "").strip(),
             stop_reason=stop_reason,
+            tool_calls=tool_calls,
+            raw_message=message,
+        )
+
+    def _parse_streaming_response(self, response: Any) -> LLMResponse:
+        content_parts: list[str] = []
+        reasoning_parts: list[str] = []
+        tool_builders: dict[int, dict[str, Any]] = {}
+        finish_reason = ""
+
+        for line in response.iter_lines():
+            if not line:
+                continue
+            decoded = line.decode("utf-8") if isinstance(line, bytes) else str(line)
+            decoded = decoded.strip()
+            if not decoded:
+                continue
+            if decoded == "data: [DONE]":
+                break
+            if not decoded.startswith("data: "):
+                continue
+
+            try:
+                chunk = json.loads(decoded[6:])
+            except json.JSONDecodeError:
+                continue
+            choices = chunk.get("choices") or []
+            if not choices:
+                continue
+            choice = choices[0]
+            finish_reason = str(choice.get("finish_reason") or finish_reason)
+            delta = choice.get("delta") or {}
+
+            content = delta.get("content")
+            if content:
+                content_parts.append(str(content))
+            reasoning_content = delta.get("reasoning_content")
+            if reasoning_content:
+                reasoning_parts.append(str(reasoning_content))
+
+            for item in delta.get("tool_calls") or []:
+                try:
+                    index = int(item.get("index", len(tool_builders)))
+                except Exception:
+                    index = len(tool_builders)
+                builder = tool_builders.setdefault(
+                    index,
+                    {"id": "", "type": "function", "function": {"name": "", "arguments": ""}},
+                )
+                if item.get("id"):
+                    builder["id"] = str(item["id"])
+                if item.get("type"):
+                    builder["type"] = str(item["type"])
+                function = item.get("function") or {}
+                if function.get("name"):
+                    builder["function"]["name"] += str(function["name"])
+                if function.get("arguments") is not None:
+                    builder["function"]["arguments"] += str(function["arguments"])
+
+        message: dict[str, Any] = {
+            "role": "assistant",
+            "content": "".join(content_parts) or None,
+        }
+        if reasoning_parts:
+            message["reasoning_content"] = "".join(reasoning_parts)
+        if tool_builders:
+            message["tool_calls"] = [
+                {
+                    "id": value.get("id") or f"tool-{index + 1}",
+                    "type": value.get("type") or "function",
+                    "function": value.get("function") or {"name": "", "arguments": "{}"},
+                }
+                for index, value in sorted(tool_builders.items())
+            ]
+
+        tool_calls: list[NormalizedToolCall] = []
+        for item in message.get("tool_calls") or []:
+            function = item.get("function", {}) if isinstance(item, dict) else {}
+            raw_args = function.get("arguments") or "{}"
+            try:
+                loaded = json.loads(raw_args) if isinstance(raw_args, str) else raw_args
+                parsed_args = loaded if isinstance(loaded, dict) else {}
+            except Exception:
+                parsed_args = {}
+            tool_calls.append(
+                NormalizedToolCall(
+                    id=str(item.get("id", f"tool-{len(tool_calls) + 1}")),
+                    name=str(function.get("name", "")),
+                    input=parsed_args,
+                    raw=item,
+                )
+            )
+
+        return LLMResponse(
+            text=str(message.get("content") or "").strip(),
+            stop_reason="tool_use" if tool_calls else (finish_reason or "end_turn"),
             tool_calls=tool_calls,
             raw_message=message,
         )
