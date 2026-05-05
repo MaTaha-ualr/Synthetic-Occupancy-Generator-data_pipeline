@@ -1176,10 +1176,20 @@ if st.session_state.pending_charts:
     _persist()
 
 if st.session_state.last_run_downloads:
+    from sog_phase2.format_export import (
+        TABULAR_FORMATS,
+        bundle_run_as_zip,
+        convert_artifact_bytes,
+        extension_for,
+        is_tabular_artifact,
+        mime_for,
+    )
+
     _render_section_intro(
         "Artifacts",
         "Output shelf",
-        "Download the latest benchmark artifacts directly from this session.",
+        "Download the latest benchmark artifacts directly from this session. "
+        "Tabular files can be re-encoded into Excel, TSV/TXT, JSON, JSONL, or Parquet on the fly.",
     )
     columns = st.columns(len(st.session_state.last_run_downloads))
     for col, (label, path_str) in zip(columns, st.session_state.last_run_downloads.items()):
@@ -1197,13 +1207,62 @@ if st.session_state.last_run_downloads:
                 """,
                 unsafe_allow_html=True,
             )
-            with open(path, "rb") as handle:
+            if is_tabular_artifact(path):
+                fmt = st.selectbox(
+                    "Format",
+                    TABULAR_FORMATS,
+                    index=TABULAR_FORMATS.index(path.suffix.lower().lstrip(".")) if path.suffix.lower().lstrip(".") in TABULAR_FORMATS else 0,
+                    key=f"fmt_{label}",
+                )
+                try:
+                    payload = convert_artifact_bytes(path, fmt)
+                    download_name = f"{path.stem}{extension_for(fmt)}"
+                    download_mime = mime_for(fmt)
+                except Exception as exc:
+                    st.error(f"Conversion failed: {exc}")
+                    payload = path.read_bytes()
+                    download_name = path.name
+                    download_mime = "application/octet-stream"
                 st.download_button(
                     f"Download {label}",
-                    handle.read(),
+                    payload,
+                    file_name=download_name,
+                    mime=download_mime,
+                    key=f"dl_{label}_{fmt}",
+                )
+            else:
+                st.download_button(
+                    f"Download {label}",
+                    path.read_bytes(),
                     file_name=path.name,
                     key=f"dl_{label}",
                 )
+
+    run_dirs = {Path(p).parent for p in st.session_state.last_run_downloads.values() if Path(p).exists()}
+    if len(run_dirs) == 1:
+        run_dir = next(iter(run_dirs))
+        st.markdown("---")
+        bundle_col1, bundle_col2 = st.columns([1, 2])
+        with bundle_col1:
+            bundle_fmt = st.selectbox(
+                "Bundle format",
+                TABULAR_FORMATS,
+                index=TABULAR_FORMATS.index("csv"),
+                key="bundle_fmt",
+                help="Re-encode every tabular file in the run, then zip the result with the meta files.",
+            )
+        with bundle_col2:
+            try:
+                bundle_bytes = bundle_run_as_zip(run_dir, bundle_fmt)
+                st.download_button(
+                    f"Download full run as {bundle_fmt} zip",
+                    bundle_bytes,
+                    file_name=f"{run_dir.name}_{bundle_fmt}.zip",
+                    mime="application/zip",
+                    key=f"bundle_dl_{bundle_fmt}",
+                )
+            except Exception as exc:
+                st.error(f"Bundle failed: {exc}")
 
 if not os.environ.get("ANTHROPIC_API_KEY"):
     _render_section_intro(
