@@ -52,7 +52,6 @@ class Orchestrator:
             config = resolve_llm_config(
                 provider=self.provider,
                 api_key=self._api_key,
-                model_role="classify",
             )
             self.provider = config.provider
             self._client = build_llm_client(config)

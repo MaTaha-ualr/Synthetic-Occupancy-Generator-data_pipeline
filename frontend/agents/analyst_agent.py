@@ -196,7 +196,7 @@ class AnalystAgent(BaseAgent):
     """Interprets run quality in ER terms and generates charts."""
 
     def __init__(self, api_key: str | None = None, provider: str | None = None):
-        super().__init__(api_key=api_key, provider=provider, model_role="smart")
+        super().__init__(api_key=api_key, provider=provider)
 
     def get_system_prompt(self) -> str:
         return _SYSTEM_PROMPT

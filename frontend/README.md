@@ -32,21 +32,23 @@ python -u -m streamlit run frontend/chatbot_production.py --server.headless true
 
 ## Hosted Model Backends
 
-Anthropic remains the default:
+The assistant uses one quality model for every role. The hosted open-model default is Together AI:
 
 ```powershell
+SOG_LLM_PROVIDER=together
+TOGETHER_API_KEY=...
+SOG_LLM_MODEL=zai-org/GLM-5.1
+```
+
+Anthropic remains supported as a premium provider:
+
+```powershell
+SOG_LLM_PROVIDER=anthropic
 ANTHROPIC_API_KEY=...
+SOG_LLM_MODEL=claude-opus-4-7
 ```
 
-To use hosted open models without a local GPU:
-
-```powershell
-SOG_LLM_PROVIDER=groq
-GROQ_API_KEY=...
-```
-
-Also supported: `together`, `fireworks`, `huggingface`, `openrouter`, and `openai_compatible`.
-See `docs/FRONTEND_RUNBOOK.md` for provider-specific environment variables and model override knobs.
+Fast/basic role-specific overrides are intentionally disabled. See `docs/FRONTEND_RUNBOOK.md` for the full policy.
 
 ## Runtime State
 

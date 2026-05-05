@@ -45,12 +45,10 @@ class BaseAgent(ABC):
         api_key: str | None = None,
         *,
         provider: str | None = None,
-        model_role: str = "smart",
     ):
         self.model = model
         self._api_key = api_key
         self.provider = provider
-        self.model_role = model_role
         self._client = None
 
     def _get_client(self):
@@ -60,7 +58,6 @@ class BaseAgent(ABC):
                 provider=self.provider,
                 api_key=self._api_key,
                 model=self.model,
-                model_role=self.model_role,
             )
             self.model = config.model
             self.provider = config.provider

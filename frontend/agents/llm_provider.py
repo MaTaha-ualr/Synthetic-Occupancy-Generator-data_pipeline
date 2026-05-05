@@ -1,8 +1,8 @@
-"""LLM provider adapters for Anthropic and hosted open-model APIs.
+"""LLM provider adapters for quality-first hosted model APIs.
 
-Most hosted open-weight providers expose OpenAI-compatible chat completions.
-This module keeps the rest of the agent code provider-neutral while preserving
-Anthropic as the default backend.
+The SOG assistant is tool-heavy, so provider defaults intentionally use only
+approved top-tier models. Fast/basic role-specific model downgrades are not
+allowed in the app configuration.
 """
 
 from __future__ import annotations
@@ -21,9 +21,7 @@ class ProviderProfile:
     label: str
     api_key_env: str
     base_url: str | None
-    smart_model: str
-    fast_model: str
-    classify_model: str
+    quality_model: str
     api_key_placeholder: str
     description: str
 
@@ -34,95 +32,26 @@ _PROFILES: dict[str, ProviderProfile] = {
         label="Anthropic Claude",
         api_key_env="ANTHROPIC_API_KEY",
         base_url=None,
-        smart_model="claude-sonnet-4-6",
-        fast_model="claude-haiku-4-5-20251001",
-        classify_model="claude-haiku-4-5-20251001",
+        quality_model="claude-opus-4-7",
         api_key_placeholder="sk-ant-...",
-        description="Default proprietary backend already supported by the app.",
-    ),
-    "groq": ProviderProfile(
-        provider="groq",
-        label="Groq hosted open models",
-        api_key_env="GROQ_API_KEY",
-        base_url="https://api.groq.com/openai/v1",
-        smart_model="openai/gpt-oss-120b",
-        fast_model="llama-3.1-8b-instant",
-        classify_model="llama-3.1-8b-instant",
-        api_key_placeholder="gsk_...",
-        description="Fast hosted open-model inference with OpenAI-compatible tool calling.",
+        description="Premium Anthropic backend using Claude Opus only.",
     ),
     "together": ProviderProfile(
         provider="together",
         label="Together AI",
         api_key_env="TOGETHER_API_KEY",
         base_url="https://api.together.ai/v1",
-        smart_model="zai-org/GLM-5.1",
-        fast_model="meta-llama/Llama-3.3-70B-Instruct-Turbo",
-        classify_model="meta-llama/Llama-3.3-70B-Instruct-Turbo",
+        quality_model="zai-org/GLM-5.1",
         api_key_placeholder="tgp_...",
-        description="Hosted serverless open-source models; GLM-5.1 is the default tool-calling model.",
-    ),
-    "fireworks": ProviderProfile(
-        provider="fireworks",
-        label="Fireworks AI",
-        api_key_env="FIREWORKS_API_KEY",
-        base_url="https://api.fireworks.ai/inference/v1",
-        smart_model="accounts/fireworks/models/kimi-k2-instruct-0905",
-        fast_model="accounts/fireworks/models/llama-v3p3-70b-instruct",
-        classify_model="accounts/fireworks/models/llama-v3p1-8b-instruct",
-        api_key_placeholder="fw_...",
-        description="Open-source model platform with OpenAI-compatible tools and structured outputs.",
-    ),
-    "huggingface": ProviderProfile(
-        provider="huggingface",
-        label="Hugging Face Inference Providers",
-        api_key_env="HF_TOKEN",
-        base_url="https://router.huggingface.co/v1",
-        smart_model="meta-llama/Llama-3.3-70B-Instruct:fastest",
-        fast_model="meta-llama/Llama-3.1-8B-Instruct:fastest",
-        classify_model="meta-llama/Llama-3.1-8B-Instruct:fastest",
-        api_key_placeholder="hf_...",
-        description="Hosted model router across Hugging Face inference providers.",
-    ),
-    "openrouter": ProviderProfile(
-        provider="openrouter",
-        label="OpenRouter",
-        api_key_env="OPENROUTER_API_KEY",
-        base_url="https://openrouter.ai/api/v1",
-        smart_model="openai/gpt-oss-120b",
-        fast_model="meta-llama/llama-3.1-8b-instruct",
-        classify_model="meta-llama/llama-3.1-8b-instruct",
-        api_key_placeholder="sk-or-...",
-        description="Aggregated hosted model router with OpenAI-compatible metadata and chat APIs.",
-    ),
-    "openai_compatible": ProviderProfile(
-        provider="openai_compatible",
-        label="Custom OpenAI-compatible",
-        api_key_env="SOG_OPENAI_COMPAT_API_KEY",
-        base_url=None,
-        smart_model="",
-        fast_model="",
-        classify_model="",
-        api_key_placeholder="provider key",
-        description="Any hosted /v1/chat/completions endpoint that follows the OpenAI tool-call schema.",
+        description="Hosted open-model backend using GLM-5.1 for every assistant role.",
     ),
 }
 
 _ALIASES = {
     "claude": "anthropic",
     "anthropic": "anthropic",
-    "groq": "groq",
     "togetherai": "together",
     "together": "together",
-    "fireworksai": "fireworks",
-    "fireworks": "fireworks",
-    "hf": "huggingface",
-    "huggingface": "huggingface",
-    "hugging_face": "huggingface",
-    "openrouter": "openrouter",
-    "openai-compatible": "openai_compatible",
-    "openai_compatible": "openai_compatible",
-    "custom": "openai_compatible",
 }
 
 
@@ -161,12 +90,13 @@ def available_provider_ids() -> list[str]:
 
 
 def normalize_provider(provider: str | None = None) -> str:
-    raw = (provider or os.environ.get("SOG_LLM_PROVIDER") or "anthropic").strip().lower()
+    raw = (provider or os.environ.get("SOG_LLM_PROVIDER") or "together").strip().lower()
     normalized = _ALIASES.get(raw, raw)
     if normalized not in _PROFILES:
         raise ValueError(
-            f"Unsupported SOG_LLM_PROVIDER '{provider or raw}'. "
-            f"Choose one of: {', '.join(available_provider_ids())}"
+            f"Unsupported quality-first SOG_LLM_PROVIDER '{provider or raw}'. "
+            f"Choose one of: {', '.join(available_provider_ids())}. "
+            "Fast/basic hosted routes are intentionally disabled."
         )
     return normalized
 
@@ -189,29 +119,16 @@ def provider_api_key_placeholder(provider: str | None = None) -> str:
 
 def has_provider_credentials(provider: str | None = None) -> bool:
     profile = provider_profile(provider)
-    has_key = bool(os.environ.get(profile.api_key_env) or os.environ.get("SOG_LLM_API_KEY"))
-    if profile.provider == "openai_compatible":
-        has_base_url = bool(os.environ.get("SOG_OPENAI_COMPAT_BASE_URL") or os.environ.get("SOG_LLM_BASE_URL"))
-        return has_key and has_base_url
-    return has_key
+    return bool(os.environ.get(profile.api_key_env) or os.environ.get("SOG_LLM_API_KEY"))
 
 
-def _role_model_env(model_role: str) -> str:
-    role = (model_role or "smart").strip().lower()
-    if role == "fast":
-        return "SOG_LLM_FAST_MODEL"
-    if role == "classify":
-        return "SOG_LLM_CLASSIFY_MODEL"
-    return "SOG_LLM_SMART_MODEL"
-
-
-def _profile_default_model(profile: ProviderProfile, model_role: str) -> str:
-    role = (model_role or "smart").strip().lower()
-    if role == "fast":
-        return profile.fast_model
-    if role == "classify":
-        return profile.classify_model
-    return profile.smart_model
+def _validate_quality_model(profile: ProviderProfile, model: str) -> str:
+    if model != profile.quality_model:
+        raise ValueError(
+            f"Model '{model}' is not allowed for provider '{profile.provider}'. "
+            f"Quality-first policy requires '{profile.quality_model}'."
+        )
+    return model
 
 
 def resolve_llm_config(
@@ -219,39 +136,25 @@ def resolve_llm_config(
     provider: str | None = None,
     api_key: str | None = None,
     model: str | None = None,
-    model_role: str = "smart",
 ) -> LLMProviderConfig:
     profile = provider_profile(provider)
     resolved_key = api_key or os.environ.get(profile.api_key_env) or os.environ.get("SOG_LLM_API_KEY", "")
     if not resolved_key:
         raise ValueError(f"{profile.api_key_env} not set")
 
-    role_model = os.environ.get(_role_model_env(model_role), "").strip()
-    default_model = _profile_default_model(profile, model_role)
-    resolved_model = (model or role_model or os.environ.get("SOG_LLM_MODEL", "") or default_model).strip()
-    if not resolved_model:
-        raise ValueError(
-            f"No model configured for provider '{profile.provider}'. "
-            "Set SOG_LLM_MODEL or a role-specific model env var."
-        )
+    for disabled_env in ("SOG_LLM_SMART_MODEL", "SOG_LLM_FAST_MODEL", "SOG_LLM_CLASSIFY_MODEL"):
+        if os.environ.get(disabled_env):
+            raise ValueError(
+                f"{disabled_env} is disabled by the quality-first model policy. "
+                "Use SOG_LLM_MODEL with the approved provider model instead."
+            )
+
+    resolved_model = (model or os.environ.get("SOG_LLM_MODEL", "") or profile.quality_model).strip()
+    resolved_model = _validate_quality_model(profile, resolved_model)
 
     base_url = profile.base_url
-    if profile.provider == "openai_compatible":
-        base_url = (
-            os.environ.get("SOG_OPENAI_COMPAT_BASE_URL")
-            or os.environ.get("SOG_LLM_BASE_URL")
-            or ""
-        ).strip()
-        if not base_url:
-            raise ValueError("SOG_OPENAI_COMPAT_BASE_URL or SOG_LLM_BASE_URL must be set")
-    elif os.environ.get("SOG_LLM_BASE_URL"):
+    if os.environ.get("SOG_LLM_BASE_URL"):
         base_url = os.environ["SOG_LLM_BASE_URL"].strip()
-
-    headers: dict[str, str] = {}
-    if profile.provider == "openrouter":
-        if os.environ.get("OPENROUTER_HTTP_REFERER"):
-            headers["HTTP-Referer"] = os.environ["OPENROUTER_HTTP_REFERER"]
-        headers["X-Title"] = os.environ.get("OPENROUTER_APP_TITLE", "SOG Benchmark Studio")
 
     return LLMProviderConfig(
         provider=profile.provider,
@@ -262,7 +165,6 @@ def resolve_llm_config(
         base_url=base_url,
         timeout_seconds=int(os.environ.get("SOG_LLM_TIMEOUT_SECONDS", "90")),
         temperature=float(os.environ.get("SOG_LLM_TEMPERATURE", "0.2")),
-        extra_headers=headers,
     )
 
 

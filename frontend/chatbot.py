@@ -983,13 +983,13 @@ def _render_access_gate() -> tuple[str, str, str]:
         current_provider = normalize_provider()
     except Exception as exc:
         st.warning(str(exc))
-        current_provider = "anthropic"
+        current_provider = "together"
     st.markdown(
         """
         <div class="sog-access-card">
             <div class="sog-access-title">Connect the model layer</div>
             <div class="sog-access-copy">
-                Choose a hosted model provider for this local session. Open-model providers run remotely, so no local GPU is required.
+                Choose a quality-first hosted model provider for this local session. Models run remotely, so no local GPU or model download is required.
             </div>
         </div>
         """,
@@ -1000,23 +1000,15 @@ def _render_access_gate() -> tuple[str, str, str]:
         provider_ids,
         index=provider_ids.index(current_provider) if current_provider in provider_ids else 0,
         format_func=provider_label,
-        help="Anthropic remains supported; Groq, Together, Fireworks, Hugging Face, OpenRouter, and custom OpenAI-compatible endpoints use hosted APIs.",
+        help="Together uses GLM-5.1. Anthropic uses Claude Opus 4.7. Fast/basic model routes are disabled.",
     )
-    base_url = ""
-    if provider == "openai_compatible":
-        base_url = st.text_input(
-            "OpenAI-compatible base URL",
-            value=os.environ.get("SOG_OPENAI_COMPAT_BASE_URL") or os.environ.get("SOG_LLM_BASE_URL", ""),
-            placeholder="https://provider.example.com/v1",
-            help="Must expose /chat/completions under this base URL.",
-        )
     key = st.text_input(
         f"{provider_label(provider)} API key",
         type="password",
         placeholder=provider_api_key_placeholder(provider),
         help="Stored only for this browser session.",
     )
-    return provider, key, base_url
+    return provider, key, ""
 
 
 def _render_footer() -> None:
@@ -1320,14 +1312,9 @@ if not _model_access_ready():
     if key.strip():
         from agents.llm_provider import provider_api_key_env
 
-        if provider != "openai_compatible" or base_url.strip():
-            os.environ["SOG_LLM_PROVIDER"] = provider
-            os.environ[provider_api_key_env(provider)] = key.strip()
-            if base_url.strip():
-                os.environ["SOG_OPENAI_COMPAT_BASE_URL"] = base_url.strip()
-            st.rerun()
-        else:
-            st.error("Enter a base URL for the custom OpenAI-compatible provider.")
+        os.environ["SOG_LLM_PROVIDER"] = provider
+        os.environ[provider_api_key_env(provider)] = key.strip()
+        st.rerun()
     _render_footer()
     st.stop()
 
