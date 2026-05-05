@@ -58,6 +58,18 @@ SOG_LLM_MODEL=moonshotai/kimi-k2.6
 
 Fast/basic role-specific overrides are intentionally disabled. See `docs/FRONTEND_RUNBOOK.md` for the full policy.
 
+NVIDIA/Kimi is a hosted API path, not a local `transformers` path. It requires `NVIDIA_API_KEY`, uses `moonshotai/kimi-k2.6`, streams responses internally, and defaults to a longer 180-second timeout because live tool-calling responses can be slow. Keep local key snippets such as `moonshot.txt` out of git.
+
+## Export Formats
+
+The artifact shelf can download individual tabular run artifacts, or bundle the full run as a zip, in these formats:
+
+```text
+csv, tsv, txt, xlsx, json, jsonl, parquet
+```
+
+Conversions are additive. Canonical run outputs under `phase2/runs/` are not rewritten.
+
 ## Runtime State
 
 The frontend writes transient files under:

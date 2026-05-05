@@ -10,6 +10,7 @@
 - `BEGINNER_GUIDE.md` - first-run and setup guide
 - `SOG_COMPLETE_USER_GUIDE.md` - end-to-end user guide
 - `FRONTEND_RUNBOOK.md` - local frontend startup and troubleshooting
+- `The_SOG_Bible_v2.pdf` - comprehensive engineering reference PDF; Chapter 14 has an addendum for the current quality-first hosted model provider policy
 
 ## Reference
 

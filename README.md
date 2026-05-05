@@ -16,6 +16,7 @@ It has two phases:
 - `docs/SOG_COMPLETE_USER_GUIDE.md`: end-to-end guide
 - `docs/SCENARIO_USE_CASES_AND_TESTING.md`: scenario selection and benchmark workflow
 - `docs/FRONTEND_RUNBOOK.md`: local Streamlit frontend guide
+- `docs/The_SOG_Bible_v2.pdf`: comprehensive engineering reference PDF
 
 ## Repository Layout
 
@@ -95,6 +96,8 @@ Manual entrypoint:
 ```powershell
 python -u -m streamlit run frontend/chatbot_production.py --server.headless true
 ```
+
+The frontend assistant uses hosted quality-first model providers only: Together `zai-org/GLM-5.1`, NVIDIA NIM `moonshotai/kimi-k2.6`, or Anthropic `claude-opus-4-7`. It does not download local Hugging Face models or require a local GPU.
 
 ## Tests
 
