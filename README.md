@@ -16,7 +16,7 @@ It has two phases:
 - `docs/SOG_COMPLETE_USER_GUIDE.md`: end-to-end guide
 - `docs/SCENARIO_USE_CASES_AND_TESTING.md`: scenario selection and benchmark workflow
 - `docs/FRONTEND_RUNBOOK.md`: local Streamlit frontend guide
-- `docs/The_SOG_Bible_v2.pdf`: comprehensive engineering reference PDF
+- `docs/The_SOG_Bible_v2.pdf`: comprehensive engineering reference PDF by Taha Mohammed
 
 ## Repository Layout
 
