@@ -1,20 +1,21 @@
 """Orchestrator — Routes user messages to specialist agents.
 
-Uses a lightweight LLM call (Haiku) to classify intent, then delegates
+Uses a lightweight LLM call to classify intent, then delegates
 to ConfigAgent, RunAgent, AnalystAgent, or ExportAgent.
 """
 
 from __future__ import annotations
 
-import os
 import re
 from pathlib import Path
 from typing import Any
 
 from .base import AgentResponse
+from .guardrails import check_user_input, guarded_system_prompt, guardrail_refusal
+from .llm_provider import build_llm_client, resolve_llm_config
 
 
-# Intent classification prompt — kept short so Haiku is fast
+# Intent classification prompt kept short so routing stays fast
 _CLASSIFY_PROMPT = """\
 Classify the user message into exactly ONE of these intents:
   configure  — configure, tune, adjust, create, modify, change, preset, noise, overlap, rates, difficulty
@@ -37,8 +38,9 @@ SCENARIOS_DIR = PROJECT_ROOT / "phase2" / "scenarios"
 class Orchestrator:
     """Routes messages to specialist agents. Agents are initialized lazily."""
 
-    def __init__(self, api_key: str | None = None):
+    def __init__(self, api_key: str | None = None, provider: str | None = None):
         self._api_key = api_key
+        self.provider = provider
         self._client = None
         self._config_agent = None
         self._run_agent = None
@@ -47,35 +49,37 @@ class Orchestrator:
 
     def _get_client(self):
         if self._client is None:
-            import anthropic
-            key = self._api_key or os.environ.get("ANTHROPIC_API_KEY")
-            if not key:
-                raise ValueError("ANTHROPIC_API_KEY not set")
-            self._client = anthropic.Anthropic(api_key=key)
+            config = resolve_llm_config(
+                provider=self.provider,
+                api_key=self._api_key,
+                model_role="classify",
+            )
+            self.provider = config.provider
+            self._client = build_llm_client(config)
         return self._client
 
     def _config(self):
         if self._config_agent is None:
             from .config_agent import ConfigAgent
-            self._config_agent = ConfigAgent(api_key=self._api_key)
+            self._config_agent = ConfigAgent(api_key=self._api_key, provider=self.provider)
         return self._config_agent
 
     def _run(self):
         if self._run_agent is None:
             from .run_agent import RunAgent
-            self._run_agent = RunAgent(api_key=self._api_key)
+            self._run_agent = RunAgent(api_key=self._api_key, provider=self.provider)
         return self._run_agent
 
     def _analyst(self):
         if self._analyst_agent is None:
             from .analyst_agent import AnalystAgent
-            self._analyst_agent = AnalystAgent(api_key=self._api_key)
+            self._analyst_agent = AnalystAgent(api_key=self._api_key, provider=self.provider)
         return self._analyst_agent
 
     def _export(self):
         if self._export_agent is None:
             from .export_agent import ExportAgent
-            self._export_agent = ExportAgent(api_key=self._api_key)
+            self._export_agent = ExportAgent(api_key=self._api_key, provider=self.provider)
         return self._export_agent
 
     # ------------------------------------------------------------------
@@ -83,19 +87,16 @@ class Orchestrator:
     # ------------------------------------------------------------------
 
     def classify_intent(self, user_input: str) -> str:
-        """Use Haiku to classify intent into configure | run | analyze | export."""
+        """Use the configured fast model to classify intent into configure | run | analyze | export."""
         try:
             client = self._get_client()
-            response = client.messages.create(
-                model="claude-haiku-4-5-20251001",
-                max_tokens=10,
-                system=_CLASSIFY_PROMPT,
+            response = client.complete(
                 messages=[{"role": "user", "content": user_input[:500]}],
+                system=guarded_system_prompt(_CLASSIFY_PROMPT),
+                tools=[],
+                max_tokens=10,
             )
-            raw = ""
-            for block in response.content:
-                if hasattr(block, "text"):
-                    raw += block.text
+            raw = response.text
             intent = raw.strip().lower().split()[0] if raw.strip() else "configure"
             return intent if intent in ("configure", "run", "analyze", "export") else "configure"
         except Exception:
@@ -160,6 +161,13 @@ class Orchestrator:
         Process one user turn. Returns:
           {message, session_updates, pending_job_id?, charts?, download_paths?}
         """
+        guard = check_user_input(user_input)
+        if not guard.allowed:
+            return {
+                "message": guardrail_refusal(guard.reason),
+                "session_updates": {},
+            }
+        user_input = guard.text
         intent = self.classify_intent(user_input)
 
         # ── configure ────────────────────────────────────────────────

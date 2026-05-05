@@ -953,24 +953,70 @@ def _render_progress(stage: str, pct: int) -> None:
     )
 
 
-def _render_access_gate() -> str:
+def _active_model_access() -> tuple[str, str]:
+    from agents.llm_provider import normalize_provider, provider_api_key_env
+
+    provider = normalize_provider()
+    key_env = provider_api_key_env(provider)
+    return provider, os.environ.get(key_env) or os.environ.get("SOG_LLM_API_KEY", "")
+
+
+def _model_access_ready() -> bool:
+    from agents.llm_provider import has_provider_credentials, normalize_provider
+
+    try:
+        return has_provider_credentials(normalize_provider())
+    except Exception:
+        return False
+
+
+def _render_access_gate() -> tuple[str, str, str]:
+    from agents.llm_provider import (
+        available_provider_ids,
+        normalize_provider,
+        provider_api_key_placeholder,
+        provider_label,
+    )
+
+    provider_ids = available_provider_ids()
+    try:
+        current_provider = normalize_provider()
+    except Exception as exc:
+        st.warning(str(exc))
+        current_provider = "anthropic"
     st.markdown(
         """
         <div class="sog-access-card">
             <div class="sog-access-title">Connect the model layer</div>
             <div class="sog-access-copy">
-                Enter an Anthropic API key for this local session. The interface is ready; the assistant layer is the only missing dependency.
+                Choose a hosted model provider for this local session. Open-model providers run remotely, so no local GPU is required.
             </div>
         </div>
         """,
         unsafe_allow_html=True,
     )
-    return st.text_input(
-        "Anthropic API key",
+    provider = st.selectbox(
+        "Model provider",
+        provider_ids,
+        index=provider_ids.index(current_provider) if current_provider in provider_ids else 0,
+        format_func=provider_label,
+        help="Anthropic remains supported; Groq, Together, Fireworks, Hugging Face, OpenRouter, and custom OpenAI-compatible endpoints use hosted APIs.",
+    )
+    base_url = ""
+    if provider == "openai_compatible":
+        base_url = st.text_input(
+            "OpenAI-compatible base URL",
+            value=os.environ.get("SOG_OPENAI_COMPAT_BASE_URL") or os.environ.get("SOG_LLM_BASE_URL", ""),
+            placeholder="https://provider.example.com/v1",
+            help="Must expose /chat/completions under this base URL.",
+        )
+    key = st.text_input(
+        f"{provider_label(provider)} API key",
         type="password",
-        placeholder="sk-ant-...",
+        placeholder=provider_api_key_placeholder(provider),
         help="Stored only for this browser session.",
     )
+    return provider, key, base_url
 
 
 def _render_footer() -> None:
@@ -1051,10 +1097,10 @@ def _persist() -> None:
 
 
 @st.cache_resource
-def _get_orchestrator(api_key: str):
+def _get_orchestrator(provider: str, api_key: str):
     from agents.orchestrator import Orchestrator
 
-    return Orchestrator(api_key=api_key)
+    return Orchestrator(api_key=api_key, provider=provider)
 
 
 def _poll_job() -> None:
@@ -1081,8 +1127,8 @@ def _poll_job() -> None:
             st.session_state.context["run_history"] = history[:20]
 
             try:
-                api_key = os.environ.get("ANTHROPIC_API_KEY", "")
-                orch = _get_orchestrator(api_key)
+                provider, api_key = _active_model_access()
+                orch = _get_orchestrator(provider, api_key)
                 result = orch._analyst().run(
                     f"Summarize run {run_id}",
                     SESSION_ID,
@@ -1264,16 +1310,24 @@ if st.session_state.last_run_downloads:
             except Exception as exc:
                 st.error(f"Bundle failed: {exc}")
 
-if not os.environ.get("ANTHROPIC_API_KEY"):
+if not _model_access_ready():
     _render_section_intro(
         "Access",
         "Enable the assistant layer",
-        "The frontend is ready. Add the API key once and continue working in the same browser session.",
+        "The frontend is ready. Add a hosted model API key once and continue working in the same browser session.",
     )
-    key = _render_access_gate()
+    provider, key, base_url = _render_access_gate()
     if key.strip():
-        os.environ["ANTHROPIC_API_KEY"] = key.strip()
-        st.rerun()
+        from agents.llm_provider import provider_api_key_env
+
+        if provider != "openai_compatible" or base_url.strip():
+            os.environ["SOG_LLM_PROVIDER"] = provider
+            os.environ[provider_api_key_env(provider)] = key.strip()
+            if base_url.strip():
+                os.environ["SOG_OPENAI_COMPAT_BASE_URL"] = base_url.strip()
+            st.rerun()
+        else:
+            st.error("Enter a base URL for the custom OpenAI-compatible provider.")
     _render_footer()
     st.stop()
 
@@ -1287,8 +1341,8 @@ if prompt := st.chat_input("Describe the benchmark, result, or export you want n
     with st.chat_message("assistant"):
         with st.spinner("Working..."):
             try:
-                api_key = os.environ.get("ANTHROPIC_API_KEY", "")
-                orch = _get_orchestrator(api_key)
+                provider, api_key = _active_model_access()
+                orch = _get_orchestrator(provider, api_key)
                 result = orch.run_turn(prompt, SESSION_ID, st.session_state.context)
 
                 text = result.get("message", "")

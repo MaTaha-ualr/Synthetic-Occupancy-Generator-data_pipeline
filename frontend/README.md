@@ -22,11 +22,31 @@ python -u -m streamlit run frontend/chatbot_production.py --server.headless true
 ## Key Files
 
 - `agents/`: natural-language orchestration helpers
+- `agents/llm_provider.py`: Anthropic and hosted OpenAI-compatible model adapters
+- `agents/guardrails.py`: deterministic prompt, tool-call, and output guardrails
 - `visualizations/`: chart and theme helpers
 - `sog_tools.py`: frontend-facing tool layer
 - `session_manager.py`: session persistence and restore logic
 - `pipeline_bridge.py`: process bridge into the pipeline scripts
 - `DESIGN_SYSTEM.md`: frontend design notes
+
+## Hosted Model Backends
+
+Anthropic remains the default:
+
+```powershell
+ANTHROPIC_API_KEY=...
+```
+
+To use hosted open models without a local GPU:
+
+```powershell
+SOG_LLM_PROVIDER=groq
+GROQ_API_KEY=...
+```
+
+Also supported: `together`, `fireworks`, `huggingface`, `openrouter`, and `openai_compatible`.
+See `docs/FRONTEND_RUNBOOK.md` for provider-specific environment variables and model override knobs.
 
 ## Runtime State
 

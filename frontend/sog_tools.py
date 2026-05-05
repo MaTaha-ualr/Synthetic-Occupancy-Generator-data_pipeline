@@ -1,4 +1,4 @@
-"""Tool implementations called by Claude via the Anthropic tool-use API.
+"""Tool implementations called by the configured assistant model.
 
 Each function is a pure Python callable that returns a JSON-serializable dict.
 No Streamlit dependency. The session_id parameter is used to scope working
@@ -842,7 +842,11 @@ def generate_chart(
 ) -> dict[str, Any]:
     """Generate a single visualization chart for a run."""
     try:
-        from visualizations.core import ChartGenerator, ChartSpec
+        try:
+            from frontend.visualizations.core import ChartGenerator, ChartSpec
+        except ImportError:
+            from visualizations.core import ChartGenerator, ChartSpec
+
         generator = ChartGenerator()
         effective_fmt = fmt
         if chart_type == "noise_radar" and fmt == "png":

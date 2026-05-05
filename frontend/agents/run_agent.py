@@ -80,8 +80,8 @@ _TOOLS = [
 class RunAgent(BaseAgent):
     """Submits async pipeline runs and reports job status."""
 
-    def __init__(self, api_key: str | None = None):
-        super().__init__(model="claude-haiku-4-5-20251001", api_key=api_key)
+    def __init__(self, api_key: str | None = None, provider: str | None = None):
+        super().__init__(api_key=api_key, provider=provider, model_role="fast")
 
     def get_system_prompt(self) -> str:
         return _SYSTEM_PROMPT
