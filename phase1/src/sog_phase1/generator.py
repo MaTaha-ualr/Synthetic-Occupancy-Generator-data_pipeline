@@ -15,11 +15,14 @@ import numpy as np
 import pandas as pd
 
 from .config import (
+    EXCEL_MAX_WORKSHEET_ROWS,
     NormalizedDistribution,
     load_phase1_config,
     normalize_distribution,
+    normalize_output_format,
     resolve_age_bins,
     resolve_counts,
+    resolve_name_duplication_percentages,
     validate_phase1_core,
 )
 from .nicknames import build_nickname_catalog, pick_display_first_name
@@ -635,28 +638,32 @@ def _build_collision_group_sizes(
     return sizes
 
 
-def _apply_forced_exact_name_duplicates(
+def _empty_forced_duplicate_stats() -> dict[str, int]:
+    return {
+        "groups": 0,
+        "pair_equivalent": 0,
+        "people": 0,
+        "min_group_size_used": 0,
+        "max_group_size_used": 0,
+    }
+
+
+def _apply_forced_name_duplicates(
     *,
     first_names: np.ndarray,
     middle_names: np.ndarray,
     last_names: np.ndarray,
     suffixes: np.ndarray,
-    genders: np.ndarray,
-    ethnicities: np.ndarray,
+    bucket_values: tuple[np.ndarray, ...],
+    fields: tuple[str, ...],
     duplicate_people_pct: float,
     min_collision_size: int,
     max_collision_size: int,
     rng: np.random.Generator,
 ) -> dict[str, int]:
     chunk_count = len(first_names)
-    if chunk_count <= 1 or duplicate_people_pct <= 0:
-        return {
-            "groups": 0,
-            "pair_equivalent": 0,
-            "people": 0,
-            "min_group_size_used": 0,
-            "max_group_size_used": 0,
-        }
+    if chunk_count <= 1 or duplicate_people_pct <= 0 or not fields:
+        return _empty_forced_duplicate_stats()
 
     min_group_size = max(2, int(min_collision_size))
     max_group_size = max(min_group_size, int(max_collision_size))
@@ -664,13 +671,7 @@ def _apply_forced_exact_name_duplicates(
     target_people = int(round(chunk_count * (duplicate_people_pct / 100.0)))
     target_people = max(0, min(chunk_count, target_people))
     if target_people < min_group_size:
-        return {
-            "groups": 0,
-            "pair_equivalent": 0,
-            "people": 0,
-            "min_group_size_used": 0,
-            "max_group_size_used": 0,
-        }
+        return _empty_forced_duplicate_stats()
 
     group_sizes = _build_collision_group_sizes(
         target_people=target_people,
@@ -679,17 +680,11 @@ def _apply_forced_exact_name_duplicates(
         rng=rng,
     )
     if not group_sizes:
-        return {
-            "groups": 0,
-            "pair_equivalent": 0,
-            "people": 0,
-            "min_group_size_used": 0,
-            "max_group_size_used": 0,
-        }
+        return _empty_forced_duplicate_stats()
 
-    bucket_members: dict[tuple[str, str], list[int]] = {}
+    bucket_members: dict[tuple[str, ...], list[int]] = {}
     for idx in range(chunk_count):
-        bucket_key = (str(genders[idx]).lower(), str(ethnicities[idx]))
+        bucket_key = tuple(str(values[idx]).lower() for values in bucket_values)
         bucket_members.setdefault(bucket_key, []).append(idx)
     for members in bucket_members.values():
         rng.shuffle(members)
@@ -697,7 +692,7 @@ def _apply_forced_exact_name_duplicates(
     selected_groups: list[list[int]] = []
     for requested_size in group_sizes:
         group_size = int(requested_size)
-        selected_key: tuple[str, str] | None = None
+        selected_key: tuple[str, ...] | None = None
 
         while group_size >= min_group_size:
             candidate_keys = [k for k, members in bucket_members.items() if len(members) >= group_size]
@@ -715,13 +710,17 @@ def _apply_forced_exact_name_duplicates(
         picked = [int(members.pop()) for _ in range(group_size)]
         selected_groups.append(picked)
 
+    field_arrays = {
+        "first_name": first_names,
+        "middle_name": middle_names,
+        "last_name": last_names,
+        "suffix": suffixes,
+    }
     for group in selected_groups:
         src_idx = group[0]
         for dst_idx in group[1:]:
-            first_names[dst_idx] = first_names[src_idx]
-            middle_names[dst_idx] = middle_names[src_idx]
-            last_names[dst_idx] = last_names[src_idx]
-            suffixes[dst_idx] = suffixes[src_idx]
+            for field in fields:
+                field_arrays[field][dst_idx] = field_arrays[field][src_idx]
 
     forced_people = int(sum(len(group) for group in selected_groups))
     forced_groups = int(len(selected_groups))
@@ -756,6 +755,54 @@ def _collision_metrics(values: np.ndarray) -> dict[str, Any]:
     }
 
 
+def _forced_duplicate_metric_block(stats: dict[str, int], total_people: int) -> dict[str, Any]:
+    return {
+        "groups": int(stats["groups"]),
+        "pair_equivalent": int(stats["pair_equivalent"]),
+        "pairs": int(stats["pair_equivalent"]),
+        "people": int(stats["people"]),
+        "people_pct": (float(stats["people"]) / float(total_people)) * 100.0 if total_people else 0.0,
+        "collision_group_min_size_observed": int(stats["min_group_size_used"]),
+        "collision_group_max_size_observed": int(stats["max_group_size_used"]),
+    }
+
+
+OUTPUT_SUFFIX_BY_FORMAT = {
+    "csv": ".csv",
+    "parquet": ".parquet",
+    "txt": ".txt",
+    "xlsx": ".xlsx",
+}
+KNOWN_OUTPUT_SUFFIXES = {".csv", ".parquet", ".txt", ".xlsx", ".xls"}
+
+
+def _resolve_output_path_for_format(project_root: Path, configured_path: str, output_format: str) -> Path:
+    output_path = (project_root / configured_path).resolve()
+    target_suffix = OUTPUT_SUFFIX_BY_FORMAT[output_format]
+    current_suffix = output_path.suffix.lower()
+    if current_suffix == target_suffix:
+        return output_path
+    if not current_suffix or current_suffix in KNOWN_OUTPUT_SUFFIXES:
+        return output_path.with_suffix(target_suffix)
+    return output_path
+
+
+def _read_generated_output(
+    *,
+    output_format: str,
+    output_path: Path,
+    chunk_files: list[str],
+) -> pd.DataFrame:
+    if output_format == "csv":
+        return pd.read_csv(output_path, dtype=str)
+    if output_format == "txt":
+        return pd.read_csv(output_path, dtype=str, sep="\t")
+    if output_format == "xlsx":
+        return pd.read_excel(output_path, dtype=str, sheet_name="Phase1")
+    frames = [pd.read_parquet(path) for path in chunk_files]
+    return pd.concat(frames, ignore_index=True).astype(str)
+
+
 def generate_phase1_dataset(
     *,
     project_root: Path,
@@ -766,7 +813,7 @@ def generate_phase1_dataset(
     phase1 = load_phase1_config(config_path)
     validate_phase1_core(phase1)
     prepared = _load_prepared(prepared_dir)
-    n_people, n_records = resolve_counts(phase1)
+    n_people, records_requested = resolve_counts(phase1)
 
     gender_norm = normalize_distribution(
         phase1.get("distributions", {}).get("gender", {}),
@@ -783,23 +830,25 @@ def generate_phase1_dataset(
     housing_norm = _normalize_housing_mix(phase1.get("address", {}))
 
     seed = int(phase1.get("seed", 0))
-    chunk_size = int(phase1["output"]["chunk_size"])
-    output_format = str(phase1["output"]["format"]).lower()
-    output_path = (project_root / str(phase1["output"]["path"])).resolve()
+    output_cfg = phase1.get("output", {})
+    chunk_size = int(output_cfg["chunk_size"])
+    output_format = normalize_output_format(output_cfg.get("format", "csv"))
+    output_path = _resolve_output_path_for_format(project_root, str(output_cfg["path"]), output_format)
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
-    if output_format == "csv":
-        if output_path.exists() and not overwrite:
-            raise FileExistsError(f"Output file already exists: {output_path}")
-        if output_path.exists() and overwrite:
-            output_path.unlink()
-    else:
+    parts_dir: Path | None = None
+    if output_format == "parquet":
         parts_dir = output_path.parent / f"{output_path.stem}_parts"
         if parts_dir.exists() and not overwrite:
             raise FileExistsError(f"Parquet parts directory already exists: {parts_dir}")
         if parts_dir.exists() and overwrite:
             shutil.rmtree(parts_dir)
         parts_dir.mkdir(parents=True, exist_ok=True)
+    else:
+        if output_path.exists() and not overwrite:
+            raise FileExistsError(f"Output file already exists: {output_path}")
+        if output_path.exists() and overwrite:
+            output_path.unlink()
 
     rng = np.random.default_rng(seed)
     reference_date = date.today()
@@ -810,7 +859,10 @@ def generate_phase1_dataset(
     last_name_pools, last_name_default_pool = _build_last_name_pools(prepared.last_names)
 
     name_dup_cfg = phase1.get("name_duplication", {})
-    duplicate_name_pct = float(name_dup_cfg.get("exact_full_name_people_pct", 0.0))
+    duplicate_name_pct_by_surface = resolve_name_duplication_percentages(name_dup_cfg)
+    first_name_duplicate_pct = float(duplicate_name_pct_by_surface["first_name"])
+    last_name_duplicate_pct = float(duplicate_name_pct_by_surface["last_name"])
+    full_name_duplicate_pct = float(duplicate_name_pct_by_surface["full_name"])
     collision_min_size = int(name_dup_cfg.get("collision_group_min_size", 2))
     collision_max_size = int(name_dup_cfg.get("collision_group_max_size", 2))
 
@@ -858,14 +910,38 @@ def generate_phase1_dataset(
     sampled_suffixes = rng.choice(suffix_keys, size=n_people, p=suffix_probs)
     entity_suffixes[suffix_fill_mask] = sampled_suffixes[suffix_fill_mask]
 
-    dup_stats = _apply_forced_exact_name_duplicates(
+    first_name_dup_stats = _apply_forced_name_duplicates(
         first_names=formal_first_names,
         middle_names=entity_middle_names,
         last_names=entity_last_names,
         suffixes=entity_suffixes,
-        genders=entity_genders,
-        ethnicities=entity_ethnicities,
-        duplicate_people_pct=duplicate_name_pct,
+        bucket_values=(entity_genders,),
+        fields=("first_name",),
+        duplicate_people_pct=first_name_duplicate_pct,
+        min_collision_size=collision_min_size,
+        max_collision_size=collision_max_size,
+        rng=rng,
+    )
+    last_name_dup_stats = _apply_forced_name_duplicates(
+        first_names=formal_first_names,
+        middle_names=entity_middle_names,
+        last_names=entity_last_names,
+        suffixes=entity_suffixes,
+        bucket_values=(entity_ethnicities,),
+        fields=("last_name",),
+        duplicate_people_pct=last_name_duplicate_pct,
+        min_collision_size=collision_min_size,
+        max_collision_size=collision_max_size,
+        rng=rng,
+    )
+    full_name_dup_stats = _apply_forced_name_duplicates(
+        first_names=formal_first_names,
+        middle_names=entity_middle_names,
+        last_names=entity_last_names,
+        suffixes=entity_suffixes,
+        bucket_values=(entity_genders, entity_ethnicities),
+        fields=("first_name", "middle_name", "last_name", "suffix"),
+        duplicate_people_pct=full_name_duplicate_pct,
         min_collision_size=collision_min_size,
         max_collision_size=collision_max_size,
         rng=rng,
@@ -913,27 +989,18 @@ def generate_phase1_dataset(
     heavy_tail_alpha = float(redundancy_cfg.get("heavy_tail_alpha", 1.3))
     records_per_entity = allocate_records_per_entity(
         n_entities=n_people,
-        n_records=n_records,
+        n_records=records_requested,
         min_records_per_entity=min_records_per_entity,
         max_records_per_entity=max_records_per_entity,
         shape=redundancy_shape,
         heavy_tail_alpha=heavy_tail_alpha,
         rng=rng,
     )
-    redundancy_stats = summarize_records_per_entity(records_per_entity)
+    requested_redundancy_stats = summarize_records_per_entity(records_per_entity)
 
     person_keys = np.repeat(entity_person_keys, records_per_entity.astype(np.int64))
     rng.shuffle(person_keys)
     entity_indices = person_keys.astype(np.int64) - 1
-
-    record_keys = np.arange(1, n_records + 1, dtype=np.int64)
-    address_keys = record_keys.copy()
-
-    entity_record_index = np.empty(n_records, dtype=np.int64)
-    seen_per_entity = np.zeros(n_people, dtype=np.int64)
-    for i, entity_idx in enumerate(entity_indices):
-        seen_per_entity[entity_idx] += 1
-        entity_record_index[i] = seen_per_entity[entity_idx]
 
     nick_cfg = phase1.get("nicknames", {})
     nickname_enabled = bool(nick_cfg.get("enabled", False))
@@ -941,8 +1008,8 @@ def generate_phase1_dataset(
     nickname_usage_rate = float(nick_cfg.get("usage_pct", 0.0)) / 100.0
     nickname_catalog = build_nickname_catalog(prepared.nicknames if nickname_enabled else {})
 
-    first_name = np.empty(n_records, dtype=object)
-    first_name_type = np.array(["FORMAL"] * n_records, dtype=object)
+    first_name = np.empty(records_requested, dtype=object)
+    first_name_type = np.array(["FORMAL"] * records_requested, dtype=object)
     if nickname_enabled and nickname_mode == "per_person":
         entity_first_name = np.empty(n_people, dtype=object)
         entity_first_type = np.array(["FORMAL"] * n_people, dtype=object)
@@ -960,8 +1027,8 @@ def generate_phase1_dataset(
         first_name = entity_first_name[entity_indices]
         first_name_type = entity_first_type[entity_indices]
     elif nickname_enabled and nickname_mode == "per_record":
-        row_use_mask = rng.random(n_records) < nickname_usage_rate
-        for i in range(n_records):
+        row_use_mask = rng.random(records_requested) < nickname_usage_rate
+        for i in range(records_requested):
             chosen_name, chosen_type = pick_display_first_name(
                 formal_first_name=str(formal_first_names[entity_indices[i]]),
                 gender=str(entity_genders[entity_indices[i]]),
@@ -973,6 +1040,49 @@ def generate_phase1_dataset(
             first_name_type[i] = chosen_type
     else:
         first_name = formal_first_names[entity_indices].astype(object)
+
+    person_has_nickname = np.zeros(n_people, dtype=bool)
+    person_has_formal = np.zeros(n_people, dtype=bool)
+    np.logical_or.at(person_has_nickname, entity_indices, first_name_type == "NICKNAME")
+    np.logical_or.at(person_has_formal, entity_indices, first_name_type == "FORMAL")
+    formal_backup_entity_indices = np.where(person_has_nickname & ~person_has_formal)[0].astype(np.int64)
+    formal_copy_records_added = int(len(formal_backup_entity_indices))
+    nickname_person_count = int(person_has_nickname.sum())
+    nickname_formal_backup = {
+        "nickname_person_count": nickname_person_count,
+        "already_had_formal_row_count": int((person_has_nickname & person_has_formal).sum()),
+        "formal_copy_records_added": formal_copy_records_added,
+        "all_nickname_people_have_formal_row": True,
+    }
+    if formal_copy_records_added:
+        person_keys = np.concatenate([person_keys, entity_person_keys[formal_backup_entity_indices]])
+        entity_indices = np.concatenate([entity_indices, formal_backup_entity_indices])
+        first_name = np.concatenate([first_name, formal_first_names[formal_backup_entity_indices].astype(object)])
+        first_name_type = np.concatenate(
+            [first_name_type, np.array(["FORMAL"] * formal_copy_records_added, dtype=object)]
+        )
+
+    records_written = int(len(person_keys))
+    actual_records_per_entity = records_per_entity.copy()
+    if formal_copy_records_added:
+        actual_records_per_entity[formal_backup_entity_indices] += 1
+    actual_redundancy_stats = summarize_records_per_entity(actual_records_per_entity)
+    if output_format == "xlsx" and records_written > EXCEL_MAX_WORKSHEET_ROWS - 1:
+        raise ValueError(
+            "phase1.output.format=xlsx can write at most "
+            f"{EXCEL_MAX_WORKSHEET_ROWS - 1} data rows because Excel reserves one row for headers. "
+            f"Requested {records_requested} rows, but nickname formal backups raised the output to "
+            f"{records_written} rows."
+        )
+
+    record_keys = np.arange(1, records_written + 1, dtype=np.int64)
+    address_keys = record_keys.copy()
+
+    entity_record_index = np.empty(records_written, dtype=np.int64)
+    seen_per_entity = np.zeros(n_people, dtype=np.int64)
+    for i, entity_idx in enumerate(entity_indices):
+        seen_per_entity[entity_idx] += 1
+        entity_record_index[i] = seen_per_entity[entity_idx]
 
     row_middle_names = entity_middle_names[entity_indices]
     row_last_names = entity_last_names[entity_indices]
@@ -987,7 +1097,7 @@ def generate_phase1_dataset(
                 str(row_last_names[i]),
                 str(row_suffixes[i]),
             )
-            for i in range(n_records)
+            for i in range(records_written)
         ],
         dtype=object,
     )
@@ -1007,14 +1117,14 @@ def generate_phase1_dataset(
     open_ended_rate = float(residence_cfg.get("open_ended_pct", 80.0)) / 100.0
     min_duration_days = int(residence_cfg.get("min_duration_days", 90))
 
-    residence_start_ordinals = rng.integers(start_min_ordinal, ref_ordinal + 1, size=n_records)
+    residence_start_ordinals = rng.integers(start_min_ordinal, ref_ordinal + 1, size=records_written)
     residence_start_dates = np.array(
         [date.fromordinal(int(v)).isoformat() for v in residence_start_ordinals],
         dtype=object,
     )
-    residence_end_dates = np.array([""] * n_records, dtype=object)
-    open_ended_mask = rng.random(n_records) < open_ended_rate
-    for i in range(n_records):
+    residence_end_dates = np.array([""] * records_written, dtype=object)
+    open_ended_mask = rng.random(records_written) < open_ended_rate
+    for i in range(records_written):
         if open_ended_mask[i]:
             continue
         min_end_ordinal = int(residence_start_ordinals[i]) + min_duration_days
@@ -1030,9 +1140,9 @@ def generate_phase1_dataset(
         phase1["address"],
         seed=seed,
     )
-    n_houses = int(round(n_records * housing_norm.probabilities["houses"]))
-    n_houses = max(0, min(n_records, n_houses))
-    n_apartments = n_records - n_houses
+    n_houses = int(round(records_written * housing_norm.probabilities["houses"]))
+    n_houses = max(0, min(records_written, n_houses))
+    n_apartments = records_written - n_houses
     address_gen.ensure_capacity(n_houses, n_apartments)
 
     output_columns = [
@@ -1090,99 +1200,138 @@ def generate_phase1_dataset(
     normalized_age_prob = _uppercase_mapping_keys(age_norm.probabilities)
     normalized_age_pct = _uppercase_mapping_keys(age_norm.normalized_percentages)
     normalized_selected_age_bins = _uppercase_age_bin_metadata(selected_age_bins)
-    for chunk_start in range(0, n_records, chunk_size):
-        chunk_count = min(chunk_size, n_records - chunk_start)
-        idx = slice(chunk_start, chunk_start + chunk_count)
-        address_batch = address_gen.generate_batch(
-            start_index=chunk_start,
-            count=chunk_count,
-            n_houses_total=n_houses,
-            rng=rng,
-        )
+    excel_writer: pd.ExcelWriter | None = None
+    excel_next_row = 0
+    if output_format == "xlsx":
+        excel_writer = pd.ExcelWriter(output_path, engine="openpyxl")
+    try:
+        for chunk_start in range(0, records_written, chunk_size):
+            chunk_count = min(chunk_size, records_written - chunk_start)
+            idx = slice(chunk_start, chunk_start + chunk_count)
+            address_batch = address_gen.generate_batch(
+                start_index=chunk_start,
+                count=chunk_count,
+                n_houses_total=n_houses,
+                rng=rng,
+            )
 
-        df = pd.DataFrame(
-            {
-                "RecordKey": record_keys[idx],
-                "PersonKey": person_keys[idx],
-                "EntityRecordIndex": entity_record_index[idx],
-                "AddressKey": address_keys[idx],
-                "FormalFirstName": row_formal_first_name[idx],
-                "FirstName": first_name[idx],
-                "FirstNameType": first_name_type[idx],
-                "MiddleName": row_middle_names[idx],
-                "LastName": row_last_names[idx],
-                "Suffix": row_suffixes[idx],
-                "FormalFullName": row_formal_full_name[idx],
-                "FullName": full_name[idx],
-                "Gender": row_gender[idx],
-                "Ethnicity": row_ethnicity[idx],
-                "DOB": row_dob[idx],
-                "Age": row_age[idx],
-                "AgeBin": row_age_bin[idx],
-                "SSN": row_ssn[idx],
-                "Phone": row_phone[idx],
-                "ResidenceType": address_batch["ResidenceType"],
-                "ResidenceStreetNumber": address_batch["ResidenceStreetNumber"],
-                "ResidenceStreetName": address_batch["ResidenceStreetName"],
-                "ResidenceUnitType": address_batch["ResidenceUnitType"],
-                "ResidenceUnitNumber": address_batch["ResidenceUnitNumber"],
-                "ResidenceCity": address_batch["ResidenceCity"],
-                "ResidenceState": address_batch["ResidenceState"],
-                "ResidencePostalCode": address_batch["ResidencePostalCode"],
-                "ResidenceStartDate": residence_start_dates[idx],
-                "ResidenceEndDate": residence_end_dates[idx],
-                "MailingAddressMode": address_batch["MailingAddressMode"],
-                "MailingStreetNumber": address_batch["MailingStreetNumber"],
-                "MailingStreetName": address_batch["MailingStreetName"],
-                "MailingUnitType": address_batch["MailingUnitType"],
-                "MailingUnitNumber": address_batch["MailingUnitNumber"],
-                "MailingCity": address_batch["MailingCity"],
-                "MailingState": address_batch["MailingState"],
-                "MailingPostalCode": address_batch["MailingPostalCode"],
-            },
-            columns=output_columns,
-        )
-        df = _uppercase_text_columns(df)
+            df = pd.DataFrame(
+                {
+                    "RecordKey": record_keys[idx],
+                    "PersonKey": person_keys[idx],
+                    "EntityRecordIndex": entity_record_index[idx],
+                    "AddressKey": address_keys[idx],
+                    "FormalFirstName": row_formal_first_name[idx],
+                    "FirstName": first_name[idx],
+                    "FirstNameType": first_name_type[idx],
+                    "MiddleName": row_middle_names[idx],
+                    "LastName": row_last_names[idx],
+                    "Suffix": row_suffixes[idx],
+                    "FormalFullName": row_formal_full_name[idx],
+                    "FullName": full_name[idx],
+                    "Gender": row_gender[idx],
+                    "Ethnicity": row_ethnicity[idx],
+                    "DOB": row_dob[idx],
+                    "Age": row_age[idx],
+                    "AgeBin": row_age_bin[idx],
+                    "SSN": row_ssn[idx],
+                    "Phone": row_phone[idx],
+                    "ResidenceType": address_batch["ResidenceType"],
+                    "ResidenceStreetNumber": address_batch["ResidenceStreetNumber"],
+                    "ResidenceStreetName": address_batch["ResidenceStreetName"],
+                    "ResidenceUnitType": address_batch["ResidenceUnitType"],
+                    "ResidenceUnitNumber": address_batch["ResidenceUnitNumber"],
+                    "ResidenceCity": address_batch["ResidenceCity"],
+                    "ResidenceState": address_batch["ResidenceState"],
+                    "ResidencePostalCode": address_batch["ResidencePostalCode"],
+                    "ResidenceStartDate": residence_start_dates[idx],
+                    "ResidenceEndDate": residence_end_dates[idx],
+                    "MailingAddressMode": address_batch["MailingAddressMode"],
+                    "MailingStreetNumber": address_batch["MailingStreetNumber"],
+                    "MailingStreetName": address_batch["MailingStreetName"],
+                    "MailingUnitType": address_batch["MailingUnitType"],
+                    "MailingUnitNumber": address_batch["MailingUnitNumber"],
+                    "MailingCity": address_batch["MailingCity"],
+                    "MailingState": address_batch["MailingState"],
+                    "MailingPostalCode": address_batch["MailingPostalCode"],
+                },
+                columns=output_columns,
+            )
+            df = _uppercase_text_columns(df)
 
-        if output_format == "csv":
-            df.to_csv(output_path, index=False, mode="a", header=(chunk_start == 0))
-        else:
-            part_path = parts_dir / f"part_{(chunk_start // chunk_size) + 1:05d}.parquet"
-            df.to_parquet(part_path, index=False)
-            chunk_files.append(str(part_path))
-
-        gender_counts.update(df["Gender"].astype(str).tolist())
-        ethnicity_counts.update(df["Ethnicity"].astype(str).tolist())
-        age_bin_counts.update(df["AgeBin"].astype(str).tolist())
-
-        for col in output_columns:
-            series = df[col]
-            if pd.api.types.is_numeric_dtype(series):
-                missing_counts[col] += int(series.isna().sum())
+            if output_format == "csv":
+                df.to_csv(output_path, index=False, mode="a", header=(chunk_start == 0))
+            elif output_format == "txt":
+                df.to_csv(output_path, index=False, mode="a", header=(chunk_start == 0), sep="\t")
+            elif output_format == "xlsx":
+                if excel_writer is None:
+                    raise RuntimeError("Excel writer was not initialized")
+                write_header = chunk_start == 0
+                df.to_excel(
+                    excel_writer,
+                    sheet_name="Phase1",
+                    index=False,
+                    header=write_header,
+                    startrow=excel_next_row,
+                )
+                excel_next_row += len(df) + (1 if write_header else 0)
             else:
-                missing_counts[col] += int(series.fillna("").astype(str).str.strip().eq("").sum())
+                if parts_dir is None:
+                    raise RuntimeError("Parquet parts directory was not initialized")
+                part_path = parts_dir / f"part_{(chunk_start // chunk_size) + 1:05d}.parquet"
+                df.to_parquet(part_path, index=False)
+                chunk_files.append(str(part_path))
 
-    achieved_gender_pct = _distribution_pct(gender_counts, n_records)
-    achieved_ethnicity_pct = _distribution_pct(ethnicity_counts, n_records)
-    achieved_age_pct = _distribution_pct(age_bin_counts, n_records)
+            gender_counts.update(df["Gender"].astype(str).tolist())
+            ethnicity_counts.update(df["Ethnicity"].astype(str).tolist())
+            age_bin_counts.update(df["AgeBin"].astype(str).tolist())
+
+            for col in output_columns:
+                series = df[col]
+                if pd.api.types.is_numeric_dtype(series):
+                    missing_counts[col] += int(series.isna().sum())
+                else:
+                    missing_counts[col] += int(series.fillna("").astype(str).str.strip().eq("").sum())
+    finally:
+        if excel_writer is not None:
+            excel_writer.close()
+
+    achieved_gender_pct = _distribution_pct(gender_counts, records_written)
+    achieved_ethnicity_pct = _distribution_pct(ethnicity_counts, records_written)
+    achieved_age_pct = _distribution_pct(age_bin_counts, records_written)
 
     tolerance_pct = float(phase1.get("quality", {}).get("distribution_tolerance_pct", 1.5))
     gender_checks = _within_tolerance(normalized_gender_pct, achieved_gender_pct, tolerance_pct)
     ethnicity_checks = _within_tolerance(normalized_ethnicity_pct, achieved_ethnicity_pct, tolerance_pct)
     age_checks = _within_tolerance(normalized_age_pct, achieved_age_pct, tolerance_pct)
 
-    missingness_pct = {col: (count / n_records) * 100.0 for col, count in missing_counts.items()}
-    entity_collision = _collision_metrics(entity_formal_full_name)
-    row_collision = _collision_metrics(full_name)
+    missingness_pct = {col: (count / records_written) * 100.0 for col, count in missing_counts.items()}
+    entity_first_name_collision = _collision_metrics(formal_first_names)
+    entity_last_name_collision = _collision_metrics(entity_last_names)
+    entity_formal_full_name_collision = _collision_metrics(entity_formal_full_name)
+    row_first_name_collision = _collision_metrics(row_formal_first_name)
+    row_last_name_collision = _collision_metrics(row_last_names)
+    row_formal_full_name_collision = _collision_metrics(row_formal_full_name)
+    row_display_full_name_collision = _collision_metrics(full_name)
 
-    nickname_usage_achieved_pct = float((first_name_type == "NICKNAME").sum()) / float(n_records) * 100.0
+    forced_first_name_metrics = _forced_duplicate_metric_block(first_name_dup_stats, n_people)
+    forced_last_name_metrics = _forced_duplicate_metric_block(last_name_dup_stats, n_people)
+    forced_full_name_metrics = _forced_duplicate_metric_block(full_name_dup_stats, n_people)
+
+    nickname_usage_achieved_pct = float((first_name_type == "NICKNAME").sum()) / float(records_written) * 100.0
     if nickname_enabled and nickname_mode == "per_person":
+        nickname_name_df = pd.DataFrame(
+            {
+                "PersonKey": person_keys.astype(str),
+                "FirstName": first_name.astype(str),
+                "FirstNameType": first_name_type.astype(str),
+            }
+        )
+        nickname_name_df = nickname_name_df[nickname_name_df["FirstNameType"] == "NICKNAME"]
         per_person_name_consistency = bool(
-            (
-                pd.DataFrame(
-                    {"PersonKey": person_keys.astype(str), "FirstName": first_name.astype(str)}
-                )
-                .groupby("PersonKey")["FirstName"]
+            nickname_name_df.empty
+            or (
+                nickname_name_df.groupby("PersonKey")["FirstName"]
                 .nunique()
                 .le(1)
                 .all()
@@ -1196,31 +1345,66 @@ def generate_phase1_dataset(
         "usage_pct_target": float(nick_cfg.get("usage_pct", 0.0)),
         "usage_pct_achieved": nickname_usage_achieved_pct,
         "per_person_consistency_check": per_person_name_consistency,
+        "formal_backup": nickname_formal_backup,
     }
 
     name_duplication_metrics: dict[str, Any] = {
-        "target_exact_full_name_people_pct": duplicate_name_pct,
+        "target_first_name_people_pct": first_name_duplicate_pct,
+        "target_last_name_people_pct": last_name_duplicate_pct,
+        "target_full_name_people_pct": full_name_duplicate_pct,
+        "target_exact_full_name_people_pct": full_name_duplicate_pct,
         "collision_group_min_size_requested": collision_min_size,
         "collision_group_max_size_requested": collision_max_size,
-        "forced_duplicate_name_groups": int(dup_stats["groups"]),
-        "forced_duplicate_name_pair_equivalent": int(dup_stats["pair_equivalent"]),
-        "forced_duplicate_name_pairs": int(dup_stats["pair_equivalent"]),
-        "forced_duplicate_name_people": int(dup_stats["people"]),
-        "forced_duplicate_name_people_pct": (float(dup_stats["people"]) / float(n_people)) * 100.0,
-        "forced_collision_group_min_size_observed": int(dup_stats["min_group_size_used"]),
-        "forced_collision_group_max_size_observed": int(dup_stats["max_group_size_used"]),
-        "entity_actual_duplicate_name_people_pct": entity_collision["duplicate_people_pct"],
-        "entity_actual_collision_group_count": entity_collision["collision_group_count"],
-        "entity_actual_collision_group_min_size": entity_collision["collision_group_min_size"],
-        "entity_actual_collision_group_max_size": entity_collision["collision_group_max_size"],
-        "row_actual_duplicate_name_people_pct": row_collision["duplicate_people_pct"],
-        "row_actual_collision_group_count": row_collision["collision_group_count"],
-        "row_actual_collision_group_min_size": row_collision["collision_group_min_size"],
-        "row_actual_collision_group_max_size": row_collision["collision_group_max_size"],
-        "actual_duplicate_name_people_pct": row_collision["duplicate_people_pct"],
-        "actual_collision_group_count": row_collision["collision_group_count"],
-        "actual_collision_group_min_size": row_collision["collision_group_min_size"],
-        "actual_collision_group_max_size": row_collision["collision_group_max_size"],
+        "forced_first_name": forced_first_name_metrics,
+        "forced_last_name": forced_last_name_metrics,
+        "forced_full_name": forced_full_name_metrics,
+        "forced_duplicate_name_groups": forced_full_name_metrics["groups"],
+        "forced_duplicate_name_pair_equivalent": forced_full_name_metrics["pair_equivalent"],
+        "forced_duplicate_name_pairs": forced_full_name_metrics["pairs"],
+        "forced_duplicate_name_people": forced_full_name_metrics["people"],
+        "forced_duplicate_name_people_pct": forced_full_name_metrics["people_pct"],
+        "forced_collision_group_min_size_observed": forced_full_name_metrics["collision_group_min_size_observed"],
+        "forced_collision_group_max_size_observed": forced_full_name_metrics["collision_group_max_size_observed"],
+        "entity_actual_first_name_duplicate_people_pct": entity_first_name_collision["duplicate_people_pct"],
+        "entity_actual_first_name_collision_group_count": entity_first_name_collision["collision_group_count"],
+        "entity_actual_first_name_collision_group_min_size": entity_first_name_collision["collision_group_min_size"],
+        "entity_actual_first_name_collision_group_max_size": entity_first_name_collision["collision_group_max_size"],
+        "entity_actual_last_name_duplicate_people_pct": entity_last_name_collision["duplicate_people_pct"],
+        "entity_actual_last_name_collision_group_count": entity_last_name_collision["collision_group_count"],
+        "entity_actual_last_name_collision_group_min_size": entity_last_name_collision["collision_group_min_size"],
+        "entity_actual_last_name_collision_group_max_size": entity_last_name_collision["collision_group_max_size"],
+        "entity_actual_full_name_duplicate_people_pct": entity_formal_full_name_collision["duplicate_people_pct"],
+        "entity_actual_full_name_collision_group_count": entity_formal_full_name_collision["collision_group_count"],
+        "entity_actual_full_name_collision_group_min_size": entity_formal_full_name_collision["collision_group_min_size"],
+        "entity_actual_full_name_collision_group_max_size": entity_formal_full_name_collision["collision_group_max_size"],
+        "entity_actual_duplicate_name_people_pct": entity_formal_full_name_collision["duplicate_people_pct"],
+        "entity_actual_collision_group_count": entity_formal_full_name_collision["collision_group_count"],
+        "entity_actual_collision_group_min_size": entity_formal_full_name_collision["collision_group_min_size"],
+        "entity_actual_collision_group_max_size": entity_formal_full_name_collision["collision_group_max_size"],
+        "row_actual_first_name_duplicate_people_pct": row_first_name_collision["duplicate_people_pct"],
+        "row_actual_first_name_collision_group_count": row_first_name_collision["collision_group_count"],
+        "row_actual_first_name_collision_group_min_size": row_first_name_collision["collision_group_min_size"],
+        "row_actual_first_name_collision_group_max_size": row_first_name_collision["collision_group_max_size"],
+        "row_actual_last_name_duplicate_people_pct": row_last_name_collision["duplicate_people_pct"],
+        "row_actual_last_name_collision_group_count": row_last_name_collision["collision_group_count"],
+        "row_actual_last_name_collision_group_min_size": row_last_name_collision["collision_group_min_size"],
+        "row_actual_last_name_collision_group_max_size": row_last_name_collision["collision_group_max_size"],
+        "row_actual_full_name_duplicate_people_pct": row_formal_full_name_collision["duplicate_people_pct"],
+        "row_actual_full_name_collision_group_count": row_formal_full_name_collision["collision_group_count"],
+        "row_actual_full_name_collision_group_min_size": row_formal_full_name_collision["collision_group_min_size"],
+        "row_actual_full_name_collision_group_max_size": row_formal_full_name_collision["collision_group_max_size"],
+        "row_actual_display_full_name_duplicate_people_pct": row_display_full_name_collision["duplicate_people_pct"],
+        "row_actual_display_full_name_collision_group_count": row_display_full_name_collision["collision_group_count"],
+        "row_actual_display_full_name_collision_group_min_size": row_display_full_name_collision["collision_group_min_size"],
+        "row_actual_display_full_name_collision_group_max_size": row_display_full_name_collision["collision_group_max_size"],
+        "row_actual_duplicate_name_people_pct": row_display_full_name_collision["duplicate_people_pct"],
+        "row_actual_collision_group_count": row_display_full_name_collision["collision_group_count"],
+        "row_actual_collision_group_min_size": row_display_full_name_collision["collision_group_min_size"],
+        "row_actual_collision_group_max_size": row_display_full_name_collision["collision_group_max_size"],
+        "actual_duplicate_name_people_pct": row_display_full_name_collision["duplicate_people_pct"],
+        "actual_collision_group_count": row_display_full_name_collision["collision_group_count"],
+        "actual_collision_group_min_size": row_display_full_name_collision["collision_group_min_size"],
+        "actual_collision_group_max_size": row_display_full_name_collision["collision_group_max_size"],
     }
 
     exact_uniqueness_check_max = int(phase1.get("quality", {}).get("exact_uniqueness_check_max_rows", 250000))
@@ -1242,12 +1426,12 @@ def generate_phase1_dataset(
             "full_address": 0,
         },
     }
-    if n_records <= exact_uniqueness_check_max:
-        if output_format == "csv":
-            check_df = pd.read_csv(output_path, dtype=str)
-        else:
-            frames = [pd.read_parquet(path) for path in chunk_files]
-            check_df = pd.concat(frames, ignore_index=True).astype(str)
+    if records_written <= exact_uniqueness_check_max:
+        check_df = _read_generated_output(
+            output_format=output_format,
+            output_path=output_path,
+            chunk_files=chunk_files,
+        )
         full_address_cols = [
             "ResidenceStreetNumber",
             "ResidenceStreetName",
@@ -1262,25 +1446,97 @@ def generate_phase1_dataset(
         address_dups = int(check_df.duplicated(["AddressKey"]).sum())
         full_dups = int(check_df.duplicated(full_address_cols).sum())
         same_person_address_dups = int(check_df.duplicated(["PersonKey"] + full_address_cols).sum())
-        person_counts = check_df["PersonKey"].value_counts()
-        within_bounds = bool(
-            person_counts.ge(min_records_per_entity).all()
-            and person_counts.le(max_records_per_entity).all()
+        person_counts = check_df["PersonKey"].value_counts().astype(int)
+        expected_person_counts = pd.Series(
+            actual_records_per_entity.astype(int),
+            index=entity_person_keys.astype(str),
         )
-        row_collision_check = _collision_metrics(check_df["FullName"].astype(str).to_numpy())
-        name_duplication_metrics["row_actual_duplicate_name_people_pct"] = row_collision_check["duplicate_people_pct"]
-        name_duplication_metrics["row_actual_collision_group_count"] = row_collision_check["collision_group_count"]
-        name_duplication_metrics["row_actual_collision_group_min_size"] = row_collision_check["collision_group_min_size"]
-        name_duplication_metrics["row_actual_collision_group_max_size"] = row_collision_check["collision_group_max_size"]
-        name_duplication_metrics["actual_duplicate_name_people_pct"] = row_collision_check["duplicate_people_pct"]
-        name_duplication_metrics["actual_collision_group_count"] = row_collision_check["collision_group_count"]
-        name_duplication_metrics["actual_collision_group_min_size"] = row_collision_check["collision_group_min_size"]
-        name_duplication_metrics["actual_collision_group_max_size"] = row_collision_check["collision_group_max_size"]
+        aligned_person_counts = person_counts.reindex(expected_person_counts.index, fill_value=0).astype(int)
+        within_bounds = bool(
+            aligned_person_counts.ge(min_records_per_entity).all()
+            and aligned_person_counts.eq(expected_person_counts).all()
+        )
+        row_first_name_collision_check = _collision_metrics(check_df["FormalFirstName"].astype(str).to_numpy())
+        row_last_name_collision_check = _collision_metrics(check_df["LastName"].astype(str).to_numpy())
+        row_formal_full_name_collision_check = _collision_metrics(check_df["FormalFullName"].astype(str).to_numpy())
+        row_display_full_name_collision_check = _collision_metrics(check_df["FullName"].astype(str).to_numpy())
+        name_duplication_metrics["row_actual_first_name_duplicate_people_pct"] = row_first_name_collision_check[
+            "duplicate_people_pct"
+        ]
+        name_duplication_metrics["row_actual_first_name_collision_group_count"] = row_first_name_collision_check[
+            "collision_group_count"
+        ]
+        name_duplication_metrics["row_actual_first_name_collision_group_min_size"] = row_first_name_collision_check[
+            "collision_group_min_size"
+        ]
+        name_duplication_metrics["row_actual_first_name_collision_group_max_size"] = row_first_name_collision_check[
+            "collision_group_max_size"
+        ]
+        name_duplication_metrics["row_actual_last_name_duplicate_people_pct"] = row_last_name_collision_check[
+            "duplicate_people_pct"
+        ]
+        name_duplication_metrics["row_actual_last_name_collision_group_count"] = row_last_name_collision_check[
+            "collision_group_count"
+        ]
+        name_duplication_metrics["row_actual_last_name_collision_group_min_size"] = row_last_name_collision_check[
+            "collision_group_min_size"
+        ]
+        name_duplication_metrics["row_actual_last_name_collision_group_max_size"] = row_last_name_collision_check[
+            "collision_group_max_size"
+        ]
+        name_duplication_metrics["row_actual_full_name_duplicate_people_pct"] = row_formal_full_name_collision_check[
+            "duplicate_people_pct"
+        ]
+        name_duplication_metrics["row_actual_full_name_collision_group_count"] = row_formal_full_name_collision_check[
+            "collision_group_count"
+        ]
+        name_duplication_metrics["row_actual_full_name_collision_group_min_size"] = row_formal_full_name_collision_check[
+            "collision_group_min_size"
+        ]
+        name_duplication_metrics["row_actual_full_name_collision_group_max_size"] = row_formal_full_name_collision_check[
+            "collision_group_max_size"
+        ]
+        name_duplication_metrics[
+            "row_actual_display_full_name_duplicate_people_pct"
+        ] = row_display_full_name_collision_check["duplicate_people_pct"]
+        name_duplication_metrics["row_actual_display_full_name_collision_group_count"] = (
+            row_display_full_name_collision_check["collision_group_count"]
+        )
+        name_duplication_metrics["row_actual_display_full_name_collision_group_min_size"] = (
+            row_display_full_name_collision_check["collision_group_min_size"]
+        )
+        name_duplication_metrics["row_actual_display_full_name_collision_group_max_size"] = (
+            row_display_full_name_collision_check["collision_group_max_size"]
+        )
+        name_duplication_metrics["row_actual_duplicate_name_people_pct"] = row_display_full_name_collision_check[
+            "duplicate_people_pct"
+        ]
+        name_duplication_metrics["row_actual_collision_group_count"] = row_display_full_name_collision_check[
+            "collision_group_count"
+        ]
+        name_duplication_metrics["row_actual_collision_group_min_size"] = row_display_full_name_collision_check[
+            "collision_group_min_size"
+        ]
+        name_duplication_metrics["row_actual_collision_group_max_size"] = row_display_full_name_collision_check[
+            "collision_group_max_size"
+        ]
+        name_duplication_metrics["actual_duplicate_name_people_pct"] = row_display_full_name_collision_check[
+            "duplicate_people_pct"
+        ]
+        name_duplication_metrics["actual_collision_group_count"] = row_display_full_name_collision_check[
+            "collision_group_count"
+        ]
+        name_duplication_metrics["actual_collision_group_min_size"] = row_display_full_name_collision_check[
+            "collision_group_min_size"
+        ]
+        name_duplication_metrics["actual_collision_group_max_size"] = row_display_full_name_collision_check[
+            "collision_group_max_size"
+        ]
         uniqueness_checks = {
             "record_key_unique": record_dups == 0,
             "person_key_unique": person_dups == 0,
             "person_key_entity_count_matches": int(check_df["PersonKey"].nunique()) == n_people,
-            "row_count_matches": int(len(check_df)) == n_records,
+            "row_count_matches": int(len(check_df)) == records_written,
             "address_key_unique": address_dups == 0,
             "full_address_unique": full_dups == 0,
             "records_per_entity_within_bounds": within_bounds,
@@ -1304,9 +1560,11 @@ def generate_phase1_dataset(
         "run_id": f"{stem}_{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}",
         "seed": seed,
         "n_people": n_people,
-        "n_records": n_records,
-        "records_requested": n_records,
-        "records_written": n_records,
+        "n_records": records_requested,
+        "records_requested": records_requested,
+        "records_written": records_written,
+        "formal_copy_records_added": formal_copy_records_added,
+        "nickname_formal_backup": nickname_formal_backup,
         "output_format": output_format,
         "output_path": str(output_path),
         "output_parts": chunk_files,
@@ -1322,11 +1580,19 @@ def generate_phase1_dataset(
             "shape": redundancy_shape,
             "heavy_tail_alpha": heavy_tail_alpha,
             "records_per_entity_stats": {
-                "min": redundancy_stats.min_records_per_entity,
-                "max": redundancy_stats.max_records_per_entity,
-                "mean": redundancy_stats.mean_records_per_entity,
+                "min": actual_redundancy_stats.min_records_per_entity,
+                "max": actual_redundancy_stats.max_records_per_entity,
+                "mean": actual_redundancy_stats.mean_records_per_entity,
                 "records_per_entity_distribution": {
-                    str(k): int(v) for k, v in redundancy_stats.distribution.items()
+                    str(k): int(v) for k, v in actual_redundancy_stats.distribution.items()
+                },
+            },
+            "requested_records_per_entity_stats": {
+                "min": requested_redundancy_stats.min_records_per_entity,
+                "max": requested_redundancy_stats.max_records_per_entity,
+                "mean": requested_redundancy_stats.mean_records_per_entity,
+                "records_per_entity_distribution": {
+                    str(k): int(v) for k, v in requested_redundancy_stats.distribution.items()
                 },
             },
         },
@@ -1368,7 +1634,11 @@ def generate_phase1_dataset(
     quality_report = {
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "entity_count": n_people,
-        "row_count": n_records,
+        "row_count": records_written,
+        "records_requested": records_requested,
+        "records_written": records_written,
+        "formal_copy_records_added": formal_copy_records_added,
+        "nickname_formal_backup": nickname_formal_backup,
         "tolerance_pct": tolerance_pct,
         "expected_distributions_pct": {
             "gender": normalized_gender_pct,
@@ -1395,8 +1665,13 @@ def generate_phase1_dataset(
     return {
         "output_path": str(output_path),
         "output_parts": chunk_files,
+        "output_format": output_format,
         "manifest_path": str(manifest_path),
         "quality_report_path": str(quality_path),
         "n_people": n_people,
-        "n_records": n_records,
+        "n_records": records_requested,
+        "records_requested": records_requested,
+        "records_written": records_written,
+        "formal_copy_records_added": formal_copy_records_added,
+        "nickname_formal_backup": nickname_formal_backup,
     }

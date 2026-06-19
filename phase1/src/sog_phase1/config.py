@@ -16,6 +16,58 @@ class NormalizedDistribution:
     normalized: bool
 
 
+CANONICAL_OUTPUT_FORMATS = {"csv", "parquet", "txt", "xlsx"}
+OUTPUT_FORMAT_ALIASES = {"excel": "xlsx", "excell": "xlsx", "paraquet": "parquet"}
+EXCEL_MAX_WORKSHEET_ROWS = 1_048_576
+
+
+def normalize_output_format(value: Any) -> str:
+    output_format = str(value).strip().lower()
+    return OUTPUT_FORMAT_ALIASES.get(output_format, output_format)
+
+
+def _resolve_percentage_aliases(
+    cfg: dict[str, Any],
+    *,
+    canonical_key: str,
+    aliases: tuple[str, ...] = (),
+) -> float:
+    values: list[tuple[str, float]] = []
+    for key in (canonical_key, *aliases):
+        if key in cfg and cfg[key] is not None:
+            values.append((key, float(cfg[key])))
+
+    if not values:
+        return 0.0
+
+    first_key, first_value = values[0]
+    for key, value in values[1:]:
+        if abs(value - first_value) > 1e-9:
+            raise ValueError(
+                f"name_duplication.{canonical_key} conflicts with name_duplication.{key}; "
+                f"use one value for the same control"
+            )
+    return first_value
+
+
+def resolve_name_duplication_percentages(name_dup_cfg: dict[str, Any]) -> dict[str, float]:
+    return {
+        "first_name": _resolve_percentage_aliases(
+            name_dup_cfg,
+            canonical_key="first_name_people_pct",
+        ),
+        "last_name": _resolve_percentage_aliases(
+            name_dup_cfg,
+            canonical_key="last_name_people_pct",
+        ),
+        "full_name": _resolve_percentage_aliases(
+            name_dup_cfg,
+            canonical_key="full_name_people_pct",
+            aliases=("exact_full_name_people_pct",),
+        ),
+    }
+
+
 def resolve_counts(phase1: dict[str, Any]) -> tuple[int, int]:
     if phase1.get("n_people") is None:
         raise ValueError("phase1.n_people is required")
@@ -133,9 +185,14 @@ def validate_phase1_core(phase1: dict[str, Any]) -> None:
         raise ValueError(f"phase1.seed must be between 0 and {max_seed}")
 
     output_cfg = phase1.get("output", {})
-    output_format = str(output_cfg.get("format", "csv")).lower()
-    if output_format not in {"csv", "parquet"}:
-        raise ValueError("phase1.output.format must be one of: csv, parquet")
+    output_format = normalize_output_format(output_cfg.get("format", "csv"))
+    if output_format not in CANONICAL_OUTPUT_FORMATS:
+        raise ValueError("phase1.output.format must be one of: csv, parquet, txt, xlsx, excel")
+    if output_format == "xlsx" and n_records > EXCEL_MAX_WORKSHEET_ROWS - 1:
+        raise ValueError(
+            "phase1.output.format=xlsx can write at most "
+            f"{EXCEL_MAX_WORKSHEET_ROWS - 1} data rows because Excel reserves one row for headers"
+        )
 
     chunk_size = int(output_cfg.get("chunk_size", 0))
     if chunk_size <= 0:
@@ -159,9 +216,10 @@ def validate_phase1_core(phase1: dict[str, Any]) -> None:
         raise ValueError("address.apartment.units_per_building must be > 0")
 
     name_dup_cfg = phase1.get("name_duplication", {})
-    exact_name_pct = float(name_dup_cfg.get("exact_full_name_people_pct", 0.0))
-    if exact_name_pct < 0 or exact_name_pct > 100:
-        raise ValueError("name_duplication.exact_full_name_people_pct must be between 0 and 100")
+    duplicate_pcts = resolve_name_duplication_percentages(name_dup_cfg)
+    for key, value in duplicate_pcts.items():
+        if value < 0 or value > 100:
+            raise ValueError(f"name_duplication.{key}_people_pct must be between 0 and 100")
     min_collision_size = int(name_dup_cfg.get("collision_group_min_size", 2))
     max_collision_size = int(name_dup_cfg.get("collision_group_max_size", 2))
     if min_collision_size < 2:

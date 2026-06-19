@@ -113,17 +113,20 @@ If `n_people = 10000` and `n_records = 14000`, then the generator creates 10,000
 
 | Key | Meaning | What it changes |
 |---|---|---|
-| `phase1.output.format` | Output storage format. Valid values: `csv`, `parquet`. | Changes whether the main artifact is a CSV file or parquet parts. |
-| `phase1.output.path` | Output path relative to the Phase-1 project root. | Controls where the dataset is written. |
+| `phase1.output.format` | Output storage format. Valid values: `csv`, `parquet`, `txt`, `xlsx`, `excel`. | Changes whether the main artifact is a CSV file, tab-delimited text file, Excel workbook, or parquet parts. `excel` is an alias for `xlsx`. |
+| `phase1.output.path` | Output path relative to the Phase-1 project root. | Controls where the dataset is written. If this path has a known output suffix such as `.csv`, the generator replaces it with the selected format's viewable suffix when needed. |
 | `phase1.output.chunk_size` | Maximum rows written per chunk. | Controls write batching and memory behavior, especially for large runs. |
 
 ### `name_duplication`
 
-This section creates exact full-name collisions across different people. It is not row duplication. It is entity-level name collision pressure.
+This section creates name collisions across different people. It is not row duplication. It is entity-level name collision pressure that can target first name, last name, or exact formal full name.
 
 | Key | Meaning | What it changes |
 |---|---|---|
-| `phase1.name_duplication.exact_full_name_people_pct` | Target percent of people who should participate in exact duplicate-name groups. | Increases the chance that distinct people share the same full formal name. |
+| `phase1.name_duplication.first_name_people_pct` | Target percent of people who should participate in forced formal first-name collision groups. | Increases first-name ambiguity without necessarily changing surnames or full names. |
+| `phase1.name_duplication.last_name_people_pct` | Target percent of people who should participate in forced last-name collision groups. | Increases surname ambiguity without necessarily changing first names or full names. |
+| `phase1.name_duplication.full_name_people_pct` | Target percent of people who should participate in exact duplicate-full-name groups. | Increases the chance that distinct people share the same first, middle, last, and suffix values. |
+| `phase1.name_duplication.exact_full_name_people_pct` | Legacy alias for `full_name_people_pct`. | Keeps older configs working; new configs should use `full_name_people_pct`. |
 | `phase1.name_duplication.collision_group_min_size` | Smallest duplicate-name group size. | Prevents trivial one-pair-only collisions if you want more realistic common-name clusters. |
 | `phase1.name_duplication.collision_group_max_size` | Largest duplicate-name group size. | Caps how large a same-name collision cluster can grow. |
 

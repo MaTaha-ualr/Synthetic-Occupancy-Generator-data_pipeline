@@ -87,7 +87,7 @@ Use this when:
 Recommended direction:
 
 - keep `n_records` close to `n_people`
-- reduce `name_duplication.exact_full_name_people_pct`
+- reduce `name_duplication.full_name_people_pct`
 - disable or minimize `nicknames`
 - keep `fill_rates.phone` high
 - keep `fill_rates.middle_name` and `fill_rates.suffix` stable rather than sparse
@@ -99,7 +99,7 @@ phase1:
   n_people: 10000
   n_records: 10000
   name_duplication:
-    exact_full_name_people_pct: 5.0
+    full_name_people_pct: 5.0
   redundancy:
     enabled: false
   nicknames:
@@ -186,7 +186,7 @@ Use this when:
 
 Recommended direction:
 
-- raise `name_duplication.exact_full_name_people_pct`
+- raise `name_duplication.full_name_people_pct`
 - keep noise low at first so the effect is measurable
 
 Example direction:
@@ -194,7 +194,7 @@ Example direction:
 ```yaml
 phase1:
   name_duplication:
-    exact_full_name_people_pct: 40.0
+    full_name_people_pct: 40.0
     collision_group_min_size: 2
     collision_group_max_size: 5
 ```
@@ -566,7 +566,7 @@ Why this works:
 
 ### If you want easier linkage
 
-- lower Phase-1 `name_duplication.exact_full_name_people_pct`
+- lower Phase-1 `name_duplication.full_name_people_pct`
 - lower Phase-1 redundancy
 - disable Phase-1 nicknames
 - keep `crossfile_match_mode: one_to_one`

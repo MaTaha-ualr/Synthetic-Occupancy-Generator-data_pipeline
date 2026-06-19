@@ -13,7 +13,9 @@ outputs/
 outputs_v1/
 .frontend_state/
 phase1/prepared/
-phase1/outputs/
+!phase1/outputs/
+phase1/outputs/*
+!phase1/outputs/README.md
 phase1/outputs_phase1/*
 !phase1/outputs_phase1/README.md
 

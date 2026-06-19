@@ -113,7 +113,7 @@ Notes:
 - `phase1.nicknames.usage_pct`: target percentage of rows using nickname first names
 - `phase1.seed`: random seed for reproducibility
 - `phase1.output`: output format/path/chunk size
-- `phase1.name_duplication.exact_full_name_people_pct`: target percent of rows that should have duplicated exact full name
+- `phase1.name_duplication.first_name_people_pct` / `last_name_people_pct` / `full_name_people_pct`: target percent of people that should share a first name, last name, or exact formal full name
 - `phase1.name_duplication.collision_group_min_size`: minimum people in one duplicate-name group
 - `phase1.name_duplication.collision_group_max_size`: maximum people in one duplicate-name group
 - `phase1.distributions.gender`: gender target percentages
