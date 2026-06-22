@@ -25,6 +25,32 @@ from visualizations.theme import (
 )
 
 
+class _NoiseRadarHtmlFallback:
+    """Minimal HTML chart object used when Plotly is unavailable."""
+
+    def __init__(self, labels: list[str], values_by_trace: dict[str, list[float]]) -> None:
+        self.labels = labels
+        self.values_by_trace = values_by_trace
+
+    def write_html(self, path: str, *_args: Any, **_kwargs: Any) -> None:
+        import html
+
+        header_cells = "".join(f"<th>{html.escape(label)}</th>" for label in self.labels)
+        rows = []
+        for dataset, values in self.values_by_trace.items():
+            value_cells = "".join(f"<td>{float(value):.2f}</td>" for value in values)
+            rows.append(f"<tr><th>{html.escape(dataset)}</th>{value_cells}</tr>")
+        body = "".join(rows)
+        content = (
+            "<html><head><meta charset=\"utf-8\"><title>Noise Profile</title></head>"
+            "<body><h1>Noise Profile by Observed Dataset</h1>"
+            "<table><thead><tr><th>Dataset</th>"
+            f"{header_cells}</tr></thead><tbody>{body}</tbody></table>"
+            "</body></html>"
+        )
+        Path(path).write_text(content, encoding="utf-8")
+
+
 def _load_pyplot():
     """Use a non-interactive backend for tests and headless runs."""
     import matplotlib
@@ -79,8 +105,12 @@ def _observed_dataset_files(run_dir: Path) -> list[tuple[str, Path]]:
 
 def generate_noise_radar(run_dir: Path, fmt: str = "html") -> tuple[Any, dict[str, Any]]:
     """Dual radar chart for Dataset A vs B across the main noise dimensions."""
-    import plotly.graph_objects as go
     import yaml
+
+    try:
+        import plotly.graph_objects as go
+    except ImportError:
+        go = None
 
     scen_path = run_dir / "scenario.yaml"
     if not scen_path.exists():
@@ -176,6 +206,9 @@ def generate_noise_radar(run_dir: Path, fmt: str = "html") -> tuple[Any, dict[st
         data["name_noise_b"] = dataset_name_noise[second_label]
         data["phonetic_b"] = float(second_noise.get("phonetic_error_pct", 0.0) or 0.0)
         data["nickname_b"] = float(second_noise.get("nickname_pct", 0.0) or 0.0)
+
+    if go is None:
+        return _NoiseRadarHtmlFallback(labels, values_by_trace), data
 
     fig = go.Figure()
     for idx, (label, _noise, color, dash) in enumerate(traces):

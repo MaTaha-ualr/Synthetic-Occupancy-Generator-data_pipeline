@@ -1,5 +1,9 @@
 # SOG Complete User Guide
 
+> Current note: this older long-form guide is retained for context. For the
+> current working-tree paths, commands, scenario contract, and generated PDF,
+> use `docs/SOG_BIBLE.md` and `The_SOG_Bible_v2.pdf`.
+
 Last updated: March 5, 2026
 
 This document is the single, end-to-end guide for the SOG project in this repository. It explains:
@@ -58,10 +62,10 @@ Phase-2 simulates on truth entities first, then emits observed records.
 
 SOG is split into major layers:
 
-1. **Phase-1 baseline generation** (`outputs/Phase1_people_addresses.csv` + metadata).
-2. **Phase-2 parameter layer** (public-source priors in `Data/phase2_params/`).
+1. **Phase-1 baseline generation** (`phase1/outputs_phase1/Phase1_people_addresses.csv` + metadata).
+2. **Phase-2 parameter layer** (public-source priors in `phase2/Data/phase2_params/`).
 3. **Scenario selection layer** (deterministic participant selection and latent traits).
-4. **Truth simulation layer** (event-driven timeline: MOVE, COHABIT, BIRTH, DIVORCE, LEAVE_HOME).
+4. **Truth simulation layer** (event-driven timeline: MOVE, COHABIT, BIRTH, DIVORCE, LEAVE_HOME, DEATH, NAME_CHANGE, ADOPTION).
 5. **Observed emission layer** (observed dataset CSVs plus truth mappings under configurable overlap/cardinality/noise).
 6. **Quality layer** (truth consistency + scenario metrics + ER benchmark metrics).
 7. **Validation and regression tests** (contract validation and scenario behavior tests).
@@ -74,10 +78,10 @@ Key directories and files:
 
 - `configs/phase1.yaml`: Phase-1 generation config.
 - `outputs/`: Phase-1 generated artifacts (baseline + manifest + quality report).
-- `Data/phase2_params/`: source-citable parameter tables loaded by Phase-2.
+- `phase2/Data/phase2_params/`: source-citable parameter tables loaded by Phase-2.
 - `phase2/scenarios/*.yaml`: scenario definitions.
 - `phase2/runs/<run_id>/`: per-run outputs and metadata.
-- `src/sog_phase2/`:
+- `phase2/src/sog_phase2/`:
   - `selection.py`: deterministic population selection + latent trait assignment.
   - `constraints.py`: eligibility and realism/novelty constraint checks.
   - `event_grammar.py`: truth event schema and validators.
@@ -91,7 +95,7 @@ Key directories and files:
   - `generate_phase2_truth.py`
   - `generate_phase2_observed.py`
   - `validate_phase2_outputs.py`
-- `tests/test_phase2_*.py`: unit + regression tests for all layers.
+- `phase2/tests/test_phase2_*.py`: unit + regression tests for all layers.
 
 ---
 
@@ -111,7 +115,6 @@ source .venv/bin/activate   # Linux/macOS
 # or .\.venv\Scripts\Activate.ps1 on Windows PowerShell
 
 pip install -r requirements.txt
-pip install -r requirements-dev.txt
 ```
 
 ---
@@ -122,15 +125,15 @@ Phase-2 assumes the Phase-1 contract is frozen.
 
 Canonical files:
 
-- `outputs/Phase1_people_addresses.csv`
-- `outputs/Phase1_people_addresses.manifest.json`
-- `outputs/Phase1_people_addresses.quality_report.json`
+- `phase1/outputs_phase1/Phase1_people_addresses.csv`
+- `phase1/outputs_phase1/Phase1_people_addresses.manifest.json`
+- `phase1/outputs_phase1/Phase1_people_addresses.quality_report.json`
 
 Generate Phase-1 if needed:
 
 ```bash
-python scripts/build_prepared.py --raw-root . --prepared-dir prepared
-python scripts/generate_phase1.py --config configs/phase1.yaml --prepared-dir prepared --overwrite
+python phase1/scripts/build_prepared.py
+python phase1/scripts/generate_phase1.py --overwrite
 ```
 
 Important design decision:
@@ -159,17 +162,17 @@ Example:
 Preferred:
 
 ```bash
-python scripts/generate_phase2_truth.py --run-id 2026-03-14_roommates_split_seed20260314
+python phase2/scripts/generate_phase2_truth.py --run-id 2026-03-14_roommates_split_seed20260314
 ```
 
 Legacy-compatible:
 
 ```bash
-python scripts/generate_phase2_truth.py \
+python phase2/scripts/generate_phase2_truth.py \
   --scenario roommates_split \
   --seed 20260314 \
   --run-date 2026-03-14 \
-  --phase1 outputs/Phase1_people_addresses.csv
+  --phase1 phase1/outputs_phase1/Phase1_people_addresses.csv
 ```
 
 ### 7.3 Observed emission
@@ -177,13 +180,13 @@ python scripts/generate_phase2_truth.py \
 Preferred:
 
 ```bash
-python scripts/generate_phase2_observed.py --run-id 2026-03-14_roommates_split_seed20260314
+python phase2/scripts/generate_phase2_observed.py --run-id 2026-03-14_roommates_split_seed20260314
 ```
 
 Legacy-compatible:
 
 ```bash
-python scripts/generate_phase2_observed.py --run phase2/runs/2026-03-14_roommates_split_seed20260314
+python phase2/scripts/generate_phase2_observed.py --run phase2/runs/2026-03-14_roommates_split_seed20260314
 ```
 
 ### 7.4 Validation
@@ -191,13 +194,13 @@ python scripts/generate_phase2_observed.py --run phase2/runs/2026-03-14_roommate
 Preferred:
 
 ```bash
-python scripts/validate_phase2_outputs.py --run-id 2026-03-14_roommates_split_seed20260314
+python phase2/scripts/validate_phase2_outputs.py --run-id 2026-03-14_roommates_split_seed20260314
 ```
 
 Legacy-compatible:
 
 ```bash
-python scripts/validate_phase2_outputs.py --run phase2/runs/2026-03-14_roommates_split_seed20260314
+python phase2/scripts/validate_phase2_outputs.py --run phase2/runs/2026-03-14_roommates_split_seed20260314
 ```
 
 ### 7.5 Overwrite behavior
@@ -206,22 +209,20 @@ python scripts/validate_phase2_outputs.py --run phase2/runs/2026-03-14_roommates
 - Add `--overwrite` to replace existing files.
 
 ---
-Use this exact sequence from repo root h:\AAA_Taha\SOG_DATASETS\SOG.
+Use this sequence from the repository root.
 
 1. Setup env + deps
 
 ..1..|python -m venv .venv
 ..2..|.\.venv\Scripts\Activate.ps1
 ..3..|pip install -r requirements.txt
-..4..|pip install -r requirements-dev.txt
-
 2. Build Phase-1 baseline (only needed if not already generated)
-..1..|python scripts/build_prepared.py --raw-root . --prepared-dir prepared
-..2..|python scripts/generate_phase1.py --config configs/phase1.yaml --prepared-dir prepared --overwrite
+..1..|python phase1/scripts/build_prepared.py
+..2..|python phase1/scripts/generate_phase1.py --overwrite
 3. Run one Phase-2 scenario (example: roommates_split)
-..1..|python scripts/generate_phase2_truth.py --run-id 2026-03-14_roommates_split_seed20260314
-..2..|python scripts/generate_phase2_observed.py --run-id 2026-03-14_roommates_split_seed20260314
-..3..|python scripts/validate_phase2_outputs.py --run-id 2026-03-14_roommates_split_seed20260314
+..1..|python phase2/scripts/generate_phase2_truth.py --run-id 2026-03-14_roommates_split_seed20260314
+..2..|python phase2/scripts/generate_phase2_observed.py --run-id 2026-03-14_roommates_split_seed20260314
+..3..|python phase2/scripts/validate_phase2_outputs.py --run-id 2026-03-14_roommates_split_seed20260314
 
 4. Run tests
 ..1..|python -m pytest -q
@@ -398,7 +399,7 @@ This is the ground-truth mapping for ER scoring.
 
 ## 11) Output Contract and Validator
 
-Contract is defined in `src/sog_phase2/output_contract.py`.
+Contract is defined in `phase2/src/sog_phase2/output_contract.py`.
 
 Validator checks:
 
@@ -412,7 +413,7 @@ Validator checks:
 Run validator:
 
 ```bash
-python scripts/validate_phase2_outputs.py --run-id <run_id>
+python phase2/scripts/validate_phase2_outputs.py --run-id <run_id>
 ```
 
 ---
@@ -473,7 +474,7 @@ The built-in Phase-2 scenario catalog is:
 
 Use the dedicated scenario guide for the detailed interpretation of each one:
 
-- `docs/SCENARIO_USE_CASES_AND_TESTING.md`
+- `phase2/docs/SCENARIO_USE_CASES_AND_TESTING.md`
 
 That guide covers:
 
@@ -489,7 +490,7 @@ Use `phase2/scenarios/*.yaml` as the canonical source for scenario settings such
 
 ## 14) Parameter Layer (Public-Source Priors)
 
-`Data/phase2_params/` includes:
+`phase2/Data/phase2_params/` includes:
 
 - `mobility_overall_acs_2024.csv`
 - `mobility_by_age_cohort_acs_2024.csv`
@@ -503,7 +504,7 @@ Use `phase2/scenarios/*.yaml` as the canonical source for scenario settings such
 Rebuild parameters:
 
 ```bash
-python scripts/build_phase2_params.py
+python phase2/scripts/build_phase2_params.py
 ```
 
 Notes:
@@ -560,7 +561,7 @@ Expected files include truth outputs, observed outputs, and metadata:
 
 The main user-facing scenario and testing workflow now lives in:
 
-- `docs/SCENARIO_USE_CASES_AND_TESTING.md`
+- `phase2/docs/SCENARIO_USE_CASES_AND_TESTING.md`
 
 Keep this section as the command index.
 
@@ -573,14 +574,14 @@ python -m pytest -q
 ### 17.2 Scenario regression suite
 
 ```bash
-python -m pytest -q tests/test_phase2_scenario_regression.py
+python -m pytest -q phase2/tests/test_phase2_scenario_regression.py
 ```
 
 ### 17.3 What regression tests protect
 
-- `tests/test_phase2_scenario_regression.py`: scenario-specific event and observed-behavior checks
-- `tests/test_phase2_quality.py`: quality-report completeness and ER metric coverage
-- broader `tests/test_phase2_*.py`: pipeline, contract, and validation behavior
+- `phase2/tests/test_phase2_scenario_regression.py`: scenario-specific event and observed-behavior checks
+- `phase2/tests/test_phase2_quality.py`: quality-report completeness and ER metric coverage
+- broader `phase2/tests/test_phase2_*.py`: pipeline, contract, and validation behavior
 
 ---
 
@@ -589,22 +590,22 @@ python -m pytest -q tests/test_phase2_scenario_regression.py
 ### Workflow A: Generate one scenario run (preferred)
 
 ```bash
-python scripts/generate_phase2_truth.py --run-id 2026-03-14_roommates_split_seed20260314
-python scripts/generate_phase2_observed.py --run-id 2026-03-14_roommates_split_seed20260314
-python scripts/validate_phase2_outputs.py --run-id 2026-03-14_roommates_split_seed20260314
+python phase2/scripts/generate_phase2_truth.py --run-id 2026-03-14_roommates_split_seed20260314
+python phase2/scripts/generate_phase2_observed.py --run-id 2026-03-14_roommates_split_seed20260314
+python phase2/scripts/validate_phase2_outputs.py --run-id 2026-03-14_roommates_split_seed20260314
 ```
 
 ### Workflow B: Generate with legacy-compatible flags
 
 ```bash
-python scripts/generate_phase2_truth.py \
+python phase2/scripts/generate_phase2_truth.py \
   --scenario roommates_split \
   --seed 20260314 \
   --run-date 2026-03-14 \
-  --phase1 outputs/Phase1_people_addresses.csv
+  --phase1 phase1/outputs_phase1/Phase1_people_addresses.csv
 
-python scripts/generate_phase2_observed.py --run phase2/runs/2026-03-14_roommates_split_seed20260314
-python scripts/validate_phase2_outputs.py --run phase2/runs/2026-03-14_roommates_split_seed20260314
+python phase2/scripts/generate_phase2_observed.py --run phase2/runs/2026-03-14_roommates_split_seed20260314
+python phase2/scripts/validate_phase2_outputs.py --run phase2/runs/2026-03-14_roommates_split_seed20260314
 ```
 
 ---
@@ -646,7 +647,7 @@ For the scenario field schema, use:
 
 For the user-facing benchmark expectations and the files/metrics to inspect after a run, use:
 
-- `docs/SCENARIO_USE_CASES_AND_TESTING.md`
+- `phase2/docs/SCENARIO_USE_CASES_AND_TESTING.md`
 
 Minimum process:
 
@@ -654,7 +655,7 @@ Minimum process:
 2. Set a unique `scenario_id` and seed.
 3. Update `parameters`, `selection`, `constraints`, `simulation`, `emission`, and `quality`.
 4. Run truth generation, observed emission, and validation.
-5. Add or update scenario regression coverage in `tests/test_phase2_scenario_regression.py`.
+5. Add or update scenario regression coverage in `phase2/tests/test_phase2_scenario_regression.py`.
 
 Do not treat a new scenario as complete until:
 
@@ -670,8 +671,8 @@ Do not treat a new scenario as complete until:
 
 - Simulator is stochastic but deterministic under seed.
 - `monthly` simulation is default for cost/performance.
-- Event grammar currently includes minimum active set (MOVE/COHABIT/BIRTH/DIVORCE/LEAVE_HOME).
-- Optional-later events (DEATH/NAME_CHANGE/ADOPTION) are defined but not enabled in minimum grammar checks.
+- Event grammar currently includes MOVE/COHABIT/BIRTH/DIVORCE/LEAVE_HOME plus lifecycle events DEATH/NAME_CHANGE/ADOPTION.
+- Lifecycle families are engine-backed through scenario parameters and shipped canonical YAML templates for `name_change_lifecycle`, `death_survivor_persistence`, and `adoption_blended_family`.
 - Observed emission is snapshot-based, not full longitudinal export.
 - Canonical observed emission supports single-dataset, pairwise, and N-way dataset-list runs, with `truth_crosswalk.csv` reserved for pairwise compatibility and `entity_record_map.csv` remaining the canonical truth mapping.
 
@@ -707,4 +708,3 @@ For operational use, standardize on:
 2. scenario YAML review process,
 3. validator pass as a release gate,
 4. regression tests as a change gate.
-

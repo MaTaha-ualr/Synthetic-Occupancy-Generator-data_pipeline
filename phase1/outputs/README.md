@@ -41,12 +41,22 @@ With the default `phase1/configs/phase1.yaml`, the output is configured for:
 | Output format | `csv` |
 | Output path | `phase1/outputs/Phase1_people_addresses.csv` |
 | Redundancy | Enabled |
+| Redundancy shape | `heavy_tail` |
+| Redundancy bounds | `1` to `10` rows per person |
 | Nicknames | Enabled |
 | House/apartment mix | `70%` houses, `30%` apartments |
 
 Because redundancy is enabled, the CSV has more rows than people. A repeated
 person keeps the same `PersonKey` but gets a different `RecordKey`,
 `EntityRecordIndex`, and address row.
+
+The default redundancy range is configured as 1-10 rows per person. The shape
+setting controls whether the output actually uses that full range. `balanced`
+spreads the 4,000 extra base rows in the default 10,000-person / 14,000-row run
+across as many people as possible, so it only reaches 1-2 base rows per person.
+`heavy_tail` concentrates extra rows into fewer people, which is why the default
+uses `shape: heavy_tail` when the goal is to exercise redundancy buckets from 1
+through 10.
 
 The configured row count is stored as `records_requested`. The actual CSV row
 count is stored as `records_written`. When nicknames are enabled,

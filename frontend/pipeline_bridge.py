@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-_src_dir = str(PROJECT_ROOT / "src")
+_src_dir = str(PROJECT_ROOT / "phase2" / "src")
 if _src_dir not in sys.path:
     sys.path.insert(0, _src_dir)
 

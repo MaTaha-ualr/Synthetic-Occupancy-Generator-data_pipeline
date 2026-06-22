@@ -1,0 +1,316 @@
+# Phase-2 scenario template
+#
+# Copy this file to phase2/scenarios/<your_scenario_id>.yaml, remove the
+# "_working_" prefix from the filename, and set scenario_id to the same name.
+# Files whose names start with "_working_" are working templates and are
+# intentionally ignored by the shipped-scenario catalog tests.
+#
+# The pipeline command is:
+#   python phase2/scripts/run_phase2_pipeline.py --scenario <your_scenario_id> --overwrite --rebuild-population
+#
+# Outputs land in:
+#   phase2/runs/YYYY-MM-DD_<scenario_id>_seed<seed>/
+#
+# Important output behavior:
+#   Dataset CSVs are observed source snapshots.
+#   entity_record_map.csv maps every emitted observed record back to PersonKey.
+#   masterDataset.csv has two row types:
+#     RecordType=source_snapshot stacks the observed source rows.
+#     RecordType=residence_timeline adds DatasetId=TIMELINE rows for every
+#       truth_residence_history.parquet interval.
+
+scenario_id: example_custom_scenario
+
+# Integer seed used for deterministic selection, simulation, and emission.
+# If the seed looks like YYYYMMDD, the pipeline can derive the run date from it.
+seed: 20260619
+
+phase1:
+  # Phase-1 baseline input. Keep these defaults unless you have a different
+  # Phase-1 output file.
+  data_path: phase1/outputs_phase1/Phase1_people_addresses.csv
+  manifest_path: phase1/outputs_phase1/Phase1_people_addresses.manifest.json
+
+parameters:
+  # Annual event rates. The simulator converts annual percentages into per-step
+  # probabilities based on simulation.granularity.
+  #
+  # move_rate_pct:
+  #   Solo people and active couple-households can move to a new address.
+  #   Higher values create more residence intervals and more TIMELINE rows in
+  #   masterDataset.csv.
+  move_rate_pct: 12.0
+
+  # cohabit_rate_pct:
+  #   Eligible singles can form a shared household. Mixed-gender adult pairs are
+  #   preferred by the pairing logic when available. In male/female cohabits, the
+  #   female partner takes the male partner's last name in later observed
+  #   snapshots; her maiden last name becomes the middle name if she had none,
+  #   and may replace the existing middle name deterministically.
+  cohabit_rate_pct: 8.0
+
+  # birth_rate_pct:
+  #   Eligible female people within constraints.fertility_age_range can have
+  #   children. If the mother has an active partner, Parent2PersonKey is filled.
+  #   Use a nonzero cohabit_rate_pct when you want partnered births instead of
+  #   mostly single-parent births.
+  birth_rate_pct: 4.0
+
+  # divorce_rate_pct:
+  #   Active couples can split. The moved-out partner gets a new household and
+  #   address; divorce events include custody mode.
+  divorce_rate_pct: 1.5
+
+  # leave_home_rate_pct:
+  #   Adults aged 18-30 in multi-person households can leave to live solo.
+  #   split_rate_pct is accepted as a backward-compatible alias.
+  leave_home_rate_pct: 3.0
+
+  # death_rate_pct:
+  #   Alive people can die. Older people are weighted more heavily. A DEATH event
+  #   closes their active household/residence intervals and marks IsDeceased and
+  #   DeathDate in truth_people.parquet.
+  death_rate_pct: 0.0
+
+  # name_change_rate_pct:
+  #   People age 16+ can undergo legal, marriage, or divorce name changes.
+  #   NAME_CHANGE events carry previous/new name fields, and later observed
+  #   snapshots plus TIMELINE rows replay the new name.
+  name_change_rate_pct: 0.0
+
+  # adoption_rate_pct:
+  #   Minors can move into another eligible adult household as adopted children.
+  #   ADOPTION events record previous/adoptive parent keys and can update the
+  #   child's surname to the adoptive household.
+  adoption_rate_pct: 0.0
+
+  # When false, omitted event rates default to 0.0. When true, omitted rates use
+  # built-in ACS/CDC/NCHS prior values where available. Lifecycle rates above are
+  # explicit-only today.
+  use_priors_for_unspecified_rates: false
+
+  # Roommate baseline grouping is only used when scenario_id is roommates_split.
+  # It creates shared households before simulation so LEAVE_HOME can split them.
+  enable_roommate_baseline_groups: true
+  roommate_group_share_pct: 40.0
+  roommate_household_size_min: 3
+  roommate_household_size_max: 5
+  roommate_age_min: 18
+  roommate_age_max: 30
+
+simulation:
+  # monthly is recommended. daily is valid but produces many more opportunities
+  # for events and can be slower.
+  granularity: monthly
+
+  # First simulation snapshot. In the legacy A/B setup, DatasetA.csv usually
+  # reflects this date.
+  start_date: 2026-01-01
+
+  # Number of steps to simulate. With monthly granularity and periods: 12, the
+  # end snapshot is 2027-01-01.
+  periods: 12
+
+selection:
+  sample:
+    # all: use every candidate left after filters.
+    # count: use exactly this many people unless filters leave fewer candidates.
+    # pct: use this percentage of candidates; value must be <= 100.
+    mode: count
+    value: 10000
+
+  filters:
+    # Empty lists mean no filtering.
+    # Supported age bins: age_0_17, age_18_34, age_35_64, age_65_plus.
+    # Note: Phase-1 source files may contain uppercase AGE_* labels; selection
+    # normalizes internally.
+    age_bins: []
+
+    # Typical values are female and male. Empty keeps all genders.
+    genders: []
+
+    # Keep only listed ethnicity values from Phase 1. Empty keeps all.
+    ethnicities: []
+
+    # Keep only listed residence types from Phase 1. Empty keeps all.
+    residence_types: []
+
+    # single_record: people with one Phase-1 source row.
+    # multi_record: people with multiple Phase-1 source rows.
+    redundancy_profiles: []
+
+    # low, medium, high based on MobilityPropensityScore thresholds below.
+    mobility_propensity_buckets: []
+
+  thresholds:
+    # Mobility score bucket cutoffs. Values are fractions in [0, 1].
+    mobility_low_max: 0.09
+    mobility_high_min: 0.18
+
+    # Trait bucket cutoffs used for partnership/fertility propensity buckets.
+    trait_low_max: 0.33
+    trait_high_min: 0.66
+
+constraints:
+  # Minimum age for cohabit/divorce eligibility unless allow_underage_marriage
+  # is true.
+  min_marriage_age: 18
+
+  # Maximum age gap for partner formation. Set to null to disable the check.
+  # If partner_age_gap_distribution is present, the largest distribution key is
+  # used as the effective maximum age gap.
+  max_partner_age_gap: 25
+
+  # Optional alternative to max_partner_age_gap. Uncomment to use. Weights are
+  # currently used as a parameter surface; the largest key is the enforced max.
+  # partner_age_gap_distribution:
+  #   5: 40
+  #   10: 35
+  #   20: 20
+  #   25: 5
+
+  fertility_age_range:
+    min: 15
+    max: 49
+
+  # Novelty/stress-test levers. Keep false for realistic standard scenarios.
+  allow_underage_marriage: false
+  allow_child_lives_alone: false
+
+  # Keep true for normal runs. When true, quality checks reject overlapping
+  # residence intervals for the same person.
+  enforce_non_overlapping_residence_intervals: true
+
+emission:
+  # Relationship topology across observed datasets.
+  # single_dataset: one output dataset, no truth_crosswalk.csv.
+  # one_to_one: overlap entities usually have one row per side.
+  # one_to_many: overlap entities are forced to duplicate on the second dataset.
+  # many_to_one: overlap entities are forced to duplicate on the first dataset.
+  # many_to_many: overlap entities are forced to duplicate on both sides.
+  crossfile_match_mode: one_to_one
+
+  # Percentage of selected base entities that should appear in more than one
+  # dataset. The engine adjusts this if requested A/B coverage makes the target
+  # impossible.
+  overlap_entity_pct: 70.0
+
+  # Canonical dataset schema. Use this when you need one, two, or three-plus
+  # observed source files. The legacy A/B schema is shown below as comments.
+  datasets:
+    - dataset_id: A
+      filename: DatasetA.csv
+
+      # simulation_start or simulation_end.
+      snapshot: simulation_start
+
+      # Percentage of eligible candidate entities that appear in this file.
+      appearance_pct: 85.0
+
+      # Extra within-file duplicate rows as a percentage of entities.
+      duplication_pct: 4.0
+
+      # Optional exact final row count for this source CSV. Set to null to let
+      # appearance_pct and duplication_pct determine the count.
+      record_count: null
+
+      noise:
+        # All noise values are per-record percentages in [0, 100].
+        name_typo_pct: 1.0
+        dob_shift_pct: 0.4
+        ssn_mask_pct: 1.5
+        phone_mask_pct: 0.8
+        address_missing_pct: 0.8
+        middle_name_missing_pct: 20.0
+        phonetic_error_pct: 0.0
+        ocr_error_pct: 0.0
+        date_swap_pct: 0.0
+        zip_digit_error_pct: 0.0
+        nickname_pct: 0.0
+        suffix_missing_pct: 0.0
+
+    - dataset_id: B
+      filename: DatasetB.csv
+      snapshot: simulation_end
+      appearance_pct: 90.0
+      duplication_pct: 6.0
+      record_count: null
+      noise:
+        name_typo_pct: 2.5
+        dob_shift_pct: 1.2
+        ssn_mask_pct: 6.0
+        phone_mask_pct: 3.0
+        address_missing_pct: 2.2
+        middle_name_missing_pct: 30.0
+        phonetic_error_pct: 0.0
+        ocr_error_pct: 0.0
+        date_swap_pct: 0.0
+        zip_digit_error_pct: 0.0
+        nickname_pct: 0.0
+        suffix_missing_pct: 0.0
+
+  # Optional third source example. Uncomment the block below for multi-source
+  # linkage tests, then use a compatible match mode such as one_to_one or
+  # many_to_many.
+  #   - dataset_id: benefits
+  #     filename: observed_benefits.csv
+  #     snapshot: simulation_end
+  #     appearance_pct: 75.0
+  #     duplication_pct: 5.0
+  #     record_count: null
+  #     noise:
+  #       name_typo_pct: 1.5
+  #       dob_shift_pct: 0.8
+  #       ssn_mask_pct: 4.0
+  #       phone_mask_pct: 2.0
+  #       address_missing_pct: 1.2
+  #       middle_name_missing_pct: 25.0
+  #       phonetic_error_pct: 0.0
+  #       ocr_error_pct: 0.0
+  #       date_swap_pct: 0.0
+  #       zip_digit_error_pct: 0.0
+  #       nickname_pct: 0.0
+  #       suffix_missing_pct: 0.0
+
+  # Legacy two-source A/B schema. Do not use this at the same time as datasets.
+  # It is still accepted for older scenarios:
+  #
+  # appearance_A_pct: 85.0
+  # appearance_B_pct: 90.0
+  # duplication_in_A_pct: 4.0
+  # duplication_in_B_pct: 6.0
+  # record_count_A: 8784
+  # record_count_B: 9540
+  # noise:
+  #   A:
+  #     name_typo_pct: 1.0
+  #     dob_shift_pct: 0.4
+  #     ssn_mask_pct: 1.5
+  #     phone_mask_pct: 0.8
+  #     address_missing_pct: 0.8
+  #     middle_name_missing_pct: 20.0
+  #     phonetic_error_pct: 0.0
+  #     ocr_error_pct: 0.0
+  #     date_swap_pct: 0.0
+  #     zip_digit_error_pct: 0.0
+  #     nickname_pct: 0.0
+  #     suffix_missing_pct: 0.0
+  #   B:
+  #     name_typo_pct: 2.5
+  #     dob_shift_pct: 1.2
+  #     ssn_mask_pct: 6.0
+  #     phone_mask_pct: 3.0
+  #     address_missing_pct: 2.2
+  #     middle_name_missing_pct: 30.0
+  #     phonetic_error_pct: 0.0
+  #     ocr_error_pct: 0.0
+  #     date_swap_pct: 0.0
+  #     zip_digit_error_pct: 0.0
+  #     nickname_pct: 0.0
+  #     suffix_missing_pct: 0.0
+
+quality:
+  household_size_range:
+    # Household sizes outside this range are flagged in quality_report.json.
+    min: 1
+    max: 12

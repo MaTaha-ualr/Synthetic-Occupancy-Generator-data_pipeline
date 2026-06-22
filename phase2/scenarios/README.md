@@ -4,7 +4,15 @@ The machine-readable scenario support plan lives in:
 - `phase2/scenarios/catalog.yaml`
 
 The user-facing support matrix is:
-- `docs/SCENARIO_SUPPORT_MATRIX.md`
+- `phase2/docs/SCENARIO_SUPPORT_MATRIX.md`
+
+The editable starter template is:
+- `phase2/scenarios/_working_scenario_template.yaml`
+
+Copy `_working_scenario_template.yaml` to `<scenario_id>.yaml`, remove the `_working_`
+prefix, and update `scenario_id`. The `_working_` prefix keeps the template out of the
+shipped scenario catalog and validation tests while still keeping it beside the runnable
+YAMLs.
 
 Each scenario YAML should minimally define:
 - `scenario_id`
@@ -48,11 +56,13 @@ Emission keys:
   - `datasets[*].snapshot` in `simulation_start | simulation_end`
   - `datasets[*].appearance_pct`
   - `datasets[*].duplication_pct`
+  - optional `datasets[*].record_count`
   - optional `datasets[*].noise.*` controls
 - Legacy A/B schema is still accepted for backward compatibility:
   - `overlap_entity_pct`
   - `appearance_A_pct`, `appearance_B_pct`
   - `duplication_in_A_pct`, `duplication_in_B_pct`
+  - optional `record_count_A`, `record_count_B`
   - optional `noise.A.*` and `noise.B.*` controls
 
 Observed output topology:
@@ -67,16 +77,16 @@ Quality keys:
 Runs are materialized under `phase2/runs/`. That directory is generated output and is intentionally not versioned.
 
 Validate a run with:
-`python scripts/validate_phase2_outputs.py --run-id <run_id>`
+`python phase2/scripts/validate_phase2_outputs.py --run-id <run_id>`
 
 Scenario population generation command:
-`python scripts/build_phase2_scenario_population.py --run-id <run_id> --overwrite`
+`python phase2/scripts/build_phase2_scenario_population.py --run-id <run_id> --overwrite`
 
 Truth-layer simulation command:
-`python scripts/generate_phase2_truth.py --run-id <run_id> --overwrite`
+`python phase2/scripts/generate_phase2_truth.py --run-id <run_id> --overwrite`
 
 Observed-layer emission command:
-`python scripts/generate_phase2_observed.py --run-id <run_id> --overwrite`
+`python phase2/scripts/generate_phase2_observed.py --run-id <run_id> --overwrite`
 
 Scenario regression test command:
-`python -m pytest -q tests/test_phase2_scenario_regression.py`
+`python -m pytest -q phase2/tests/test_phase2_scenario_regression.py`

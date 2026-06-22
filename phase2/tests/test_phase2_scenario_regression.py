@@ -1,0 +1,701 @@
+from __future__ import annotations
+
+from datetime import date, timedelta
+from pathlib import Path
+import sys
+from typing import Any
+
+import pandas as pd
+import pytest
+import yaml
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(PROJECT_ROOT / "phase2" / "src"))
+
+from sog_phase2.constraints import parse_constraints_config
+from sog_phase2.emission import emit_observed_datasets, parse_emission_config
+from sog_phase2.params import load_phase2_params_from_project
+from sog_phase2.selection import parse_selection_config, select_scenario_population
+from sog_phase2.simulator import parse_simulation_config, simulate_truth_layer
+
+
+SCENARIO_IDS = (
+    "single_movers",
+    "couple_merge",
+    "family_birth",
+    "divorce_custody",
+    "roommates_split",
+    "clean_baseline_linkage",
+    "high_noise_identity_drift",
+    "low_overlap_sparse_coverage",
+    "asymmetric_source_coverage",
+    "high_duplication_dedup",
+    "three_source_partial_overlap",
+    "name_change_lifecycle",
+    "death_survivor_persistence",
+    "adoption_blended_family",
+)
+
+
+def _stable_key(value: Any) -> tuple[int, str]:
+    text = str(value).strip()
+    if text.isdigit():
+        return (0, f"{int(text):020d}")
+    return (1, text)
+
+
+def _load_scenario(scenario_id: str) -> dict[str, Any]:
+    path = PROJECT_ROOT / "phase2" / "scenarios" / f"{scenario_id}.yaml"
+    with path.open("r", encoding="utf-8") as handle:
+        payload = yaml.safe_load(handle) or {}
+    if not isinstance(payload, dict):
+        raise ValueError(f"Scenario YAML must be mapping: {path}")
+    return payload
+
+
+def _resolve_phase1_csv() -> Path:
+    candidates = (
+        PROJECT_ROOT / "outputs" / "Phase1_people_addresses.csv",
+        PROJECT_ROOT / "outputs_phase1" / "Phase1_people_addresses.csv",
+        PROJECT_ROOT / "phase1" / "outputs" / "Phase1_people_addresses.csv",
+        PROJECT_ROOT / "phase1" / "outputs_phase1" / "Phase1_people_addresses.csv",
+    )
+    for path in candidates:
+        if path.exists():
+            return path
+    raise FileNotFoundError(
+        "Could not find Phase-1 baseline CSV in outputs/, outputs_phase1/, "
+        "phase1/outputs/, or phase1/outputs_phase1/"
+    )
+
+
+def _add_months(value: date, months: int) -> date:
+    month_index = (value.month - 1) + months
+    year = value.year + (month_index // 12)
+    month = (month_index % 12) + 1
+    day = min(value.day, int(pd.Period(f"{year}-{month:02d}").days_in_month))
+    return date(year, month, day)
+
+
+def _simulation_end_date(start: date, periods: int, granularity: str) -> date:
+    if periods <= 0:
+        return start
+    if granularity == "monthly":
+        return _add_months(start, periods)
+    return start + timedelta(days=periods)
+
+
+def _address_on_date(residence_df: pd.DataFrame, person_key: str, event_date: date) -> str:
+    person_rows = residence_df[residence_df["PersonKey"].astype(str).str.strip() == str(person_key)].copy()
+    if person_rows.empty:
+        return ""
+    person_rows["_start"] = pd.to_datetime(person_rows["ResidenceStartDate"], errors="coerce")
+    person_rows["_end"] = pd.to_datetime(person_rows["ResidenceEndDate"], errors="coerce")
+    target = pd.Timestamp(event_date)
+    active = person_rows[
+        (person_rows["_start"].notna())
+        & (person_rows["_start"] <= target)
+        & ((person_rows["_end"].isna()) | (person_rows["_end"] >= target))
+    ].copy()
+    active = active.sort_values(by="_start", kind="mergesort")
+    if active.empty:
+        return ""
+    return str(active.iloc[-1]["AddressKey"]).strip()
+
+
+def _household_on_date(membership_df: pd.DataFrame, person_key: str, event_date: date) -> str:
+    person_rows = membership_df[
+        membership_df["PersonKey"].astype(str).str.strip() == str(person_key)
+    ].copy()
+    if person_rows.empty:
+        return ""
+    person_rows["_start"] = pd.to_datetime(person_rows["MembershipStartDate"], errors="coerce")
+    person_rows["_end"] = pd.to_datetime(person_rows["MembershipEndDate"], errors="coerce")
+    target = pd.Timestamp(event_date)
+    active = person_rows[
+        (person_rows["_start"].notna())
+        & (person_rows["_start"] <= target)
+        & ((person_rows["_end"].isna()) | (person_rows["_end"] >= target))
+    ].copy()
+    if active.empty:
+        return ""
+    active = active.sort_values(by="_start", kind="mergesort")
+    return str(active.iloc[-1]["HouseholdKey"]).strip()
+
+
+def _active_household_size(membership_df: pd.DataFrame, household_key: str, event_date: date) -> int:
+    rows = membership_df[
+        membership_df["HouseholdKey"].astype(str).str.strip() == str(household_key)
+    ].copy()
+    if rows.empty:
+        return 0
+    rows["_start"] = pd.to_datetime(rows["MembershipStartDate"], errors="coerce")
+    rows["_end"] = pd.to_datetime(rows["MembershipEndDate"], errors="coerce")
+    target = pd.Timestamp(event_date)
+    active = rows[
+        (rows["_start"].notna())
+        & (rows["_start"] <= target)
+        & ((rows["_end"].isna()) | (rows["_end"] >= target))
+    ]
+    return int(active["PersonKey"].astype(str).str.strip().nunique())
+
+
+def _max_household_size_over_time(membership_df: pd.DataFrame) -> int:
+    if membership_df.empty:
+        return 0
+    rows = membership_df.copy()
+    rows["_start"] = pd.to_datetime(rows["MembershipStartDate"], errors="coerce")
+    rows["_end"] = pd.to_datetime(rows["MembershipEndDate"], errors="coerce")
+    max_size = 0
+    for _, group in rows.groupby("HouseholdKey", dropna=False):
+        points = sorted(
+            {
+                ts
+                for ts in pd.concat([group["_start"], group["_end"].dropna()], ignore_index=True)
+                if pd.notna(ts)
+            }
+        )
+        for point in points:
+            active = group[
+                (group["_start"].notna())
+                & (group["_start"] <= point)
+                & ((group["_end"].isna()) | (group["_end"] >= point))
+            ]
+            size = int(active["PersonKey"].astype(str).str.strip().nunique())
+            max_size = max(max_size, size)
+    return max_size
+
+
+def _linked_crosswalk(crosswalk: pd.DataFrame) -> pd.DataFrame:
+    return crosswalk[
+        (crosswalk["A_RecordKey"].astype(str).str.strip() != "")
+        & (crosswalk["B_RecordKey"].astype(str).str.strip() != "")
+    ].copy()
+
+
+def _duplicate_rate(stats: dict[str, Any]) -> float:
+    rows = int(stats["rows"])
+    duplicates = int(stats["duplicates"])
+    if rows <= 0:
+        return 0.0
+    return duplicates / rows
+
+
+def _dataset_row_for_person(observed: dict[str, Any], dataset_id: str, person_key: str) -> pd.Series | None:
+    entity_map = observed["entity_record_map"]
+    matches = entity_map[
+        (entity_map["DatasetId"].astype(str).str.strip() == dataset_id)
+        & (entity_map["PersonKey"].astype(str).str.strip() == str(person_key))
+    ]
+    if matches.empty:
+        return None
+    record_key = str(matches.iloc[0]["RecordKey"]).strip()
+    dataset = observed["datasets"][dataset_id]
+    rows = dataset[dataset["RecordKey"].astype(str).str.strip() == record_key]
+    if rows.empty:
+        return None
+    return rows.iloc[0]
+
+
+@pytest.fixture(scope="module")
+def scenario_results() -> dict[str, dict[str, Any]]:
+    phase1_path = _resolve_phase1_csv()
+    phase1_df = pd.read_csv(phase1_path, dtype=str)
+    keys = sorted(
+        phase1_df["PersonKey"].astype(str).str.strip().unique().tolist(),
+        key=_stable_key,
+    )
+    selected_keys = set(keys[:1200])
+    phase1_subset = phase1_df[phase1_df["PersonKey"].astype(str).str.strip().isin(selected_keys)].copy()
+
+    params = load_phase2_params_from_project(PROJECT_ROOT)
+    mobility_df = params["mobility_by_age_cohort"]
+    results: dict[str, dict[str, Any]] = {}
+
+    for scenario_id in SCENARIO_IDS:
+        scenario = _load_scenario(scenario_id)
+        selection_cfg = parse_selection_config(scenario.get("selection"))
+        selected_df, _ = select_scenario_population(
+            phase1_df=phase1_subset,
+            mobility_params_df=mobility_df,
+            selection_config=selection_cfg,
+            seed=int(scenario["seed"]),
+            scenario_id=scenario["scenario_id"],
+        )
+        assert not selected_df.empty
+
+        simulation_cfg = parse_simulation_config(scenario.get("simulation"))
+        constraints_cfg = parse_constraints_config(scenario.get("constraints"))
+        truth = simulate_truth_layer(
+            phase1_df=phase1_subset,
+            scenario_population_df=selected_df,
+            scenario_id=scenario["scenario_id"],
+            seed=int(scenario["seed"]),
+            simulation_config=simulation_cfg,
+            constraints_config=constraints_cfg,
+            scenario_parameters=scenario.get("parameters"),
+            phase2_priors=params.get("priors_snapshot"),
+        )
+
+        emission_cfg = parse_emission_config(scenario.get("emission"))
+        observed = emit_observed_datasets(
+            truth_people_df=truth["truth_people"],
+            truth_residence_history_df=truth["truth_residence_history"],
+            truth_events_df=truth["truth_events"],
+            simulation_start_date=simulation_cfg.start_date,
+            simulation_end_date=_simulation_end_date(
+                simulation_cfg.start_date,
+                simulation_cfg.periods,
+                simulation_cfg.granularity,
+            ),
+            emission_config=emission_cfg,
+            seed=int(scenario["seed"]),
+        )
+        results[scenario_id] = {
+            "scenario": scenario,
+            "truth": truth,
+            "observed": observed,
+        }
+    return results
+
+
+def test_single_movers_produces_moves(scenario_results: dict[str, dict[str, Any]]) -> None:
+    events = scenario_results["single_movers"]["truth"]["truth_events"]
+    move_count = int((events["EventType"].astype(str).str.upper() == "MOVE").sum())
+    assert move_count > 0
+
+
+def test_clean_baseline_linkage_stays_low_noise_one_to_one(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    result = scenario_results["clean_baseline_linkage"]
+    events = result["truth"]["truth_events"]
+    observed = result["observed"]
+    crosswalk = observed["truth_crosswalk"]
+    linked = _linked_crosswalk(crosswalk)
+
+    move_count = int((events["EventType"].astype(str).str.upper() == "MOVE").sum())
+    assert move_count > 0
+    assert observed["metrics"]["match_mode"] == "one_to_one"
+    assert not linked.empty
+
+    counts = linked.groupby("PersonKey").agg(
+        a_count=("A_RecordKey", "nunique"),
+        b_count=("B_RecordKey", "nunique"),
+    )
+    assert int(counts["a_count"].max()) == 1
+    assert int(counts["b_count"].max()) == 1
+
+    dataset_a = observed["metrics"]["datasets"]["A"]
+    dataset_b = observed["metrics"]["datasets"]["B"]
+    assert _duplicate_rate(dataset_a) <= 0.02
+    assert _duplicate_rate(dataset_b) <= 0.03
+
+
+def test_couple_merge_produces_cohabit_and_shared_residence(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    truth = scenario_results["couple_merge"]["truth"]
+    events = truth["truth_events"]
+    residence = truth["truth_residence_history"]
+    cohabits = events[events["EventType"].astype(str).str.upper() == "COHABIT"].copy()
+    assert len(cohabits) > 0
+
+    for _, row in cohabits.head(10).iterrows():
+        person_a = str(row["PersonKeyA"]).strip()
+        person_b = str(row["PersonKeyB"]).strip()
+        event_date = pd.to_datetime(str(row["EventDate"]), errors="coerce").date()
+        address_a = _address_on_date(residence, person_a, event_date)
+        address_b = _address_on_date(residence, person_b, event_date)
+        assert address_a
+        assert address_b
+        assert address_a == address_b
+
+
+def test_couple_merge_exposes_one_to_many_crosswalk_behavior(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    crosswalk = scenario_results["couple_merge"]["observed"]["truth_crosswalk"]
+    linked = _linked_crosswalk(crosswalk)
+    assert not linked.empty
+    b_counts = linked.groupby("PersonKey")["B_RecordKey"].nunique()
+    assert int(b_counts.max()) >= 2
+
+
+def test_family_birth_produces_birth_events(scenario_results: dict[str, dict[str, Any]]) -> None:
+    truth = scenario_results["family_birth"]["truth"]
+    events = truth["truth_events"]
+    births = events[events["EventType"].astype(str).str.upper() == "BIRTH"].copy()
+    assert len(births) > 0
+    child_keys = set(births["ChildPersonKey"].astype(str).str.strip().tolist())
+    people_keys = set(truth["truth_people"]["PersonKey"].astype(str).str.strip().tolist())
+    assert child_keys.issubset(people_keys)
+    assert births["Parent2PersonKey"].astype(str).str.strip().ne("").sum() > 0
+    assert births["SubjectHouseholdKey"].astype(str).str.strip().ne("").all()
+    assert births["ToAddressKey"].astype(str).str.strip().ne("").all()
+
+
+def test_family_birth_exposes_many_to_one_crosswalk_behavior(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    crosswalk = scenario_results["family_birth"]["observed"]["truth_crosswalk"]
+    linked = _linked_crosswalk(crosswalk)
+    assert not linked.empty
+    a_counts = linked.groupby("PersonKey")["A_RecordKey"].nunique()
+    assert int(a_counts.max()) >= 2
+
+
+def test_divorce_custody_produces_divorce_and_split_households(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    truth = scenario_results["divorce_custody"]["truth"]
+    events = truth["truth_events"]
+    divorces = events[events["EventType"].astype(str).str.upper() == "DIVORCE"].copy()
+    assert len(divorces) > 0
+    households = truth["truth_households"]
+    assert (households["HouseholdType"].astype(str).str.strip() == "post_divorce").any()
+
+
+def test_divorce_custody_exposes_many_to_many_crosswalk_behavior(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    crosswalk = scenario_results["divorce_custody"]["observed"]["truth_crosswalk"]
+    linked = _linked_crosswalk(crosswalk)
+    assert not linked.empty
+    counts = linked.groupby("PersonKey").agg(
+        a_count=("A_RecordKey", "nunique"),
+        b_count=("B_RecordKey", "nunique"),
+    )
+    assert ((counts["a_count"] >= 2) & (counts["b_count"] >= 2)).any()
+
+
+def test_one_to_many_mode_yields_multi_b_records(scenario_results: dict[str, dict[str, Any]]) -> None:
+    observed = scenario_results["roommates_split"]["observed"]
+    crosswalk = observed["truth_crosswalk"]
+    linked = _linked_crosswalk(crosswalk)
+    assert not linked.empty
+    b_counts = linked.groupby("PersonKey")["B_RecordKey"].nunique()
+    assert int(b_counts.max()) >= 2
+
+
+def test_roommates_split_has_household_with_three_or_more_members(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    memberships = scenario_results["roommates_split"]["truth"]["truth_household_memberships"]
+    assert _max_household_size_over_time(memberships) >= 3
+
+
+def test_roommates_split_contains_split_household_pattern(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    truth = scenario_results["roommates_split"]["truth"]
+    events = truth["truth_events"]
+    memberships = truth["truth_household_memberships"]
+    residence = truth["truth_residence_history"]
+    leave_events = events[events["EventType"].astype(str).str.upper() == "LEAVE_HOME"].copy()
+    assert not leave_events.empty
+
+    found_split = False
+    for _, row in leave_events.iterrows():
+        person_key = str(row["ChildPersonKey"]).strip()
+        parsed = pd.to_datetime(str(row["EventDate"]), errors="coerce")
+        if pd.isna(parsed):
+            continue
+        event_date = parsed.date()
+        prev_date = event_date - timedelta(days=1)
+
+        household_before = _household_on_date(memberships, person_key, prev_date)
+        household_after = _household_on_date(memberships, person_key, event_date)
+        if not household_before or not household_after or household_before == household_after:
+            continue
+
+        size_before = _active_household_size(memberships, household_before, prev_date)
+        size_after = _active_household_size(memberships, household_before, event_date)
+        if size_before < 3 or size_after >= size_before:
+            continue
+
+        address_before = _address_on_date(residence, person_key, prev_date)
+        address_after = _address_on_date(residence, person_key, event_date)
+        if not address_before or not address_after or address_before == address_after:
+            continue
+
+        found_split = True
+        break
+
+    assert found_split
+
+
+def test_crosswalk_overlap_matches_claimed_overlap_pct(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    for scenario_id in (
+        "single_movers",
+        "clean_baseline_linkage",
+        "high_noise_identity_drift",
+        "low_overlap_sparse_coverage",
+        "asymmetric_source_coverage",
+    ):
+        result = scenario_results[scenario_id]
+        scenario = result["scenario"]
+        observed = result["observed"]
+        coverage = observed["metrics"]["coverage"]
+        crosswalk = observed["truth_crosswalk"]
+
+        overlap_people = set(_linked_crosswalk(crosswalk)["PersonKey"].astype(str).str.strip().tolist())
+        actual_overlap = len(overlap_people)
+
+        n_base = int(coverage["base_entities"])
+        overlap_pct = float(scenario["emission"]["overlap_entity_pct"])
+        appearance_a_pct = float(scenario["emission"]["appearance_A_pct"])
+        appearance_b_pct = float(scenario["emission"]["appearance_B_pct"])
+        assert actual_overlap == int(coverage["overlap_entities"])
+        if (
+            scenario["emission"].get("record_count_A") is None
+            and scenario["emission"].get("record_count_B") is None
+        ):
+            target_a = min(n_base, max(0, int(round((appearance_a_pct / 100.0) * n_base))))
+            target_b = min(n_base, max(0, int(round((appearance_b_pct / 100.0) * n_base))))
+            expected_overlap = min(n_base, max(0, int(round((overlap_pct / 100.0) * n_base))))
+            expected_overlap = min(expected_overlap, target_a, target_b)
+            expected_overlap = max(expected_overlap, max(0, target_a + target_b - n_base))
+            assert actual_overlap == expected_overlap
+
+
+def test_high_noise_identity_drift_realizes_biased_noise_in_dataset_b(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    result = scenario_results["high_noise_identity_drift"]
+    events = result["truth"]["truth_events"]
+    observed = result["observed"]
+    crosswalk = observed["truth_crosswalk"]
+    linked = _linked_crosswalk(crosswalk)
+    dataset_a = observed["metrics"]["datasets"]["A"]
+    dataset_b = observed["metrics"]["datasets"]["B"]
+    noise_a = dataset_a["noise_counts"]
+    noise_b = dataset_b["noise_counts"]
+
+    move_count = int((events["EventType"].astype(str).str.upper() == "MOVE").sum())
+    assert move_count > 0
+    assert observed["metrics"]["match_mode"] == "one_to_one"
+    assert not linked.empty
+
+    counts = linked.groupby("PersonKey").agg(
+        a_count=("A_RecordKey", "nunique"),
+        b_count=("B_RecordKey", "nunique"),
+    )
+    assert int(counts["a_count"].max()) == 1
+    assert int(counts["b_count"].max()) == 1
+
+    for field in ("phonetic_error", "ocr_error", "date_swap", "nickname", "suffix_missing"):
+        assert int(noise_b[field]) > 0
+        assert int(noise_b[field]) > int(noise_a[field])
+
+    b_name_drift = sum(int(noise_b[field]) for field in ("name_typo", "phonetic_error", "ocr_error", "nickname"))
+    a_name_drift = sum(int(noise_a[field]) for field in ("name_typo", "phonetic_error", "ocr_error", "nickname"))
+    assert b_name_drift >= (a_name_drift * 5)
+
+
+def test_low_overlap_sparse_coverage_realizes_large_unmatched_populations(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    result = scenario_results["low_overlap_sparse_coverage"]
+    events = result["truth"]["truth_events"]
+    observed = result["observed"]
+    coverage = observed["metrics"]["coverage"]
+    linked = _linked_crosswalk(observed["truth_crosswalk"])
+
+    move_count = int((events["EventType"].astype(str).str.upper() == "MOVE").sum())
+    assert move_count > 0
+    assert observed["metrics"]["match_mode"] == "one_to_one"
+    assert not linked.empty
+    assert int(coverage["overlap_entities"]) < int(coverage["a_only_entities"])
+    assert int(coverage["overlap_entities"]) < int(coverage["b_only_entities"])
+
+    union_entities = (
+        int(coverage["overlap_entities"])
+        + int(coverage["a_only_entities"])
+        + int(coverage["b_only_entities"])
+    )
+    overlap_pct_of_union = (int(coverage["overlap_entities"]) / union_entities) * 100.0 if union_entities else 0.0
+    assert overlap_pct_of_union <= 30.0
+
+    counts = linked.groupby("PersonKey").agg(
+        a_count=("A_RecordKey", "nunique"),
+        b_count=("B_RecordKey", "nunique"),
+    )
+    assert int(counts["a_count"].max()) == 1
+    assert int(counts["b_count"].max()) == 1
+
+
+def test_asymmetric_source_coverage_realizes_source_imbalance(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    result = scenario_results["asymmetric_source_coverage"]
+    events = result["truth"]["truth_events"]
+    observed = result["observed"]
+    coverage = observed["metrics"]["coverage"]
+    dataset_a = observed["metrics"]["datasets"]["A"]
+    dataset_b = observed["metrics"]["datasets"]["B"]
+    linked = _linked_crosswalk(observed["truth_crosswalk"])
+
+    move_count = int((events["EventType"].astype(str).str.upper() == "MOVE").sum())
+    assert move_count > 0
+    assert observed["metrics"]["match_mode"] == "one_to_one"
+    assert not linked.empty
+    assert int(coverage["a_entities_base"]) >= (int(coverage["b_entities_base"]) * 2)
+    assert int(coverage["a_only_entities"]) > int(coverage["b_only_entities"])
+
+    assert _duplicate_rate(dataset_a) > 0.0
+    assert _duplicate_rate(dataset_a) <= 0.05
+    assert _duplicate_rate(dataset_b) <= 0.05
+
+
+def test_high_duplication_dedup_is_single_dataset_with_large_duplicate_pressure(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    observed = scenario_results["high_duplication_dedup"]["observed"]
+    dataset = observed["datasets"]["registry"]
+    entity_record_map = observed["entity_record_map"]
+    registry_stats = observed["metrics"]["datasets"]["registry"]
+
+    assert observed["truth_crosswalk"] is None
+    assert observed["metrics"]["match_mode"] == "single_dataset"
+    assert observed["metrics"]["dataset_count"] == 1
+    assert observed["metrics"]["dataset_ids"] == ["registry"]
+    assert _duplicate_rate(registry_stats) >= 0.35
+    assert set(entity_record_map["DatasetId"].astype(str).str.strip().tolist()) == {"registry"}
+    assert len(dataset) == len(entity_record_map)
+
+
+def test_three_source_partial_overlap_emits_n_way_pairwise_artifacts(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    result = scenario_results["three_source_partial_overlap"]
+    events = result["truth"]["truth_events"]
+    observed = result["observed"]
+    coverage = observed["metrics"]["coverage"]
+    pairwise = observed["pairwise_crosswalks"]
+
+    move_count = int((events["EventType"].astype(str).str.upper() == "MOVE").sum())
+    assert move_count > 0
+    assert observed["truth_crosswalk"] is None
+    assert observed["metrics"]["match_mode"] == "one_to_one"
+    assert observed["metrics"]["dataset_count"] == 3
+    assert observed["metrics"]["dataset_ids"] == ["registry", "claims", "benefits"]
+    assert set(pairwise.keys()) == {"registry__claims", "registry__benefits", "claims__benefits"}
+    assert all(not df.empty for df in pairwise.values())
+
+    pair_overlap = coverage["pairwise_overlap"]
+    registry_claims = int(pair_overlap["registry__claims"]["overlap_entities"])
+    registry_benefits = int(pair_overlap["registry__benefits"]["overlap_entities"])
+    claims_benefits = int(pair_overlap["claims__benefits"]["overlap_entities"])
+    all_overlap = int(coverage["all_dataset_overlap_entities"])
+
+    assert registry_claims > registry_benefits > claims_benefits
+    assert all_overlap < claims_benefits
+
+
+def test_name_change_lifecycle_replays_new_names_in_observed_snapshot(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    result = scenario_results["name_change_lifecycle"]
+    events = result["truth"]["truth_events"]
+    observed = result["observed"]
+    changes = events[events["EventType"].astype(str).str.upper() == "NAME_CHANGE"].copy()
+    assert not changes.empty
+    assert changes["PreviousFullName"].astype(str).str.strip().ne("").all()
+    assert changes["NewFullName"].astype(str).str.strip().ne("").all()
+    assert (changes["PreviousFullName"].astype(str) != changes["NewFullName"].astype(str)).all()
+
+    found_observed_change = False
+    for _, change in changes.iterrows():
+        person_key = str(change["SubjectPersonKey"]).strip()
+        source_a = _dataset_row_for_person(observed, "A", person_key)
+        source_b = _dataset_row_for_person(observed, "B", person_key)
+        if source_a is None or source_b is None:
+            continue
+        if str(source_a["LastName"]).strip() == str(change["PreviousLastName"]).strip() and str(
+            source_b["LastName"]
+        ).strip() == str(change["NewLastName"]).strip():
+            found_observed_change = True
+            break
+
+    assert found_observed_change
+
+
+def test_death_survivor_persistence_closes_intervals_and_keeps_observed_record(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    result = scenario_results["death_survivor_persistence"]
+    truth = result["truth"]
+    observed = result["observed"]
+    events = truth["truth_events"]
+    deaths = events[events["EventType"].astype(str).str.upper() == "DEATH"].copy()
+    assert not deaths.empty
+
+    people = truth["truth_people"].copy()
+    people["PersonKey"] = people["PersonKey"].astype(str).str.strip()
+    memberships = truth["truth_household_memberships"]
+    residence = truth["truth_residence_history"]
+
+    found_closed_deceased = False
+    for _, death in deaths.iterrows():
+        person_key = str(death["SubjectPersonKey"]).strip()
+        person = people[people["PersonKey"] == person_key].iloc[0]
+        if str(person.get("IsDeceased")).lower() != "true":
+            continue
+        if str(person.get("DeathDate")).strip() != str(death["EventDate"]).strip():
+            continue
+        person_memberships = memberships[memberships["PersonKey"].astype(str).str.strip() == person_key]
+        person_residence = residence[residence["PersonKey"].astype(str).str.strip() == person_key]
+        if not person_memberships["MembershipEndDate"].astype(str).str.strip().ne("").any():
+            continue
+        if not person_residence["ResidenceEndDate"].astype(str).str.strip().ne("").any():
+            continue
+        if _dataset_row_for_person(observed, "B", person_key) is None:
+            continue
+        found_closed_deceased = True
+        break
+
+    assert found_closed_deceased
+
+
+def test_adoption_blended_family_moves_child_and_replays_adoptive_surname(
+    scenario_results: dict[str, dict[str, Any]]
+) -> None:
+    result = scenario_results["adoption_blended_family"]
+    truth = result["truth"]
+    observed = result["observed"]
+    events = truth["truth_events"]
+    adoptions = events[events["EventType"].astype(str).str.upper() == "ADOPTION"].copy()
+    assert not adoptions.empty
+
+    memberships = truth["truth_household_memberships"]
+    found_observed_adoption = False
+    for _, adoption in adoptions.iterrows():
+        child_key = str(adoption["ChildPersonKey"]).strip()
+        new_household = str(adoption["NewHouseholdKey"]).strip()
+        if not child_key or not new_household:
+            continue
+        child_memberships = memberships[memberships["PersonKey"].astype(str).str.strip() == child_key]
+        active_child_memberships = child_memberships[
+            child_memberships["MembershipEndDate"].astype(str).str.strip() == ""
+        ]
+        if active_child_memberships.empty:
+            continue
+        if str(active_child_memberships.iloc[0]["HouseholdKey"]).strip() != new_household:
+            continue
+        if str(adoption["FromAddressKey"]).strip() == str(adoption["ToAddressKey"]).strip():
+            continue
+        source_a = _dataset_row_for_person(observed, "A", child_key)
+        source_b = _dataset_row_for_person(observed, "B", child_key)
+        if source_a is None or source_b is None:
+            continue
+        if str(source_a["LastName"]).strip() != str(adoption["PreviousLastName"]).strip():
+            continue
+        if str(source_b["LastName"]).strip() != str(adoption["NewLastName"]).strip():
+            continue
+        found_observed_adoption = True
+        break
+
+    assert found_observed_adoption

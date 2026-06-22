@@ -10,11 +10,13 @@ It has two phases:
 ## Start Here
 
 - `docs/HANDOFF.md`: final ownership-transfer summary and operational starting points
+- `docs/SOG_BIBLE.md`: current canonical end-to-end Bible for the working tree
+- `The_SOG_Bible_v2.pdf`: PDF build of the current Bible
 - `phase1/README.md`: practical Phase-1 setup and baseline generation
 - `phase2/README.md`: practical Phase-2 run sequence
 - `docs/README.md`: documentation index
-- `docs/SOG_COMPLETE_USER_GUIDE.md`: end-to-end guide
-- `docs/SCENARIO_USE_CASES_AND_TESTING.md`: scenario selection and benchmark workflow
+- `docs/SOG_COMPLETE_USER_GUIDE.md`: older long-form guide kept for context
+- `phase2/docs/SCENARIO_USE_CASES_AND_TESTING.md`: scenario selection and benchmark workflow
 - `docs/FRONTEND_RUNBOOK.md`: local Streamlit frontend guide
 
 ## Repository Layout
@@ -31,19 +33,20 @@ SOG/
 |   |-- prepared/              # generated cache, gitignored
 |   |-- outputs/               # generated Phase-1 outputs, gitignored
 |   `-- outputs_phase1/        # canonical baseline location for Phase-2, data gitignored
-|-- Data/phase2_params/         # source-backed Phase-2 parameter tables
-|-- scripts/                    # Phase-2 CLI entrypoints
-|-- src/sog_phase2/             # Phase-2 implementation
 |-- phase2/
+|   |-- Data/phase2_params/    # source-backed Phase-2 parameter tables
+|   |-- docs/                  # scenario and ER benchmark guides
+|   |-- examples/              # small Phase-2 usage examples
+|   |-- scripts/               # Phase-2 CLI entrypoints
 |   |-- scenarios/             # canonical scenario YAML files
+|   |-- src/sog_phase2/        # Phase-2 implementation
+|   |-- tests/                 # Phase-2 unit, integration, and regression tests
 |   |-- runs/                  # generated Phase-2 run folders, gitignored except .gitkeep
 |   `-- .sog_*/                # local frontend/runtime state, gitignored
 |-- frontend/                   # Streamlit app, agents, charts, and helpers
-|-- tests/                      # Phase-2 and frontend tests
-|-- examples/                   # small usage examples
+|-- tests/                      # frontend tests
 |-- docs/                       # active docs, reference docs, and archive material
 |-- requirements.txt
-|-- requirements-dev.txt
 `-- run_frontend.ps1
 ```
 
@@ -55,7 +58,6 @@ SOG/
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt
-pip install -r requirements-dev.txt
 ```
 
 ### 2. Build the Phase-1 baseline
@@ -71,15 +73,15 @@ Copy-Item phase1/outputs/Phase1_people_addresses.quality_report.json phase1/outp
 ### 3. Build Phase-2 parameter tables
 
 ```powershell
-python scripts/build_phase2_params.py
+python phase2/scripts/build_phase2_params.py
 ```
 
 ### 4. Run one Phase-2 scenario
 
 ```powershell
-python scripts/generate_phase2_truth.py --run-id 2026-03-10_single_movers_seed20260310
-python scripts/generate_phase2_observed.py --run-id 2026-03-10_single_movers_seed20260310
-python scripts/validate_phase2_outputs.py --run-id 2026-03-10_single_movers_seed20260310
+python phase2/scripts/generate_phase2_truth.py --run-id 2026-03-10_single_movers_seed20260310
+python phase2/scripts/generate_phase2_observed.py --run-id 2026-03-10_single_movers_seed20260310
+python phase2/scripts/validate_phase2_outputs.py --run-id 2026-03-10_single_movers_seed20260310
 ```
 
 ## Frontend
@@ -107,7 +109,7 @@ python -m pytest -q
 Run the Phase-2 scenario regression suite only:
 
 ```powershell
-python -m pytest -q tests/test_phase2_scenario_regression.py
+python -m pytest -q phase2/tests/test_phase2_scenario_regression.py
 ```
 
 ## Notes Before Pushing

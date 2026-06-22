@@ -1,0 +1,628 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R 19 0 R 21 0 R 23 0 R 25 0 R 27 0 R 29 0 R] /Count 12 >>
+endobj
+3 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Courier >>
+endobj
+6 0 obj
+<< /Length 3738 >>
+stream
+BT /F2 22.00 Tf 1 0 0 1 54.00 734.00 Tm (The SOG Bible) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 691.00 Tm (Current working-tree edition) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 670.50 Tm (Last updated: 2026-06-22) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 650.00 Tm (Editable source: docs/SOG_BIBLE.md) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 629.50 Tm (Generated PDF: The_SOG_Bible_v2.pdf) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 601.00 Tm (What This Document Is) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 572.00 Tm (This is the current canonical end-to-end reference for the Synthetic Occupancy) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 558.50 Tm (Generator repository as it exists today. It replaces older SOG Bible PDFs and) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 545.00 Tm (older guide sections that assumed root-level scripts/, src/sog_phase2/, or) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 531.50 Tm (Data/phase2_params/ paths.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 511.00 Tm (Use this file when you need the current workflow, current paths, current Phase 1) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 497.50 Tm (configuration behavior, current Phase 2 scenario contract, and current output) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 484.00 Tm (artifacts in one place.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 463.50 Tm (The current repository is phase-scoped:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 443.00 Tm (- Phase 1 code and scripts live under phase1/.) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 430.50 Tm (- Phase 2 code, scripts, scenarios, tests, docs, priors, and run artifacts live) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 418.00 Tm (under phase2/.) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 404.50 Tm (- The Streamlit frontend and agent helpers live under frontend/.) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 377.00 Tm (Source Of Truth Files) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 348.00 Tm (When this Bible and another document disagree, use the code and these active) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 334.50 Tm (references in this order:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 314.00 Tm (1. Phase 1 config validation: phase1/src/sog_phase1/config.py) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 301.50 Tm (2. Phase 1 generator behavior: phase1/src/sog_phase1/generator.py) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 289.00 Tm (3. Phase 1 YAML: phase1/configs/phase1.yaml) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 276.50 Tm (4. Phase 1 parameter notes: phase1/configs/phase1_config_parameters.md) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 264.00 Tm (5. Phase 2 scenario YAMLs: phase2/scenarios/*.yaml) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 251.50 Tm (6. Phase 2 scenario template: phase2/scenarios/_working_scenario_template.yaml) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 239.00 Tm (7. Phase 2 scenario catalog: phase2/scenarios/catalog.yaml) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 226.50 Tm (8. Phase 2 engine: phase2/src/sog_phase2/) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 214.00 Tm (9. Phase 2 output contract: phase2/src/sog_phase2/output_contract.py) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 201.50 Tm (10. Phase 2 run-folder reference: phase2/runs/README.md) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 174.00 Tm (Current Repository Map) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 140.00 Tm (SOG/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 129.60 Tm (|-- phase1/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 119.20 Tm (|   |-- Addresses/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 108.80 Tm (|   |-- Names/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 98.40 Tm (|   |-- Data/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 88.00 Tm (|   |-- configs/phase1.yaml) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 77.60 Tm (|   |-- configs/phase1_config_parameters.md) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 67.20 Tm (|   |-- scripts/) Tj ET
+BT /F1 8.00 Tf 1 0 0 1 54.00 30.00 Tm (The SOG Bible - current edition - page 1 of 12) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 3852 >>
+stream
+BT /F3 8.20 Tf 1 0 0 1 54.00 734.00 Tm (|   |-- src/sog_phase1/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 723.60 Tm (|   |-- tests/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 713.20 Tm (|   |-- prepared/                 # generated, gitignored) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 702.80 Tm (|   |-- outputs/                  # generated, gitignored) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 692.40 Tm (|   `-- outputs_phase1/           # canonical Phase 2 baseline location) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 682.00 Tm (|-- phase2/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 671.60 Tm (|   |-- Data/phase2_params/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 661.20 Tm (|   |-- docs/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 650.80 Tm (|   |-- scenarios/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 640.40 Tm (|   |-- scripts/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 630.00 Tm (|   |-- src/sog_phase2/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 619.60 Tm (|   |-- tests/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 609.20 Tm (|   `-- runs/                     # generated run folders) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 598.80 Tm (|-- frontend/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 588.40 Tm (|-- tests/                        # frontend tests) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 578.00 Tm (|-- docs/) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 567.60 Tm (|-- requirements.txt) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 557.20 Tm (|-- run_frontend.ps1) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 546.80 Tm (`-- The_SOG_Bible_v2.pdf) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 516.40 Tm (What SOG Does) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 487.40 Tm (SOG is a deterministic synthetic data platform for entity-resolution and) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 473.90 Tm (record-linkage benchmarking.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 453.40 Tm (It creates a known synthetic world, changes that world through simulated life and) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 439.90 Tm (household events, emits one or more noisy operational views of the world, and) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 426.40 Tm (ships the answer keys needed to evaluate an ER system.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 405.90 Tm (The pipeline has two primary phases:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 385.40 Tm (1. Phase 1 generates the baseline person-and-address population.) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 372.90 Tm (2. Phase 2 selects scenario participants, simulates truth events, emits observed) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 360.40 Tm (datasets, and validates the run package.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 339.90 Tm (The key design principle is separation:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 319.40 Tm (- Phase 1 creates stable people and baseline administrative rows.) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 306.90 Tm (- Phase 2 creates scenario-specific temporal truth and observed data.) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 294.40 Tm (- Output contracts and metadata make each run auditable and reproducible.) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 266.90 Tm (Install And Setup) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 237.90 Tm (Run commands from the repository root.) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 212.40 Tm (python -m venv .venv) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 202.00 Tm (.\\.venv\\Scripts\\Activate.ps1) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 191.60 Tm (pip install -r requirements.txt) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 169.20 Tm (requirements.txt is the dependency source of truth in this checkout. It already) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 155.70 Tm (contains runtime packages, the frontend packages, and pytest.) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 127.20 Tm (Phase 1 In Plain Terms) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 98.20 Tm (Phase 1 answers these questions:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 77.70 Tm (- How many people exist?) Tj ET
+BT /F1 8.00 Tf 1 0 0 1 54.00 30.00 Tm (The SOG Bible - current edition - page 2 of 12) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 4403 >>
+stream
+BT /F1 9.60 Tf 1 0 0 1 64.00 734.00 Tm (- What stable identity and demographic attributes do they have?) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 721.50 Tm (- How many flat-file rows represent each person?) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 709.00 Tm (- How much legitimate name collision, nickname variation, mailing-address) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 696.50 Tm (divergence, and row redundancy should be present?) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 676.00 Tm (The main config is:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 650.50 Tm (phase1/configs/phase1.yaml) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 628.10 Tm (The current default shape is:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 602.60 Tm (phase1:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 592.20 Tm (  n_people: 10000) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 581.80 Tm (  n_records: 14000) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 571.40 Tm (  seed: 20260303) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 561.00 Tm (  output:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 550.60 Tm (    format: csv) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 540.20 Tm (    path: outputs/Phase1_people_addresses.csv) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 529.80 Tm (    chunk_size: 5000) Tj ET
+BT /F2 12.20 Tf 1 0 0 1 54.00 501.40 Tm (Current Phase 1 Defaults) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 478.40 Tm (| Setting | Current value | Meaning |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 469.10 Tm (| --- | --- | --- |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 459.80 Tm (| `phase1.n_people` | `10000` | Unique people, therefore unique `PersonKey` values. |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 450.50 Tm (| `phase1.n_records` | `14000` | Requested base output rows before nickname backup rows. |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 441.20 Tm (| `phase1.seed` | `20260303` | Reproducibility seed. |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 431.90 Tm (| `phase1.output.format` | `csv` | Main file format. |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 422.60 Tm (| `phase1.output.path` | `outputs/Phase1_people_addresses.csv` | Path relative to `phase1/`. |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 413.30 Tm (| `phase1.output.chunk_size` | `5000` | Write batching size. |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 404.00 Tm (| `phase1.redundancy.enabled` | `true` | Allows repeated rows for the same person. |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 394.70 Tm (| `phase1.redundancy.shape` | `heavy_tail` | Concentrates extra records among fewer people. |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 385.40 Tm (| `phase1.nicknames.enabled` | `true` | Emits display first names that can differ from formal first names. |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 376.10 Tm (| `phase1.nicknames.mode` | `per_record` | Nickname display can vary row by row. |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 366.80 Tm (| `phase1.nicknames.usage_pct` | `35.0` | Target nickname usage rate. |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 357.50 Tm (| `phase1.name_duplication.full_name_people_pct` | `58.0` | Target people participating in exact formal full-name co) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 348.20 Tm (  llisions. |) Tj ET
+BT /F2 12.20 Tf 1 0 0 1 54.00 325.90 Tm (Phase 1 Output Formats) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 302.90 Tm (phase1.output.format accepts:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 282.40 Tm (- csv) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 269.90 Tm (- parquet) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 257.40 Tm (- txt) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 244.90 Tm (- xlsx) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 232.40 Tm (- excel as an alias for xlsx) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 212.90 Tm (Compatibility typo aliases exist in the code for older configs, but new configs) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 199.40 Tm (should use the canonical values above.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 178.90 Tm (Format behavior:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 158.40 Tm (- csv writes Phase1_people_addresses.csv.) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 145.90 Tm (- txt writes a tab-delimited Phase1_people_addresses.txt.) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 133.40 Tm (- xlsx and excel write Phase1_people_addresses.xlsx with a Phase1) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 120.90 Tm (worksheet.) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 107.40 Tm (- parquet writes chunk files under a <output_stem>_parts/ directory.) Tj ET
+BT /F2 12.20 Tf 1 0 0 1 54.00 81.90 Tm (Important Phase 1 Behaviors) Tj ET
+BT /F1 8.00 Tf 1 0 0 1 54.00 30.00 Tm (The SOG Bible - current edition - page 3 of 12) Tj ET
+endstream
+endobj
+11 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 10 0 R >>
+endobj
+12 0 obj
+<< /Length 4184 >>
+stream
+BT /F1 10.00 Tf 1 0 0 1 54.00 734.00 Tm (n_people and n_records are not the same thing. n_people controls entity) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 720.50 Tm (count. n_records controls flat-file row count. With the current default,) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 707.00 Tm (Phase 1 generates 10,000 people and requests 14,000 base rows, so some people) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 693.50 Tm (appear more than once.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 673.00 Tm (When redundancy is enabled:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 647.50 Tm (n_people * min_records_per_entity <= n_records <= n_people * max_records_per_entity) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 625.10 Tm (When redundancy is disabled, n_records must equal n_people.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 604.60 Tm (Nickname behavior can add formal backup rows. If a person receives a nickname) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 591.10 Tm (row but does not already have a formal-name row, the generator appends a formal) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 577.60 Tm (backup row. Check records_requested, records_written, and) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 564.10 Tm (formal_copy_records_added in the manifest and quality report.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 543.60 Tm (Name duplication is entity-level collision pressure. It does not duplicate rows.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 530.10 Tm (It makes different people legitimately share first names, last names, or exact) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 516.60 Tm (formal full names.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 496.10 Tm (Residence dates in Phase 1 are sampled per row. Coherent household movement and) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 482.60 Tm (event-driven residence intervals are Phase 2 responsibilities.) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 454.10 Tm (Build The Phase 1 Baseline) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 425.10 Tm (Run:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 399.60 Tm (python phase1/scripts/build_prepared.py) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 389.20 Tm (python phase1/scripts/generate_phase1.py --overwrite) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 366.80 Tm (Primary generated artifacts:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 341.30 Tm (phase1/outputs/Phase1_people_addresses.csv) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 330.90 Tm (phase1/outputs/Phase1_people_addresses.manifest.json) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 320.50 Tm (phase1/outputs/Phase1_people_addresses.quality_report.json) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 298.10 Tm (Phase 2 uses the canonical baseline under phase1/outputs_phase1/, so copy the) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 284.60 Tm (fresh Phase 1 artifacts there when you want Phase 2 to consume them:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 259.10 Tm (Copy-Item phase1/outputs/Phase1_people_addresses.csv phase1/outputs_phase1/Phase1_people_addresses.csv) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 248.70 Tm (   -Force) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 238.30 Tm (Copy-Item phase1/outputs/Phase1_people_addresses.manifest.json phase1/outputs_phase1/Phase1_people_add) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 227.90 Tm (  resses.manifest.json -Force) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 217.50 Tm (Copy-Item phase1/outputs/Phase1_people_addresses.quality_report.json phase1/outputs_phase1/Phase1_peop) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 207.10 Tm (  le_addresses.quality_report.json -Force) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 176.70 Tm (Phase 2 In Plain Terms) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 147.70 Tm (Phase 2 answers these questions:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 127.20 Tm (- Which people from Phase 1 enter this scenario?) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 114.70 Tm (- What events happen to them over time?) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 102.20 Tm (- Which systems observe them, at which snapshot dates, and with what coverage?) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 89.70 Tm (- Which fields are corrupted, masked, missing, duplicated, or drifted?) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 77.20 Tm (- What answer keys prove which observed records refer to the same real person?) Tj ET
+BT /F1 8.00 Tf 1 0 0 1 54.00 30.00 Tm (The SOG Bible - current edition - page 4 of 12) Tj ET
+endstream
+endobj
+13 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 12 0 R >>
+endobj
+14 0 obj
+<< /Length 2706 >>
+stream
+BT /F1 10.00 Tf 1 0 0 1 54.00 734.00 Tm (Phase 2 is now self-contained under:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 708.50 Tm (phase2/) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 686.10 Tm (The current implementation lives under:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 660.60 Tm (phase2/src/sog_phase2/) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 638.20 Tm (The current CLI entrypoints live under:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 612.70 Tm (phase2/scripts/) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 590.30 Tm (The current parameter package lives under:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 564.80 Tm (phase2/Data/phase2_params/) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 534.40 Tm (Build Phase 2 Priors) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 505.40 Tm (Run:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 479.90 Tm (python phase2/scripts/build_phase2_params.py) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 457.50 Tm (The priors package contains mobility, household, marriage/divorce, fertility,) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 444.00 Tm (source, and provenance files used by Phase 2.) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 415.50 Tm (Run A Phase 2 Scenario) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 386.50 Tm (The preferred one-command path is:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 361.00 Tm (python phase2/scripts/run_phase2_pipeline.py --scenario single_movers --overwrite) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 338.60 Tm (Use --rebuild-population when selection or filtering changed and you want to) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 325.10 Tm (discard the cached scenario_population.parquet:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 299.60 Tm (python phase2/scripts/run_phase2_pipeline.py --scenario single_movers --overwrite --rebuild-population) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 277.20 Tm (The staged equivalent is:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 251.70 Tm (python phase2/scripts/generate_phase2_truth.py --run-id 2026-03-10_single_movers_seed20260310 --overwr) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 241.30 Tm (  ite) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 230.90 Tm (python phase2/scripts/generate_phase2_observed.py --run-id 2026-03-10_single_movers_seed20260310 --ove) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 220.50 Tm (  rwrite) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 210.10 Tm (python phase2/scripts/validate_phase2_outputs.py --run-id 2026-03-10_single_movers_seed20260310) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 187.70 Tm (Run IDs use:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 162.20 Tm (YYYY-MM-DD_<scenario_id>_seed<seed>) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 139.80 Tm (Example:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 114.30 Tm (2026-03-10_single_movers_seed20260310) Tj ET
+BT /F1 8.00 Tf 1 0 0 1 54.00 30.00 Tm (The SOG Bible - current edition - page 5 of 12) Tj ET
+endstream
+endobj
+15 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 14 0 R >>
+endobj
+16 0 obj
+<< /Length 3238 >>
+stream
+BT /F2 15.50 Tf 1 0 0 1 54.00 726.00 Tm (Important Cache Rule) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 697.00 Tm (--overwrite replaces output artifacts, but by itself it does not rebuild an) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 683.50 Tm (existing scenario_population.parquet.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 663.00 Tm (If you edit selection filters, sample size, age bins, genders, residence types,) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 649.50 Tm (or similar participant-selection logic in a scenario YAML, use:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 624.00 Tm (--rebuild-population) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 601.60 Tm (The selection audit lives in:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 576.10 Tm (phase2/runs/<run_id>/scenario_selection_log.json) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 553.70 Tm (Use that file to confirm selected counts, filter survivor counts, selection seed,) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 540.20 Tm (and selected PersonKey checksum.) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 511.70 Tm (Scenario YAML Contract) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 482.70 Tm (Canonical scenario YAMLs live under:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 457.20 Tm (phase2/scenarios/) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 434.80 Tm (The editable starter template is:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 409.30 Tm (phase2/scenarios/_working_scenario_template.yaml) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 386.90 Tm (Copy that file to phase2/scenarios/<scenario_id>.yaml, remove the _working_) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 373.40 Tm (prefix, and set scenario_id to match the filename.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 352.90 Tm (Top-level scenario sections:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 327.40 Tm (scenario_id: single_movers) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 317.00 Tm (seed: 20260310) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 306.60 Tm (phase1: { data_path: ..., manifest_path: ... }) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 296.20 Tm (parameters: { ... }) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 285.80 Tm (selection: { ... }) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 275.40 Tm (constraints: { ... }) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 265.00 Tm (simulation: { ... }) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 254.60 Tm (emission: { ... }) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 244.20 Tm (quality: { ... }) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 221.80 Tm (Only scenario_id, seed, and phase1 are strictly required. Other sections) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 208.30 Tm (fall back to defaults, but shipped scenarios define the important knobs) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 194.80 Tm (explicitly.) Tj ET
+BT /F2 12.20 Tf 1 0 0 1 54.00 168.30 Tm (Selection) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 145.30 Tm (Selection is entity-centric. It collapses Phase 1 rows to people, attaches) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 131.80 Tm (deterministic latent propensity scores, filters candidates, samples the cohort,) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 118.30 Tm (and writes scenario_population.parquet.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 97.80 Tm (Common keys:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 77.30 Tm (- selection.sample.mode: all, count, or pct) Tj ET
+BT /F1 8.00 Tf 1 0 0 1 54.00 30.00 Tm (The SOG Bible - current edition - page 6 of 12) Tj ET
+endstream
+endobj
+17 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 16 0 R >>
+endobj
+18 0 obj
+<< /Length 3455 >>
+stream
+BT /F1 9.60 Tf 1 0 0 1 64.00 734.00 Tm (- selection.sample.value: count or percentage) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 721.50 Tm (- selection.filters.age_bins) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 709.00 Tm (- selection.filters.genders) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 696.50 Tm (- selection.filters.ethnicities) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 684.00 Tm (- selection.filters.residence_types) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 671.50 Tm (- selection.filters.redundancy_profiles) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 659.00 Tm (- selection.filters.mobility_propensity_buckets) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 646.50 Tm (- selection.thresholds.mobility_low_max) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 634.00 Tm (- selection.thresholds.mobility_high_min) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 621.50 Tm (- selection.thresholds.trait_low_max) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 609.00 Tm (- selection.thresholds.trait_high_min) Tj ET
+BT /F2 12.20 Tf 1 0 0 1 54.00 583.50 Tm (Parameters) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 560.50 Tm (Scenario parameters are annual event rates:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 540.00 Tm (- move_rate_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 527.50 Tm (- cohabit_rate_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 515.00 Tm (- birth_rate_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 502.50 Tm (- divorce_rate_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 490.00 Tm (- leave_home_rate_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 477.50 Tm (- split_rate_pct as a backward-compatible alias for leave-home behavior) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 465.00 Tm (- use_priors_for_unspecified_rates) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 445.50 Tm (The simulator converts annual rates to per-step probabilities based on) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 432.00 Tm (simulation.granularity.) Tj ET
+BT /F2 12.20 Tf 1 0 0 1 54.00 405.50 Tm (Constraints) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 382.50 Tm (Constraints gate and validate realism:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 362.00 Tm (- min_marriage_age) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 349.50 Tm (- max_partner_age_gap) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 337.00 Tm (- partner_age_gap_distribution) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 324.50 Tm (- fertility_age_range.min) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 312.00 Tm (- fertility_age_range.max) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 299.50 Tm (- allow_underage_marriage) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 287.00 Tm (- allow_child_lives_alone) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 274.50 Tm (- enforce_non_overlapping_residence_intervals) Tj ET
+BT /F2 12.20 Tf 1 0 0 1 54.00 249.00 Tm (Simulation) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 226.00 Tm (The current simulation keys are:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 205.50 Tm (- granularity: monthly or daily) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 193.00 Tm (- start_date: YYYY-MM-DD) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 180.50 Tm (- periods: positive integer) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 161.00 Tm (Monthly is the recommended default. Daily runs create many more event) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 147.50 Tm (opportunities and can be slower.) Tj ET
+BT /F2 12.20 Tf 1 0 0 1 54.00 121.00 Tm (Emission) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 98.00 Tm (Emission controls observed source files. The canonical schema supports one,) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 84.50 Tm (two, or more datasets:) Tj ET
+BT /F1 8.00 Tf 1 0 0 1 54.00 30.00 Tm (The SOG Bible - current edition - page 7 of 12) Tj ET
+endstream
+endobj
+19 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 18 0 R >>
+endobj
+20 0 obj
+<< /Length 4162 >>
+stream
+BT /F3 8.20 Tf 1 0 0 1 54.00 734.00 Tm (emission:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 723.60 Tm (  crossfile_match_mode: one_to_one) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 713.20 Tm (  overlap_entity_pct: 70.0) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 702.80 Tm (  datasets:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 692.40 Tm (    - dataset_id: A) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 682.00 Tm (      filename: DatasetA.csv) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 671.60 Tm (      snapshot: simulation_start) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 661.20 Tm (      appearance_pct: 85.0) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 650.80 Tm (      duplication_pct: 4.0) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 640.40 Tm (      record_count: null) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 630.00 Tm (      noise: { ... }) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 619.60 Tm (    - dataset_id: B) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 609.20 Tm (      filename: DatasetB.csv) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 598.80 Tm (      snapshot: simulation_end) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 588.40 Tm (      appearance_pct: 90.0) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 578.00 Tm (      duplication_pct: 6.0) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 567.60 Tm (      record_count: null) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 557.20 Tm (      noise: { ... }) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 534.80 Tm (Accepted crossfile_match_mode values:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 514.30 Tm (- single_dataset) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 501.80 Tm (- one_to_one) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 489.30 Tm (- one_to_many) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 476.80 Tm (- many_to_one) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 464.30 Tm (- many_to_many) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 444.80 Tm (Legacy two-source A/B keys are still accepted for compatibility, but new) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 431.30 Tm (scenarios should use emission.datasets[*].) Tj ET
+BT /F2 12.20 Tf 1 0 0 1 54.00 404.80 Tm (Noise Dials) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 381.80 Tm (Noise is configured per dataset. Current dials are percentages applied per) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 368.30 Tm (record:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 347.80 Tm (- name_typo_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 335.30 Tm (- dob_shift_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 322.80 Tm (- ssn_mask_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 310.30 Tm (- phone_mask_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 297.80 Tm (- address_missing_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 285.30 Tm (- middle_name_missing_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 272.80 Tm (- phonetic_error_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 260.30 Tm (- ocr_error_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 247.80 Tm (- date_swap_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 235.30 Tm (- zip_digit_error_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 222.80 Tm (- nickname_pct) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 210.30 Tm (- suffix_missing_pct) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 182.80 Tm (Built-In Scenario Catalog) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 153.80 Tm (The machine-readable catalog is phase2/scenarios/catalog.yaml.) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 133.30 Tm (| Scenario | Topology | Cardinality | Truth event surface | Current status |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 124.00 Tm (| --- | --- | --- | --- | --- |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 114.70 Tm (| `single_movers` | pairwise | `one_to_one` | `MOVE` | supported |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 105.40 Tm (| `clean_baseline_linkage` | pairwise | `one_to_one` | `MOVE` | supported |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 96.10 Tm (| `couple_merge` | pairwise | `one_to_many` | `COHABIT`, `MOVE` | supported |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 86.80 Tm (| `family_birth` | pairwise | `many_to_one` | `BIRTH`, `COHABIT` | supported |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 77.50 Tm (| `divorce_custody` | pairwise | `many_to_many` | `DIVORCE`, `COHABIT` | supported |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 68.20 Tm (| `roommates_split` | pairwise | `one_to_many` | `LEAVE_HOME`, `MOVE`, `COHABIT` | supported |) Tj ET
+BT /F1 8.00 Tf 1 0 0 1 54.00 30.00 Tm (The SOG Bible - current edition - page 8 of 12) Tj ET
+endstream
+endobj
+21 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 20 0 R >>
+endobj
+22 0 obj
+<< /Length 4074 >>
+stream
+BT /F3 7.20 Tf 1 0 0 1 54.00 734.00 Tm (| `high_noise_identity_drift` | pairwise | `one_to_one` | `MOVE` | supported |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 724.70 Tm (| `low_overlap_sparse_coverage` | pairwise | `one_to_one` | `MOVE` | supported |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 715.40 Tm (| `asymmetric_source_coverage` | pairwise | `one_to_one` | `MOVE` | supported |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 706.10 Tm (| `high_duplication_dedup` | single dataset | `dedup` | `MOVE` background | supported |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 696.80 Tm (| `three_source_partial_overlap` | N-way | `one_to_one` | `MOVE` | supported |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 687.50 Tm (| `name_change_lifecycle` | pairwise | `one_to_one` | `NAME_CHANGE` | supported |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 678.20 Tm (| `death_survivor_persistence` | pairwise | `one_to_one` | `DEATH` | supported |) Tj ET
+BT /F3 7.20 Tf 1 0 0 1 54.00 668.90 Tm (| `adoption_blended_family` | pairwise | `one_to_one` | `ADOPTION` | supported |) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 652.60 Tm (Parameterized but supported families:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 632.10 Tm (- custom_single_dataset_dedup) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 619.60 Tm (- custom_pairwise_linkage) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 607.10 Tm (- custom_multi_dataset_linkage) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 594.60 Tm (- custom lifecycle variants through parameters.name_change_rate_pct,) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 582.10 Tm (parameters.death_rate_pct, and parameters.adoption_rate_pct) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 561.60 Tm (These events are active in the truth event grammar and simulator. NAME_CHANGE) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 548.10 Tm (and ADOPTION replay updated names into later observed snapshots and) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 534.60 Tm (RecordType=residence_timeline rows. DEATH closes active household/residence) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 521.10 Tm (intervals and records IsDeceased / DeathDate in the truth person table.) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 492.60 Tm (Phase 2 Run Folder Anatomy) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 463.60 Tm (Each run lands under:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 438.10 Tm (phase2/runs/<run_id>/) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 415.70 Tm (Truth-layer Parquet files:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 395.20 Tm (- truth_people.parquet) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 382.70 Tm (- truth_households.parquet) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 370.20 Tm (- truth_household_memberships.parquet) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 357.70 Tm (- truth_residence_history.parquet) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 345.20 Tm (- truth_events.parquet) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 332.70 Tm (- scenario_population.parquet) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 313.20 Tm (Observed-layer CSV files:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 292.70 Tm (- one or more scenario-defined dataset CSVs, such as DatasetA.csv,) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 280.20 Tm (DatasetB.csv, or custom filenames) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 266.70 Tm (- entity_record_map.csv) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 254.20 Tm (- masterDataset.csv) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 241.70 Tm (- truth_crosswalk.csv for two-dataset pairwise runs) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 229.20 Tm (- truth_crosswalk<left><right>.csv files for multi-dataset pairwise views) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 209.70 Tm (Metadata files:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 189.20 Tm (- scenario.yaml) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 176.70 Tm (- scenario_selection_log.json) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 164.20 Tm (- manifest.json) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 151.70 Tm (- quality_report.json) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 139.20 Tm (- README.md) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 111.70 Tm (Answer Keys) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 82.70 Tm (Use entity_record_map.csv as the canonical answer key.) Tj ET
+BT /F1 8.00 Tf 1 0 0 1 54.00 30.00 Tm (The SOG Bible - current edition - page 9 of 12) Tj ET
+endstream
+endobj
+23 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 22 0 R >>
+endobj
+24 0 obj
+<< /Length 3812 >>
+stream
+BT /F1 10.00 Tf 1 0 0 1 54.00 734.00 Tm (It maps every emitted observed record to the real person:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 708.50 Tm (PersonKey, DatasetId, RecordKey) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 686.10 Tm (Two observed records refer to the same real-world entity if they share the same) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 672.60 Tm (PersonKey. For clustering evaluation, group observed records by PersonKey.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 652.10 Tm (truth_crosswalk.csv is a backward-compatible A/B pairwise view for two-dataset) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 638.60 Tm (runs. It is useful for pairwise comparisons, but it is positional and can show) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 625.10 Tm (blank opposite-side cells when within-file duplicates exist. For transitive) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 611.60 Tm (cluster truth, prefer entity_record_map.csv.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 591.10 Tm (For three-or-more dataset runs, pairwise crosswalk files can be emitted per) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 577.60 Tm (dataset pair, but entity_record_map.csv remains the canonical truth bridge.) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 549.10 Tm (masterDataset.csv) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 520.10 Tm (Every current Phase 2 run emits masterDataset.csv.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 499.60 Tm (It has two row types:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 479.10 Tm (- RecordType=source_snapshot: stacks the observed source dataset rows and adds) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 466.60 Tm (PersonKey.) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 453.10 Tm (- RecordType=residence_timeline: adds DatasetId=TIMELINE rows from) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 440.60 Tm (truth_residence_history.parquet.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 420.10 Tm (The source snapshot section is the best convenience table when you want all) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 406.60 Tm (observed inputs in one CSV. The timeline section is useful when you need to) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 393.10 Tm (inspect intermediate simulated address intervals that do not necessarily appear) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 379.60 Tm (as source snapshots.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 359.10 Tm (Observed source rows are ordered through the entity_record_map.csv bridge and) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 345.60 Tm (stable PersonKey-aware sorting so combined outputs do not depend on arbitrary) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 332.10 Tm (file order.) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 303.60 Tm (Quality And Validation) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 274.60 Tm (Phase 1 writes:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 254.10 Tm (- Phase1_people_addresses.manifest.json) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 241.60 Tm (- Phase1_people_addresses.quality_report.json) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 222.10 Tm (Phase 2 writes:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 201.60 Tm (- manifest.json) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 189.10 Tm (- quality_report.json) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 176.60 Tm (- validation output from phase2/scripts/validate_phase2_outputs.py) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 157.10 Tm (Phase 2 quality checks include:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 136.60 Tm (- required file presence) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 124.10 Tm (- schema checks) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 111.60 Tm (- run ID, scenario ID, seed, and Phase 1 input consistency) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 99.10 Tm (- selected-entity counts against scenario_population.parquet) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 86.60 Tm (- event grammar checks) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 74.10 Tm (- constraint validation) Tj ET
+BT /F1 8.00 Tf 1 0 0 1 54.00 30.00 Tm (The SOG Bible - current edition - page 10 of 12) Tj ET
+endstream
+endobj
+25 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 24 0 R >>
+endobj
+26 0 obj
+<< /Length 2434 >>
+stream
+BT /F1 9.60 Tf 1 0 0 1 64.00 734.00 Tm (- household-size threshold checks) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 721.50 Tm (- observed artifact discovery) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 694.00 Tm (Frontend) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 665.00 Tm (The active frontend entrypoint is:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 639.50 Tm (frontend/chatbot_production.py) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 617.10 Tm (Launch through:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 591.60 Tm (.\\run_frontend.ps1) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 569.20 Tm (Manual command:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 543.70 Tm (python -u -m streamlit run frontend/chatbot_production.py --server.headless true) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 521.30 Tm (Frontend helpers should prefer the current package path:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 495.80 Tm (frontend.visualizations.core) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 465.40 Tm (Test Commands) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 436.40 Tm (Full suite:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 410.90 Tm (python -m pytest -q) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 388.50 Tm (Phase 1 focused tests:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 363.00 Tm (python -m pytest -q phase1/tests) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 340.60 Tm (Phase 2 focused tests:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 315.10 Tm (python -m pytest -q phase2/tests) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 292.70 Tm (Frontend focused tests:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 267.20 Tm (python -m pytest -q tests) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 244.80 Tm (Scenario regression:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 219.30 Tm (python -m pytest -q phase2/tests/test_phase2_scenario_regression.py) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 196.90 Tm (If Windows numerical libraries fail with a thread-start error, retry with:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 171.40 Tm ($env:OMP_NUM_THREADS='1') Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 161.00 Tm ($env:OPENBLAS_NUM_THREADS='1') Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 150.60 Tm ($env:MKL_NUM_THREADS='1') Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 140.20 Tm ($env:NUMEXPR_NUM_THREADS='1') Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 129.80 Tm (python -m pytest -q) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 99.40 Tm (Common Mistakes) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 70.40 Tm (Do not run old root-level commands such as:) Tj ET
+BT /F1 8.00 Tf 1 0 0 1 54.00 30.00 Tm (The SOG Bible - current edition - page 11 of 12) Tj ET
+endstream
+endobj
+27 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 26 0 R >>
+endobj
+28 0 obj
+<< /Length 2473 >>
+stream
+BT /F3 8.20 Tf 1 0 0 1 54.00 722.00 Tm (python scripts/generate_phase1.py) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 699.60 Tm (Use:) Tj ET
+BT /F3 8.20 Tf 1 0 0 1 54.00 674.10 Tm (python phase1/scripts/generate_phase1.py) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 651.70 Tm (Do not assume --overwrite rebuilds selected people. Use) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 638.20 Tm (--rebuild-population after participant-selection edits.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 617.70 Tm (Do not evaluate clusters from truth_crosswalk.csv alone when duplicates exist.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 604.20 Tm (Use entity_record_map.csv.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 583.70 Tm (Do not commit generated outputs such as phase1/prepared/,) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 570.20 Tm (phase1/outputs/, large phase1/outputs_phase1/*.csv files, or) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 556.70 Tm (phase2/runs/.) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 536.20 Tm (Do not move Phase 2 files back to root-level scripts/, src/, or) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 522.70 Tm (Data/phase2_params/. The current clean layout is under phase2/.) Tj ET
+BT /F2 15.50 Tf 1 0 0 1 54.00 494.20 Tm (Current Reference Docs) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 465.20 Tm (Use these active docs with this Bible:) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 444.70 Tm (- phase1/README.md) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 432.20 Tm (- phase1/configs/phase1_config_parameters.md) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 419.70 Tm (- phase2/README.md) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 407.20 Tm (- phase2/scenarios/README.md) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 394.70 Tm (- phase2/docs/PARAMETER_REFERENCE.md) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 382.20 Tm (- phase2/docs/SCENARIO_USE_CASES_AND_TESTING.md) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 369.70 Tm (- phase2/docs/SCENARIO_SUPPORT_MATRIX.md) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 357.20 Tm (- phase2/runs/README.md) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 344.70 Tm (- docs/SOG_TECHNICAL_WALKTHROUGH.md) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 332.20 Tm (- docs/SOG_V1_TO_V2_COMPARISON.md) Tj ET
+BT /F1 9.60 Tf 1 0 0 1 64.00 319.70 Tm (- docs/FRONTEND_RUNBOOK.md) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 300.20 Tm (Older docs can still be useful for context, but this file is the current) Tj ET
+BT /F1 10.00 Tf 1 0 0 1 54.00 286.70 Tm (single-document Bible for the working tree.) Tj ET
+BT /F1 8.00 Tf 1 0 0 1 54.00 30.00 Tm (The SOG Bible - current edition - page 12 of 12) Tj ET
+endstream
+endobj
+29 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 28 0 R >>
+endobj
+xref
+0 30
+0000000000 65535 f 
+0000000015 00000 n 
+0000000064 00000 n 
+0000000198 00000 n 
+0000000268 00000 n 
+0000000343 00000 n 
+0000000411 00000 n 
+0000004201 00000 n 
+0000004347 00000 n 
+0000008251 00000 n 
+0000008397 00000 n 
+0000012853 00000 n 
+0000013001 00000 n 
+0000017238 00000 n 
+0000017386 00000 n 
+0000020145 00000 n 
+0000020293 00000 n 
+0000023584 00000 n 
+0000023732 00000 n 
+0000027240 00000 n 
+0000027388 00000 n 
+0000031603 00000 n 
+0000031751 00000 n 
+0000035878 00000 n 
+0000036026 00000 n 
+0000039891 00000 n 
+0000040039 00000 n 
+0000042526 00000 n 
+0000042674 00000 n 
+0000045200 00000 n 
+trailer
+<< /Size 30 /Root 1 0 R >>
+startxref
+45348
+%%EOF

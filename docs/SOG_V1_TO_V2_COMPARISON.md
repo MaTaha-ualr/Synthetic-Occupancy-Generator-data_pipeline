@@ -22,11 +22,11 @@ For Version 2, the main repository-backed sources are:
 
 - `docs/SOG_COMPLETE_USER_GUIDE.md`
 - `docs/ENGINEERING_TEST_AND_READINESS_REPORT.md`
-- `docs/SCENARIO_SUPPORT_MATRIX.md`
+- `phase2/docs/SCENARIO_SUPPORT_MATRIX.md`
 - `phase2/scenarios/catalog.yaml`
-- `src/sog_phase2/event_grammar.py`
-- `src/sog_phase2/emission.py`
-- `src/sog_phase2/output_contract.py`
+- `phase2/src/sog_phase2/event_grammar.py`
+- `phase2/src/sog_phase2/emission.py`
+- `phase2/src/sog_phase2/output_contract.py`
 
 The standard used in this memo is conservative:
 
@@ -201,7 +201,7 @@ The truth layer produces normalized parquet tables for:
 - events
 - scenario population
 
-The active truth event grammar in `src/sog_phase2/event_grammar.py` currently supports:
+The active truth event grammar in `phase2/src/sog_phase2/event_grammar.py` currently supports:
 
 - `MOVE`
 - `COHABIT`
@@ -229,7 +229,7 @@ It also supports configurable linkage cardinalities:
 - `many_to_one`
 - `many_to_many`
 
-This is defined in `src/sog_phase2/emission.py`.
+This is defined in `phase2/src/sog_phase2/emission.py`.
 
 ### 4.5 Noise and disruption in Version 2
 
@@ -264,7 +264,7 @@ Version 2 packages runs under `phase2/runs/<run_id>/` and writes a formal artifa
 - `scenario.yaml`
 - `scenario_selection_log.json`
 
-This is enforced by `src/sog_phase2/output_contract.py`.
+This is enforced by `phase2/src/sog_phase2/output_contract.py`.
 
 ### 4.7 Validation and test surface in Version 2
 
@@ -287,8 +287,8 @@ The active readiness report says the system has a large passing test suite and t
 | Primary conceptual unit | occupancy history | baseline + truth layer + observed layer | Version 2 is more structured |
 | Identity framing | internal view vs external view | truth vs observed with canonical mapping artifacts | Version 2 preserves the core idea and operationalizes it |
 | Baseline generation | seed-based synthetic identity and occupancy generation | separate Phase 1 synthetic baseline plus Phase 2 simulation | Version 2 has stronger layering |
-| Scenario surface | Single and Couple | 11 canonical scenarios plus parameterized custom families | Version 2 is much broader |
-| Truth events | occupancy moves and couple narratives | explicit event grammar for move, cohabit, birth, divorce, leave-home | Version 2 is broader on active family dynamics |
+| Scenario surface | Single and Couple | 14 canonical scenarios plus parameterized custom families | Version 2 is much broader |
+| Truth events | occupancy moves and couple narratives | explicit event grammar for move, cohabit, birth, divorce, leave-home, death, name-change, and adoption | Version 2 is broader on active family and lifecycle dynamics |
 | Disruption into benchmark data | future work in the paper | active observed emission with overlap, duplication, noise, and mappings | Version 2 is substantially stronger |
 | Topology | split-file idea | single-dataset, pairwise, N-way | Version 2 is substantially stronger |
 | Cardinality control | not formalized as a shipped benchmark contract | one-to-one, one-to-many, many-to-one, many-to-many, dedup | Version 2 is substantially stronger |
@@ -296,8 +296,8 @@ The active readiness report says the system has a large passing test suite and t
 | Reproducibility packaging | conceptual simulation parameters | run-id packaging, manifest, scenario log, validator | Version 2 is much stronger |
 | Testing posture | research paper, not a repo-level test contract | regression and readiness-oriented engineering surface | Version 2 is much stronger |
 | PO Box support | explicit output fields | not exposed in active observed contract | Version 1 still has an advantage here |
-| Death lifecycle | explicitly described in Couple variant | deferred as optional-later event | Version 1 still has an advantage here |
-| Name-change lifecycle | embedded in Couple narrative | deferred as optional-later event | Version 1 still has an advantage here |
+| Death lifecycle | explicitly described in Couple variant | active `death_survivor_persistence` scenario using `DEATH` | Version 2 now has engine behavior and canonical scenario coverage |
+| Name-change lifecycle | embedded in Couple narrative | active `name_change_lifecycle` scenario using `NAME_CHANGE` and observed-name replay | Version 2 now has engine behavior and canonical scenario coverage |
 | Observed longitudinal export | occupancy histories themselves are the main output | observed layer is snapshot-based; full longitudinal history lives in truth tables | architectural divergence rather than simple upgrade |
 
 ---
@@ -310,19 +310,22 @@ This section exists to make the document clearer about the actual ground covered
 
 According to `phase2/scenarios/catalog.yaml`, Version 2 currently ships these canonical scenarios:
 
-| Scenario | Primary intent | Topology | Cardinality | Primary events |
+| Scenario | Primary intent | Topology | Cardinality | Truth event surface |
 |---|---|---|---|---|
 | `single_movers` | address-change linkage benchmark | pairwise | `one_to_one` | `MOVE` |
 | `clean_baseline_linkage` | low-noise baseline sanity check | pairwise | `one_to_one` | `MOVE` |
-| `couple_merge` | household formation benchmark | pairwise | `one_to_many` | `COHABIT` |
-| `family_birth` | household growth benchmark | pairwise | `many_to_one` | `BIRTH` |
+| `couple_merge` | household formation benchmark | pairwise | `one_to_many` | `COHABIT`, `MOVE` |
+| `family_birth` | household growth benchmark | pairwise | `many_to_one` | `BIRTH`, `COHABIT` |
 | `divorce_custody` | family split and custody ambiguity benchmark | pairwise | `many_to_many` | `DIVORCE`, `COHABIT` |
-| `roommates_split` | roommate churn and shared-address ambiguity benchmark | pairwise | `one_to_many` | `LEAVE_HOME`, `MOVE` |
+| `roommates_split` | roommate churn and shared-address ambiguity benchmark | pairwise | `one_to_many` | `LEAVE_HOME`, `MOVE`, `COHABIT` |
+| `name_change_lifecycle` | legal name-change continuity benchmark | pairwise | `one_to_one` | `NAME_CHANGE` |
+| `death_survivor_persistence` | death lifecycle and stale-record benchmark | pairwise | `one_to_one` | `DEATH` |
+| `adoption_blended_family` | adoption and blended-family transition benchmark | pairwise | `one_to_one` | `ADOPTION` |
 | `high_noise_identity_drift` | severe field-level corruption benchmark | pairwise | `one_to_one` | `MOVE` |
-| `low_overlap_sparse_coverage` | weak-overlap linkage benchmark | pairwise | configurable | `MOVE` |
-| `asymmetric_source_coverage` | broad-versus-sparse source benchmark | pairwise | configurable | `MOVE` |
-| `high_duplication_dedup` | single-file dedup benchmark | single-dataset | `dedup` | background move context only |
-| `three_source_partial_overlap` | three-source linkage benchmark | N-way | configurable | `MOVE` |
+| `low_overlap_sparse_coverage` | weak-overlap linkage benchmark | pairwise | `one_to_one` | `MOVE` |
+| `asymmetric_source_coverage` | broad-versus-sparse source benchmark | pairwise | `one_to_one` | `MOVE` |
+| `high_duplication_dedup` | single-file dedup benchmark | single-dataset | `dedup` | `MOVE` background |
+| `three_source_partial_overlap` | three-source linkage benchmark | N-way | `one_to_one` | `MOVE` |
 
 ### 6.2 Supported parameterized scenario families
 
@@ -498,11 +501,11 @@ The paper's Couple scenario explicitly includes a path where shared occupancy en
 
 In Version 2:
 
-- `DEATH` exists only in `OPTIONAL_LATER_EVENT_TYPES`
-- it is not active in the current event grammar
-- the scenario catalog marks death-oriented scenarios as future engine extension work
+- `DEATH` is active in the current event grammar and simulator
+- death closes active household/residence intervals and marks `IsDeceased` / `DeathDate`
+- the scenario catalog includes `death_survivor_persistence` as a supported canonical YAML with scenario-level tests
 
-So Version 2 has not yet reintroduced this lifecycle behavior as an active supported simulation path.
+So Version 2 has reintroduced the lifecycle behavior as both engine behavior and a shipped built-in scenario.
 
 ### 8.3 First-class name-change lifecycle
 
@@ -510,11 +513,11 @@ Version 1 embeds name transition into the occupancy-history narrative, especiall
 
 In Version 2:
 
-- `NAME_CHANGE` exists only as an optional-later event type
-- there is no active shipped name-change scenario
-- observed name drift today is better understood as noise and household ambiguity rather than a complete legal or social name-change lifecycle model
+- `NAME_CHANGE` is active in the current event grammar and simulator
+- name-change events carry previous/new name fields and are replayed into later observed snapshots and residence-timeline rows
+- the scenario catalog includes `name_change_lifecycle` as a supported canonical YAML with scenario-level tests
 
-So Version 2 does not yet offer a first-class name-change truth model that fully corresponds to the paper's narrative logic.
+So Version 2 now offers a first-class name-change truth model and a shipped built-in scenario for it.
 
 ### 8.4 Observed longitudinal history export
 
@@ -559,6 +562,9 @@ Version 2 is also broader in supported user intent. A user can now ask for:
 - household formation ambiguity
 - family-growth ambiguity
 - divorce/custody ambiguity
+- name-change continuity
+- death lifecycle and stale observed records
+- adoption and blended-family transitions
 - weak-overlap stress
 - asymmetric source coverage
 
@@ -577,11 +583,9 @@ That is a healthy state for the project. It means the architecture improved mate
 
 The clearest historically grounded future work items are:
 
-- first-class `DEATH` lifecycle simulation
-- first-class `NAME_CHANGE` lifecycle simulation
 - first-class PO Box support in the active observed-output contract
 
-The repository already captures future engine-extension scenario families for:
+The repository now captures supported canonical lifecycle scenario families for:
 
 - `name_change_lifecycle`
 - `death_survivor_persistence`
@@ -589,10 +593,10 @@ The repository already captures future engine-extension scenario families for:
 
 Those appear in:
 
-- `docs/SCENARIO_SUPPORT_MATRIX.md`
+- `phase2/docs/SCENARIO_SUPPORT_MATRIX.md`
 - `phase2/scenarios/catalog.yaml`
 
-If those are implemented, Version 2 would move closer to being not only stronger than Version 1 in architecture and benchmarking surface, but also closer to reproducing the full occupancy-history semantics that the original paper described.
+Those shipped lifecycle scenarios move Version 2 closer to being not only stronger than Version 1 in architecture and benchmarking surface, but also closer to reproducing the full occupancy-history semantics that the original paper described.
 
 ---
 

@@ -19,8 +19,8 @@ from typing import Any
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 JOBS_DIR = PROJECT_ROOT / "phase2" / ".sog_jobs"
 
-if str(PROJECT_ROOT / "src") not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT / "src"))
+if str(PROJECT_ROOT / "phase2" / "src") not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT / "phase2" / "src"))
 if str(PROJECT_ROOT / "frontend") not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT / "frontend"))
 

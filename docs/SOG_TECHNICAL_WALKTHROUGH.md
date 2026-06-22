@@ -356,7 +356,7 @@ This area owns baseline generation.
 
 This split is important because identity construction, row redundancy, and prepared-source normalization are different problems.
 
-### `src/sog_phase2/`
+### `phase2/src/sog_phase2/`
 
 This area owns scenario generation and benchmarking.
 
@@ -680,7 +680,7 @@ The more detailed comparison looks like this:
 | Dimension | Version 1 emphasis | Version 2 emphasis | Practical effect |
 |---|---|---|---|
 | Main abstraction | occupancy history | baseline plus truth plus observed | V2 separates world simulation from benchmark projection |
-| Scenario surface | Single and Couple narrative families | 11 shipped canonical scenarios plus configurable families | V2 covers a broader ER difficulty range |
+| Scenario surface | Single and Couple narrative families | 14 shipped canonical scenarios plus configurable families | V2 covers a broader ER difficulty range |
 | Truth representation | history-centric records | normalized people, households, memberships, residences, events | V2 is easier to audit and extend |
 | Observed layer | framed as future or research direction | actively implemented emission engine | V2 ships real benchmark datasets, not only generator output |
 | Evaluation packaging | conceptual | explicit entity-record map and crosswalk artifacts | V2 is much easier to score and compare |
@@ -699,8 +699,6 @@ The current system is stronger overall, but not a literal feature-by-feature sup
 
 The clearest remaining gaps are:
 
-- no first-class `DEATH` event in the active truth grammar
-- no first-class `NAME_CHANGE` event in the active truth grammar
 - no direct paper-style longitudinal PO Box occupancy model as a first-class exported truth construct
 - the current observed layer is benchmark-oriented and snapshot-oriented rather than a direct export of full occupancy histories
 
@@ -721,10 +719,13 @@ The current repository ships a real benchmark surface, not just a code skeleton.
 - `BIRTH`
 - `DIVORCE`
 - `LEAVE_HOME`
+- `DEATH`
+- `NAME_CHANGE`
+- `ADOPTION`
 
 ### Shipped scenario surface
 
-The active scenario catalog includes 11 canonical scenarios covering:
+The active scenario catalog includes 14 canonical scenarios covering:
 
 - clean linkage baselines
 - movers
@@ -737,6 +738,9 @@ The active scenario catalog includes 11 canonical scenarios covering:
 - asymmetric coverage
 - single-dataset dedup
 - three-source linkage
+- name-change continuity
+- death lifecycle and stale observed records
+- adoption and blended-family transitions
 
 ### Shipped observed benchmark surface
 
@@ -832,4 +836,4 @@ For tuning guidance, use:
 
 For end-user scenario guidance, use:
 
-- `docs/SCENARIO_USE_CASES_AND_TESTING.md`
+- `phase2/docs/SCENARIO_USE_CASES_AND_TESTING.md`

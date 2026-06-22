@@ -1,7 +1,7 @@
 # SOG Engineering Test Report and Production Readiness Guide
 
 **Last updated**: April 8, 2026
-**Test suite version**: 322 tests, all passing
+**Test suite version**: 368 Phase-2 tests, all passing
 **Runtime**: ~112 seconds on Windows 11, Python 3.12
 
 This document is the single source of truth for engineers working on the SOG synthetic data pipeline. It covers what the system does, how it is tested, what works well, what has known issues, and what must be addressed before or after publishing.
@@ -65,7 +65,7 @@ Phase-1 CSV (baseline population)
   [Output Validator]  -->  validation result (schema + contract checks)
 ```
 
-### Source modules (src/sog_phase2/)
+### Source modules (phase2/src/sog_phase2/)
 
 | Module | Purpose | Lines |
 |---|---|---|
@@ -73,7 +73,7 @@ Phase-1 CSV (baseline population)
 | `simulator.py` | Truth-layer state machine: households, events, residence | ~1,324 |
 | `emission.py` | Observed dataset generation: noise, duplication, coverage | ~1,329 |
 | `selection.py` | Population subsetting: entity view, latent traits, filtering, sampling | ~462 |
-| `event_grammar.py` | Event schema: MOVE, COHABIT, BIRTH, DIVORCE, LEAVE_HOME | ~345 |
+| `event_grammar.py` | Event schema: MOVE, COHABIT, BIRTH, DIVORCE, LEAVE_HOME, DEATH, NAME_CHANGE, ADOPTION | ~345 |
 | `constraints.py` | Demographic constraints: marriage age, fertility range, residence overlap | ~310 |
 | `quality.py` | Quality metrics: truth consistency, ER benchmark, drift rates | ~805 |
 | `output_contract.py` | Schema validation for all run artifacts | ~824 |
@@ -128,21 +128,24 @@ SOG stands out because it combines several properties that are usually scattered
 
 ---
 
-## 4) Shipped Scenarios (11 Canonical)
+## 4) Shipped Scenarios (14 Canonical)
 
-| Scenario | Primary Event | Match Mode | Main ER Stress |
+| Scenario | Truth Event Surface | Match Mode | Main ER Stress |
 |---|---|---|---|
 | `single_movers` | MOVE | one_to_one | Address change |
 | `clean_baseline_linkage` | MOVE (low) | one_to_one | Near-ideal sanity check |
-| `couple_merge` | COHABIT | one_to_many | Shared-address household formation |
-| `family_birth` | BIRTH | many_to_one | Household growth, new child entities |
+| `couple_merge` | COHABIT + MOVE | one_to_many | Shared-address household formation |
+| `family_birth` | BIRTH + COHABIT | many_to_one | Household growth, new child entities |
 | `divorce_custody` | DIVORCE + COHABIT | many_to_many | Hardest family ambiguity |
-| `roommates_split` | LEAVE_HOME + MOVE | one_to_many | High churn, roommate grouping |
+| `roommates_split` | LEAVE_HOME + MOVE + COHABIT | one_to_many | High churn, roommate grouping |
 | `high_noise_identity_drift` | MOVE | one_to_one | OCR, phonetic, nickname corruption |
 | `low_overlap_sparse_coverage` | MOVE | one_to_one | Weak shared coverage |
 | `asymmetric_source_coverage` | MOVE | one_to_one | One broad, one sparse source |
 | `high_duplication_dedup` | MOVE (background) | single_dataset | Within-file dedup |
 | `three_source_partial_overlap` | MOVE | N-way (3 datasets) | Multi-source linkage |
+| `name_change_lifecycle` | NAME_CHANGE | one_to_one | Legal name continuity |
+| `death_survivor_persistence` | DEATH | one_to_one | Stale records for deceased people |
+| `adoption_blended_family` | ADOPTION | one_to_one | Child household and surname transition |
 
 Each shipped scenario has a canonical YAML in `phase2/scenarios/` and is regression-tested. The folder may also contain `_working_*.yaml` files created by scenario-editing flows; those are working copies, not shipped scenarios, and are intentionally excluded from canonical-scenario validation tests.
 
@@ -556,7 +559,7 @@ FUNCTION compute_phase2_quality_report(truth_*, emitted_*, constraints_config, q
         FLAG households exceeding household_size_max
 
     # Scenario metrics
-    event_counts: count MOVE, COHABIT, BIRTH, DIVORCE, LEAVE_HOME
+    event_counts: count MOVE, COHABIT, BIRTH, DIVORCE, LEAVE_HOME, DEATH, NAME_CHANGE, ADOPTION
     moves_per_person_distribution: histogram of how many times each person moved
     household_type_shares: proportion of solo_house, couple, family, etc.
 
@@ -676,31 +679,31 @@ The methodological point of this schema is that truth is normalized and observed
 
 ## 6) Complete Test Suite
 
-### 6.1 Test inventory (322 tests, 28 test files)
+### 6.1 Test inventory (368 Phase-2 tests, 23 Phase-2 test files)
 
 | Test File | Count | Category | What It Validates |
 |---|---|---|---|
-| `test_phase2_scenario_regression.py` | 17 | Regression | All 11 scenarios produce correct events, cardinality, overlap |
-| `test_phase2_all_scenarios_smoke.py` | 11 | E2E Smoke | Every scenario runs from YAML to validated output |
-| `test_phase2_scenario_yaml_validation.py` | 90 | Schema | Every canonical YAML parses, has valid simulation/emission/selection/constraints/quality, and `_working_*.yaml` copies are ignored |
-| `test_phase2_event_grammar_extended.py` | 30 | Unit | All 5 event types: valid/invalid fields, enums, missing columns |
+| `test_phase2_scenario_regression.py` | 20 | Regression | All 14 scenarios produce correct events, cardinality, overlap |
+| `test_phase2_all_scenarios_smoke.py` | 14 | E2E Smoke | Every scenario runs from YAML to validated output |
+| `test_phase2_scenario_yaml_validation.py` | 128 | Schema | Every canonical YAML parses, has valid simulation/emission/selection/constraints/quality/cardinality-target safeguards, and `_working_*.yaml` copies are ignored |
+| `test_phase2_event_grammar_extended.py` | 38 | Unit | All 8 event types: valid/invalid fields, enums, missing columns |
 | `test_phase2_event_grammar.py` | 4 | Unit | MOVE validation, grammar vocabulary |
 | `test_phase2_constraints_extended.py` | 19 | Unit | Age gap, child-lives-alone, residence intervals, config validation |
 | `test_phase2_constraints.py` | 5 | Unit | Defaults, underage cohabit, fertility range, overlap |
 | `test_phase2_selection_extended.py` | 25 | Unit | Sample modes, propensity, filtering, determinism |
 | `test_phase2_selection.py` | 3 | Unit | Entity view, determinism, filter primitives |
 | `test_phase2_emission_extended.py` | 13 | Unit | Noise injection, duplication math, coverage, determinism |
-| `test_phase2_emission.py` | 12 | Unit | Config parsing, pairwise/single/multi emission |
-| `test_phase2_simulator_extended.py` | 14 | Unit | Move/cohabit/birth, truth tables, consistency, edge cases |
+| `test_phase2_emission.py` | 14 | Unit | Config parsing, pairwise/single/multi emission |
+| `test_phase2_simulator_extended.py` | 17 | Unit | Move/cohabit/birth/lifecycle events, truth tables, consistency, edge cases |
 | `test_phase2_simulator.py` | 3 | Unit | Config, determinism, roommates |
-| `test_phase2_quality_extended.py` | 14 | Unit | Quality config, event counts, household violations, ER metrics |
+| `test_phase2_quality_extended.py` | 15 | Unit | Quality config, event counts, household violations, ER metrics |
 | `test_phase2_quality.py` | 2 | Unit | Defaults, comprehensive ER metrics report |
-| `test_phase2_output_contract.py` | 10 | Unit | Schema, missing files, seed mismatch, grammar, constraints |
+| `test_phase2_output_contract.py` | 11 | Unit | Schema, missing files, seed mismatch, grammar, constraints, validator run-path handling |
 | `test_phase2_pipeline_integration.py` | 6 | Integration | Single/pairwise/multi pipeline, reproducibility, scale (300-500 people) |
 | `test_phase2_pipeline_errors.py` | 4 | Error | Missing YAML, missing CSV, overwrite protection |
 | `test_phase2_resilience.py` | 6 | Resilience | Malformed input, partial failure, boundary conditions |
 | `test_phase2_params.py` | 3 | Unit | Parameter loading, household shares, mobility rates |
-| `test_phase2_scenario_catalog.py` | 5 | Unit | Catalog integrity, unique IDs, file existence |
+| `test_phase2_scenario_catalog.py` | 6 | Unit | Catalog integrity, unique IDs, file existence, YAML metadata consistency |
 | `test_phase2_observed_cli.py` | 4 | CLI | Single/pairwise/multi CLI emission |
 | `test_frontend_orchestrator.py` | 2 | Frontend | Scenario inference and run-turn orchestration |
 | `test_frontend_production_entrypoint.py` | 1 | Frontend | Production entrypoint rerun behavior |
@@ -713,16 +716,16 @@ The methodological point of this schema is that truth is normalized and observed
 
 | Module | Tests | Coverage Level | Notes |
 |---|---|---|---|
-| `event_grammar.py` | 34 | **Strong** | All 5 event types, all validation rules, edge cases |
+| `event_grammar.py` | 42 | **Strong** | All 8 event types, all validation rules, edge cases |
 | `constraints.py` | 24 | **Strong** | All constraint types, config validation, both allow/deny paths |
-| `emission.py` | 25 | **Strong** | Config parsing, noise injection, duplication, overlap, determinism |
+| `emission.py` | 32 | **Strong** | Config parsing, noise injection, duplication, overlap, determinism |
 | `selection.py` | 28 | **Strong** | Entity view, traits, filtering, all sample modes, determinism |
-| `simulator.py` | 17 | **Good** | Move/cohabit/birth events, consistency, determinism; divorce tested via regression |
-| `quality.py` | 16 | **Good** | Config, event counts, household size, ER metrics |
+| `simulator.py` | 20 | **Good** | Move/cohabit/birth/lifecycle events, consistency, determinism; divorce tested via regression |
+| `quality.py` | 17 | **Good** | Config, event counts, household size, ER metrics |
 | `output_contract.py` | 10 | **Good** | Schema validation, metadata checks |
 | `pipeline.py` | 10 | **Good** | Integration + error handling |
 | `params.py` | 3 | **Adequate** | Load + data consistency; network-dependent build_params not testable offline |
-| `scenario_yaml_validation.py` | 90 | **Strong** | All 11 shipped YAMLs validated through 7 parametrized dimensions; ignores `_working_*.yaml` copies |
+| `scenario_yaml_validation.py` | 128 | **Strong** | All 14 shipped YAMLs validated through 9 parametrized dimensions; ignores `_working_*.yaml` copies |
 | `scenario_catalog.py` | 5 | **Good** | Catalog integrity, unique IDs, shipped-file coverage |
 | Frontend | 18 | **Adequate** | Core tools tested; no component unit tests |
 
@@ -777,11 +780,12 @@ Noise rates scale proportionally and behave correctly at 0% and high percentages
 The entire pipeline is deterministic given the same seed. SHA256-based entity hashing ensures stable selection and trait assignment. NumPy RNG seeding ensures stable simulation and emission.
 
 ### 7.4 Scenario diversity
-The 11 shipped scenarios cover the full spectrum of ER benchmarking challenges:
+The 14 shipped scenarios cover the full spectrum of ER benchmarking challenges:
 - One-to-one through many-to-many cardinality
 - Single-dataset dedup through 3-source linkage
 - Clean baselines through heavy corruption
 - High overlap through sparse coverage
+- Address, household, birth, divorce, death, name-change, and adoption lifecycle events
 
 ### 7.5 Quality reporting
 The quality report provides actionable metrics: event counts, overlap rates, duplication rates, attribute drift, cardinality distribution, household size constraints. These are sufficient for a user to determine whether a run behaved as expected.
@@ -794,13 +798,13 @@ The quality report provides actionable metrics: event counts, overlap rates, dup
 
 #### Issue 1: Manifest vs quality report entity count discrepancy
 - **What**: `manifest.json` reports "base" entity counts (before late-only arrivals), but `quality_report.json` reports final entity counts. In the reference run, Dataset B shows 8,981 in manifest but 9,000 in quality report.
-- **Where**: [pipeline.py](src/sog_phase2/pipeline.py) (manifest building) vs [emission.py](src/sog_phase2/emission.py) (coverage calculation)
+- **Where**: [pipeline.py](phase2/src/sog_phase2/pipeline.py) (manifest building) vs [emission.py](phase2/src/sog_phase2/emission.py) (coverage calculation)
 - **Fix**: Align counts or explicitly document the difference in both files.
 - **Risk if unfixed**: Users comparing manifest and quality report will see inconsistent numbers and lose trust in the outputs.
 
 #### Issue 2: No atomic write safety
 - **What**: If the pipeline crashes after writing truth parquets but before writing manifest/quality_report, the run directory contains incomplete outputs that look partially valid.
-- **Where**: [pipeline.py](src/sog_phase2/pipeline.py) lines 245-520
+- **Where**: [pipeline.py](phase2/src/sog_phase2/pipeline.py) lines 245-520
 - **Fix**: Write to a temp directory, then rename atomically on success; or write a `.complete` marker last and check for it in the validator.
 - **Risk if unfixed**: In CI or automated workflows, a crashed run could be picked up as a completed run.
 
@@ -811,7 +815,7 @@ The quality report provides actionable metrics: event counts, overlap rates, dup
 
 #### Issue 4: Absolute Windows paths in manifest
 - **What**: `manifest.json` stores resolved absolute paths like `H:\\AAA_Taha\\...`. These break when moving to a different machine, drive, or OS.
-- **Where**: [pipeline.py](src/sog_phase2/pipeline.py) path resolution
+- **Where**: [pipeline.py](phase2/src/sog_phase2/pipeline.py) path resolution
 - **Fix**: Store paths relative to the run directory or project root.
 - **Risk if unfixed**: Non-portable outputs; CI/CD, Linux, and Mac users get broken paths.
 
@@ -826,7 +830,7 @@ The quality report provides actionable metrics: event counts, overlap rates, dup
 - **Fix**: Pin to tested versions (e.g., `numpy==1.26.4`).
 
 #### Issue 7: Monolithic simulator state machine
-- **What**: `_SimulationState` in [simulator.py](src/sog_phase2/simulator.py) is ~1,000 lines. It's hard to test individual event types in isolation.
+- **What**: `_SimulationState` in [simulator.py](phase2/src/sog_phase2/simulator.py) is ~1,000 lines. It's hard to test individual event types in isolation.
 - **Fix**: Not blocking, but makes future development harder. Document the internal structure for new contributors.
 
 #### Issue 8: No input CSV schema validation
@@ -851,25 +855,25 @@ The quality report provides actionable metrics: event counts, overlap rates, dup
 python -m pytest tests/ -v
 ```
 
-Expected: 322 passed in ~130 seconds.
+Expected: 368 passed in ~155 seconds.
 
 ### 9.2 By category
 
 ```bash
 # Unit tests only (fast, ~10s)
-python -m pytest tests/test_phase2_event_grammar*.py tests/test_phase2_constraints*.py tests/test_phase2_selection*.py tests/test_phase2_emission*.py tests/test_phase2_quality*.py tests/test_phase2_simulator*.py -v
+python -m pytest phase2/tests/test_phase2_event_grammar*.py phase2/tests/test_phase2_constraints*.py phase2/tests/test_phase2_selection*.py phase2/tests/test_phase2_emission*.py phase2/tests/test_phase2_quality*.py phase2/tests/test_phase2_simulator*.py -v
 
 # Integration tests (medium, ~20s)
-python -m pytest tests/test_phase2_pipeline*.py tests/test_phase2_observed_cli.py -v
+python -m pytest phase2/tests/test_phase2_pipeline*.py phase2/tests/test_phase2_observed_cli.py -v
 
 # End-to-end smoke tests for all scenarios (~30s)
-python -m pytest tests/test_phase2_all_scenarios_smoke.py -v
+python -m pytest phase2/tests/test_phase2_all_scenarios_smoke.py -v
 
 # Scenario YAML validation (~5s)
-python -m pytest tests/test_phase2_scenario_yaml_validation.py -v
+python -m pytest phase2/tests/test_phase2_scenario_yaml_validation.py -v
 
 # Regression tests (~15s)
-python -m pytest tests/test_phase2_scenario_regression.py -v
+python -m pytest phase2/tests/test_phase2_scenario_regression.py -v
 
 # Frontend tests (~5s)
 python -m pytest tests/test_frontend*.py -v
@@ -878,7 +882,7 @@ python -m pytest tests/test_frontend*.py -v
 ### 9.3 Running a single scenario manually
 
 ```bash
-python scripts/run_phase2_pipeline.py --scenario single_movers
+python phase2/scripts/run_phase2_pipeline.py --scenario single_movers
 ```
 
 Output lands in `phase2/runs/YYYY-MM-DD_single_movers_seedN/`.
@@ -886,7 +890,7 @@ Output lands in `phase2/runs/YYYY-MM-DD_single_movers_seedN/`.
 ### 9.4 Validating a completed run
 
 ```bash
-python scripts/validate_phase2_outputs.py --run-id 2026-03-10_single_movers_seed20260310
+python phase2/scripts/validate_phase2_outputs.py --run-id 2026-03-10_single_movers_seed20260310
 ```
 
 ---
@@ -895,38 +899,38 @@ python scripts/validate_phase2_outputs.py --run-id 2026-03-10_single_movers_seed
 
 1. Create `phase2/scenarios/your_scenario.yaml` using an existing scenario as a template.
 2. Add an entry to `phase2/scenarios/catalog.yaml`.
-3. Add a smoke test in `tests/test_phase2_all_scenarios_smoke.py`:
+3. Add a smoke test in `phase2/tests/test_phase2_all_scenarios_smoke.py`:
    ```python
    def test_smoke_your_scenario(tmp_path: Path) -> None:
        result = _run_scenario(tmp_path, "your_scenario", sample_override=SAMPLE)
        assert result["validation_valid"] is True
    ```
-4. Add regression assertions in `tests/test_phase2_scenario_regression.py` for the specific behavior your scenario targets.
+4. Add regression assertions in `phase2/tests/test_phase2_scenario_regression.py` for the specific behavior your scenario targets.
 5. Run: `python -m pytest tests/ -v`
 
 ---
 
 ## 11) How to Add a New Event Type
 
-Event types are defined in [event_grammar.py](src/sog_phase2/event_grammar.py).
+Event types are defined in [event_grammar.py](phase2/src/sog_phase2/event_grammar.py).
 
 1. Add the event name to `ACTIVE_EVENT_TYPES` (or move from `OPTIONAL_LATER_EVENT_TYPES`).
 2. Add validation logic in `validate_truth_events_dataframe()`.
 3. Add simulation logic in `simulator.py` `_SimulationState`.
-4. Add tests in `tests/test_phase2_event_grammar_extended.py` for valid and invalid cases.
+4. Add tests in `phase2/tests/test_phase2_event_grammar_extended.py` for valid and invalid cases.
 5. Update any constraint checks in `constraints.py` if the event has demographic rules.
 
 ---
 
 ## 12) How to Add a New Noise Type
 
-Noise types are defined in [emission.py](src/sog_phase2/emission.py) `DatasetNoiseConfig`.
+Noise types are defined in [emission.py](phase2/src/sog_phase2/emission.py) `DatasetNoiseConfig`.
 
 1. Add the field to `DatasetNoiseConfig` with a default of `0.0`.
 2. Implement the noise function (e.g., `_apply_your_noise()`).
 3. Call it in `_build_dataset_rows()` with the configured percentage.
 4. Track the count in the per-dataset noise_counts dict.
-5. Add a test in `tests/test_phase2_emission_extended.py` verifying the noise produces expected counts.
+5. Add a test in `phase2/tests/test_phase2_emission_extended.py` verifying the noise produces expected counts.
 
 ---
 
@@ -936,8 +940,8 @@ Noise types are defined in [emission.py](src/sog_phase2/emission.py) `DatasetNoi
 
 **What earns the score:**
 - Core pipeline is functionally complete and produces valid, reproducible output
-- 322 tests pass covering unit, integration, regression, and end-to-end scenarios
-- All 11 canonical scenarios validate end-to-end
+- 368 Phase-2 tests pass covering unit, integration, regression, and end-to-end scenarios
+- All 14 canonical scenarios validate end-to-end
 - Noise injection, demographic constraints, and quality reporting all work correctly
 - Deterministic seeding ensures reproducible benchmarks
 
@@ -963,6 +967,9 @@ The table below links each system capability to the tests that prove it works.
 | BIRTH events create new people | `test_family_birth_produces_birth_events`, `test_high_birth_rate_produces_birth_events`, `test_birth_creates_new_person` | PASS |
 | DIVORCE events and split households | `test_divorce_custody_produces_divorce_and_split_households` | PASS |
 | LEAVE_HOME events | `test_roommates_split_contains_split_household_pattern`, `test_valid_leave_home_event` | PASS |
+| DEATH lifecycle events | `test_death_survivor_persistence_closes_intervals_and_keeps_observed_record`, `test_smoke_death_survivor_persistence` | PASS |
+| NAME_CHANGE lifecycle events | `test_name_change_lifecycle_replays_new_names_in_observed_snapshot`, `test_smoke_name_change_lifecycle` | PASS |
+| ADOPTION lifecycle events | `test_adoption_blended_family_moves_child_and_replays_adoptive_surname`, `test_smoke_adoption_blended_family` | PASS |
 | One-to-one crosswalk behavior | `test_clean_baseline_linkage_stays_low_noise_one_to_one`, `test_smoke_clean_baseline_linkage` | PASS |
 | One-to-many crosswalk behavior | `test_couple_merge_exposes_one_to_many_crosswalk_behavior`, `test_one_to_many_mode_yields_multi_b_records` | PASS |
 | Many-to-one crosswalk behavior | `test_family_birth_exposes_many_to_one_crosswalk_behavior` | PASS |
@@ -984,8 +991,8 @@ The table below links each system capability to the tests that prove it works.
 | Household size violation detected | `test_quality_report_household_size_violation_detected` | PASS |
 | Pipeline determinism (same seed = same output) | `test_run_scenario_pipeline_is_reproducible_for_same_seed`, `test_emission_is_deterministic`, `test_select_is_deterministic` | PASS |
 | Different seeds produce different output | `test_different_seeds_produce_different_results`, `test_select_different_seeds_produce_different_results` | PASS |
-| All 11 scenario YAMLs parse correctly | `test_scenario_yaml_exists_and_parses` x11, `test_scenario_has_valid_emission` x11, etc. | PASS |
-| All 11 scenarios run end-to-end | `test_smoke_single_movers` through `test_smoke_three_source_partial_overlap` | PASS |
+| All 14 scenario YAMLs parse correctly | `test_scenario_yaml_exists_and_parses` x14, `test_scenario_has_valid_emission` x14, etc. | PASS |
+| All 14 scenarios run end-to-end | `test_smoke_single_movers` through `test_smoke_adoption_blended_family` | PASS |
 | Missing input raises clear error | `test_pipeline_raises_on_missing_scenario_yaml`, `test_pipeline_raises_on_missing_phase1_csv` | PASS |
 | Overwrite protection works | `test_pipeline_raises_if_run_exists_and_no_overwrite` | PASS |
 | Invalid config rejected with clear message | 15+ config validation tests across constraints, emission, selection, quality | PASS |
@@ -999,7 +1006,7 @@ The table below links each system capability to the tests that prove it works.
 
 ```
 SOG/
-|-- src/sog_phase2/           # Core library
+|-- phase2/src/sog_phase2/           # Core library
 |   |-- pipeline.py           # START HERE - orchestrates everything
 |   |-- simulator.py          # Truth-layer state machine
 |   |-- emission.py           # Observed dataset + noise generation
@@ -1012,10 +1019,10 @@ SOG/
 |   |-- scenario_catalog.py   # Scenario registry
 |
 |-- scripts/                  # CLI entry points
-|-- tests/                    # 322 tests (this report details all of them)
-|-- phase2/scenarios/         # 11 canonical scenario YAMLs + catalog.yaml + optional _working_ copies
+|-- tests/                    # 368 Phase-2 tests (this report details all of them)
+|-- phase2/scenarios/         # 14 canonical scenario YAMLs + catalog.yaml + optional _working_ copies
 |-- phase2/runs/              # Run output directories
-|-- Data/phase2_params/       # Demographic priors (Census, CDC, NCHS)
+|-- phase2/Data/phase2_params/       # Demographic priors (Census, CDC, NCHS)
 |-- frontend/                 # Streamlit UI + tool functions
 |-- docs/                     # This report + user guides
 ```
@@ -1031,6 +1038,6 @@ To understand the codebase, read in this order:
 
 ## 16) Conclusion
 
-The SOG synthetic data pipeline produces correct, deterministic, constraint-respecting synthetic data across 11 benchmarking scenarios. The test suite comprehensively validates correctness, determinism, error handling, and contract compliance.
+The SOG synthetic data pipeline produces correct, deterministic, constraint-respecting synthetic data across 14 benchmarking scenarios. The test suite comprehensively validates correctness, determinism, error handling, and contract compliance.
 
 The system is ready for publication with the caveat that Issues 1-4 in Section 8.1 should be fixed for production workflows that depend on portable paths, atomic writes, or frontend error transparency. For local research use, the system works correctly today.

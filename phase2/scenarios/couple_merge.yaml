@@ -4,26 +4,29 @@ phase1:
   data_path: phase1/outputs_phase1/Phase1_people_addresses.csv
   manifest_path: phase1/outputs_phase1/Phase1_people_addresses.manifest.json
 parameters:
-  cohabit_rate_pct: 4.0
+  cohabit_rate_pct: 96.0
+  move_rate_pct: 72.0
 simulation:
   granularity: monthly
   start_date: 2026-01-01
-  periods: 12
+  periods: 18
 emission:
   crossfile_match_mode: one_to_many
-  overlap_entity_pct: 65.0
-  appearance_A_pct: 80.0
-  appearance_B_pct: 90.0
-  duplication_in_A_pct: 3.0
-  duplication_in_B_pct: 12.0
+  overlap_entity_pct: 82.0
+  appearance_A_pct: 90.0
+  appearance_B_pct: 96.0
+  duplication_in_A_pct: 1.0
+  duplication_in_B_pct: 18.0
+  record_count_A: 5499
+  record_count_B: 11011
   noise:
     A:
-      name_typo_pct: 1.0
-      dob_shift_pct: 0.4
-      ssn_mask_pct: 1.5
-      phone_mask_pct: 0.8
-      address_missing_pct: 0.8
-      middle_name_missing_pct: 20.0
+      name_typo_pct: 0.4
+      dob_shift_pct: 0.2
+      ssn_mask_pct: 0.8
+      phone_mask_pct: 0.4
+      address_missing_pct: 0.2
+      middle_name_missing_pct: 12.0
       phonetic_error_pct: 0.0
       ocr_error_pct: 0.0
       date_swap_pct: 0.0
@@ -31,12 +34,12 @@ emission:
       nickname_pct: 0.0
       suffix_missing_pct: 0.0
     B:
-      name_typo_pct: 2.5
-      dob_shift_pct: 1.2
-      ssn_mask_pct: 6.0
-      phone_mask_pct: 3.0
-      address_missing_pct: 2.2
-      middle_name_missing_pct: 30.0
+      name_typo_pct: 1.5
+      dob_shift_pct: 0.8
+      ssn_mask_pct: 3.0
+      phone_mask_pct: 1.5
+      address_missing_pct: 0.4
+      middle_name_missing_pct: 18.0
       phonetic_error_pct: 0.0
       ocr_error_pct: 0.0
       date_swap_pct: 0.0
@@ -49,10 +52,12 @@ quality:
     max: 10
 selection:
   sample:
-    mode: pct
-    value: 100.0
+    mode: count
+    value: 6050
   filters:
-    age_bins: []
+    age_bins:
+      - age_18_34
+      - age_35_64
     genders: []
     ethnicities: []
     residence_types: []

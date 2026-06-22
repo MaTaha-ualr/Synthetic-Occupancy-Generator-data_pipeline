@@ -36,7 +36,7 @@ Controls where and how the generated dataset is written.
 |---|---:|---|
 | `phase1.output.format` | `csv` | Output format. Valid values are `csv`, `parquet`, `txt`, `xlsx`, and `excel`. `excel` is accepted as an alias for `xlsx`. CSV writes one comma-delimited file. TXT writes one tab-delimited text file. Excel writes one `.xlsx` workbook with a `Phase1` sheet. Parquet writes chunk files into a `<output_stem>_parts` directory. |
 | `phase1.output.path` | `outputs/Phase1_people_addresses.csv` | Output path relative to the Phase 1 project directory, which is `phase1/` when using `phase1/scripts/generate_phase1.py`. If the path has a known output suffix like `.csv` and the selected format needs another suffix, the generator writes the viewable file with the matching suffix such as `.txt` or `.xlsx`. |
-| `phase1.output.chunk_size` | `50000` | Number of rows processed per write chunk. Larger chunks can be faster but use more memory. Smaller chunks reduce peak memory use. |
+| `phase1.output.chunk_size` | `5000` | Number of rows processed per write chunk. Larger chunks can be faster but use more memory. Smaller chunks reduce peak memory use. |
 
 Format examples:
 
@@ -73,10 +73,15 @@ Controls how many rows each person can have in the flat Phase 1 output.
 | `phase1.redundancy.enabled` | `true` | Allows more output rows than unique people. If `false`, every person gets exactly one row. |
 | `phase1.redundancy.min_records_per_entity` | `1` | Minimum number of rows each person must receive. Must be at least `1`. |
 | `phase1.redundancy.max_records_per_entity` | `10` | Maximum number of rows each person can receive. Must be at least `min_records_per_entity`. |
-| `phase1.redundancy.shape` | `balanced` | How extra rows are distributed across people. Valid values are `balanced` and `heavy_tail`. |
+| `phase1.redundancy.shape` | `heavy_tail` | How extra rows are distributed across people. Valid values are `balanced` and `heavy_tail`. |
 | `phase1.redundancy.heavy_tail_alpha` | `1.3` | Controls concentration when `shape` is `heavy_tail`. Lower values concentrate extra rows among fewer people; higher values spread them more evenly. Ignored for `balanced`. |
 
-`balanced` spreads extra rows around the population. `heavy_tail` models systems where a smaller set of people have many more records than most people.
+`balanced` spreads extra rows around the population. With the default `10,000`
+people and `14,000` requested base rows, it would only produce 1-2 base rows per
+person because there are only 4,000 extra rows to distribute. `heavy_tail`
+models systems where a smaller set of people have many more records than most
+people and allows the default run to exercise the configured 1-10 redundancy
+range.
 
 ## `nicknames`
 

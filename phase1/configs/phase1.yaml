@@ -6,7 +6,7 @@ phase1:
   output:
     format: csv
     path: outputs/Phase1_people_addresses.csv
-    chunk_size: 50000
+    chunk_size: 5000
 
   name_duplication:
     first_name_people_pct: 0.0
@@ -19,7 +19,7 @@ phase1:
     enabled: true
     min_records_per_entity: 1
     max_records_per_entity: 10
-    shape: balanced
+    shape: heavy_tail
     heavy_tail_alpha: 1.3
 
   nicknames:

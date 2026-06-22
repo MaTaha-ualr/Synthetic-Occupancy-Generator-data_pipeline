@@ -12,7 +12,7 @@ It covers three separate control surfaces:
 
 1. `phase1/configs/phase1.yaml`
 2. `phase2/scenarios/*.yaml`
-3. `Data/phase2_params/*`
+3. `phase2/Data/phase2_params/*`
 
 Those three layers are related, but they do different jobs:
 
@@ -25,13 +25,13 @@ This guide is based on the current code paths in:
 - `phase1/src/sog_phase1/config.py`
 - `phase1/src/sog_phase1/generator.py`
 - `phase1/src/sog_phase1/preprocess.py`
-- `src/sog_phase2/pipeline.py`
-- `src/sog_phase2/selection.py`
-- `src/sog_phase2/simulator.py`
-- `src/sog_phase2/emission.py`
-- `src/sog_phase2/constraints.py`
-- `src/sog_phase2/quality.py`
-- `src/sog_phase2/params.py`
+- `phase2/src/sog_phase2/pipeline.py`
+- `phase2/src/sog_phase2/selection.py`
+- `phase2/src/sog_phase2/simulator.py`
+- `phase2/src/sog_phase2/emission.py`
+- `phase2/src/sog_phase2/constraints.py`
+- `phase2/src/sog_phase2/quality.py`
+- `phase2/src/sog_phase2/params.py`
 
 ## Big Picture
 
@@ -57,9 +57,9 @@ Phase-2 is the scenario engine. It does not just "add noise." It does four separ
 
 So the main Phase-2 question is: "Which people enter the scenario, what truth events happen to them, and how do different systems observe them?"
 
-### What `Data/phase2_params` is
+### What `phase2/Data/phase2_params` is
 
-`Data/phase2_params/` is not a scenario. It is the parameter bundle that gives Phase-2 a data-backed prior layer and provenance:
+`phase2/Data/phase2_params/` is not a scenario. It is the parameter bundle that gives Phase-2 a data-backed prior layer and provenance:
 
 - mobility rates
 - marriage/divorce rates
@@ -374,7 +374,10 @@ This section is the truth-dynamics control block. These values are annualized ra
 | `parameters.divorce_rate_pct` | Annual divorce or separation rate as a percent. | Controls household splits after partnership. |
 | `parameters.leave_home_rate_pct` | Annual rate for children or young adults leaving home. | Controls `LEAVE_HOME` truth events. |
 | `parameters.split_rate_pct` | Backward-compatible alias for `leave_home_rate_pct`. | Used by shipped roommate scenarios. |
-| `parameters.use_priors_for_unspecified_rates` | If `true`, missing event rates inherit from `phase2_priors_snapshot.json`. | Lets the scenario rely on the statistical prior bundle instead of explicitly setting every rate. |
+| `parameters.death_rate_pct` | Annual death-event rate as a percent. | Controls `DEATH` events, closes active intervals, and marks `IsDeceased` / `DeathDate` in truth people. |
+| `parameters.name_change_rate_pct` | Annual legal/marriage/divorce name-change rate as a percent. | Controls `NAME_CHANGE` events and later observed-name replay. |
+| `parameters.adoption_rate_pct` | Annual adoption-event rate for minors as a percent. | Controls `ADOPTION` events, adoptive household transfer, parent-key changes, and optional child surname replay. |
+| `parameters.use_priors_for_unspecified_rates` | If `true`, missing move/cohabit/birth/divorce rates inherit from `phase2_priors_snapshot.json`. | Lets the scenario rely on the statistical prior bundle where priors exist; lifecycle rates remain explicit-only. |
 
 #### Scenario-specific roommate parameters
 
@@ -457,6 +460,9 @@ It then adds latent scores:
 
 Those scores are deterministic given the seed and are influenced by age and mobility priors. The threshold fields control how those continuous scores become `low`, `medium`, and `high` buckets.
 
+Use `selection.sample.mode: count` when you want an explicit number of simulated people.
+The selected count is capped at the number of candidates left after filters.
+
 ### `constraints`
 
 This section defines realism rules and validation rules for the truth layer.
@@ -500,6 +506,8 @@ There are two supported schemas:
 | `emission.appearance_B_pct` | Share of eligible entities that appear in dataset B. | Controls source coverage for B. |
 | `emission.duplication_in_A_pct` | Extra duplicate record rate within A. | Controls within-file duplication on A. |
 | `emission.duplication_in_B_pct` | Extra duplicate record rate within B. | Controls within-file duplication on B. |
+| `emission.record_count_A` | Optional exact final row count for `DatasetA.csv`. | Overrides the final row count that A coverage/duplication would otherwise produce. |
+| `emission.record_count_B` | Optional exact final row count for `DatasetB.csv`. | Overrides the final row count that B coverage/duplication would otherwise produce. |
 | `emission.noise.A` | Noise profile for A. | Controls corruption level in A. |
 | `emission.noise.B` | Noise profile for B. | Controls corruption level in B. |
 
@@ -512,6 +520,7 @@ There are two supported schemas:
 | `emission.datasets[*].snapshot` | Valid values: `simulation_start`, `simulation_end`. | Controls whether the dataset is emitted from the beginning or end truth state. |
 | `emission.datasets[*].appearance_pct` | Coverage rate for that dataset. | Controls how many eligible entities appear in the dataset. |
 | `emission.datasets[*].duplication_pct` | Within-dataset duplication rate. | Controls extra repeated rows in that dataset. |
+| `emission.datasets[*].record_count` | Optional exact final row count for that dataset. | Overrides the final row count that coverage/duplication would otherwise produce. |
 | `emission.datasets[*].noise` | Noise profile for that dataset. | Controls field corruption in that dataset. |
 
 ### Story behind `overlap`, `appearance`, and `duplication`
@@ -523,6 +532,13 @@ These are easy to mix up.
 - `duplication_pct` is about repeated observed rows inside that dataset.
 
 So one dataset can have high coverage and still be hard because it is noisy or duplicated. Another can be very clean but sparse. These knobs let you separate those effects.
+
+If a `record_count` control is present, the engine keeps the same selection and match-mode
+logic, then trims or adds duplicate allocations deterministically so the observed CSV has
+the requested number of rows. `masterDataset.csv` keeps those source rows under
+`RecordType=source_snapshot`, deduplicates exact same-source payloads, and also adds
+`DatasetId=TIMELINE` / `RecordType=residence_timeline` rows for every interval from
+`truth_residence_history.parquet`.
 
 ### Emission noise glossary
 
@@ -565,7 +581,7 @@ That separation is the point of the Phase-2 architecture. The simulator changes 
 
 Phase-2 quality is not just about formatting. It also checks whether the scenario still looks operationally sane after simulation and emission. Household size is a simple but useful guardrail against runaway scenario behavior.
 
-## Phase-2 parameter package: `Data/phase2_params/`
+## Phase-2 parameter package: `phase2/Data/phase2_params/`
 
 ### What lives there
 
@@ -634,8 +650,8 @@ Some keys and files are direct operational controls. Some are mainly descriptive
 
 - `phase1.age_bins.pct_interpretation`
 - `phase2/scenarios/catalog.yaml`
-- `Data/phase2_params/sources.json`
-- `Data/phase2_params/manifest.json`
+- `phase2/Data/phase2_params/sources.json`
+- `phase2/Data/phase2_params/manifest.json`
 - raw Phase-2 CSV parameter tables that are currently summarized into the priors snapshot instead of being consumed directly by the simulator
 
 ## Practical reading order
@@ -644,10 +660,10 @@ If you are trying to understand the system quickly, read the config surfaces in 
 
 1. `phase1/configs/phase1.yaml`
 2. one Phase-2 scenario YAML such as `phase2/scenarios/single_movers.yaml`
-3. `Data/phase2_params/phase2_priors_snapshot.json`
-4. `src/sog_phase2/selection.py`
-5. `src/sog_phase2/simulator.py`
-6. `src/sog_phase2/emission.py`
+3. `phase2/Data/phase2_params/phase2_priors_snapshot.json`
+4. `phase2/src/sog_phase2/selection.py`
+5. `phase2/src/sog_phase2/simulator.py`
+6. `phase2/src/sog_phase2/emission.py`
 
 That order mirrors the actual runtime flow:
 
@@ -662,4 +678,4 @@ If you want the shortest possible interpretation of the knobs:
 - Phase-2 `parameters` controls what happens to them in truth.
 - Phase-2 `emission` controls what each dataset reveals, misses, duplicates, or corrupts.
 - Phase-2 `constraints` controls what counts as unrealistic.
-- `Data/phase2_params` explains where the rates came from and supplies the prior layer.
+- `phase2/Data/phase2_params` explains where the rates came from and supplies the prior layer.

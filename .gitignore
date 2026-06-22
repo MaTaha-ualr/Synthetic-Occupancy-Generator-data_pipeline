@@ -26,10 +26,12 @@ phase2/.sog_sessions/
 phase2/.sog_charts/
 phase2/.sog_exports/
 phase2/scenarios/_working_*.yaml
+!phase2/scenarios/_working_scenario_template.yaml
 
-# Phase-2 run outputs (keep only the placeholder)
+# Phase-2 run outputs (keep only the placeholder and the anatomy reference)
 phase2/runs/*
 !phase2/runs/.gitkeep
+!phase2/runs/README.md
 
 # OS/editor
 .DS_Store

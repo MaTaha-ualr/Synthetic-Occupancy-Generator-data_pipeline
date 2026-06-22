@@ -26,16 +26,15 @@ SOG is a deterministic synthetic data pipeline for entity-resolution benchmarkin
 - Frontend runtime: `frontend/chatbot_production.py`
 - Frontend launcher: `run_frontend.ps1`
 - Scenario YAML schema: `phase2/scenarios/README.md`
-- Scenario benchmark guidance: `docs/SCENARIO_USE_CASES_AND_TESTING.md`
+- Scenario benchmark guidance: `phase2/docs/SCENARIO_USE_CASES_AND_TESTING.md`
 - Technical deep dive: `docs/SOG_TECHNICAL_WALKTHROUGH.md`
 
 ## Validation Snapshot At Handoff
 
-- Date: April 8, 2026
-- Branch: `main`
-- Final handoff commit series anchored by `ddb4911`
-- Test result before handoff push: `322 passed`
-- Command used: `python -m pytest -q`
+- Date: June 22, 2026
+- Branch: current working tree
+- Test result: `368 passed in 154.45s`
+- Command used: `python -m pytest -q phase2\tests`
 
 ## Important Repository Rules
 
@@ -58,7 +57,7 @@ python phase1/scripts/generate_phase1.py --overwrite
 Copy-Item phase1/outputs/Phase1_people_addresses.csv phase1/outputs_phase1/Phase1_people_addresses.csv -Force
 Copy-Item phase1/outputs/Phase1_people_addresses.manifest.json phase1/outputs_phase1/Phase1_people_addresses.manifest.json -Force
 Copy-Item phase1/outputs/Phase1_people_addresses.quality_report.json phase1/outputs_phase1/Phase1_people_addresses.quality_report.json -Force
-python scripts/build_phase2_params.py
+python phase2/scripts/build_phase2_params.py
 python -m pytest -q
 ```
 

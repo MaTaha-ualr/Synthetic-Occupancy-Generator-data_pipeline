@@ -1,5 +1,5 @@
 version: 1
-last_updated: 2026-04-05
+last_updated: 2026-06-22
 entries:
   - scenario_id: single_movers
     title: Single Movers
@@ -15,7 +15,7 @@ entries:
     user_intents:
       - Benchmark address-change linkage before testing harder household dynamics.
       - Validate that the ER system still links the same person after a residence change.
-    validation_reference: tests/test_phase2_scenario_regression.py
+    validation_reference: phase2/tests/test_phase2_scenario_regression.py
 
   - scenario_id: couple_merge
     title: Couple Merge
@@ -26,12 +26,12 @@ entries:
     topology: pairwise
     dataset_count: 2
     cardinality: one_to_many
-    primary_events: [COHABIT]
+    primary_events: [COHABIT, MOVE]
     summary: Two people form a household and Dataset B becomes the noisier, more duplicated side.
     user_intents:
       - Benchmark household formation and shared-address ambiguity.
       - Stress one-to-many cross-file linkage concentrated in the second observed dataset.
-    validation_reference: tests/test_phase2_scenario_regression.py
+    validation_reference: phase2/tests/test_phase2_scenario_regression.py
 
   - scenario_id: family_birth
     title: Family Birth
@@ -42,12 +42,12 @@ entries:
     topology: pairwise
     dataset_count: 2
     cardinality: many_to_one
-    primary_events: [BIRTH]
+    primary_events: [BIRTH, COHABIT]
     summary: Households grow through births and multiple A-side records collapse to one B-side record.
     user_intents:
       - Benchmark family growth and new child creation in the truth layer.
       - Stress many-to-one linkage where the first dataset is more redundant than the second.
-    validation_reference: tests/test_phase2_scenario_regression.py
+    validation_reference: phase2/tests/test_phase2_scenario_regression.py
 
   - scenario_id: divorce_custody
     title: Divorce Custody
@@ -63,7 +63,7 @@ entries:
     user_intents:
       - Benchmark household separation after prior co-residence.
       - Stress high duplication and ambiguity on both observed sides.
-    validation_reference: tests/test_phase2_scenario_regression.py
+    validation_reference: phase2/tests/test_phase2_scenario_regression.py
 
   - scenario_id: roommates_split
     title: Roommates Split
@@ -74,12 +74,12 @@ entries:
     topology: pairwise
     dataset_count: 2
     cardinality: one_to_many
-    primary_events: [LEAVE_HOME, MOVE]
+    primary_events: [LEAVE_HOME, MOVE, COHABIT]
     summary: Young-adult roommate households split, creating churn, shared-address noise, and B-side duplication.
     user_intents:
       - Benchmark temporary co-residence and roommate false-positive pressure.
       - Stress high-churn non-family households with unstable address context.
-    validation_reference: tests/test_phase2_scenario_regression.py
+    validation_reference: phase2/tests/test_phase2_scenario_regression.py
 
   - scenario_id: custom_single_dataset_dedup
     title: Custom Single-Dataset Dedup
@@ -97,7 +97,7 @@ entries:
     implementation_notes:
       - set emission.crossfile_match_mode to single_dataset
       - define exactly one emission.datasets entry
-    validation_reference: tests/test_phase2_observed_cli.py
+    validation_reference: phase2/tests/test_phase2_observed_cli.py
 
   - scenario_id: custom_pairwise_linkage
     title: Custom Pairwise Linkage
@@ -115,7 +115,7 @@ entries:
     implementation_notes:
       - define two emission.datasets entries or use the legacy A/B schema
       - truth_crosswalk.csv remains the backward-compatible pairwise answer key
-    validation_reference: tests/test_phase2_observed_cli.py
+    validation_reference: phase2/tests/test_phase2_observed_cli.py
 
   - scenario_id: custom_multi_dataset_linkage
     title: Custom Multi-Dataset Linkage
@@ -133,7 +133,7 @@ entries:
     implementation_notes:
       - define three or more emission.datasets entries
       - per-pair truth_crosswalk__<left>__<right>.csv files are emitted for evaluation
-    validation_reference: tests/test_phase2_pipeline_integration.py
+    validation_reference: phase2/tests/test_phase2_pipeline_integration.py
 
   - scenario_id: clean_baseline_linkage
     title: Clean Baseline Linkage
@@ -149,7 +149,7 @@ entries:
     user_intents:
       - Start with an easy benchmark before increasing ambiguity and noise.
       - Compare algorithm baselines under near-ideal linkage conditions.
-    validation_reference: tests/test_phase2_scenario_regression.py
+    validation_reference: phase2/tests/test_phase2_scenario_regression.py
 
   - scenario_id: high_noise_identity_drift
     title: High Noise Identity Drift
@@ -165,7 +165,7 @@ entries:
     user_intents:
       - Benchmark severe identity corruption with minimal truth-layer ambiguity.
       - Stress blocking and scoring under realistic field-level noise.
-    validation_reference: tests/test_phase2_scenario_regression.py
+    validation_reference: phase2/tests/test_phase2_scenario_regression.py
 
   - scenario_id: low_overlap_sparse_coverage
     title: Low Overlap Sparse Coverage
@@ -175,13 +175,13 @@ entries:
     yaml_path: phase2/scenarios/low_overlap_sparse_coverage.yaml
     topology: pairwise
     dataset_count: 2
-    cardinality: configurable
+    cardinality: one_to_one
     primary_events: [MOVE]
     summary: A template with intentionally weak overlap and uneven coverage between observed datasets.
     user_intents:
       - Benchmark high non-match pressure.
       - Measure precision/recall under sparse shared coverage.
-    validation_reference: tests/test_phase2_scenario_regression.py
+    validation_reference: phase2/tests/test_phase2_scenario_regression.py
 
   - scenario_id: asymmetric_source_coverage
     title: Asymmetric Source Coverage
@@ -191,13 +191,13 @@ entries:
     yaml_path: phase2/scenarios/asymmetric_source_coverage.yaml
     topology: pairwise
     dataset_count: 2
-    cardinality: configurable
+    cardinality: one_to_one
     primary_events: [MOVE]
     summary: One source is broad and one is sparse, creating large unmatched populations and uneven evidence.
     user_intents:
       - Benchmark linkage where one system is operationally dominant and the other is incomplete.
       - Stress evaluation under unequal source coverage.
-    validation_reference: tests/test_phase2_scenario_regression.py
+    validation_reference: phase2/tests/test_phase2_scenario_regression.py
 
   - scenario_id: high_duplication_dedup
     title: High Duplication Dedup
@@ -208,12 +208,12 @@ entries:
     topology: single_dataset
     dataset_count: 1
     cardinality: dedup
-    primary_events: []
+    primary_events: [MOVE]
     summary: A single-dataset benchmark with intentionally high within-file duplication.
     user_intents:
       - Benchmark deduplication rather than linkage.
       - Stress clustering and consolidation with one observed file only.
-    validation_reference: tests/test_phase2_scenario_regression.py
+    validation_reference: phase2/tests/test_phase2_scenario_regression.py
 
   - scenario_id: three_source_partial_overlap
     title: Three-Source Partial Overlap
@@ -223,61 +223,58 @@ entries:
     yaml_path: phase2/scenarios/three_source_partial_overlap.yaml
     topology: n_way
     dataset_count: 3
-    cardinality: configurable
+    cardinality: one_to_one
     primary_events: [MOVE]
     summary: A three-dataset benchmark where each pair overlaps differently and full intersection is limited.
     user_intents:
       - Benchmark multi-source linkage with non-uniform pairwise evidence.
       - Evaluate N-way linkage strategies without requiring new truth events.
-    validation_reference: tests/test_phase2_scenario_regression.py
+    validation_reference: phase2/tests/test_phase2_scenario_regression.py
 
   - scenario_id: name_change_lifecycle
     title: Name Change Lifecycle
-    status: future_engine_extension
-    runnable: false
-    delivery_mode: future_engine_extension
-    topology: configurable
-    dataset_count: configurable
-    cardinality: configurable
+    status: supported
+    runnable: true
+    delivery_mode: canonical_yaml
+    yaml_path: phase2/scenarios/name_change_lifecycle.yaml
+    topology: pairwise
+    dataset_count: 2
+    cardinality: one_to_one
     primary_events: [NAME_CHANGE]
     summary: A benchmark where identity changes through marriage, divorce, or other legal name changes.
     user_intents:
       - Benchmark continuity of identity when names legitimately change over time.
       - Stress temporal identity reconciliation beyond simple noise injection.
-    remaining_work:
-      - activate NAME_CHANGE in the truth event grammar and simulator
-      - define observed-name persistence rules across snapshots
+    validation_reference: phase2/tests/test_phase2_scenario_regression.py
 
   - scenario_id: death_survivor_persistence
     title: Death and Survivor Persistence
-    status: future_engine_extension
-    runnable: false
-    delivery_mode: future_engine_extension
-    topology: configurable
-    dataset_count: configurable
-    cardinality: configurable
+    status: supported
+    runnable: true
+    delivery_mode: canonical_yaml
+    yaml_path: phase2/scenarios/death_survivor_persistence.yaml
+    topology: pairwise
+    dataset_count: 2
+    cardinality: one_to_one
     primary_events: [DEATH]
     summary: A benchmark where some entities die and downstream systems disagree about how long records persist.
     user_intents:
       - Benchmark temporal retirement of records after death.
       - Stress system disagreement about stale records and survivor households.
-    remaining_work:
-      - activate DEATH in the truth event grammar and simulator
-      - define record persistence and household aftermath rules
+    validation_reference: phase2/tests/test_phase2_scenario_regression.py
 
   - scenario_id: adoption_blended_family
     title: Adoption and Blended Family
-    status: future_engine_extension
-    runnable: false
-    delivery_mode: future_engine_extension
-    topology: configurable
-    dataset_count: configurable
-    cardinality: configurable
+    status: supported
+    runnable: true
+    delivery_mode: canonical_yaml
+    yaml_path: phase2/scenarios/adoption_blended_family.yaml
+    topology: pairwise
+    dataset_count: 2
+    cardinality: one_to_one
     primary_events: [ADOPTION]
     summary: A benchmark for changing parent-child relationships and blended household structure.
     user_intents:
       - Benchmark family linkage when parent-child roles change over time.
       - Stress household composition beyond birth and divorce alone.
-    remaining_work:
-      - activate ADOPTION in the truth event grammar and simulator
-      - define household and membership transition rules for blended families
+    validation_reference: phase2/tests/test_phase2_scenario_regression.py

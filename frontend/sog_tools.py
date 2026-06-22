@@ -16,7 +16,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCENARIOS_DIR = PROJECT_ROOT / "phase2" / "scenarios"
 RUNS_ROOT = PROJECT_ROOT / "phase2" / "runs"
 
-_src_dir = str(PROJECT_ROOT / "src")
+_src_dir = str(PROJECT_ROOT / "phase2" / "src")
 if _src_dir not in sys.path:
     sys.path.insert(0, _src_dir)
 _frontend_dir = str(PROJECT_ROOT / "frontend")
@@ -388,7 +388,7 @@ def get_run_results(run_id: str) -> dict[str, Any]:
                 if path.exists():
                     label = f"truth_crosswalk__{str(dataset_ids[0]).strip()}__{str(dataset_ids[1]).strip()}"
                     download_paths[label] = str(path)
-        for label in ("dataset_a", "dataset_b", "entity_record_map", "truth_crosswalk"):
+        for label in ("dataset_a", "dataset_b", "entity_record_map", "master_dataset", "truth_crosswalk"):
             raw_path = str(observed_outputs.get(label, "")).strip()
             if raw_path:
                 path = Path(raw_path)
@@ -400,6 +400,7 @@ def get_run_results(run_id: str) -> dict[str, Any]:
             ("DatasetA", "DatasetA.csv"),
             ("DatasetB", "DatasetB.csv"),
             ("entity_record_map", "entity_record_map.csv"),
+            ("master_dataset", "masterDataset.csv"),
             ("truth_crosswalk", "truth_crosswalk.csv"),
         ]:
             p = run_dir / filename
@@ -842,7 +843,11 @@ def generate_chart(
 ) -> dict[str, Any]:
     """Generate a single visualization chart for a run."""
     try:
-        from visualizations.core import ChartGenerator, ChartSpec
+        try:
+            from frontend.visualizations.core import ChartGenerator, ChartSpec
+        except ImportError:
+            from visualizations.core import ChartGenerator, ChartSpec
+
         generator = ChartGenerator()
         effective_fmt = fmt
         if chart_type == "noise_radar" and fmt == "png":
