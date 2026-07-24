@@ -659,7 +659,7 @@
     {
       "bytes": 16068,
       "path": "paper_revision_bundle/matcher_protocol.json",
-      "sha256": "3248a26f1ef3aeda5949dc441a7cc271635980b10e88c590ba1bb97d306e81ca"
+      "sha256": "0563da75f30124fb10a23d0e31b9814c9b168059206c09065c58d1417c76b99c"
     },
     {
       "bytes": 34162,
@@ -684,7 +684,7 @@
     {
       "bytes": 2010,
       "path": "paper_revision_bundle/paper_tables/figure_2_data.docx",
-      "sha256": "780111a03aff0f76d00969870977523b212f3dbafe9263123c4576c3a503994b"
+      "sha256": "0359a21fc954597e84ca7548ed8c6b810f44a0110a903118d61c032939955594"
     },
     {
       "bytes": 3284,
@@ -699,7 +699,7 @@
     {
       "bytes": 1720,
       "path": "paper_revision_bundle/paper_tables/table_i.docx",
-      "sha256": "78befb1faa3fa4b4f876362864cfa17df0b80d669ba3a368b31a4ea15786f17c"
+      "sha256": "c291779795d3076543f2bc71ad9ee9798bb792c89cb94cf916abcae32a9617e9"
     },
     {
       "bytes": 1619,
@@ -714,7 +714,7 @@
     {
       "bytes": 3726,
       "path": "paper_revision_bundle/paper_tables/table_ii.docx",
-      "sha256": "d3c3879af716eaf7db01283ca98ccb3ddf37ad0b67f26631424deb4682f79490"
+      "sha256": "e99e2869b7056979a7ffa3c63fcc113074f6351399ff162eaae1de230739d24b"
     },
     {
       "bytes": 6689,
@@ -729,7 +729,7 @@
     {
       "bytes": 2006,
       "path": "paper_revision_bundle/paper_tables/table_iii.docx",
-      "sha256": "cbff2398d2bfe75c4351df3c3a3b1ba44fb62189b89cd53c9ac0ddc875ad691b"
+      "sha256": "fa8b2db3c61ad8550849885b92426d471158ccc051d15d1f52bb3692f261d6d3"
     },
     {
       "bytes": 3301,
@@ -744,7 +744,7 @@
     {
       "bytes": 2577,
       "path": "paper_revision_bundle/paper_tables/table_iv.docx",
-      "sha256": "cd5630296eeaeaffcf94934c645d5c7f2a88ba05a918711b4eacd98c5bdfee10"
+      "sha256": "6000f5d57ef2a6528fb155a17b6c281c9a33af621e5864736c6e5b8569463692"
     },
     {
       "bytes": 4071,
@@ -759,7 +759,7 @@
     {
       "bytes": 3175,
       "path": "paper_revision_bundle/paper_tables/table_v.docx",
-      "sha256": "e85186b95ea44c13bc7c2d9ca639a2e1da1b55711f1311a5dc256c96a45b1109"
+      "sha256": "f5a02b3bda18d353e80983991fb5abf2c56712e93edd61359c7d27b269970ec6"
     },
     {
       "bytes": 6602,
@@ -774,7 +774,7 @@
     {
       "bytes": 2020,
       "path": "paper_revision_bundle/paper_tables/table_vi.docx",
-      "sha256": "c593009dcd1e1963e85a1ed4efe83b8e24d4c0f2b9f2380771fad9f6e02b28ff"
+      "sha256": "bbed0fc4c51739967a69a469240cd3f14614a9011bc217aab1111a64f152f06c"
     },
     {
       "bytes": 2194,
@@ -789,7 +789,7 @@
     {
       "bytes": 10939,
       "path": "paper_revision_bundle/README.md",
-      "sha256": "6b38f4776236e532acd20368b6c25149d36d291c516df6ca898a8e8b06e043d8"
+      "sha256": "83ba1694635935ab0e04553fb6a872fa1e9c8bcbd2e09da23e797ff4c6fa6bd7"
     },
     {
       "bytes": 8533,
@@ -797,11 +797,11 @@
       "sha256": "62d1e6f44039c8fd97b120d9a5fa606f905f69326137e9c8728ff81157a9bb63"
     }
   ],
-  "generated_at_utc": "2026-07-24T06:15:30.651661+00:00",
+  "generated_at_utc": "2026-07-24T06:16:10.515148+00:00",
   "git": {
     "all_tags_at_generation_commit": [],
     "branch": "main",
-    "commit_sha": "85a03c11ebd534358a87afc1115870bc0a0efcfb",
+    "commit_sha": "1ef472955d3c0d6c64b8b135cf241c62942f025a",
     "commit_sha_role": "payload_commit_before_release_metadata_freeze",
     "dirty_at_generation": true,
     "release": {
@@ -810,16 +810,13 @@
       "final_commit_sha_embedded": false,
       "final_commit_sha_explanation": "A tracked file cannot contain the SHA of its own containing commit because that SHA depends on the file bytes. The annotated release tag is the authoritative final commit identifier and is checked by the release validator.",
       "payload_commit_role": "complete payload immediately before release metadata freeze",
-      "payload_commit_sha": "85a03c11ebd534358a87afc1115870bc0a0efcfb",
+      "payload_commit_sha": "1ef472955d3c0d6c64b8b135cf241c62942f025a",
       "tag": "paper-artifact-2026.07.24"
     },
     "release_tag": "paper-artifact-2026.07.24",
     "status_at_generation": "dirty",
     "status_porcelain_at_generation": [
-      "M paper_experiments/build_paper_revision_bundle.py",
-      " M paper_experiments/validate_paper_revision_bundle.py",
-      " M paper_revision_bundle/README.md",
-      " M paper_revision_bundle/artifact_manifest.json",
+      "M paper_revision_bundle/README.md",
       " M paper_revision_bundle/matcher_protocol.json",
       " M paper_revision_bundle/paper_tables/figure_2_data.docx",
       " M paper_revision_bundle/paper_tables/table_i.docx",

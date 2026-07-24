@@ -87,7 +87,7 @@
     "normalization": "Uppercase; remove all characters outside A-Z and 0-9. DOB is parsed to year/month/day where possible.",
     "package_and_version": {
       "package": "repository code",
-      "version": "85a03c11ebd534358a87afc1115870bc0a0efcfb"
+      "version": "1ef472955d3c0d6c64b8b135cf241c62942f025a"
     },
     "threshold_search_grid_or_procedure": "Paper-fixed threshold inherited from E0. The legacy calibration grid is 0.30, 0.31, ..., 0.95, maximizing F1 then precision then threshold.",
     "training_negative_count": 0,
