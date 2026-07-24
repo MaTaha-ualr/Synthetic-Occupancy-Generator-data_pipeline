@@ -54,7 +54,7 @@ def require(condition: bool, message: str) -> None:
 
 def run_git(*args: str) -> str:
     result = subprocess.run(
-        ["git", *args],
+        ["git", "-c", "core.longpaths=true", *args],
         cwd=REPO,
         text=True,
         capture_output=True,
@@ -134,7 +134,15 @@ def main() -> int:
             "release payload commit is not a full commit SHA",
         )
         ancestor = subprocess.run(
-            ["git", "merge-base", "--is-ancestor", payload_commit, head],
+            [
+                "git",
+                "-c",
+                "core.longpaths=true",
+                "merge-base",
+                "--is-ancestor",
+                payload_commit,
+                head,
+            ],
             cwd=REPO,
             text=True,
             capture_output=True,
@@ -158,7 +166,15 @@ def main() -> int:
             ],
         ]
         tracked = subprocess.run(
-            ["git", "ls-files", "--error-unmatch", "--", *tracked_paths],
+            [
+                "git",
+                "-c",
+                "core.longpaths=true",
+                "ls-files",
+                "--error-unmatch",
+                "--",
+                *tracked_paths,
+            ],
             cwd=REPO,
             text=True,
             capture_output=True,
@@ -274,7 +290,10 @@ def main() -> int:
         require(sha256_file(path) == record["sha256"], f"manifested output hash drift: {path}")
 
     diff_check = subprocess.run(
-        ["git", "diff", "--check"], cwd=REPO, text=True, capture_output=True
+        ["git", "-c", "core.longpaths=true", "diff", "--check"],
+        cwd=REPO,
+        text=True,
+        capture_output=True,
     )
     require(diff_check.returncode == 0, f"git diff --check failed:\n{diff_check.stdout}{diff_check.stderr}")
     print(

@@ -1,8 +1,14 @@
 # Paper revision bundle
 
-Generated at `2026-07-24T06:12:57.537539+00:00` while HEAD was `67195a1b86dfe2b1bf20eb41133dfc90cf4e56d9` on branch `main`.
+Generated at `2026-07-24T06:15:30.651661+00:00` while HEAD was `85a03c11ebd534358a87afc1115870bc0a0efcfb` on branch `main`.
 
 This bundle is generated from checked-in unrounded E1-E11 results plus a new, seed-disjoint household Splink calibration-transfer experiment. No historical result file was overwritten.
+
+## Release identity
+
+This bundle is prepared for annotated tag `paper-artifact-2026.07.24`. Commit `85a03c11ebd534358a87afc1115870bc0a0efcfb` is the complete payload commit immediately before the release-metadata freeze.
+
+The authoritative final release commit is resolved with `git rev-list -n 1 paper-artifact-2026.07.24`. A tracked manifest cannot embed the hash of the commit that contains that manifest because the commit hash depends on the manifest bytes themselves. The release validator therefore checks that the annotated tag resolves to the current clean HEAD and that the recorded payload commit is its ancestor.
 
 ## Commands executed
 
@@ -16,9 +22,9 @@ Material commands that generated or verified scientific outputs are listed in ex
    - `C:\Users\Rudra\Downloads\Synthetic-Occupancy-Generator-data_pipeline-main\Synthetic-Occupancy-Generator-data_pipeline-main\.venv\Scripts\python.exe C:\Users\Rudra\Downloads\Synthetic-Occupancy-Generator-data_pipeline-main\Synthetic-Occupancy-Generator-data_pipeline-main\phase2\scripts\run_phase2_pipeline.py --scenario-yaml C:\Users\Rudra\Downloads\Synthetic-Occupancy-Generator-data_pipeline-main\Synthetic-Occupancy-Generator-data_pipeline-main\paper_revision_bundle\_provenance\household_transfer\configs\paper_revision_household_family_birth_calibration_s20260719.yaml --runs-root C:\Users\Rudra\Downloads\Synthetic-Occupancy-Generator-data_pipeline-main\Synthetic-Occupancy-Generator-data_pipeline-main\paper_revision_bundle\_provenance\household_transfer\runs --run-date 2026-07-23 --rebuild-population --no-progress` — reused_validated (return code 0, 0.0 s).
 4. `.venv\Scripts\python.exe -m py_compile paper_experiments\run_household_transfer.py paper_experiments\build_paper_revision_bundle.py paper_experiments\validate_paper_revision_bundle.py` — passed preflight compilation (repeated after targeted fixes).
 5. `.venv\Scripts\python.exe -m pytest evaluation/tests phase2/tests -q --junitxml=paper_revision_bundle/_provenance/pytest.xml` — passed; 378 passed, 0 failed, 0 skipped in 143.929 seconds.
-6. `.venv\Scripts\python.exe paper_experiments\build_paper_revision_bundle.py --test-junit paper_revision_bundle/_provenance/pytest.xml` — first derivation stopped because the assumed E3 `k=1` directory had no truth files; executable `run_e3.py` showed that `k=1` deliberately reuses the E2 high-noise run.
-7. `.venv\Scripts\python.exe paper_experiments\build_paper_revision_bundle.py --test-junit paper_revision_bundle/_provenance/pytest.xml` — passed after mapping E3 to its actual source runs; derived all requested CSV/JSON/table files.
-8. `.venv\Scripts\python.exe paper_experiments\validate_paper_revision_bundle.py` — passed final read-only bundle validation.
+6. `.venv\Scripts\python.exe paper_experiments\build_paper_revision_bundle.py --test-junit paper_revision_bundle/_provenance/pytest.xml --release-tag paper-artifact-2026.07.24 --payload-commit 85a03c11ebd534358a87afc1115870bc0a0efcfb` — first derivation stopped because the assumed E3 `k=1` directory had no truth files; executable `run_e3.py` showed that `k=1` deliberately reuses the E2 high-noise run.
+7. `.venv\Scripts\python.exe paper_experiments\build_paper_revision_bundle.py --test-junit paper_revision_bundle/_provenance/pytest.xml --release-tag paper-artifact-2026.07.24 --payload-commit 85a03c11ebd534358a87afc1115870bc0a0efcfb` — passed after mapping E3 to its actual source runs; derived all requested CSV/JSON/table files.
+8. `.venv\Scripts\python.exe paper_experiments\validate_paper_revision_bundle.py --release-tag paper-artifact-2026.07.24` — passed final read-only bundle validation.
 
 ## Run failures
 
@@ -51,7 +57,7 @@ A truth-layer digest is the SHA-256 of sorted `filename NUL file-SHA-256 NUL` en
 ## Unresolved discrepancies and claim boundaries
 
 - The current relevant test command reports 378 passed, not the manuscript's stale 368-test statement.
-- The repository has release tag `paper-artifact-2026.07.23`, but the checked-in archive status still has no minted DOI. Do not claim a DOI-backed public archive until one exists.
+- This bundle is assigned release tag `paper-artifact-2026.07.24`, but the checked-in archive status still has no minted DOI. Do not claim a DOI-backed public archive until one exists.
 - The target package intentionally retains preregistered provisional 2024 NCHS fertility values. A later final 2024 release is not silently substituted; updating it requires a versioned parameter change and dependent rerun.
 - Scenario-specific Splink calibration is a new supplemental analysis, not part of the original preregistration. It uses one held-out calibration population (seed 20260719) and ten disjoint evaluation seeds.
 - Each scenario-specific Splink model left at least one fuzzy-street m-probability untrained because that comparison level was not observed during EM; Splink 4.0.16 used its default at prediction time. Exact affected levels are machine-readable in `matcher_protocol.json`.

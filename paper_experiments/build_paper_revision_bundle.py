@@ -134,7 +134,7 @@ def write_json(path: Path, value: Any) -> None:
 
 def run_git(*args: str) -> str:
     result = subprocess.run(
-        ["git", *args],
+        ["git", "-c", "core.longpaths=true", *args],
         cwd=REPO,
         text=True,
         capture_output=True,
