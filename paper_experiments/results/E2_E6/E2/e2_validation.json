@@ -1,0 +1,26 @@
+{
+  "metric_rows": 420,
+  "expected_metric_rows": 420,
+  "scenario_count": 14,
+  "seed_count": 10,
+  "matcher_count": 3,
+  "clean_rank_order": [
+    "learned",
+    "baseline",
+    "splink"
+  ],
+  "changed_rank_scenarios": {},
+  "changed_rank_count": 0,
+  "changed_rank_family_count": 0,
+  "hardest_scenario_by_best_matcher_f1": "adoption_blended_family",
+  "hardest_best_matcher_f1": 0.8547041623587646,
+  "material_profile_threshold_f1": 0.02,
+  "material_profile_scenarios": {
+    "adoption_blended_family": 0.11326304095395501,
+    "couple_merge": 0.02566031098856214,
+    "family_birth": 0.051554268405862524
+  },
+  "acceptance_rank_change": false,
+  "acceptance_material_profile": true,
+  "acceptance_rank_or_profile": true
+}

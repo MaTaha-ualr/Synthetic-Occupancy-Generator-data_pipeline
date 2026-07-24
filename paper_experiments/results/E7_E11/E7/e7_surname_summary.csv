@@ -1,0 +1,6 @@
+dimension,source,unit,estimability,n_seeds,target,configured_input,achieved_mean,achieved_sd,relative_deviation_pct,absolute_deviation,verdict
+surname_top_10_share_pct,Phase 1 conditional Census surname pool,percent,comparable,10,7.634050105744991,,7.568555964233164,0.49152011553140607,-0.8579212947860916,-0.06549414151182642,close
+surname_top_50_share_pct,Phase 1 conditional Census surname pool,percent,comparable,10,19.77523350922551,,20.81940465407047,0.5395947990978519,5.280196283689062,1.0441711448449595,moderate
+surname_top_100_share_pct,Phase 1 conditional Census surname pool,percent,comparable,10,27.30069456864089,,30.23806552349596,0.7175413189022883,10.759326827637194,2.9373709548550693,moderate
+surname_rank_slope_10_1000,Phase 1 conditional Census surname pool,log probability / log rank,comparable,10,-0.781669262596665,,-0.7725003947182272,0.017990600145452847,-1.1729855985355417,0.009168867878437847,descriptive
+surname_js_distance,Phase 1 conditional Census surname pool,Jensen-Shannon distance,comparable,10,0.0,,0.09046402092176213,0.009118901582839836,,0.09046402092176213,moderate

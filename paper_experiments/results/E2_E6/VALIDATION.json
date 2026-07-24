@@ -1,0 +1,52 @@
+{
+  "e2_metric_rows": 420,
+  "e2_expected_rows": 420,
+  "e2_scenarios": 14,
+  "e2_seeds": 10,
+  "e2_matchers": 3,
+  "e3_metric_rows": 150,
+  "e3_expected_rows": 150,
+  "e4_e5_metric_rows": 120,
+  "e4_e5_expected_rows": 120,
+  "e6_metric_rows": 120,
+  "e6_expected_rows": 120,
+  "row_counts_valid": true,
+  "e2_score_hashes_recorded": 140,
+  "e2_score_hashes_complete": true,
+  "e2_acceptance": true,
+  "e3_acceptance": true,
+  "e5_one_to_many_pairwise_absolute_effect": 1.6011936373572233e-05,
+  "e5_one_to_many_b3_absolute_effect": 8.018039868395999e-05,
+  "e5_nominal_numeric_criterion": true,
+  "e5_substantive_pressure_supported": false,
+  "e2_family_difficulty_orders_easiest_to_hardest": {
+    "baseline": [
+      "lifecycle",
+      "multi_source",
+      "duplication_topology",
+      "emission_noise_coverage",
+      "household_dissolution",
+      "clean_mobility",
+      "household_formation"
+    ],
+    "splink": [
+      "lifecycle",
+      "multi_source",
+      "duplication_topology",
+      "emission_noise_coverage",
+      "household_dissolution",
+      "clean_mobility",
+      "household_formation"
+    ],
+    "learned": [
+      "lifecycle",
+      "multi_source",
+      "duplication_topology",
+      "emission_noise_coverage",
+      "clean_mobility",
+      "household_dissolution",
+      "household_formation"
+    ]
+  },
+  "git_head_before_results_commit": "51cdc2eb294c0545db7fe17ca8adf2be7f77db8e"
+}

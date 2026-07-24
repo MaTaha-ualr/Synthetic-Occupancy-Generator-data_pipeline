@@ -303,15 +303,50 @@ def _resolve_step_rates(
     scenario_parameters: dict[str, Any] | None,
     phase2_priors: dict[str, Any] | None,
     granularity: str,
-) -> dict[str, float]:
+) -> dict[str, Any]:
     annual_pct = _resolve_annual_rate_pct(
         scenario_parameters=scenario_parameters,
         phase2_priors=phase2_priors,
     )
-    return {
+    resolved: dict[str, Any] = {
         key: _annual_to_step_probability(_pct_to_annual_probability(value), granularity)
         for key, value in annual_pct.items()
     }
+    raw = scenario_parameters if isinstance(scenario_parameters, dict) else {}
+    if bool(raw.get("calibrate_to_public_targets", False)) and isinstance(phase2_priors, dict):
+        mobility = (phase2_priors.get("mobility") or {}).get("age_cohort_moved_pct") or {}
+        age_18_34 = raw.get("mobility_age_18_34_pct")
+        if age_18_34 is None:
+            age_18_34 = (float(mobility.get("age_18_24", 0.0)) + float(mobility.get("age_25_34", 0.0))) / 2.0
+        annual_mobility = {
+            "age_0_17": float(raw.get("mobility_age_0_17_pct", mobility.get("age_0_17", annual_pct["move_rate_pct"]))),
+            "age_18_34": float(age_18_34),
+            "age_35_64": float(raw.get("mobility_age_35_64_pct", mobility.get("age_35_64", annual_pct["move_rate_pct"]))),
+            "age_65_plus": float(raw.get("mobility_age_65_plus_pct", mobility.get("age_65_plus", annual_pct["move_rate_pct"]))),
+        }
+        resolved["mobility_by_age"] = {
+            key: _annual_to_step_probability(_pct_to_annual_probability(value), granularity)
+            for key, value in annual_mobility.items()
+        }
+        fertility = (phase2_priors.get("fertility") or {}).get("birth_rate_per_1000_by_age_group") or {}
+        resolved["fertility_by_age"] = {
+            str(key): _annual_to_step_probability(float(value) / 1000.0, granularity)
+            for key, value in fertility.items()
+            if str(key) not in {"15-17", "18-19"}
+        }
+        resolved["calibrate_to_public_targets"] = True
+    return resolved
+
+
+def _fertility_band_for_age(age: int) -> str:
+    for label, lower, upper in (
+        ("10-14", 10, 14), ("15-19", 15, 19), ("20-24", 20, 24),
+        ("25-29", 25, 29), ("30-34", 30, 34), ("35-39", 35, 39),
+        ("40-44", 40, 44), ("45-54", 45, 54),
+    ):
+        if lower <= age <= upper:
+            return label
+    return ""
 
 
 def _effective_max_gap(config: ConstraintConfig) -> int | None:
@@ -862,13 +897,17 @@ class _SimulationState:
         if divorce_base <= 0:
             return
         couples = sorted(self.active_couples, key=lambda pair: (_stable_key(pair[0]), _stable_key(pair[1])))
+        calibrated = bool(step_rates.get("calibrate_to_public_targets", False))
         for person_a, person_b in couples:
             if person_a in locked or person_b in locked:
                 continue
-            partnership = 0.5 * (
-                self.person_partnership.get(person_a, 0.5) + self.person_partnership.get(person_b, 0.5)
-            )
-            probability = float(np.clip(divorce_base * (0.7 + (1.0 - partnership)), 0.0, 1.0))
+            if calibrated:
+                probability = float(np.clip(divorce_base * len(self.person_current_household) / max(len(couples), 1), 0.0, 1.0))
+            else:
+                partnership = 0.5 * (
+                    self.person_partnership.get(person_a, 0.5) + self.person_partnership.get(person_b, 0.5)
+                )
+                probability = float(np.clip(divorce_base * (0.7 + (1.0 - partnership)), 0.0, 1.0))
             if self.rng.random() >= probability:
                 continue
 
@@ -1023,7 +1062,7 @@ class _SimulationState:
         self.person_fertility[child_key] = 0.05
         return child_key
 
-    def _simulate_births(self, *, step_date: date, step_rates: dict[str, float], locked: set[str]) -> None:
+    def _simulate_births(self, *, step_date: date, step_rates: dict[str, Any], locked: set[str]) -> None:
         birth_base = float(step_rates.get("birth_rate_pct", 0.0))
         if birth_base <= 0:
             return
@@ -1047,8 +1086,13 @@ class _SimulationState:
         for parent1 in candidates:
             if parent1 in locked:
                 continue
-            fertility = self.person_fertility.get(parent1, 0.5)
-            probability = float(np.clip(birth_base * (0.4 + fertility), 0.0, 1.0))
+            parent_age = self.person_age.get(parent1, -1)
+            calibrated = step_rates.get("fertility_by_age") or {}
+            if calibrated:
+                probability = float(calibrated.get(_fertility_band_for_age(parent_age), 0.0))
+            else:
+                fertility = self.person_fertility.get(parent1, 0.5)
+                probability = float(np.clip(birth_base * (0.4 + fertility), 0.0, 1.0))
             if self.rng.random() >= probability:
                 continue
 
@@ -1124,7 +1168,7 @@ class _SimulationState:
             )
             locked.add(person_key)
 
-    def _simulate_moves(self, *, step_date: date, step_rates: dict[str, float], locked: set[str]) -> None:
+    def _simulate_moves(self, *, step_date: date, step_rates: dict[str, Any], locked: set[str]) -> None:
         move_base = float(step_rates.get("move_rate_pct", 0.0))
         if move_base <= 0:
             return
@@ -1138,10 +1182,17 @@ class _SimulationState:
             household_key = self.person_current_household.get(person_a, "")
             if household_key != self.person_current_household.get(person_b, ""):
                 continue
-            partnership_move = 0.5 * (
-                self.person_mobility.get(person_a, 0.5) + self.person_mobility.get(person_b, 0.5)
-            )
-            probability = float(np.clip(move_base * (0.5 + partnership_move), 0.0, 1.0))
+            calibrated = step_rates.get("mobility_by_age") or {}
+            if calibrated:
+                probability = 0.5 * (
+                    float(calibrated.get(_age_bin_for_age(self.person_age.get(person_a, 0)), move_base))
+                    + float(calibrated.get(_age_bin_for_age(self.person_age.get(person_b, 0)), move_base))
+                )
+            else:
+                partnership_move = 0.5 * (
+                    self.person_mobility.get(person_a, 0.5) + self.person_mobility.get(person_b, 0.5)
+                )
+                probability = float(np.clip(move_base * (0.5 + partnership_move), 0.0, 1.0))
             if self.rng.random() >= probability:
                 continue
             to_address = self._new_address_key()
@@ -1158,32 +1209,49 @@ class _SimulationState:
             for member in self.household_members.get(household_key, set()):
                 locked.add(member)
 
+        processed_households: set[str] = set()
         for person_key in sorted(self.person_current_household.keys(), key=_stable_key):
             if person_key in locked:
                 continue
             if person_key in self._partner_lookup():
                 continue
             household_key = self.person_current_household.get(person_key, "")
-            if len(self.household_members.get(household_key, set())) != 1:
+            if household_key in processed_households:
                 continue
-            mobility = self.person_mobility.get(person_key, 0.5)
-            probability = float(np.clip(move_base * (0.5 + mobility), 0.0, 1.0))
+            members = sorted(self.household_members.get(household_key, set()), key=_stable_key)
+            if not members or any(member in locked for member in members):
+                continue
+            processed_households.add(household_key)
+            calibrated = step_rates.get("mobility_by_age") or {}
+            if calibrated:
+                # A shared move must not let a high-propensity adult force every
+                # child or senior in the household above that cohort's target.
+                probability = float(np.min([
+                    float(calibrated.get(_age_bin_for_age(self.person_age.get(member, 0)), move_base))
+                    for member in members
+                ]))
+            else:
+                mobility = float(np.mean([self.person_mobility.get(member, 0.5) for member in members]))
+                probability = float(np.clip(move_base * (0.5 + mobility), 0.0, 1.0))
             if self.rng.random() >= probability:
                 continue
             to_address = self._new_address_key()
-            from_address, moved_to = self._set_person_address(person_key, to_address, step_date)
+            if len(members) > 1:
+                from_address, moved_to = self._move_household(household_key, to_address, step_date)
+            else:
+                from_address, moved_to = self._set_person_address(person_key, to_address, step_date)
             if from_address == moved_to:
                 continue
             self.household_current_address[household_key] = moved_to
             self._append_event(
                 "MOVE",
                 step_date,
-                SubjectPersonKey=person_key,
+                SubjectPersonKey=person_key if len(members) == 1 else "",
                 SubjectHouseholdKey=household_key,
                 FromAddressKey=from_address,
                 ToAddressKey=moved_to,
             )
-            locked.add(person_key)
+            locked.update(members)
 
     def simulate(self, *, step_rates: dict[str, float]) -> None:
         for step_date in _step_dates(self.simulation_config):
@@ -1479,6 +1547,127 @@ def _apply_roommate_baseline_grouping(
     return baseline
 
 
+def _apply_public_household_baseline_grouping(
+    *, baseline_df: pd.DataFrame, seed: int, scenario_parameters: dict[str, Any] | None,
+    phase2_priors: dict[str, Any] | None,
+) -> pd.DataFrame:
+    """Build a seeded baseline whose household-type shares match the public priors.
+
+    Phase 1 intentionally emits record-level addresses and has no family graph.  This
+    adapter constructs that graph at the Phase-2 truth boundary instead of treating
+    every Phase-1 person as a one-person household.
+    """
+    raw = scenario_parameters if isinstance(scenario_parameters, dict) else {}
+    if not bool(raw.get("initialize_households_from_public_targets", False)):
+        return baseline_df
+    shares = ((phase2_priors or {}).get("household_type_share") or {}).get("share_pct_by_type") or {}
+    required = ("married_couple_family", "single_parent_male_householder",
+                "single_parent_female_householder", "nonfamily_living_alone")
+    if any(key not in shares for key in required):
+        raise ValueError("Public household initialization requires household_type_share priors")
+
+    baseline = baseline_df.copy()
+    baseline["InitHouseholdKey"] = ""
+    baseline["InitHouseholdType"] = ""
+    baseline["InitHouseholdRole"] = ""
+    baseline["InitAddressKey"] = baseline["AddressKey"].map(_non_empty_text)
+    rng = np.random.default_rng(int(seed) + 7919)
+    people = baseline.copy()
+    people["_key"] = people["PersonKey"].astype(str).str.strip()
+    ages = pd.to_numeric(people["Age"], errors="coerce").fillna(-1)
+    adults = people.loc[ages >= 18, "_key"].tolist()
+    children = people.loc[ages < 18, "_key"].tolist()
+    adults = [str(v) for v in np.asarray(adults, dtype=object)[rng.permutation(len(adults))]]
+    children = [str(v) for v in np.asarray(children, dtype=object)[rng.permutation(len(children))]]
+    gender = people.set_index("_key")["Gender"].map(_gender_bucket).to_dict()
+    age_by_key = pd.to_numeric(people.set_index("_key")["Age"], errors="coerce").fillna(-1).astype(int).to_dict()
+
+    target = {
+        "married": float(shares["married_couple_family"]),
+        "single_male": float(shares["single_parent_male_householder"]),
+        "single_female": float(shares["single_parent_female_householder"]),
+        "alone": float(shares["nonfamily_living_alone"]),
+        "nonfamily": float(shares.get("nonfamily_not_alone", 7.123284)),
+    }
+    total_share = sum(target.values())
+    target = {key: value / total_share for key, value in target.items()}
+    # Choose the largest feasible household count. Family households absorb the
+    # remaining people as children, preserving exact household-type proportions.
+    household_n = len(people)
+    while household_n > 0:
+        counts = {key: int(round(household_n * value)) for key, value in target.items()}
+        counts["nonfamily"] += household_n - sum(counts.values())
+        adult_need = 2 * counts["married"] + counts["single_male"] + counts["single_female"] + counts["alone"] + 2 * counts["nonfamily"]
+        minimum_people = adult_need + counts["single_male"] + counts["single_female"]
+        if adult_need <= len(adults) and minimum_people <= len(people):
+            break
+        household_n -= 1
+    if household_n <= 0:
+        raise ValueError("Population cannot satisfy public household targets")
+
+    assignments: dict[str, tuple[str, str, str, str]] = {}
+    adult_pool = list(adults)
+    child_pool = list(children)
+    household_members: dict[str, list[str]] = {}
+    serial = 0
+
+    def new_household(kind: str, members: list[tuple[str, str]]) -> None:
+        nonlocal serial
+        serial += 1
+        hh = f"HH_PUBLIC_{serial:07d}"
+        address = f"ADDR_PUBLIC_{serial:07d}"
+        household_members[hh] = []
+        for key, role in members:
+            assignments[key] = (hh, kind, role, address)
+            household_members[hh].append(key)
+
+    def take_adult(preferred: str = "") -> str:
+        if preferred:
+            for index, key in enumerate(adult_pool):
+                if gender.get(key) == preferred:
+                    return adult_pool.pop(index)
+        return adult_pool.pop()
+
+    def take_compatible_partner(first: str) -> str:
+        max_gap = int(raw.get("max_initial_partner_age_gap", 25))
+        candidates = [
+            (abs(age_by_key.get(key, -1000) - age_by_key.get(first, 1000)), index, key)
+            for index, key in enumerate(adult_pool)
+            if abs(age_by_key.get(key, -1000) - age_by_key.get(first, 1000)) <= max_gap
+        ]
+        if not candidates:
+            raise ValueError("Population cannot satisfy baseline partner age-gap constraint")
+        _, index, _ = min(candidates)
+        return adult_pool.pop(index)
+
+    for _ in range(counts["married"]):
+        head = take_adult()
+        new_household("married_couple_family", [(head, "HEAD"), (take_compatible_partner(head), "SPOUSE")])
+    for kind, preferred in (("single_male", "male"), ("single_female", "female")):
+        for _ in range(counts[kind]):
+            child = child_pool.pop() if child_pool else adult_pool.pop()
+            new_household(kind, [(take_adult(preferred), "HEAD"), (child, "CHILD")])
+    for _ in range(counts["alone"]):
+        new_household("nonfamily_living_alone", [(take_adult(), "HEAD")])
+    for _ in range(counts["nonfamily"]):
+        new_household("nonfamily_not_alone", [(take_adult(), "HEAD"), (take_adult(), "ROOMMATE")])
+
+    remaining = adult_pool + child_pool
+    family_households = [hh for hh, members in household_members.items() if assignments[members[0]][1] in {"married_couple_family", "single_male", "single_female"}]
+    for index, key in enumerate(remaining):
+        hh = family_households[index % len(family_households)]
+        exemplar = assignments[household_members[hh][0]]
+        assignments[key] = (hh, exemplar[1], "CHILD", exemplar[3])
+        household_members[hh].append(key)
+
+    mapped = baseline["PersonKey"].astype(str).str.strip().map(assignments)
+    baseline["InitHouseholdKey"] = mapped.map(lambda value: value[0])
+    baseline["InitHouseholdType"] = mapped.map(lambda value: value[1])
+    baseline["InitHouseholdRole"] = mapped.map(lambda value: value[2])
+    baseline["InitAddressKey"] = mapped.map(lambda value: value[3])
+    return baseline
+
+
 def _check_non_overlapping_intervals(
     df: pd.DataFrame,
     *,
@@ -1552,6 +1741,12 @@ def simulate_truth_layer(
         scenario_id=scenario_id,
         seed=seed,
         scenario_parameters=scenario_parameters,
+    )
+    baseline = _apply_public_household_baseline_grouping(
+        baseline_df=baseline,
+        seed=seed,
+        scenario_parameters=scenario_parameters,
+        phase2_priors=phase2_priors,
     )
     state = _SimulationState(
         scenario_id=scenario_id,
@@ -1651,6 +1846,16 @@ def simulate_truth_layer(
             address_key=address_key,
             start_date=simulation_config.start_date,
         )
+
+    # Baseline spouses are pre-existing couples. Register them so divorce,
+    # fertility, and household moves operate on the initialized family graph.
+    active_roles = pd.DataFrame(state.membership_rows)
+    if not active_roles.empty:
+        for _, members in active_roles.groupby("HouseholdKey", sort=False):
+            heads = members.loc[members["HouseholdRole"].astype(str).str.upper().eq("HEAD"), "PersonKey"]
+            spouses = members.loc[members["HouseholdRole"].astype(str).str.upper().eq("SPOUSE"), "PersonKey"]
+            if len(heads) and len(spouses):
+                state.active_couples.add(tuple(sorted((str(heads.iloc[0]), str(spouses.iloc[0])), key=_stable_key)))
 
     step_rates = _resolve_step_rates(
         scenario_parameters=scenario_parameters,

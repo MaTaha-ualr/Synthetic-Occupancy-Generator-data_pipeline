@@ -38,6 +38,17 @@ def test_household_core_shares_sum_to_100_pct() -> None:
     assert abs(total - 100.0) < 1e-6
 
 
+def test_priors_snapshot_contains_mutually_exclusive_household_bins() -> None:
+    params = load_phase2_params_from_project(PROJECT_ROOT)
+    shares = params["priors_snapshot"]["household_type_share"]["share_pct_by_type"]
+    total = sum(float(shares[key]) for key in (
+        "married_couple_family", "single_parent_male_householder",
+        "single_parent_female_householder", "nonfamily_living_alone",
+        "nonfamily_not_alone",
+    ))
+    assert abs(total - 100.0) < 1e-6
+
+
 def test_mobility_components_match_overall_rate() -> None:
     params = load_phase2_params_from_project(PROJECT_ROOT)
     overall = params["mobility_overall"]

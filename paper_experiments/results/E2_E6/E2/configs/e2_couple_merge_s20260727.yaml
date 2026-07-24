@@ -1,0 +1,80 @@
+scenario_id: e2_couple_merge_s20260727
+seed: 20260727
+phase1:
+  data_path: paper_experiments/results/E1_multiseed/phase1_populations/phase1_seed_20260727.csv
+  manifest_path: paper_experiments/results/E1_multiseed/phase1_populations/phase1_seed_20260727.manifest.json
+parameters:
+  cohabit_rate_pct: 96.0
+  move_rate_pct: 72.0
+  initialize_households_from_public_targets: true
+simulation:
+  granularity: monthly
+  start_date: 2026-01-01
+  periods: 18
+emission:
+  crossfile_match_mode: one_to_many
+  overlap_entity_pct: 82.0
+  appearance_A_pct: 90.0
+  appearance_B_pct: 96.0
+  duplication_in_A_pct: 1.0
+  duplication_in_B_pct: 18.0
+  record_count_A: 5499
+  record_count_B: 11011
+  noise:
+    A:
+      name_typo_pct: 0.4
+      dob_shift_pct: 0.2
+      ssn_mask_pct: 0.8
+      phone_mask_pct: 0.4
+      address_missing_pct: 0.2
+      middle_name_missing_pct: 12.0
+      phonetic_error_pct: 0.0
+      ocr_error_pct: 0.0
+      date_swap_pct: 0.0
+      zip_digit_error_pct: 0.0
+      nickname_pct: 0.0
+      suffix_missing_pct: 0.0
+    B:
+      name_typo_pct: 1.5
+      dob_shift_pct: 0.8
+      ssn_mask_pct: 3.0
+      phone_mask_pct: 1.5
+      address_missing_pct: 0.4
+      middle_name_missing_pct: 18.0
+      phonetic_error_pct: 0.0
+      ocr_error_pct: 0.0
+      date_swap_pct: 0.0
+      zip_digit_error_pct: 0.0
+      nickname_pct: 5.0
+      suffix_missing_pct: 0.0
+quality:
+  household_size_range:
+    min: 1
+    max: 10
+selection:
+  sample:
+    mode: count
+    value: 6050
+  filters:
+    age_bins:
+    - age_18_34
+    - age_35_64
+    genders: []
+    ethnicities: []
+    residence_types: []
+    redundancy_profiles: []
+    mobility_propensity_buckets: []
+  thresholds:
+    mobility_low_max: 0.09
+    mobility_high_min: 0.18
+    trait_low_max: 0.33
+    trait_high_min: 0.66
+constraints:
+  min_marriage_age: 18
+  max_partner_age_gap: 25
+  fertility_age_range:
+    min: 15
+    max: 49
+  allow_underage_marriage: false
+  allow_child_lives_alone: false
+  enforce_non_overlapping_residence_intervals: true

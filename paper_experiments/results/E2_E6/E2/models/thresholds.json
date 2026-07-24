@@ -1,0 +1,40 @@
+{
+  "calibration_seed": 20260719,
+  "scenario": "clean_baseline_linkage",
+  "candidate_pairs": 65924,
+  "true_pairs": 9522,
+  "candidate_recall": 1.0,
+  "candidate_seconds": 11.521935600001598,
+  "thresholds": {
+    "baseline": 0.65,
+    "splink": 0.9986013472769922,
+    "learned": 0.6500030591266042
+  },
+  "baseline_calibration": {
+    "tp": 9516,
+    "fp": 14,
+    "fn": 6,
+    "predicted": 9530,
+    "precision": 0.9985309548793284,
+    "recall": 0.9993698802772527,
+    "f1": 0.9989502414444676
+  },
+  "splink_calibration": {
+    "tp": 9516,
+    "fp": 64,
+    "fn": 6,
+    "predicted": 9580,
+    "precision": 0.9933194154488518,
+    "recall": 0.9993698802772527,
+    "f1": 0.9963354622552613
+  },
+  "learned_calibration": {
+    "tp": 9521,
+    "fp": 2,
+    "fn": 1,
+    "predicted": 9523,
+    "precision": 0.9997899821484826,
+    "recall": 0.9998949800462088,
+    "f1": 0.9998424783407719
+  }
+}

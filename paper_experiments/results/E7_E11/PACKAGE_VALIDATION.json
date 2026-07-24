@@ -1,0 +1,28 @@
+{
+  "all_internal_checks_pass": true,
+  "checks": {
+    "e7_seed_count_is_10": true,
+    "e7_no_comparable_large_deviations": true,
+    "e7_has_10_independent_populations": true,
+    "e7_summary_nonempty": true,
+    "e8_has_20_runtime_rows": true,
+    "e8_has_40_workload_rows": true,
+    "e8_candidate_counts_stable": true,
+    "e8_score_digests_stable": true,
+    "e10_has_11_capabilities": true,
+    "e10_has_6_system_columns": true,
+    "e11_has_60_metric_rows": true,
+    "e11_size_contract_exact": true,
+    "e11_reproduces_e2": true,
+    "e11_upstream_hash_matches": true,
+    "e11_null_or_bad_result_retained": true,
+    "e9_doi_not_fabricated": true
+  },
+  "experiment_verdicts": {
+    "E7": "passes fidelity-to-parameterization calibration; scoped limitations retained",
+    "E8": "complete",
+    "E9": "local archive-ready; GitHub release and Zenodo DOI pending authentication",
+    "E10": "supports capability-composition novelty only",
+    "E11": "mixed"
+  }
+}

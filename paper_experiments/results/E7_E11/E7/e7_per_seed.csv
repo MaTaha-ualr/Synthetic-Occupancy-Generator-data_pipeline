@@ -1,0 +1,271 @@
+seed,dimension,source,target,configured_input,achieved,unit,estimability,relative_deviation_pct,absolute_deviation,verdict
+20260720,mobility_overall_pct,ACS 2024 B07001,11.762824,11.762824,11.9073980875692,percent,comparable,1.2290763473907313,0.14457408756920032,close
+20260720,mobility_age_0_17_pct,ACS 2024 B07001,10.510834,11.762824,11.867612293144209,percent,comparable,12.908379041512879,1.3567782931442096,moderate
+20260720,mobility_age_18_34_pct,ACS 2024 B07001,22.582798020647232,11.762824,23.080357142857146,percent,comparable,2.2032660512439626,0.49755912220991405,close
+20260720,mobility_age_35_64_pct,ACS 2024 B07001,8.891885,11.762824,8.923884514435695,percent,comparable,0.3598732376284086,0.03199951443569482,close
+20260720,mobility_age_65_plus_pct,ACS 2024 B07001,5.518441,11.762824,4.23728813559322,percent,comparable,-23.215847816562327,-1.2811528644067804,large deviation
+20260720,household_married_couple_family_pct,ACS 2024 B11001,46.69385,,46.6955153422502,percent,comparable,0.0035665130422933124,0.0016653422501988757,close
+20260720,household_single_parent_male_householder_pct,ACS 2024 B11001,5.208111,,5.212431156569631,percent,comparable,0.0829505471298695,0.004320156569630917,close
+20260720,household_single_parent_female_householder_pct,ACS 2024 B11001,12.109163,,12.116443745082613,percent,comparable,0.060125915247917855,0.007280745082612228,close
+20260720,household_nonfamily_living_alone_pct,ACS 2024 B11001,28.865592,,28.87490165224233,percent,comparable,0.03225172808626094,0.009309652242329491,close
+20260720,household_nonfamily_not_alone_pct,ACS 2024 B11001,7.123284,,7.100708103855232,percent,comparable,-0.3169310130659954,-0.02257589614476796,close
+20260720,household_type_js_distance,ACS 2024 B11001,0.0,,0.0003861460238361869,Jensen-Shannon distance,comparable,,0.0003861460238361869,close
+20260720,household_size_js_distance,requested ACS B11001 file,,,,Jensen-Shannon distance,"not estimable: source has household types, not size bins",,,not estimable
+20260720,cohabitation_rate_per_1000,CDC 2023 marriage rate (incompatible construct),6.1,0.61,1.3085052843482636,"events per 1,000 total population",not comparable: COHABIT is not marriage,-78.5490936992088,-4.791494715651736,not comparable
+20260720,divorce_rate_per_1000,CDC 2023,2.4,0.24,2.7176648213387016,"events per 1,000 total population",comparable,13.236034222445904,0.31766482133870166,moderate
+20260720,fertility_10-14_per_1000,NCHS 2024 provisional,0.2,7.4625,0.0,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,-100.0,-0.2,not estimable
+20260720,fertility_15-19_per_1000,NCHS 2024 provisional,12.7,7.4625,12.861736334405144,"births per 1,000 women",comparable,1.2735144441349984,0.1617363344051448,close
+20260720,fertility_20-24_per_1000,NCHS 2024 provisional,56.7,7.4625,73.31378299120234,"births per 1,000 women",comparable,29.301204570021767,16.613782991202342,large deviation
+20260720,fertility_25-29_per_1000,NCHS 2024 provisional,91.4,7.4625,84.375,"births per 1,000 women",comparable,-7.685995623632391,-7.025000000000006,moderate
+20260720,fertility_30-34_per_1000,NCHS 2024 provisional,95.4,7.4625,109.82658959537572,"births per 1,000 women",comparable,15.12221131590746,14.426589595375717,moderate
+20260720,fertility_35-39_per_1000,NCHS 2024 provisional,55.0,7.4625,59.375,"births per 1,000 women",comparable,7.954545454545454,4.375,moderate
+20260720,fertility_40-44_per_1000,NCHS 2024 provisional,12.8,7.4625,3.3003300330033003,"births per 1,000 women",comparable,-74.21617161716172,-9.4996699669967,large deviation
+20260720,fertility_45-54_per_1000,NCHS 2024 provisional,1.1,7.4625,0.0,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,-100.0,-1.1,not estimable
+20260720,surname_top_10_share_pct,Phase 1 conditional Census surname pool,7.634050105744991,,7.81095511172632,percent,comparable,2.317315232817234,0.17690500598132886,close
+20260720,surname_top_50_share_pct,Phase 1 conditional Census surname pool,19.77523350922551,,20.526003559422584,percent,comparable,3.7965167382060208,0.7507700501970724,close
+20260720,surname_top_100_share_pct,Phase 1 conditional Census surname pool,27.30069456864089,,30.08700810757367,percent,comparable,10.206017037139036,2.786313538932781,moderate
+20260720,surname_rank_slope_10_1000,Phase 1 conditional Census surname pool,-0.781669262596665,,-0.7843551647946028,log probability / log rank,comparable,0.3436110803455813,-0.0026859021979377395,descriptive
+20260720,surname_js_distance,Phase 1 conditional Census surname pool,0.0,,0.08847023462651424,Jensen-Shannon distance,comparable,,0.08847023462651424,moderate
+20260721,mobility_overall_pct,ACS 2024 B07001,11.762824,11.762824,10.811354942621302,percent,comparable,-8.08878086910676,-0.9514690573786986,moderate
+20260721,mobility_age_0_17_pct,ACS 2024 B07001,10.510834,11.762824,10.21759697256386,percent,comparable,-2.7898549956753196,-0.29323702743614,close
+20260721,mobility_age_18_34_pct,ACS 2024 B07001,22.582798020647232,11.762824,21.33928571428571,percent,comparable,-5.506458080281234,-1.24351230636152,moderate
+20260721,mobility_age_35_64_pct,ACS 2024 B07001,8.891885,11.762824,8.451443569553806,percent,comparable,-4.953296522010733,-0.4404414304461941,close
+20260721,mobility_age_65_plus_pct,ACS 2024 B07001,5.518441,11.762824,3.2768361581920904,percent,comparable,-40.62025564480819,-2.2416048418079098,large deviation
+20260721,household_married_couple_family_pct,ACS 2024 B11001,46.69385,,46.6955153422502,percent,comparable,0.0035665130422933124,0.0016653422501988757,close
+20260721,household_single_parent_male_householder_pct,ACS 2024 B11001,5.208111,,5.212431156569631,percent,comparable,0.0829505471298695,0.004320156569630917,close
+20260721,household_single_parent_female_householder_pct,ACS 2024 B11001,12.109163,,12.116443745082613,percent,comparable,0.060125915247917855,0.007280745082612228,close
+20260721,household_nonfamily_living_alone_pct,ACS 2024 B11001,28.865592,,28.87490165224233,percent,comparable,0.03225172808626094,0.009309652242329491,close
+20260721,household_nonfamily_not_alone_pct,ACS 2024 B11001,7.123284,,7.100708103855232,percent,comparable,-0.3169310130659954,-0.02257589614476796,close
+20260721,household_type_js_distance,ACS 2024 B11001,0.0,,0.0003861460238361869,Jensen-Shannon distance,comparable,,0.0003861460238361869,close
+20260721,household_size_js_distance,requested ACS B11001 file,,,,Jensen-Shannon distance,"not estimable: source has household types, not size bins",,,not estimable
+20260721,cohabitation_rate_per_1000,CDC 2023 marriage rate (incompatible construct),6.1,0.61,1.4093013891685122,"events per 1,000 total population",not comparable: COHABIT is not marriage,-76.89669853822112,-4.690698610831488,not comparable
+20260721,divorce_rate_per_1000,CDC 2023,2.4,0.24,2.01328769881216,"events per 1,000 total population",comparable,-16.113012549493323,-0.3867123011878397,moderate
+20260721,fertility_10-14_per_1000,NCHS 2024 provisional,0.2,7.4625,0.0,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,-100.0,-0.2,not estimable
+20260721,fertility_15-19_per_1000,NCHS 2024 provisional,12.7,7.4625,6.410256410256411,"births per 1,000 women",comparable,-49.52554007672118,-6.289743589743589,large deviation
+20260721,fertility_20-24_per_1000,NCHS 2024 provisional,56.7,7.4625,30.0,"births per 1,000 women",comparable,-47.089947089947096,-26.700000000000003,large deviation
+20260721,fertility_25-29_per_1000,NCHS 2024 provisional,91.4,7.4625,67.25146198830409,"births per 1,000 women",comparable,-26.420719925269054,-24.14853801169592,large deviation
+20260721,fertility_30-34_per_1000,NCHS 2024 provisional,95.4,7.4625,87.8186968838527,"births per 1,000 women",comparable,-7.946858612313742,-7.581303116147311,moderate
+20260721,fertility_35-39_per_1000,NCHS 2024 provisional,55.0,7.4625,45.45454545454545,"births per 1,000 women",comparable,-17.355371900826448,-9.545454545454547,moderate
+20260721,fertility_40-44_per_1000,NCHS 2024 provisional,12.8,7.4625,6.349206349206349,"births per 1,000 women",comparable,-50.3968253968254,-6.450793650793652,large deviation
+20260721,fertility_45-54_per_1000,NCHS 2024 provisional,1.1,7.4625,2.9673590504451037,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,169.75991367682758,1.8673590504451036,not estimable
+20260721,surname_top_10_share_pct,Phase 1 conditional Census surname pool,7.630672755600261,,7.994445546518547,percent,comparable,4.767244023815691,0.3637727909182855,close
+20260721,surname_top_50_share_pct,Phase 1 conditional Census surname pool,19.767473974158825,,20.977980559412813,percent,comparable,6.123729247532748,1.210506585253988,moderate
+20260721,surname_top_100_share_pct,Phase 1 conditional Census surname pool,27.291948511971164,,29.95437413211665,percent,comparable,9.755351908925295,2.6624256201454877,moderate
+20260721,surname_rank_slope_10_1000,Phase 1 conditional Census surname pool,-0.7814949865209577,,-0.7423064338553118,log probability / log rank,comparable,-5.014562260994745,0.039188552665645915,descriptive
+20260721,surname_js_distance,Phase 1 conditional Census surname pool,0.0,,0.10711131788782453,Jensen-Shannon distance,comparable,,0.10711131788782453,moderate
+20260722,mobility_overall_pct,ACS 2024 B07001,11.762824,11.762824,11.815533005124083,percent,comparable,0.4480982213461887,0.05270900512408261,close
+20260722,mobility_age_0_17_pct,ACS 2024 B07001,10.510834,11.762824,11.298640412564463,percent,comparable,7.495184612034252,0.7878064125644642,moderate
+20260722,mobility_age_18_34_pct,ACS 2024 B07001,22.582798020647232,11.762824,22.544642857142858,percent,comparable,-0.16895675845610145,-0.0381551635043742,close
+20260722,mobility_age_35_64_pct,ACS 2024 B07001,8.891885,11.762824,8.713910761154855,percent,comparable,-2.001535544433439,-0.1779742388451453,close
+20260722,mobility_age_65_plus_pct,ACS 2024 B07001,5.518441,11.762824,5.536723163841808,percent,comparable,0.33129218635857133,0.018282163841807808,close
+20260722,household_married_couple_family_pct,ACS 2024 B11001,46.69385,,46.6955153422502,percent,comparable,0.0035665130422933124,0.0016653422501988757,close
+20260722,household_single_parent_male_householder_pct,ACS 2024 B11001,5.208111,,5.212431156569631,percent,comparable,0.0829505471298695,0.004320156569630917,close
+20260722,household_single_parent_female_householder_pct,ACS 2024 B11001,12.109163,,12.116443745082613,percent,comparable,0.060125915247917855,0.007280745082612228,close
+20260722,household_nonfamily_living_alone_pct,ACS 2024 B11001,28.865592,,28.87490165224233,percent,comparable,0.03225172808626094,0.009309652242329491,close
+20260722,household_nonfamily_not_alone_pct,ACS 2024 B11001,7.123284,,7.100708103855232,percent,comparable,-0.3169310130659954,-0.02257589614476796,close
+20260722,household_type_js_distance,ACS 2024 B11001,0.0,,0.0003861460238361869,Jensen-Shannon distance,comparable,,0.0003861460238361869,close
+20260722,household_size_js_distance,requested ACS B11001 file,,,,Jensen-Shannon distance,"not estimable: source has household types, not size bins",,,not estimable
+20260722,cohabitation_rate_per_1000,CDC 2023 marriage rate (incompatible construct),6.1,0.61,1.1051944137445997,"events per 1,000 total population",not comparable: COHABIT is not marriage,-81.88205879107214,-4.9948055862554,not comparable
+20260722,divorce_rate_per_1000,CDC 2023,2.4,0.24,2.7127499246458355,"events per 1,000 total population",comparable,13.03124686024315,0.3127499246458356,moderate
+20260722,fertility_10-14_per_1000,NCHS 2024 provisional,0.2,7.4625,0.0,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,-100.0,-0.2,not estimable
+20260722,fertility_15-19_per_1000,NCHS 2024 provisional,12.7,7.4625,16.181229773462782,"births per 1,000 women",comparable,27.41125805876207,3.4812297734627826,large deviation
+20260722,fertility_20-24_per_1000,NCHS 2024 provisional,56.7,7.4625,36.92307692307692,"births per 1,000 women",comparable,-34.879934879934886,-19.776923076923083,large deviation
+20260722,fertility_25-29_per_1000,NCHS 2024 provisional,91.4,7.4625,90.3954802259887,"births per 1,000 women",comparable,-1.099036951872319,-1.0045197740112997,close
+20260722,fertility_30-34_per_1000,NCHS 2024 provisional,95.4,7.4625,91.46341463414635,"births per 1,000 women",comparable,-4.126399754563584,-3.9365853658536594,close
+20260722,fertility_35-39_per_1000,NCHS 2024 provisional,55.0,7.4625,74.4336569579288,"births per 1,000 women",comparable,35.333921741688734,19.433656957928804,large deviation
+20260722,fertility_40-44_per_1000,NCHS 2024 provisional,12.8,7.4625,14.792899408284024,"births per 1,000 women",comparable,15.569526627218929,1.992899408284023,moderate
+20260722,fertility_45-54_per_1000,NCHS 2024 provisional,1.1,7.4625,3.289473684210526,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,199.04306220095688,2.189473684210526,not estimable
+20260722,surname_top_10_share_pct,Phase 1 conditional Census surname pool,7.63615960562938,,7.251681836169372,percent,comparable,-5.0349624590948965,-0.3844777694600081,moderate
+20260722,surname_top_50_share_pct,Phase 1 conditional Census surname pool,19.776183270271005,,20.76573011476059,percent,comparable,5.003730148360545,0.9895468444895847,moderate
+20260722,surname_top_100_share_pct,Phase 1 conditional Census surname pool,27.30047471702785,,30.282944202611787,percent,comparable,10.924606683574304,2.9824694855839375,moderate
+20260722,surname_rank_slope_10_1000,Phase 1 conditional Census surname pool,-0.7816145144583411,,-0.7884559277392054,log probability / log rank,comparable,0.875292507279678,-0.006841413280864295,descriptive
+20260722,surname_js_distance,Phase 1 conditional Census surname pool,0.0,,0.07549877379979407,Jensen-Shannon distance,comparable,,0.07549877379979407,moderate
+20260723,mobility_overall_pct,ACS 2024 B07001,11.762824,11.762824,11.580641915685682,percent,comparable,-1.5487954619938058,-0.18218208431431826,close
+20260723,mobility_age_0_17_pct,ACS 2024 B07001,10.510834,11.762824,11.514865502595564,percent,comparable,9.552348582382375,1.0040315025955646,moderate
+20260723,mobility_age_18_34_pct,ACS 2024 B07001,22.582798020647232,11.762824,21.294642857142858,percent,comparable,-5.7041433144228915,-1.2881551635043742,moderate
+20260723,mobility_age_35_64_pct,ACS 2024 B07001,8.891885,11.762824,8.871391076115485,percent,comparable,-0.23047895788705827,-0.020493923884515652,close
+20260723,mobility_age_65_plus_pct,ACS 2024 B07001,5.518441,11.762824,5.19774011299435,percent,comparable,-5.811439988316443,-0.3207008870056498,moderate
+20260723,household_married_couple_family_pct,ACS 2024 B11001,46.69385,,46.6955153422502,percent,comparable,0.0035665130422933124,0.0016653422501988757,close
+20260723,household_single_parent_male_householder_pct,ACS 2024 B11001,5.208111,,5.212431156569631,percent,comparable,0.0829505471298695,0.004320156569630917,close
+20260723,household_single_parent_female_householder_pct,ACS 2024 B11001,12.109163,,12.116443745082613,percent,comparable,0.060125915247917855,0.007280745082612228,close
+20260723,household_nonfamily_living_alone_pct,ACS 2024 B11001,28.865592,,28.87490165224233,percent,comparable,0.03225172808626094,0.009309652242329491,close
+20260723,household_nonfamily_not_alone_pct,ACS 2024 B11001,7.123284,,7.100708103855232,percent,comparable,-0.3169310130659954,-0.02257589614476796,close
+20260723,household_type_js_distance,ACS 2024 B11001,0.0,,0.0003861460238361869,Jensen-Shannon distance,comparable,,0.0003861460238361869,close
+20260723,household_size_js_distance,requested ACS B11001 file,,,,Jensen-Shannon distance,"not estimable: source has household types, not size bins",,,not estimable
+20260723,cohabitation_rate_per_1000,CDC 2023 marriage rate (incompatible construct),6.1,0.61,0.7042962068618573,"events per 1,000 total population",not comparable: COHABIT is not marriage,-88.45416054324824,-5.395703793138142,not comparable
+20260723,divorce_rate_per_1000,CDC 2023,2.4,0.24,2.8171848274474294,"events per 1,000 total population",comparable,17.382701143642894,0.41718482744742946,moderate
+20260723,fertility_10-14_per_1000,NCHS 2024 provisional,0.2,7.4625,0.0,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,-100.0,-0.2,not estimable
+20260723,fertility_15-19_per_1000,NCHS 2024 provisional,12.7,7.4625,9.404388714733543,"births per 1,000 women",comparable,-25.9496951595784,-3.2956112852664567,large deviation
+20260723,fertility_20-24_per_1000,NCHS 2024 provisional,56.7,7.4625,50.0,"births per 1,000 women",comparable,-11.816578483245154,-6.700000000000003,moderate
+20260723,fertility_25-29_per_1000,NCHS 2024 provisional,91.4,7.4625,122.25705329153605,"births per 1,000 women",comparable,33.760452178923465,30.857053291536047,large deviation
+20260723,fertility_30-34_per_1000,NCHS 2024 provisional,95.4,7.4625,110.09174311926606,"births per 1,000 women",comparable,15.40015002019502,14.69174311926605,moderate
+20260723,fertility_35-39_per_1000,NCHS 2024 provisional,55.0,7.4625,55.214723926380366,"births per 1,000 women",comparable,0.39040713887339185,0.21472392638036553,close
+20260723,fertility_40-44_per_1000,NCHS 2024 provisional,12.8,7.4625,9.036144578313253,"births per 1,000 women",comparable,-29.40512048192771,-3.7638554216867472,large deviation
+20260723,fertility_45-54_per_1000,NCHS 2024 provisional,1.1,7.4625,0.0,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,-100.0,-1.1,not estimable
+20260723,surname_top_10_share_pct,Phase 1 conditional Census surname pool,7.629453575710096,,6.899278442225956,percent,comparable,-9.57047744295607,-0.7301751334841402,moderate
+20260723,surname_top_50_share_pct,Phase 1 conditional Census surname pool,19.76705010006127,,20.11465849560146,percent,comparable,1.7585243816380798,0.34760839554019185,close
+20260723,surname_top_100_share_pct,Phase 1 conditional Census surname pool,27.29218761471034,,29.25768508451122,percent,comparable,7.20168532309769,1.96549746980088,moderate
+20260723,surname_rank_slope_10_1000,Phase 1 conditional Census surname pool,-0.7815262303790208,,-0.7700531437545727,log probability / log rank,comparable,-1.4680360272596307,0.011473086624448126,descriptive
+20260723,surname_js_distance,Phase 1 conditional Census surname pool,0.0,,0.09336604360216293,Jensen-Shannon distance,comparable,,0.09336604360216293,moderate
+20260724,mobility_overall_pct,ACS 2024 B07001,11.762824,11.762824,11.224181360201511,percent,comparable,-4.5791949263075695,-0.5386426397984891,close
+20260724,mobility_age_0_17_pct,ACS 2024 B07001,10.510834,11.762824,11.258907363420427,percent,comparable,7.117164664768065,0.7480733634204277,moderate
+20260724,mobility_age_18_34_pct,ACS 2024 B07001,22.582798020647232,11.762824,20.714285714285715,percent,comparable,-8.274051358264613,-1.8685123063615166,moderate
+20260724,mobility_age_35_64_pct,ACS 2024 B07001,8.891885,11.762824,8.68766404199475,percent,comparable,-2.296711642191162,-0.20422095800524964,close
+20260724,mobility_age_65_plus_pct,ACS 2024 B07001,5.518441,11.762824,4.632768361581921,percent,comparable,-16.049326946108128,-0.8856726384180789,moderate
+20260724,household_married_couple_family_pct,ACS 2024 B11001,46.69385,,46.6955153422502,percent,comparable,0.0035665130422933124,0.0016653422501988757,close
+20260724,household_single_parent_male_householder_pct,ACS 2024 B11001,5.208111,,5.212431156569631,percent,comparable,0.0829505471298695,0.004320156569630917,close
+20260724,household_single_parent_female_householder_pct,ACS 2024 B11001,12.109163,,12.116443745082613,percent,comparable,0.060125915247917855,0.007280745082612228,close
+20260724,household_nonfamily_living_alone_pct,ACS 2024 B11001,28.865592,,28.87490165224233,percent,comparable,0.03225172808626094,0.009309652242329491,close
+20260724,household_nonfamily_not_alone_pct,ACS 2024 B11001,7.123284,,7.100708103855232,percent,comparable,-0.3169310130659954,-0.02257589614476796,close
+20260724,household_type_js_distance,ACS 2024 B11001,0.0,,0.0003861460238361869,Jensen-Shannon distance,comparable,,0.0003861460238361869,close
+20260724,household_size_js_distance,requested ACS B11001 file,,,,Jensen-Shannon distance,"not estimable: source has household types, not size bins",,,not estimable
+20260724,cohabitation_rate_per_1000,CDC 2023 marriage rate (incompatible construct),6.1,0.61,0.5037783375314862,"events per 1,000 total population",not comparable: COHABIT is not marriage,-91.74133872899203,-5.596221662468514,not comparable
+20260724,divorce_rate_per_1000,CDC 2023,2.4,0.24,2.3173803526448364,"events per 1,000 total population",comparable,-3.442485306465145,-0.08261964735516347,close
+20260724,fertility_10-14_per_1000,NCHS 2024 provisional,0.2,7.4625,0.0,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,-100.0,-0.2,not estimable
+20260724,fertility_15-19_per_1000,NCHS 2024 provisional,12.7,7.4625,18.867924528301888,"births per 1,000 women",comparable,48.56633486851881,6.167924528301889,large deviation
+20260724,fertility_20-24_per_1000,NCHS 2024 provisional,56.7,7.4625,61.94690265486726,"births per 1,000 women",comparable,9.253796569430786,5.246902654867256,moderate
+20260724,fertility_25-29_per_1000,NCHS 2024 provisional,91.4,7.4625,96.27329192546584,"births per 1,000 women",comparable,5.331829240115794,4.873291925465836,moderate
+20260724,fertility_30-34_per_1000,NCHS 2024 provisional,95.4,7.4625,120.12012012012012,"births per 1,000 women",comparable,25.91207559761018,24.720120120120114,large deviation
+20260724,fertility_35-39_per_1000,NCHS 2024 provisional,55.0,7.4625,71.20743034055728,"births per 1,000 women",comparable,29.4680551646496,16.20743034055728,large deviation
+20260724,fertility_40-44_per_1000,NCHS 2024 provisional,12.8,7.4625,14.619883040935672,"births per 1,000 women",comparable,14.217836257309934,1.8198830409356717,moderate
+20260724,fertility_45-54_per_1000,NCHS 2024 provisional,1.1,7.4625,3.4722222222222223,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,215.65656565656565,2.3722222222222222,not estimable
+20260724,surname_top_10_share_pct,Phase 1 conditional Census surname pool,7.634140773283993,,8.43290214278661,percent,comparable,10.463015986002208,0.7987613695026168,moderate
+20260724,surname_top_50_share_pct,Phase 1 conditional Census surname pool,19.77470839396251,,22.040090846252593,percent,comparable,11.45595882962166,2.2653824522900834,moderate
+20260724,surname_top_100_share_pct,Phase 1 conditional Census surname pool,27.29931141964067,,31.72706625851684,percent,comparable,16.219291288389755,4.427754838876169,moderate
+20260724,surname_rank_slope_10_1000,Phase 1 conditional Census surname pool,-0.7816244063568507,,-0.7913827231290329,log probability / log rank,comparable,1.2484662317116841,-0.009758316772182196,descriptive
+20260724,surname_js_distance,Phase 1 conditional Census surname pool,0.0,,0.08920906278339664,Jensen-Shannon distance,comparable,,0.08920906278339664,moderate
+20260725,mobility_overall_pct,ACS 2024 B07001,11.762824,11.762824,11.155859846959324,percent,comparable,-5.160020697756565,-0.6069641530406766,moderate
+20260725,mobility_age_0_17_pct,ACS 2024 B07001,10.510834,11.762824,11.316287878787879,percent,comparable,7.663082480304416,0.8054538787878798,moderate
+20260725,mobility_age_18_34_pct,ACS 2024 B07001,22.582798020647232,11.762824,21.651785714285715,percent,comparable,-4.12266144128952,-0.9310123063615166,close
+20260725,mobility_age_35_64_pct,ACS 2024 B07001,8.891885,11.762824,8.057742782152232,percent,comparable,-9.380937988376685,-0.8341422178477682,moderate
+20260725,mobility_age_65_plus_pct,ACS 2024 B07001,5.518441,11.762824,4.350282485875706,percent,comparable,-21.168270425003985,-1.1681585141242943,large deviation
+20260725,household_married_couple_family_pct,ACS 2024 B11001,46.69385,,46.6955153422502,percent,comparable,0.0035665130422933124,0.0016653422501988757,close
+20260725,household_single_parent_male_householder_pct,ACS 2024 B11001,5.208111,,5.212431156569631,percent,comparable,0.0829505471298695,0.004320156569630917,close
+20260725,household_single_parent_female_householder_pct,ACS 2024 B11001,12.109163,,12.116443745082613,percent,comparable,0.060125915247917855,0.007280745082612228,close
+20260725,household_nonfamily_living_alone_pct,ACS 2024 B11001,28.865592,,28.87490165224233,percent,comparable,0.03225172808626094,0.009309652242329491,close
+20260725,household_nonfamily_not_alone_pct,ACS 2024 B11001,7.123284,,7.100708103855232,percent,comparable,-0.3169310130659954,-0.02257589614476796,close
+20260725,household_type_js_distance,ACS 2024 B11001,0.0,,0.0003861460238361869,Jensen-Shannon distance,comparable,,0.0003861460238361869,close
+20260725,household_size_js_distance,requested ACS B11001 file,,,,Jensen-Shannon distance,"not estimable: source has household types, not size bins",,,not estimable
+20260725,cohabitation_rate_per_1000,CDC 2023 marriage rate (incompatible construct),6.1,0.61,0.4027386226339106,"events per 1,000 total population",not comparable: COHABIT is not marriage,-93.39772749780474,-5.697261377366089,not comparable
+20260725,divorce_rate_per_1000,CDC 2023,2.4,0.24,2.6178010471204187,"events per 1,000 total population",comparable,9.075043630017452,0.2178010471204188,moderate
+20260725,fertility_10-14_per_1000,NCHS 2024 provisional,0.2,7.4625,0.0,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,-100.0,-0.2,not estimable
+20260725,fertility_15-19_per_1000,NCHS 2024 provisional,12.7,7.4625,9.23076923076923,"births per 1,000 women",comparable,-27.316777710478497,-3.4692307692307693,large deviation
+20260725,fertility_20-24_per_1000,NCHS 2024 provisional,56.7,7.4625,46.875,"births per 1,000 women",comparable,-17.328042328042333,-9.825000000000003,moderate
+20260725,fertility_25-29_per_1000,NCHS 2024 provisional,91.4,7.4625,114.28571428571429,"births per 1,000 women",comparable,25.039074710847135,22.885714285714286,large deviation
+20260725,fertility_30-34_per_1000,NCHS 2024 provisional,95.4,7.4625,112.04481792717087,"births per 1,000 women",comparable,17.447398246510335,16.644817927170863,moderate
+20260725,fertility_35-39_per_1000,NCHS 2024 provisional,55.0,7.4625,81.2720848056537,"births per 1,000 women",comparable,47.76742691937037,26.272084805653705,large deviation
+20260725,fertility_40-44_per_1000,NCHS 2024 provisional,12.8,7.4625,11.976047904191617,"births per 1,000 women",comparable,-6.437125748502997,-0.8239520958083837,moderate
+20260725,fertility_45-54_per_1000,NCHS 2024 provisional,1.1,7.4625,0.0,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,-100.0,-1.1,not estimable
+20260725,surname_top_10_share_pct,Phase 1 conditional Census surname pool,7.635880868138538,,7.123801995850212,percent,comparable,-6.706218720947116,-0.5120788722883258,moderate
+20260725,surname_top_50_share_pct,Phase 1 conditional Census surname pool,19.773432341181408,,20.175871949412112,percent,comparable,2.0352541798853907,0.40243960823070424,close
+20260725,surname_top_100_share_pct,Phase 1 conditional Census surname pool,27.29633738844629,,29.394328623653788,percent,comparable,7.685980742953134,2.0979912352074983,moderate
+20260725,surname_rank_slope_10_1000,Phase 1 conditional Census surname pool,-0.7815038558574577,,-0.7546542408392113,log probability / log rank,comparable,-3.435634362774492,0.026849615018246453,descriptive
+20260725,surname_js_distance,Phase 1 conditional Census surname pool,0.0,,0.0947764163138494,Jensen-Shannon distance,comparable,,0.0947764163138494,moderate
+20260726,mobility_overall_pct,ACS 2024 B07001,11.762824,11.762824,11.837598226878903,percent,comparable,0.6356826122613319,0.0747742268789029,close
+20260726,mobility_age_0_17_pct,ACS 2024 B07001,10.510834,11.762824,11.633428300094966,percent,comparable,10.680354195442218,1.122594300094967,moderate
+20260726,mobility_age_18_34_pct,ACS 2024 B07001,22.582798020647232,11.762824,23.035714285714285,percent,comparable,2.0055808171022735,0.45291626506705285,close
+20260726,mobility_age_35_64_pct,ACS 2024 B07001,8.891885,11.762824,8.32020997375328,percent,comparable,-6.429177010799391,-0.5716750262467194,moderate
+20260726,mobility_age_65_plus_pct,ACS 2024 B07001,5.518441,11.762824,5.480225988700565,percent,comparable,-0.6924965094206004,-0.038215011299435275,close
+20260726,household_married_couple_family_pct,ACS 2024 B11001,46.69385,,46.6955153422502,percent,comparable,0.0035665130422933124,0.0016653422501988757,close
+20260726,household_single_parent_male_householder_pct,ACS 2024 B11001,5.208111,,5.212431156569631,percent,comparable,0.0829505471298695,0.004320156569630917,close
+20260726,household_single_parent_female_householder_pct,ACS 2024 B11001,12.109163,,12.116443745082613,percent,comparable,0.060125915247917855,0.007280745082612228,close
+20260726,household_nonfamily_living_alone_pct,ACS 2024 B11001,28.865592,,28.87490165224233,percent,comparable,0.03225172808626094,0.009309652242329491,close
+20260726,household_nonfamily_not_alone_pct,ACS 2024 B11001,7.123284,,7.100708103855232,percent,comparable,-0.3169310130659954,-0.02257589614476796,close
+20260726,household_type_js_distance,ACS 2024 B11001,0.0,,0.0003861460238361869,Jensen-Shannon distance,comparable,,0.0003861460238361869,close
+20260726,household_size_js_distance,requested ACS B11001 file,,,,Jensen-Shannon distance,"not estimable: source has household types, not size bins",,,not estimable
+20260726,cohabitation_rate_per_1000,CDC 2023 marriage rate (incompatible construct),6.1,0.61,0.9067096514205117,"events per 1,000 total population",not comparable: COHABIT is not marriage,-85.13590735376211,-5.193290348579488,not comparable
+20260726,divorce_rate_per_1000,CDC 2023,2.4,0.24,2.014910336490026,"events per 1,000 total population",comparable,-16.04540264624891,-0.38508966350997387,moderate
+20260726,fertility_10-14_per_1000,NCHS 2024 provisional,0.2,7.4625,0.0,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,-100.0,-0.2,not estimable
+20260726,fertility_15-19_per_1000,NCHS 2024 provisional,12.7,7.4625,18.75,"births per 1,000 women",comparable,47.63779527559056,6.050000000000001,large deviation
+20260726,fertility_20-24_per_1000,NCHS 2024 provisional,56.7,7.4625,38.095238095238095,"births per 1,000 women",comparable,-32.81263122532964,-18.604761904761908,large deviation
+20260726,fertility_25-29_per_1000,NCHS 2024 provisional,91.4,7.4625,124.6376811594203,"births per 1,000 women",comparable,36.36507785494561,33.23768115942029,large deviation
+20260726,fertility_30-34_per_1000,NCHS 2024 provisional,95.4,7.4625,91.42857142857143,"births per 1,000 women",comparable,-4.162923030847563,-3.971428571428575,close
+20260726,fertility_35-39_per_1000,NCHS 2024 provisional,55.0,7.4625,76.4525993883792,"births per 1,000 women",comparable,39.00472616068945,21.4525993883792,large deviation
+20260726,fertility_40-44_per_1000,NCHS 2024 provisional,12.8,7.4625,9.146341463414634,"births per 1,000 women",comparable,-28.544207317073173,-3.6536585365853664,large deviation
+20260726,fertility_45-54_per_1000,NCHS 2024 provisional,1.1,7.4625,0.0,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,-100.0,-1.1,not estimable
+20260726,surname_top_10_share_pct,Phase 1 conditional Census surname pool,7.628978073252204,,7.242367355004448,percent,comparable,-5.0676606294523765,-0.3866107182477565,moderate
+20260726,surname_top_50_share_pct,Phase 1 conditional Census surname pool,19.76276746961352,,20.739057405394725,percent,comparable,4.940046667463498,0.9762899357812032,close
+20260726,surname_top_100_share_pct,Phase 1 conditional Census surname pool,27.28680165888811,,30.253927477521973,percent,comparable,10.873849767099342,2.967125818633864,moderate
+20260726,surname_rank_slope_10_1000,Phase 1 conditional Census surname pool,-0.7813872276646311,,-0.7659129399385981,log probability / log rank,comparable,-1.9803609757330844,0.015474287726032987,descriptive
+20260726,surname_js_distance,Phase 1 conditional Census surname pool,0.0,,0.09629629734410906,Jensen-Shannon distance,comparable,,0.09629629734410906,moderate
+20260727,mobility_overall_pct,ACS 2024 B07001,11.762824,11.762824,11.193879605395612,percent,comparable,-4.836801048833073,-0.5689443946043884,close
+20260727,mobility_age_0_17_pct,ACS 2024 B07001,10.510834,11.762824,10.737937559129612,percent,comparable,2.1606616480634493,0.22710355912961333,close
+20260727,mobility_age_18_34_pct,ACS 2024 B07001,22.582798020647232,11.762824,20.625,percent,comparable,-8.66942182654796,-1.9577980206472319,moderate
+20260727,mobility_age_35_64_pct,ACS 2024 B07001,8.891885,11.762824,8.976377952755906,percent,comparable,0.9502254331438754,0.08449295275590529,close
+20260727,mobility_age_65_plus_pct,ACS 2024 B07001,5.518441,11.762824,4.576271186440678,percent,comparable,-17.0731156418873,-0.942169813559322,moderate
+20260727,household_married_couple_family_pct,ACS 2024 B11001,46.69385,,46.6955153422502,percent,comparable,0.0035665130422933124,0.0016653422501988757,close
+20260727,household_single_parent_male_householder_pct,ACS 2024 B11001,5.208111,,5.212431156569631,percent,comparable,0.0829505471298695,0.004320156569630917,close
+20260727,household_single_parent_female_householder_pct,ACS 2024 B11001,12.109163,,12.116443745082613,percent,comparable,0.060125915247917855,0.007280745082612228,close
+20260727,household_nonfamily_living_alone_pct,ACS 2024 B11001,28.865592,,28.87490165224233,percent,comparable,0.03225172808626094,0.009309652242329491,close
+20260727,household_nonfamily_not_alone_pct,ACS 2024 B11001,7.123284,,7.100708103855232,percent,comparable,-0.3169310130659954,-0.02257589614476796,close
+20260727,household_type_js_distance,ACS 2024 B11001,0.0,,0.0003861460238361869,Jensen-Shannon distance,comparable,,0.0003861460238361869,close
+20260727,household_size_js_distance,requested ACS B11001 file,,,,Jensen-Shannon distance,"not estimable: source has household types, not size bins",,,not estimable
+20260727,cohabitation_rate_per_1000,CDC 2023 marriage rate (incompatible construct),6.1,0.61,0.8053150795248641,"events per 1,000 total population",not comparable: COHABIT is not marriage,-86.79811345041206,-5.294684920475135,not comparable
+20260727,divorce_rate_per_1000,CDC 2023,2.4,0.24,2.113952083752768,"events per 1,000 total population",comparable,-11.918663176967993,-0.2860479162472318,moderate
+20260727,fertility_10-14_per_1000,NCHS 2024 provisional,0.2,7.4625,0.0,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,-100.0,-0.2,not estimable
+20260727,fertility_15-19_per_1000,NCHS 2024 provisional,12.7,7.4625,3.236245954692557,"births per 1,000 women",comparable,-74.51774838824758,-9.463754045307443,large deviation
+20260727,fertility_20-24_per_1000,NCHS 2024 provisional,56.7,7.4625,65.15580736543909,"births per 1,000 women",comparable,14.913240503419903,8.455807365439085,moderate
+20260727,fertility_25-29_per_1000,NCHS 2024 provisional,91.4,7.4625,75.40983606557377,"births per 1,000 women",comparable,-17.494708899809883,-15.990163934426235,moderate
+20260727,fertility_30-34_per_1000,NCHS 2024 provisional,95.4,7.4625,108.76132930513594,"births per 1,000 women",comparable,14.005586273727399,13.36132930513594,moderate
+20260727,fertility_35-39_per_1000,NCHS 2024 provisional,55.0,7.4625,78.125,"births per 1,000 women",comparable,42.04545454545455,23.125,large deviation
+20260727,fertility_40-44_per_1000,NCHS 2024 provisional,12.8,7.4625,9.118541033434651,"births per 1,000 women",comparable,-28.76139817629179,-3.6814589665653497,large deviation
+20260727,fertility_45-54_per_1000,NCHS 2024 provisional,1.1,7.4625,3.215434083601286,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,192.3121894182987,2.115434083601286,not estimable
+20260727,surname_top_10_share_pct,Phase 1 conditional Census surname pool,7.6307315035069765,,7.189477848101265,percent,comparable,-5.782586573815599,-0.4412536554057116,moderate
+20260727,surname_top_50_share_pct,Phase 1 conditional Census surname pool,19.76698878975515,,21.10363924050633,percent,comparable,6.762033736994576,1.3366504507511792,moderate
+20260727,surname_top_100_share_pct,Phase 1 conditional Census surname pool,27.29129845911079,,31.03243670886076,percent,comparable,13.708172424830327,3.7411382497499694,moderate
+20260727,surname_rank_slope_10_1000,Phase 1 conditional Census surname pool,-0.7814768993374822,,-0.7996006298012923,log probability / log rank,comparable,2.3191639419124197,-0.018123730463810106,descriptive
+20260727,surname_js_distance,Phase 1 conditional Census surname pool,0.0,,0.09566338050383442,Jensen-Shannon distance,comparable,,0.09566338050383442,moderate
+20260728,mobility_overall_pct,ACS 2024 B07001,11.762824,11.762824,11.263348780979246,percent,comparable,-4.246218586801553,-0.49947521902075387,close
+20260728,mobility_age_0_17_pct,ACS 2024 B07001,10.510834,11.762824,10.778727445394113,percent,comparable,2.5487363361852498,0.2678934453941135,close
+20260728,mobility_age_18_34_pct,ACS 2024 B07001,22.582798020647232,11.762824,21.5625,percent,comparable,-4.518031909572867,-1.0202980206472319,close
+20260728,mobility_age_35_64_pct,ACS 2024 B07001,8.891885,11.762824,8.162729658792651,percent,comparable,-8.200233597345772,-0.729155341207349,moderate
+20260728,mobility_age_65_plus_pct,ACS 2024 B07001,5.518441,11.762824,5.480225988700565,percent,comparable,-0.6924965094206004,-0.038215011299435275,close
+20260728,household_married_couple_family_pct,ACS 2024 B11001,46.69385,,46.6955153422502,percent,comparable,0.0035665130422933124,0.0016653422501988757,close
+20260728,household_single_parent_male_householder_pct,ACS 2024 B11001,5.208111,,5.212431156569631,percent,comparable,0.0829505471298695,0.004320156569630917,close
+20260728,household_single_parent_female_householder_pct,ACS 2024 B11001,12.109163,,12.116443745082613,percent,comparable,0.060125915247917855,0.007280745082612228,close
+20260728,household_nonfamily_living_alone_pct,ACS 2024 B11001,28.865592,,28.87490165224233,percent,comparable,0.03225172808626094,0.009309652242329491,close
+20260728,household_nonfamily_not_alone_pct,ACS 2024 B11001,7.123284,,7.100708103855232,percent,comparable,-0.3169310130659954,-0.02257589614476796,close
+20260728,household_type_js_distance,ACS 2024 B11001,0.0,,0.0003861460238361869,Jensen-Shannon distance,comparable,,0.0003861460238361869,close
+20260728,household_size_js_distance,requested ACS B11001 file,,,,Jensen-Shannon distance,"not estimable: source has household types, not size bins",,,not estimable
+20260728,cohabitation_rate_per_1000,CDC 2023 marriage rate (incompatible construct),6.1,0.61,0.7052186177715092,"events per 1,000 total population",not comparable: COHABIT is not marriage,-88.43903905292609,-5.394781382228491,not comparable
+20260728,divorce_rate_per_1000,CDC 2023,2.4,0.24,2.014910336490026,"events per 1,000 total population",comparable,-16.04540264624891,-0.38508966350997387,moderate
+20260728,fertility_10-14_per_1000,NCHS 2024 provisional,0.2,7.4625,0.0,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,-100.0,-0.2,not estimable
+20260728,fertility_15-19_per_1000,NCHS 2024 provisional,12.7,7.4625,12.307692307692308,"births per 1,000 women",comparable,-3.089036947304653,-0.3923076923076909,close
+20260728,fertility_20-24_per_1000,NCHS 2024 provisional,56.7,7.4625,78.78787878787878,"births per 1,000 women",comparable,38.95569451125005,22.08787878787878,large deviation
+20260728,fertility_25-29_per_1000,NCHS 2024 provisional,91.4,7.4625,87.09677419354838,"births per 1,000 women",comparable,-4.708124514717309,-4.303225806451621,close
+20260728,fertility_30-34_per_1000,NCHS 2024 provisional,95.4,7.4625,108.35913312693498,"births per 1,000 women",comparable,13.583996988401436,12.959133126934972,moderate
+20260728,fertility_35-39_per_1000,NCHS 2024 provisional,55.0,7.4625,65.28189910979229,"births per 1,000 women",comparable,18.694362017804167,10.281899109792292,moderate
+20260728,fertility_40-44_per_1000,NCHS 2024 provisional,12.8,7.4625,9.23076923076923,"births per 1,000 women",comparable,-27.884615384615394,-3.5692307692307708,large deviation
+20260728,fertility_45-54_per_1000,NCHS 2024 provisional,1.1,7.4625,3.3557046979865772,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,205.0640634533252,2.255704697986577,not estimable
+20260728,surname_top_10_share_pct,Phase 1 conditional Census surname pool,7.632201318762586,,7.93635105752125,percent,comparable,3.985085377805204,0.3041497387586638,close
+20260728,surname_top_50_share_pct,Phase 1 conditional Census surname pool,19.769718740622473,,20.952757461949002,percent,comparable,5.984094851565296,1.183038721326529,moderate
+20260728,surname_top_100_share_pct,Phase 1 conditional Census surname pool,27.294044122060328,,30.154180668116233,percent,comparable,10.478976780667724,2.860136546055905,moderate
+20260728,surname_rank_slope_10_1000,Phase 1 conditional Census surname pool,-0.781522459792671,,-0.7621939431549731,log probability / log rank,comparable,-2.4731876090708247,0.019328516637697857,descriptive
+20260728,surname_js_distance,Phase 1 conditional Census surname pool,0.0,,0.07942431535973903,Jensen-Shannon distance,comparable,,0.07942431535973903,moderate
+20260729,mobility_overall_pct,ACS 2024 B07001,11.762824,11.762824,10.908357697348523,percent,comparable,-7.264125542059268,-0.8544663026514776,moderate
+20260729,mobility_age_0_17_pct,ACS 2024 B07001,10.510834,11.762824,10.719390185802762,percent,comparable,1.984202070004751,0.20855618580276314,close
+20260729,mobility_age_18_34_pct,ACS 2024 B07001,22.582798020647232,11.762824,20.9375,percent,comparable,-7.2856251875562625,-1.6452980206472319,moderate
+20260729,mobility_age_35_64_pct,ACS 2024 B07001,8.891885,11.762824,7.664041994750656,percent,comparable,-13.808579454742656,-1.227843005249344,moderate
+20260729,mobility_age_65_plus_pct,ACS 2024 B07001,5.518441,11.762824,5.423728813559322,percent,comparable,-1.7162852051997721,-0.09471218644067836,close
+20260729,household_married_couple_family_pct,ACS 2024 B11001,46.69385,,46.6955153422502,percent,comparable,0.0035665130422933124,0.0016653422501988757,close
+20260729,household_single_parent_male_householder_pct,ACS 2024 B11001,5.208111,,5.212431156569631,percent,comparable,0.0829505471298695,0.004320156569630917,close
+20260729,household_single_parent_female_householder_pct,ACS 2024 B11001,12.109163,,12.116443745082613,percent,comparable,0.060125915247917855,0.007280745082612228,close
+20260729,household_nonfamily_living_alone_pct,ACS 2024 B11001,28.865592,,28.87490165224233,percent,comparable,0.03225172808626094,0.009309652242329491,close
+20260729,household_nonfamily_not_alone_pct,ACS 2024 B11001,7.123284,,7.100708103855232,percent,comparable,-0.3169310130659954,-0.02257589614476796,close
+20260729,household_type_js_distance,ACS 2024 B11001,0.0,,0.0003861460238361869,Jensen-Shannon distance,comparable,,0.0003861460238361869,close
+20260729,household_size_js_distance,requested ACS B11001 file,,,,Jensen-Shannon distance,"not estimable: source has household types, not size bins",,,not estimable
+20260729,cohabitation_rate_per_1000,CDC 2023 marriage rate (incompatible construct),6.1,0.61,0.8065329166246598,"events per 1,000 total population",not comparable: COHABIT is not marriage,-86.77814890779246,-5.29346708337534,not comparable
+20260729,divorce_rate_per_1000,CDC 2023,2.4,0.24,1.713882447827402,"events per 1,000 total population",comparable,-28.588231340524917,-0.686117552172598,large deviation
+20260729,fertility_10-14_per_1000,NCHS 2024 provisional,0.2,7.4625,0.0,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,-100.0,-0.2,not estimable
+20260729,fertility_15-19_per_1000,NCHS 2024 provisional,12.7,7.4625,13.422818791946309,"births per 1,000 women",comparable,5.691486550758344,0.7228187919463096,moderate
+20260729,fertility_20-24_per_1000,NCHS 2024 provisional,56.7,7.4625,57.69230769230769,"births per 1,000 women",comparable,1.7501017501017468,0.9923076923076906,close
+20260729,fertility_25-29_per_1000,NCHS 2024 provisional,91.4,7.4625,65.71428571428571,"births per 1,000 women",comparable,-28.102532041262908,-25.685714285714297,large deviation
+20260729,fertility_30-34_per_1000,NCHS 2024 provisional,95.4,7.4625,104.4776119402985,"births per 1,000 women",comparable,9.515316499264669,9.077611940298496,moderate
+20260729,fertility_35-39_per_1000,NCHS 2024 provisional,55.0,7.4625,46.97986577181208,"births per 1,000 women",comparable,-14.582062233068946,-8.02013422818792,moderate
+20260729,fertility_40-44_per_1000,NCHS 2024 provisional,12.8,7.4625,9.06344410876133,"births per 1,000 women",comparable,-29.191842900302117,-3.7365558912386714,large deviation
+20260729,fertility_45-54_per_1000,NCHS 2024 provisional,1.1,7.4625,0.0,"births per 1,000 women",not estimable: fewer than five expected events across ten seeds,-100.0,-1.1,not estimable
+20260729,surname_top_10_share_pct,Phase 1 conditional Census surname pool,7.6309733115587255,,7.804298306427651,percent,comparable,2.2713353564792125,0.17332499486892594,close
+20260729,surname_top_50_share_pct,Phase 1 conditional Census surname pool,19.76596141884805,,20.798256907992474,percent,comparable,5.222591844988968,1.032295489144424,moderate
+20260729,surname_top_100_share_pct,Phase 1 conditional Census surname pool,27.289697982418264,,30.236703971476675,percent,comparable,10.798968867141943,2.947005989058411,moderate
+20260729,surname_rank_slope_10_1000,Phase 1 conditional Census surname pool,-0.7814274101141452,,-0.7660888001754714,log probability / log rank,comparable,-1.962896327943398,0.015338609938673753,descriptive
+20260729,surname_js_distance,Phase 1 conditional Census surname pool,0.0,,0.08482436699639694,Jensen-Shannon distance,comparable,,0.08482436699639694,moderate

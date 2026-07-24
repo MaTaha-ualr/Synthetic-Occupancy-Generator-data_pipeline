@@ -1,8 +1,8 @@
 # SOG Engineering Test Report and Production Readiness Guide
 
 **Last updated**: April 8, 2026
-**Test suite version**: 368 Phase-2 tests, all passing
-**Runtime**: ~112 seconds on Windows 11, Python 3.12
+**Test suite version**: 369 Phase-2 tests, all passing
+**Runtime**: included in the July 23 combined 398-test run on Windows
 
 This document is the single source of truth for engineers working on the SOG synthetic data pipeline. It covers what the system does, how it is tested, what works well, what has known issues, and what must be addressed before or after publishing.
 
@@ -679,7 +679,7 @@ The methodological point of this schema is that truth is normalized and observed
 
 ## 6) Complete Test Suite
 
-### 6.1 Test inventory (368 Phase-2 tests, 23 Phase-2 test files)
+### 6.1 Test inventory (369 Phase-2 tests, 23 Phase-2 test files)
 
 | Test File | Count | Category | What It Validates |
 |---|---|---|---|
@@ -855,7 +855,7 @@ The quality report provides actionable metrics: event counts, overlap rates, dup
 python -m pytest tests/ -v
 ```
 
-Expected: 368 passed in ~155 seconds.
+Expected: 369 passed; runtime varies by machine.
 
 ### 9.2 By category
 
@@ -940,7 +940,7 @@ Noise types are defined in [emission.py](phase2/src/sog_phase2/emission.py) `Dat
 
 **What earns the score:**
 - Core pipeline is functionally complete and produces valid, reproducible output
-- 368 Phase-2 tests pass covering unit, integration, regression, and end-to-end scenarios
+- 369 Phase-2 tests pass covering unit, integration, regression, and end-to-end scenarios
 - All 14 canonical scenarios validate end-to-end
 - Noise injection, demographic constraints, and quality reporting all work correctly
 - Deterministic seeding ensures reproducible benchmarks
@@ -1019,7 +1019,7 @@ SOG/
 |   |-- scenario_catalog.py   # Scenario registry
 |
 |-- scripts/                  # CLI entry points
-|-- tests/                    # 368 Phase-2 tests (this report details all of them)
+|-- tests/                    # 369 Phase-2 tests (this report details all of them)
 |-- phase2/scenarios/         # 14 canonical scenario YAMLs + catalog.yaml + optional _working_ copies
 |-- phase2/runs/              # Run output directories
 |-- phase2/Data/phase2_params/       # Demographic priors (Census, CDC, NCHS)

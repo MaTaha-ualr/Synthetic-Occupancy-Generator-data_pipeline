@@ -1,0 +1,20 @@
+{
+  "conditions": [
+    "clean",
+    "high_noise",
+    "low_overlap",
+    "one_to_many"
+  ],
+  "repetitions_per_condition": {
+    "clean": 5,
+    "high_noise": 5,
+    "low_overlap": 5,
+    "one_to_many": 5
+  },
+  "candidate_count_stable_within_condition": true,
+  "score_label_digest_stable_within_condition": true,
+  "fresh_candidate_counts_match_e1": true,
+  "all_cartesian_spaces_exact": true,
+  "runtime_rows": 20,
+  "workload_rows": 40
+}

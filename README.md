@@ -11,6 +11,7 @@ It has two phases:
 
 - `docs/HANDOFF.md`: final ownership-transfer summary and operational starting points
 - `docs/SOG_BIBLE.md`: current canonical end-to-end Bible for the working tree
+- `docs/SOG_PROFESSOR_WALKTHROUGH.md`: top-to-bottom PowerShell demo with commands, expected outputs, and inspection steps
 - `The_SOG_Bible_v2.pdf`: PDF build of the current Bible
 - `phase1/README.md`: practical Phase-1 setup and baseline generation
 - `phase2/README.md`: practical Phase-2 run sequence

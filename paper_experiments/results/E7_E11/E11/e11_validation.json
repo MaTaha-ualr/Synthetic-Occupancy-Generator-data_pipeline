@@ -1,0 +1,35 @@
+{
+  "upstream_archive_sha256": "676b143d208b44a306002c05fb2b17d1a21c40e1972d4be7db8b03c130d0ab0c",
+  "upstream_archive_hash_matches_preregistration": true,
+  "selected_modifications_per_record": 5,
+  "calibration_rmse": 0.2792323397779097,
+  "calibration_selected_at_upper_grid_boundary": true,
+  "noise_match_diagnostic": "poor approximation; large residual field-profile mismatch",
+  "calibration_seed": 20260719,
+  "evaluation_seeds": [
+    20260720,
+    20260721,
+    20260722,
+    20260723,
+    20260724,
+    20260725,
+    20260726,
+    20260727,
+    20260728,
+    20260729
+  ],
+  "calibration_seed_excluded_from_evaluation": true,
+  "metric_rows": 60,
+  "expected_metric_rows": 60,
+  "all_size_contracts_exact": true,
+  "all_candidate_recall_bounded": true,
+  "sog_metrics_reproduce_e2": true,
+  "frozen_thresholds": {
+    "baseline": 0.65,
+    "splink": 0.9986013472769922,
+    "learned": 0.6500030591266042
+  },
+  "novelty_verdict": "mixed",
+  "supporting_matchers": [],
+  "bad_or_null_result_retained": true
+}

@@ -1,0 +1,8 @@
+dimension,source,unit,estimability,n_seeds,target,configured_input,achieved_mean,achieved_sd,relative_deviation_pct,absolute_deviation,verdict
+household_married_couple_family_pct,ACS 2024 B11001,percent,comparable,10,46.69385,,46.6955153422502,0.0,0.0035665130422933124,0.0016653422501988757,close
+household_single_parent_male_householder_pct,ACS 2024 B11001,percent,comparable,10,5.208111,,5.212431156569631,0.0,0.0829505471298695,0.004320156569630917,close
+household_single_parent_female_householder_pct,ACS 2024 B11001,percent,comparable,10,12.109163,,12.116443745082615,1.8724445165742407e-15,0.060125915247932524,0.007280745082614004,close
+household_nonfamily_living_alone_pct,ACS 2024 B11001,percent,comparable,10,28.865592,,28.87490165224233,0.0,0.03225172808626094,0.009309652242329491,close
+household_nonfamily_not_alone_pct,ACS 2024 B11001,percent,comparable,10,7.123284,,7.100708103855231,9.362222582871203e-16,-0.31693101306600785,-0.022575896144768848,close
+household_type_js_distance,ACS 2024 B11001,Jensen-Shannon distance,comparable,10,0.0,,0.0003861460238361869,0.0,,0.0003861460238361869,close
+household_size_js_distance,requested ACS B11001 file,Jensen-Shannon distance,"not estimable: source has household types, not size bins",10,,,,0.0,,,not estimable

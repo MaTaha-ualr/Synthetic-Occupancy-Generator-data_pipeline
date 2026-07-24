@@ -1,0 +1,39 @@
+{
+  "download_url": "https://dmm.anu.edu.au/geco/geco-data-generator-corruptor.tar.gz",
+  "download_date": "2026-07-27",
+  "archive_repo_path": "paper_experiments\\vendor\\geco\\geco-data-generator-corruptor.tar.gz",
+  "archive_bytes": 1958129,
+  "archive_sha256": "676b143d208b44a306002c05fb2b17d1a21c40e1972d4be7db8b03c130d0ab0c",
+  "expected_sha256": "676b143d208b44a306002c05fb2b17d1a21c40e1972d4be7db8b03c130d0ab0c",
+  "license": "Mozilla Public License 2.0",
+  "upstream_runtime": "Python 2",
+  "compatibility_action": "mechanical lib2to3 conversion of five source modules; py_compile passed",
+  "adapter_fields": [
+    "first",
+    "last",
+    "dob",
+    "street",
+    "city",
+    "state",
+    "postal"
+  ],
+  "attribute_modification_probabilities": {
+    "first": 0.15,
+    "last": 0.2,
+    "dob": 0.15,
+    "street": 0.2,
+    "city": 0.1,
+    "state": 0.05,
+    "postal": 0.15
+  },
+  "corruption_method_probabilities": {
+    "uniform_edit": 0.7,
+    "normal_edit": 0.15,
+    "missing": 0.15
+  },
+  "duplicates_per_original": {
+    "maximum": 3,
+    "distribution": "zipf"
+  },
+  "port_patch_sha256": "efc718e02804d89cf46e984b9f0bbd81d2cf09d0096dfe8fbee825f0314e6aac"
+}

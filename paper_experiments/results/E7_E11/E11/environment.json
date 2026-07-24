@@ -1,0 +1,8 @@
+{
+  "run_date": "2026-07-27",
+  "python": "3.10.5",
+  "platform": "Windows-10-10.0.26200-SP0",
+  "pandas": "2.3.3",
+  "numpy": "2.2.6",
+  "git_head_before_e11_commit": "51cdc2eb294c0545db7fe17ca8adf2be7f77db8e"
+}

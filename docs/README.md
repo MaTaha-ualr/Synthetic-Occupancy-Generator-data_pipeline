@@ -5,6 +5,7 @@
 - `SOG_BIBLE.md` - current canonical end-to-end Bible for the working tree; source for `../The_SOG_Bible_v2.pdf`
 - `HANDOFF.md` - final owner handoff summary, validation snapshot, and where to start operating the project
 - `SOG_TECHNICAL_WALKTHROUGH.md` - complete technical stakeholder walkthrough of what SOG is, how the pipeline works, what is novel, and how V2 differs from the paper-era system
+- `SOG_PROFESSOR_WALKTHROUGH.md` - PowerShell classroom/demo walkthrough with every command, what it does, and where to inspect the results
 - `CODE_VERIFICATION_AND_ARCHITECTURE.md` - module-by-module code reference plus the result of a full read-through and test verification pass
 - `../phase2/docs/SCENARIO_USE_CASES_AND_TESTING.md` - primary guide for choosing scenarios and benchmarking with them
 - `../phase2/docs/SCENARIO_SUPPORT_MATRIX.md` - runnable-vs-planned scenario support matrix for end-user intents

@@ -1,0 +1,232 @@
+{
+    "link_type": "dedupe_only",
+    "probability_two_random_records_match": 0.001,
+    "retain_matching_columns": false,
+    "retain_intermediate_calculation_columns": false,
+    "additional_columns_to_retain": [],
+    "sql_dialect": "duckdb",
+    "linker_uid": "3hxn3pau",
+    "em_convergence": 0.0001,
+    "max_iterations": 100,
+    "bayes_factor_column_prefix": "bf_",
+    "term_frequency_adjustment_column_prefix": "tf_",
+    "comparison_vector_value_column_prefix": "gamma_",
+    "unique_id_column_name": "unique_id",
+    "source_dataset_column_name": "source_dataset",
+    "blocking_rules_to_generate_predictions": [
+        {
+            "blocking_rule": "l.dob_norm = r.dob_norm AND l.dob_norm <> ''",
+            "sql_dialect": "duckdb"
+        },
+        {
+            "blocking_rule": "l.sx_last = r.sx_last AND l.first_initial = r.first_initial AND l.sx_last <> '' AND l.first_initial <> ''",
+            "sql_dialect": "duckdb"
+        },
+        {
+            "blocking_rule": "l.sx_first = r.sx_first AND l.sx_last = r.sx_last AND l.sx_first <> '' AND l.sx_last <> ''",
+            "sql_dialect": "duckdb"
+        },
+        {
+            "blocking_rule": "l.postal = r.postal AND l.sx_last = r.sx_last AND l.postal <> '' AND l.sx_last <> ''",
+            "sql_dialect": "duckdb"
+        },
+        {
+            "blocking_rule": "l.birth_year = r.birth_year AND l.sx_last = r.sx_last AND l.birth_year <> '' AND l.sx_last <> ''",
+            "sql_dialect": "duckdb"
+        }
+    ],
+    "comparisons": [
+        {
+            "output_column_name": "first",
+            "comparison_levels": [
+                {
+                    "sql_condition": "\"first_l\" IS NULL OR \"first_r\" IS NULL",
+                    "label_for_charts": "first is NULL",
+                    "fix_m_probability": false,
+                    "fix_u_probability": false,
+                    "is_null_level": true
+                },
+                {
+                    "sql_condition": "\"first_l\" = \"first_r\"",
+                    "label_for_charts": "Exact match on first",
+                    "m_probability": 0.6406722920290624,
+                    "u_probability": 0.0032697011762684246,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                },
+                {
+                    "sql_condition": "jaro_winkler_similarity(\"first_l\", \"first_r\") >= 0.92",
+                    "label_for_charts": "Jaro-Winkler distance of first >= 0.92",
+                    "m_probability": 0.0010521982426384042,
+                    "u_probability": 0.0009827943698946502,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                },
+                {
+                    "sql_condition": "jaro_winkler_similarity(\"first_l\", \"first_r\") >= 0.8",
+                    "label_for_charts": "Jaro-Winkler distance of first >= 0.8",
+                    "m_probability": 0.0036000937266299693,
+                    "u_probability": 0.005985894716574484,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                },
+                {
+                    "sql_condition": "ELSE",
+                    "label_for_charts": "All other comparisons",
+                    "m_probability": 0.35467541600166924,
+                    "u_probability": 0.9897616097372625,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                }
+            ],
+            "comparison_description": "JaroWinklerAtThresholds"
+        },
+        {
+            "output_column_name": "last",
+            "comparison_levels": [
+                {
+                    "sql_condition": "\"last_l\" IS NULL OR \"last_r\" IS NULL",
+                    "label_for_charts": "last is NULL",
+                    "fix_m_probability": false,
+                    "fix_u_probability": false,
+                    "is_null_level": true
+                },
+                {
+                    "sql_condition": "\"last_l\" = \"last_r\"",
+                    "label_for_charts": "Exact match on last",
+                    "m_probability": 0.6397884477902022,
+                    "u_probability": 0.0015864044363424813,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                },
+                {
+                    "sql_condition": "jaro_winkler_similarity(\"last_l\", \"last_r\") >= 0.92",
+                    "label_for_charts": "Jaro-Winkler distance of last >= 0.92",
+                    "m_probability": 0.0013403022142746631,
+                    "u_probability": 0.00039460839878222107,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                },
+                {
+                    "sql_condition": "jaro_winkler_similarity(\"last_l\", \"last_r\") >= 0.8",
+                    "label_for_charts": "Jaro-Winkler distance of last >= 0.8",
+                    "m_probability": 0.0026724186323717975,
+                    "u_probability": 0.003387814550615359,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                },
+                {
+                    "sql_condition": "ELSE",
+                    "label_for_charts": "All other comparisons",
+                    "m_probability": 0.35619883136315134,
+                    "u_probability": 0.9946311726142599,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                }
+            ],
+            "comparison_description": "JaroWinklerAtThresholds"
+        },
+        {
+            "output_column_name": "dob_norm",
+            "comparison_levels": [
+                {
+                    "sql_condition": "\"dob_norm_l\" IS NULL OR \"dob_norm_r\" IS NULL",
+                    "label_for_charts": "dob_norm is NULL",
+                    "fix_m_probability": false,
+                    "fix_u_probability": false,
+                    "is_null_level": true
+                },
+                {
+                    "sql_condition": "\"dob_norm_l\" = \"dob_norm_r\"",
+                    "label_for_charts": "Exact match on dob_norm",
+                    "m_probability": 0.2874726028700699,
+                    "u_probability": 8.198579533985286e-05,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                },
+                {
+                    "sql_condition": "ELSE",
+                    "label_for_charts": "All other comparisons",
+                    "m_probability": 0.71252739712993,
+                    "u_probability": 0.9999180142046602,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                }
+            ],
+            "comparison_description": "ExactMatch"
+        },
+        {
+            "output_column_name": "street",
+            "comparison_levels": [
+                {
+                    "sql_condition": "\"street_l\" IS NULL OR \"street_r\" IS NULL",
+                    "label_for_charts": "street is NULL",
+                    "fix_m_probability": false,
+                    "fix_u_probability": false,
+                    "is_null_level": true
+                },
+                {
+                    "sql_condition": "\"street_l\" = \"street_r\"",
+                    "label_for_charts": "Exact match on street",
+                    "m_probability": 0.9639589381586563,
+                    "u_probability": 0.00016976856610777613,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                },
+                {
+                    "sql_condition": "jaro_winkler_similarity(\"street_l\", \"street_r\") >= 0.92",
+                    "label_for_charts": "Jaro-Winkler distance of street >= 0.92",
+                    "u_probability": 1.6562786937344013e-06,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                },
+                {
+                    "sql_condition": "jaro_winkler_similarity(\"street_l\", \"street_r\") >= 0.75",
+                    "label_for_charts": "Jaro-Winkler distance of street >= 0.75",
+                    "m_probability": 0.00010167711142910753,
+                    "u_probability": 0.0006045417232130565,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                },
+                {
+                    "sql_condition": "ELSE",
+                    "label_for_charts": "All other comparisons",
+                    "m_probability": 0.035990223285629175,
+                    "u_probability": 0.9992240334319854,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                }
+            ],
+            "comparison_description": "JaroWinklerAtThresholds"
+        },
+        {
+            "output_column_name": "postal",
+            "comparison_levels": [
+                {
+                    "sql_condition": "\"postal_l\" IS NULL OR \"postal_r\" IS NULL",
+                    "label_for_charts": "postal is NULL",
+                    "fix_m_probability": false,
+                    "fix_u_probability": false,
+                    "is_null_level": true
+                },
+                {
+                    "sql_condition": "\"postal_l\" = \"postal_r\"",
+                    "label_for_charts": "Exact match on postal",
+                    "m_probability": 0.9285494395576851,
+                    "u_probability": 0.0002583794762225666,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                },
+                {
+                    "sql_condition": "ELSE",
+                    "label_for_charts": "All other comparisons",
+                    "m_probability": 0.07145056044231493,
+                    "u_probability": 0.9997416205237775,
+                    "fix_m_probability": false,
+                    "fix_u_probability": false
+                }
+            ],
+            "comparison_description": "ExactMatch"
+        }
+    ]
+}

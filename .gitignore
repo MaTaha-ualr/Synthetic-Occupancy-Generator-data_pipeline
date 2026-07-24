@@ -32,6 +32,22 @@ phase2/scenarios/_working_*.yaml
 phase2/runs/*
 !phase2/runs/.gitkeep
 !phase2/runs/README.md
+phase2/runs_calibration_check/
+
+# Regenerable independent Phase-1 populations used by paper E7
+paper_experiments/results/E1_multiseed/phase1_populations/
+paper_experiments/results/E1_multiseed/phase1_configs/
+
+# Regenerable paper intermediates; compact CSV/JSON summaries remain versioned
+paper_experiments/results/**/*.log
+paper_experiments/results/**/generation_logs/
+paper_experiments/results/**/per_run/
+paper_experiments/results/**/e1_per_run/
+paper_experiments/results/**/scores/
+paper_experiments/results/**/e1_scores/
+paper_experiments/results/**/calibration_scores.parquet
+paper_experiments/results/paper_experiment_*
+paper_test_results.txt
 
 # OS/editor
 .DS_Store

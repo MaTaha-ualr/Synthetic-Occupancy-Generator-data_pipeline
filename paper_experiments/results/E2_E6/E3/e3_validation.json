@@ -1,0 +1,33 @@
+{
+  "baseline_strict_monotone": true,
+  "baseline_f1_by_scale": {
+    "0.0": 0.9985589622647659,
+    "0.5": 0.9904473379037132,
+    "1.0": 0.9807291641861351,
+    "2.0": 0.9556898255347427,
+    "4.0": 0.890307338881585
+  },
+  "baseline_first_below_0.95": 4.0,
+  "baseline_first_below_0.9": 4.0,
+  "splink_strict_monotone": true,
+  "splink_f1_by_scale": {
+    "0.0": 0.9966556714310402,
+    "0.5": 0.9885296453893708,
+    "1.0": 0.9783621498029692,
+    "2.0": 0.9513302079832785,
+    "4.0": 0.8730401250135978
+  },
+  "splink_first_below_0.95": 4.0,
+  "splink_first_below_0.9": 4.0,
+  "learned_strict_monotone": true,
+  "learned_f1_by_scale": {
+    "0.0": 0.9996535110369109,
+    "0.5": 0.997251414249664,
+    "1.0": 0.9931342335373097,
+    "2.0": 0.9793553655219147,
+    "4.0": 0.9292876290405996
+  },
+  "learned_first_below_0.95": 4.0,
+  "learned_first_below_0.9": null,
+  "all_matchers_strict_monotone": true
+}

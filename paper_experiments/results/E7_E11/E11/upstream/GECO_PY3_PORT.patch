@@ -1,0 +1,1601 @@
+--- a/geco-data-generator-corruptor/basefunctions.py
++++ b/geco-data-generator-corruptor/basefunctions.py
+@@ -27,7 +27,7 @@
+   check_is_non_empty_string('variable', variable)
+ 
+   if (value == None):
+-    raise Exception, 'Value of "%s" is None' % (variable)
++    raise Exception('Value of "%s" is None' % (variable))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -41,8 +41,8 @@
+   check_is_non_empty_string('variable', variable)
+ 
+   if (not isinstance(value, str)):
+-    raise Exception, 'Value of "%s" is not a string: %s (%s)' % \
+-                     (variable, str(value), type(value))
++    raise Exception('Value of "%s" is not a string: %s (%s)' % \
++                     (variable, str(value), type(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -55,9 +55,9 @@
+ 
+   check_is_non_empty_string('variable', variable)
+ 
+-  if (not isinstance(value, unicode)):
+-    raise Exception, 'Value of "%s" is not a Unicode string: %s (%s)' % \
+-                     (variable, str(value), type(value))
++  if (not isinstance(value, str)):
++    raise Exception('Value of "%s" is not a Unicode string: %s (%s)' % \
++                     (variable, str(value), type(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -70,9 +70,9 @@
+ 
+   check_is_non_empty_string('variable', variable)
+ 
+-  if ((not isinstance(value, unicode)) and (not isinstance(value, str))):
+-    raise Exception, 'Value of "%s" is neither a string nor a Unicode ' % \
+-                     (variable) + 'string: %s (%s)' % (str(value), type(value))
++  if ((not isinstance(value, str)) and (not isinstance(value, str))):
++    raise Exception('Value of "%s" is neither a string nor a Unicode ' % \
++                     (variable) + 'string: %s (%s)' % (str(value), type(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -84,12 +84,12 @@
+   """
+ 
+   if ((not isinstance(variable, str)) or (variable == '')):
+-    raise Exception, 'Value of "variable" is not a non-empty string: %s (%s)' \
+-                     % (str(variable), type(variable))
++    raise Exception('Value of "variable" is not a non-empty string: %s (%s)' \
++                     % (str(variable), type(variable)))
+ 
+   if ((not isinstance(value, str)) or (value == '')):
+-    raise Exception, 'Value of "%s" is not a non-empty string: %s (%s)' % \
+-                     (variable, str(value), type(value))
++    raise Exception('Value of "%s" is not a non-empty string: %s (%s)' % \
++                     (variable, str(value), type(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -103,8 +103,8 @@
+   check_is_non_empty_string('variable', variable)
+ 
+   if ((not isinstance(value, int)) and (not isinstance(value, float))):
+-    raise Exception, 'Value of "%s" is not a number: %s (%s)' % \
+-                     (variable, str(value), type(value))
++    raise Exception('Value of "%s" is not a number: %s (%s)' % \
++                     (variable, str(value), type(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -120,8 +120,8 @@
+ 
+   if ((not isinstance(value, int)) and (not isinstance(value, float)) or \
+       (value <= 0.0)):
+-    raise Exception, 'Value of "%s" is not a positive number: ' % \
+-                     (variable) + '%s (%s)' % (str(value), type(value))
++    raise Exception('Value of "%s" is not a positive number: ' % \
++                     (variable) + '%s (%s)' % (str(value), type(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -137,9 +137,9 @@
+ 
+   if ((not isinstance(value, int)) and (not isinstance(value, float)) or \
+       (value < 0.0)):
+-    raise Exception, 'Value of "%s" is not a number or it is a ' % \
++    raise Exception('Value of "%s" is not a number or it is a ' % \
+                       (variable) + 'negative number: %s (%s)' % \
+-                      (str(value), type(value))
++                      (str(value), type(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -155,9 +155,9 @@
+ 
+   if ((not isinstance(value, int)) and (not isinstance(value, float)) or \
+       (value < 0.0) or (value > 1.0)):
+-    raise Exception, 'Value of "%s" is not a normalised number ' % \
++    raise Exception('Value of "%s" is not a normalised number ' % \
+                      (variable) + '(between 0.0 and 1.0): %s (%s)' % \
+-                     (str(value), type(value))
++                     (str(value), type(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -173,9 +173,9 @@
+ 
+   if ((not isinstance(value, int)) and (not isinstance(value, float)) or \
+       (value < 0.0) or (value > 100.0)):
+-    raise Exception, 'Value of "%s" is not a percentage number ' % \
++    raise Exception('Value of "%s" is not a percentage number ' % \
+                      (variable) + '(between 0.0 and 100.0): %s (%s)' % \
+-                     (str(value), type(value))
++                     (str(value), type(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -189,8 +189,8 @@
+   check_is_non_empty_string('variable', variable)
+ 
+   if (not isinstance(value, int)):
+-    raise Exception, 'Value of "%s" is not an integer: %s (%s)' % \
+-                     (variable, str(value), type(value))
++    raise Exception('Value of "%s" is not an integer: %s (%s)' % \
++                     (variable, str(value), type(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -204,8 +204,8 @@
+   check_is_non_empty_string('variable', variable)
+ 
+   if (not isinstance(value, float)):
+-    raise Exception, 'Value of "%s" is not a floating point ' % (variable) + \
+-                     'number: %s (%s)' % (str(value),type(value))
++    raise Exception('Value of "%s" is not a floating point ' % (variable) + \
++                     'number: %s (%s)' % (str(value),type(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -219,8 +219,8 @@
+   check_is_non_empty_string('variable', variable)
+ 
+   if (not isinstance(value, dict)):
+-    raise Exception, 'Value of "%s" is not a dictionary: %s' % \
+-                     (variable, type(value))
++    raise Exception('Value of "%s" is not a dictionary: %s' % \
++                     (variable, type(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -234,8 +234,8 @@
+   check_is_non_empty_string('variable', variable)
+ 
+   if (not isinstance(value, list)):
+-    raise Exception, 'Value of "%s" is not a list: %s' % \
+-                     (variable, type(value))
++    raise Exception('Value of "%s" is not a list: %s' % \
++                     (variable, type(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -249,8 +249,8 @@
+   check_is_non_empty_string('variable', variable)
+ 
+   if (not isinstance(value, set)):
+-    raise Exception, 'Value of "%s" is not a set: %s' % \
+-                     (variable, type(value))
++    raise Exception('Value of "%s" is not a set: %s' % \
++                     (variable, type(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -264,8 +264,8 @@
+   check_is_non_empty_string('variable', variable)
+ 
+   if (not isinstance(value, tuple)):
+-    raise Exception, 'Value of "%s" is not a tuple: %s' % \
+-                     (variable, type(value))
++    raise Exception('Value of "%s" is not a tuple: %s' % \
++                     (variable, type(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -279,8 +279,8 @@
+   check_is_non_empty_string('variable', variable)
+ 
+   if (value not in [True, False]):
+-    raise Exception, 'Value of "%s" is not True or False: %s' % \
+-                     (variable, str(value))
++    raise Exception('Value of "%s" is not True or False: %s' % \
++                     (variable, str(value)))
+ 
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+ 
+@@ -294,8 +294,8 @@
+   check_is_non_empty_string('variable', variable)
+ 
+   if (type(value) not in [types.FunctionType, types.MethodType]):
+-    raise Exception, '%s is not a function or method: %s' % \
+-                     (str(variable), type(value))
++    raise Exception('%s is not a function or method: %s' % \
++                     (str(variable), type(value)))
+ 
+ # -----------------------------------------------------------------------------
+ 
+@@ -312,8 +312,8 @@
+   try:
+     codecs.lookup(unicode_encoding_str)
+   except:
+-    raise Exception, 'Unknown Unicode encoding string: "%s"' % \
+-                     (unicode_encoding_str)
++    raise Exception('Unknown Unicode encoding string: "%s"' % \
++                     (unicode_encoding_str))
+ 
+ # -----------------------------------------------------------------------------
+ 
+@@ -379,8 +379,8 @@
+ 
+   if (value not in ['int','float1','float2','float3','float4','float5', \
+                     'float6','float7','float8', 'float9']):
+-    raise Exception, '%s is not a validformat string: %s' % \
+-                     (str(variable), type(value))
++    raise Exception('%s is not a validformat string: %s' % \
++                     (str(variable), type(value)))
+ 
+ # -----------------------------------------------------------------------------
+ 
+@@ -419,7 +419,7 @@
+   elif (format_str == 'float9'):
+     f_str = '%.9f' % (f)
+   else:
+-    raise Exception, 'Illegal string format given: "%s"' % (format_str)
++    raise Exception('Illegal string format given: "%s"' % (format_str))
+ 
+   return f_str
+ 
+@@ -489,7 +489,7 @@
+   try:
+     in_file = codecs.open(file_name, encoding=encoding)
+   except:
+-    raise IOError, 'Cannot read CSV file "%s"' % (file_name)
++    raise IOError('Cannot read CSV file "%s"' % (file_name))
+ 
+   if (header_line == True):
+     header_line = in_file.readline()
+@@ -550,7 +550,7 @@
+   try:
+     out_file = codecs.open(file_name, 'w', encoding=encoding)
+   except:
+-    raise IOError, 'Cannot write CSV file "%s"' % (file_name)
++    raise IOError('Cannot write CSV file "%s"' % (file_name))
+ 
+   if (header_list != None):
+     check_is_list('header_list',header_list)
+--- a/geco-data-generator-corruptor/attrgenfunct.py
++++ b/geco-data-generator-corruptor/attrgenfunct.py
+@@ -220,90 +220,90 @@
+ 
+   num_test = 20
+ 
+-  print 'Generate %d Australian telephone numbers:' % (num_test)
+-  for i in range(num_test):
+-    print ' ', generate_phone_number_australia()
+-  print
+-
+-  print 'Generate %d credit card numbers:' % (num_test)
+-  for i in range(num_test):
+-    print ' ', generate_credit_card_number()
+-  print
+-
+-  print 'Generate %d uniformly distributed integer numbers between -100' % \
+-        (num_test) + ' and -5:'
+-  for i in range(num_test):
+-    print ' ', generate_uniform_value(-100, -5, 'int'),
+-  print
+-
+-  print 'Generate %d uniformly distributed floating-point numbers with ' % \
+-        (num_test) + '3 digits between -55 and 55:'
+-  for i in range(num_test):
+-    print ' ', generate_uniform_value(-55, 55, 'float3')
+-  print
+-
+-  print 'Generate %d uniformly distributed floating-point numbers with ' % \
+-        (num_test) + '7 digits between 147 and 9843:'
+-  for i in range(num_test):
+-    print ' ', generate_uniform_value(147, 9843, 'float7')
+-  print
+-
+-  print 'Generate %d uniformly distributed age values between 0 and 120:' % \
+-        (num_test)
+-  for i in range(num_test):
+-    print ' ', generate_uniform_age(0, 120)
+-  print
+-
+-  print 'Generate %d uniformly distributed age values between 18 and 65:' % \
+-        (num_test)
+-  for i in range(num_test):
+-    print ' ', generate_uniform_age(18, 65)
+-  print
+-
+-  print 'Generate %d normally distributed integer numbers between -200' % \
+-        (num_test) + ' and -3 with mean -50 and standard deviation 44:'
+-  for i in range(num_test):
+-    print ' ', generate_normal_value(-50, 44, -200, -3, 'int')
+-  print
+-
+-  print 'Generate %d normally distributed floating-point numbers with ' % \
++  print('Generate %d Australian telephone numbers:' % (num_test))
++  for i in range(num_test):
++    print(' ', generate_phone_number_australia())
++  print()
++
++  print('Generate %d credit card numbers:' % (num_test))
++  for i in range(num_test):
++    print(' ', generate_credit_card_number())
++  print()
++
++  print('Generate %d uniformly distributed integer numbers between -100' % \
++        (num_test) + ' and -5:')
++  for i in range(num_test):
++    print(' ', generate_uniform_value(-100, -5, 'int'), end=' ')
++  print()
++
++  print('Generate %d uniformly distributed floating-point numbers with ' % \
++        (num_test) + '3 digits between -55 and 55:')
++  for i in range(num_test):
++    print(' ', generate_uniform_value(-55, 55, 'float3'))
++  print()
++
++  print('Generate %d uniformly distributed floating-point numbers with ' % \
++        (num_test) + '7 digits between 147 and 9843:')
++  for i in range(num_test):
++    print(' ', generate_uniform_value(147, 9843, 'float7'))
++  print()
++
++  print('Generate %d uniformly distributed age values between 0 and 120:' % \
++        (num_test))
++  for i in range(num_test):
++    print(' ', generate_uniform_age(0, 120))
++  print()
++
++  print('Generate %d uniformly distributed age values between 18 and 65:' % \
++        (num_test))
++  for i in range(num_test):
++    print(' ', generate_uniform_age(18, 65))
++  print()
++
++  print('Generate %d normally distributed integer numbers between -200' % \
++        (num_test) + ' and -3 with mean -50 and standard deviation 44:')
++  for i in range(num_test):
++    print(' ', generate_normal_value(-50, 44, -200, -3, 'int'))
++  print()
++
++  print('Generate %d normally distributed floating-point numbers with ' % \
+         (num_test) + '5 digits between -100 and 100 and with mean 22 and ' + \
+-        'standard deviation 74:'
+-  for i in range(num_test):
+-    print ' ', generate_normal_value(22, 74, -100, 100, 'float5')
+-  print
+-
+-  print 'Generate %d normally distributed floating-point numbers with ' % \
+-        (num_test) + '9 digits with mean 22 and standard deviation 74:'
+-  for i in range(num_test):
+-    print ' ', generate_normal_value(22, 74, min_val=None, max_val= None,
+-                                     val_type='float9')
+-  print
+-
+-  print 'Generate %d normally distributed floating-point numbers with ' % \
++        'standard deviation 74:')
++  for i in range(num_test):
++    print(' ', generate_normal_value(22, 74, -100, 100, 'float5'))
++  print()
++
++  print('Generate %d normally distributed floating-point numbers with ' % \
++        (num_test) + '9 digits with mean 22 and standard deviation 74:')
++  for i in range(num_test):
++    print(' ', generate_normal_value(22, 74, min_val=None, max_val= None,
++                                     val_type='float9'))
++  print()
++
++  print('Generate %d normally distributed floating-point numbers with ' % \
+         (num_test) + '2 digits with mean 22 and standard deviation 24 that' + \
+-        ' are larger than 10:'
+-  for i in range(num_test):
+-    print ' ', generate_normal_value(22, 74, min_val=10, max_val=None,
+-                                     val_type='float2')
+-  print
+-
+-  print 'Generate %d normally distributed floating-point numbers with ' % \
++        ' are larger than 10:')
++  for i in range(num_test):
++    print(' ', generate_normal_value(22, 74, min_val=10, max_val=None,
++                                     val_type='float2'))
++  print()
++
++  print('Generate %d normally distributed floating-point numbers with ' % \
+         (num_test) + '4 digits with mean 22 and standard deviation 24 that' + \
+-        ' are smaller than 30:'
+-  for i in range(num_test):
+-    print ' ', generate_normal_value(22, 74, min_val=None, max_val=40,
+-                                     val_type='float4')
+-  print
+-
+-  print 'Generate %d normally distributed age values between 0 and 120' % \
+-        (num_test) + ' with mean 45 and standard deviation 22:'
+-  for i in range(num_test):
+-    print ' ', generate_normal_age(45, 22, 0, 120)
+-  print
+-
+-  print 'Generate %d normally distributed age values between 18 and 65' % \
+-        (num_test) + ' with mean 30 and standard deviation 10:'
+-  for i in range(num_test):
+-    print ' ', generate_normal_age(30, 10, 18, 65)
+-  print
++        ' are smaller than 30:')
++  for i in range(num_test):
++    print(' ', generate_normal_value(22, 74, min_val=None, max_val=40,
++                                     val_type='float4'))
++  print()
++
++  print('Generate %d normally distributed age values between 0 and 120' % \
++        (num_test) + ' with mean 45 and standard deviation 22:')
++  for i in range(num_test):
++    print(' ', generate_normal_age(45, 22, 0, 120))
++  print()
++
++  print('Generate %d normally distributed age values between 18 and 65' % \
++        (num_test) + ' with mean 30 and standard deviation 10:')
++  for i in range(num_test):
++    print(' ', generate_normal_age(30, 10, 18, 65))
++  print()
+--- a/geco-data-generator-corruptor/contdepfunct.py
++++ b/geco-data-generator-corruptor/contdepfunct.py
+@@ -33,10 +33,10 @@
+   """
+ 
+   if ((not isinstance(age, int)) and (not isinstance(age, float))):
+-    raise Exception, 'Age value given is not a number: %s' % (str(age))
++    raise Exception('Age value given is not a number: %s' % (str(age)))
+ 
+   if (age < 0) or (age > 130):
+-    raise Exception, 'Age value below 0 or above 130 given'
++    raise Exception('Age value below 0 or above 130 given')
+ 
+   avrg_bp = 75.0 + age/100.0
+ 
+@@ -46,7 +46,7 @@
+ 
+   if bp < 0.0:
+     bp = 0.0
+-    print 'Warning, blood pressure value of 0.0 returned!'
++    print('Warning, blood pressure value of 0.0 returned!')
+ 
+   return bp
+ 
+@@ -64,10 +64,10 @@
+   """
+ 
+   if ((not isinstance(age, int)) and (not isinstance(age, float))):
+-    raise Exception, 'Age value given is not a number: %s' % (str(age))
++    raise Exception('Age value given is not a number: %s' % (str(age)))
+ 
+   if (age < 0) or (age > 130):
+-    raise Exception, 'Age value below 0 or above 130 given'
++    raise Exception('Age value below 0 or above 130 given')
+ 
+   if (age < 18.0):
+     sal = 0.0
+--- a/geco-data-generator-corruptor/generator.py
++++ b/geco-data-generator-corruptor/generator.py
+@@ -58,15 +58,15 @@
+     # Process the keyword argument (all keywords specific to a certain data
+     # generator type were processed in the derived class constructor)
+     #
+-    for (keyword, value) in base_kwargs.items():
++    for (keyword, value) in list(base_kwargs.items()):
+ 
+       if (keyword.startswith('attribute')):
+         basefunctions.check_is_non_empty_string('attribute_name', value)
+         self.attribute_name = value
+ 
+       else:
+-        raise Exception, 'Illegal constructor argument keyword: "%s"' % \
+-              (str(keyword))
++        raise Exception('Illegal constructor argument keyword: "%s"' % \
++              (str(keyword)))
+ 
+     basefunctions.check_is_non_empty_string('attribute_name',
+                                             self.attribute_name)
+@@ -78,8 +78,8 @@
+     if (("'" in self.attribute_name) or ('"' in self.attribute_name) or \
+         ("`" in self.attribute_name) or (',' in self.attribute_name) or \
+         (";" in self.attribute_name) or ('\t' in self.attribute_name)):
+-      raise Exception, 'Illegal character (such as comma, semi-colon or' + \
+-                       'quote in attribute name'
++      raise Exception('Illegal character (such as comma, semi-colon or' + \
++                       'quote in attribute name')
+ 
+   # ---------------------------------------------------------------------------
+ 
+@@ -88,7 +88,7 @@
+        See implementations in derived classes for details.
+     """
+ 
+-    raise Exception, 'Override abstract method in derived class'
++    raise Exception('Override abstract method in derived class')
+ 
+ # =============================================================================
+ 
+@@ -133,7 +133,7 @@
+     #
+     base_kwargs = {}  # Dictionary, will contain unprocessed arguments
+ 
+-    for (keyword, value) in kwargs.items():
++    for (keyword, value) in list(kwargs.items()):
+ 
+       if (keyword.startswith('freq')):
+         basefunctions.check_is_non_empty_string('freq_file_name', value)
+@@ -174,24 +174,24 @@
+     #
+     for rec_list in freq_file_data:
+       if (len(rec_list) != 2):
+-        raise Exception, 'Illegal format in frequency file %s: %s' % \
+-                         (self.freq_file_name, line)
++        raise Exception('Illegal format in frequency file %s: %s' % \
++                         (self.freq_file_name, line))
+       line_val =  rec_list[0].strip()
+       try:
+         line_count = int(rec_list[1])
+       except:
+-        raise Exception, 'Value count given is not an integer number: %s' % \
+-                         (rec_list[1])
++        raise Exception('Value count given is not an integer number: %s' % \
++                         (rec_list[1]))
+ 
+       if (line_val == ''):
+-        raise Exception, 'Empty attribute value in frequency file %s' % \
+-                         (self.freq_file_name)
++        raise Exception('Empty attribute value in frequency file %s' % \
++                         (self.freq_file_name))
+       basefunctions.check_is_positive('line_count', line_count)
+ 
+       if (line_val in val_dict):
+-        raise Exception, 'Attribute values "%s" occurs twice in ' % \
++        raise Exception('Attribute values "%s" occurs twice in ' % \
+                          (line_val) + 'frequency file %s' % \
+-                         (self.freq_file_name)
++                         (self.freq_file_name))
+ 
+       val_dict[line_val] = line_count
+ 
+@@ -200,7 +200,7 @@
+ 
+     # Generate a list of values according to their counts
+     #
+-    for (attr_val, val_count) in val_dict.iteritems():
++    for (attr_val, val_count) in val_dict.items():
+ 
+       # Append value as many times as given in their counts
+       #
+@@ -257,7 +257,7 @@
+     #
+     base_kwargs = {}  # Dictionary, will contain unprocessed arguments
+ 
+-    for (keyword, value) in kwargs.items():
++    for (keyword, value) in list(kwargs.items()):
+ 
+       if (keyword.startswith('funct')):
+         basefunctions.check_is_function_or_method('function', value)
+@@ -266,7 +266,7 @@
+       elif (keyword.startswith('para')):
+         basefunctions.check_is_list('parameters', value)
+         if (len(value) > 5):
+-          raise Exception, 'Maximum five parameters allowed for function call'
++          raise Exception('Maximum five parameters allowed for function call')
+         self.parameters = value
+ 
+       else:
+@@ -299,7 +299,7 @@
+                                 self.parameters[4])
+ 
+     if (not isinstance(funct_ret, str)):
+-      raise Exception, ('Function provided does not return a string value:',
++      raise Exception('Function provided does not return a string value:',
+                         self.function, type(funct_ret))
+ 
+   # ---------------------------------------------------------------------------
+@@ -348,7 +348,7 @@
+     """Constructor. See implementations in derived classes for details.
+     """
+ 
+-    raise Exception, 'Override abstract method in derived class'
++    raise Exception('Override abstract method in derived class')
+ 
+   # ---------------------------------------------------------------------------
+ 
+@@ -357,7 +357,7 @@
+        See implementations in derived classes for details.
+     """
+ 
+-    raise Exception, 'Override abstract method in derived class'
++    raise Exception('Override abstract method in derived class')
+ 
+ # =============================================================================
+ 
+@@ -453,7 +453,7 @@
+     self.number_of_atttributes = 2
+     self.attribute_type =        'Compound-Categorical-Categorical'
+ 
+-    for (keyword, value) in kwargs.items():
++    for (keyword, value) in list(kwargs.items()):
+ 
+       if (keyword.startswith('categorical1')):
+         basefunctions.check_is_non_empty_string('categorical1_attribute_name',
+@@ -478,8 +478,8 @@
+         self.unicode_encoding = value
+ 
+       else:
+-        raise Exception, 'Illegal constructor argument keyword: "%s"' % \
+-              (str(keyword))
++        raise Exception('Illegal constructor argument keyword: "%s"' % \
++              (str(keyword)))
+ 
+     # Check if the necessary variables have been set
+     #
+@@ -494,7 +494,7 @@
+                                             self.unicode_encoding)
+ 
+     if (self.categorical1_attribute_name == self.categorical2_attribute_name):
+-      raise Exception, 'Both attribute names are the same'
++      raise Exception('Both attribute names are the same')
+ 
+     # Load the lookup file - - - - - - - - - - - - - - - - - - - - - - - - - -
+     #
+@@ -520,24 +520,24 @@
+       # First line must contain categorical value of the first attribute
+       #
+       if (len(rec_list) < 2):  # Need at least two values in each line
+-        raise Exception, 'Illegal format in lookup file %s: %s' % \
+-                         (self.freq_file_name, str(rec_list))
++        raise Exception('Illegal format in lookup file %s: %s' % \
++                         (self.freq_file_name, str(rec_list)))
+       cate_attr1_val =  rec_list[0].strip()
+       try:
+         cate_attr1_count = int(rec_list[1])
+       except:
+-        raise Exception, 'Value count given for attribute 1 is not an ' + \
+-                         'integer number: %s' % (rec_list[1])
++        raise Exception('Value count given for attribute 1 is not an ' + \
++                         'integer number: %s' % (rec_list[1]))
+ 
+       if (cate_attr1_val == ''):
+-        raise Exception, 'Empty categorical attribute 1 value in lookup ' + \
+-                         'file %s' % (self.lookup_file_name)
++        raise Exception('Empty categorical attribute 1 value in lookup ' + \
++                         'file %s' % (self.lookup_file_name))
+       basefunctions.check_is_positive('cate_attr1_count', cate_attr1_count)
+ 
+       if (cate_attr1_val in cate_val1_dict):
+-        raise Exception, 'Attribute 1 value "%s" occurs twice in ' % \
++        raise Exception('Attribute 1 value "%s" occurs twice in ' % \
+                          (cate_attr1_val) + 'lookup file %s' % \
+-                         (self.lookup_file_name)
++                         (self.lookup_file_name))
+ 
+       cate_val1_dict[cate_attr1_val] = cate_attr1_count
+ 
+@@ -551,33 +551,33 @@
+       while (cate_attr2_data != []):
+         if (len(cate_attr2_data) == 1):
+           if (cate_attr2_data[0] != '\\'):
+-            raise Exception, 'Line in categorical look-up file has illegal' + \
+-                             'format.'
++            raise Exception('Line in categorical look-up file has illegal' + \
++                             'format.')
+           # Get the next record from file data with a continuation of the
+           # categorical values from the second attribute
+           #
+           i += 1
+           cate_attr2_data = lookup_file_data[i]
+           if (len(cate_attr2_data) < 2):
+-            raise Exception, 'Illegal format in lookup file %s: %s' % \
+-                             (self.freq_file_name, str(cate_attr2_data))
++            raise Exception('Illegal format in lookup file %s: %s' % \
++                             (self.freq_file_name, str(cate_attr2_data)))
+ 
+         cate_attr2_val =   cate_attr2_data[0]
+         try:
+           cate_attr2_count = int(cate_attr2_data[1])
+         except:
+-          raise Exception, 'Value count given for attribute 2 is not an ' + \
+-                           'integer number: %s' % (cate_attr2_data[1])
++          raise Exception('Value count given for attribute 2 is not an ' + \
++                           'integer number: %s' % (cate_attr2_data[1]))
+ 
+         if (cate_attr2_val == ''):
+-          raise Exception, 'Empty categorical attribute 2 value in lookup' \
+-                           + ' file %s' % (self.lookup_file_name)
++          raise Exception('Empty categorical attribute 2 value in lookup' \
++                           + ' file %s' % (self.lookup_file_name))
+         basefunctions.check_is_positive('cate_attr2_count', cate_attr2_count)
+ 
+         if (cate_attr2_val in cate_val2_dict):
+-          raise Exception, 'Attribute 2 value "%s" occurs twice in ' % \
++          raise Exception('Attribute 2 value "%s" occurs twice in ' % \
+                            (cate_attr2_val) + 'lookup file %s' % \
+-                           (self.lookup_file_name)
++                           (self.lookup_file_name))
+ 
+         this_cate_val2_dict[cate_attr2_val] = cate_attr2_count
+ 
+@@ -587,7 +587,7 @@
+       #
+       cate_attr2_val_list = []
+ 
+-      for (cate_attr2_val, val2_count) in this_cate_val2_dict.iteritems():
++      for (cate_attr2_val, val2_count) in this_cate_val2_dict.items():
+ 
+         # Append value as many times as given in their counts
+         #
+@@ -606,7 +606,7 @@
+     #
+     cate_attr1_val_list = []
+ 
+-    for (cate_attr1_val, val1_count) in cate_val1_dict.iteritems():
++    for (cate_attr1_val, val1_count) in cate_val1_dict.items():
+ 
+       # Append value as many times as given in their counts
+       #
+@@ -726,7 +726,7 @@
+     self.number_of_atttributes = 2
+     self.attribute_type =        'Compound-Categorical-Continuous'
+ 
+-    for (keyword, value) in kwargs.items():
++    for (keyword, value) in list(kwargs.items()):
+ 
+       if (keyword.startswith('cate')):
+         basefunctions.check_is_non_empty_string('categorical_attribute_name',
+@@ -758,8 +758,8 @@
+         self.unicode_encoding = value
+ 
+       else:
+-        raise Exception, 'Illegal constructor argument keyword: "%s"' % \
+-              (str(keyword))
++        raise Exception('Illegal constructor argument keyword: "%s"' % \
++              (str(keyword)))
+ 
+     # Check if the necessary variables have been set
+     #
+@@ -774,7 +774,7 @@
+                                             self.unicode_encoding)
+ 
+     if (self.categorical_attribute_name == self.continuous_attribute_name):
+-      raise Exception, 'Both attribute names are the same'
++      raise Exception('Both attribute names are the same')
+ 
+     basefunctions.check_is_valid_format_str('continuous_value_type',
+                                             self.continuous_value_type)
+@@ -795,33 +795,33 @@
+     #
+     for rec_list in lookup_file_data:
+       if (len(rec_list) not in [5,7]):
+-        raise Exception, 'Illegal format in lookup file %s: %s' % \
+-                         (self.lookup_file_name, str(rec_list))
++        raise Exception('Illegal format in lookup file %s: %s' % \
++                         (self.lookup_file_name, str(rec_list)))
+       cate_attr_val =  rec_list[0].strip()
+       try:
+         cate_attr_count = int(rec_list[1])
+       except:
+-        raise Exception, 'Value count given for categorical attribute is ' + \
+-                         'not an integer number: %s' % (rec_list[1])
++        raise Exception('Value count given for categorical attribute is ' + \
++                         'not an integer number: %s' % (rec_list[1]))
+       cont_attr_funct = rec_list[2].strip()
+ 
+       if (cate_attr_val == ''):
+-        raise Exception, 'Empty categorical attribute value in lookup file %s'\
+-                         % (self.lookup_file_name)
++        raise Exception('Empty categorical attribute value in lookup file %s'\
++                         % (self.lookup_file_name))
+       if (cate_attr_count <= 0):
+-        raise Exception, 'Count given for categorical attribute is not ' + \
++        raise Exception('Count given for categorical attribute is not ' + \
+                          'positive for value "%s" in lookup ' % \
+-                         (cate_attr_val) + 'file %s' % (self.lookup_file_name)
++                         (cate_attr_val) + 'file %s' % (self.lookup_file_name))
+ 
+       if (cate_attr_val in cate_val_dict):
+-        raise Exception, 'Attribute values "%s" occurs twice in ' % \
++        raise Exception('Attribute values "%s" occurs twice in ' % \
+                          (cate_attr_val) + 'lookup file %s' % \
+-                         (self.lookup_file_name)
++                         (self.lookup_file_name))
+ 
+       if (cont_attr_funct not in ['uniform','normal']):
+-        raise Exception, 'Illegal continuous attribute function given: "%s"' % \
++        raise Exception('Illegal continuous attribute function given: "%s"' % \
+                          (cont_attr_funct) + ' in lookup file %s' % \
+-                         (self.lookup_file_name)
++                         (self.lookup_file_name))
+ 
+       cate_val_dict[cate_attr_val] = cate_attr_count
+ 
+@@ -873,7 +873,7 @@
+     #
+     cate_attr_val_list = []
+ 
+-    for (cate_attr_val, val_count) in cate_val_dict.iteritems():
++    for (cate_attr_val, val_count) in cate_val_dict.items():
+ 
+       # Append value as many times as given in their counts
+       #
+@@ -929,7 +929,7 @@
+         assert cont_attr_val <= max_val
+ 
+     else:
+-      raise Exception, ('Illegal continuous function given:', funct_name)
++      raise Exception('Illegal continuous function given:', funct_name)
+ 
+     cont_attr_val_str = basefunctions.float_to_str(cont_attr_val,
+                                                    self.continuous_value_type)
+@@ -1064,7 +1064,7 @@
+     self.number_of_atttributes = 3
+     self.attribute_type =        'Compound-Categorical-Categorical-Continuous'
+ 
+-    for (keyword, value) in kwargs.items():
++    for (keyword, value) in list(kwargs.items()):
+ 
+       if (keyword.startswith('categorical1')):
+         basefunctions.check_is_non_empty_string('categorical1_attribute_name',
+@@ -1101,8 +1101,8 @@
+         self.unicode_encoding = value
+ 
+       else:
+-        raise Exception, 'Illegal constructor argument keyword: "%s"' % \
+-              (str(keyword))
++        raise Exception('Illegal constructor argument keyword: "%s"' % \
++              (str(keyword)))
+ 
+     # Check if the necessary variables have been set
+     #
+@@ -1123,7 +1123,7 @@
+        (self.categorical1_attribute_name == self.continuous_attribute_name) \
+        or \
+        (self.categorical2_attribute_name == self.continuous_attribute_name):
+-      raise Exception, 'Not all attribute names are different.'
++      raise Exception('Not all attribute names are different.')
+ 
+     basefunctions.check_is_valid_format_str('continuous_value_type',
+                                             self.continuous_value_type)
+@@ -1155,24 +1155,24 @@
+     while list_counter < num_file_rows:  # Process one row after another
+ 
+       if (len(rec_list) < 2):  # Need at least one categorical value and count
+-        raise Exception, 'Illegal format in lookup file %s: %s' % \
+-                         (self.lookup_file_name, str(rec_list))
++        raise Exception('Illegal format in lookup file %s: %s' % \
++                         (self.lookup_file_name, str(rec_list)))
+       cate_attr1_val =  rec_list[0].strip()
+       try:
+         cate_attr1_count = int(rec_list[1])
+       except:
+-        raise Exception, 'Value count given for attribute 1 is not an ' + \
+-                         'integer number: %s' % (rec_list[1])
++        raise Exception('Value count given for attribute 1 is not an ' + \
++                         'integer number: %s' % (rec_list[1]))
+ 
+       if (cate_attr1_val == ''):
+-        raise Exception, 'Empty categorical attribute value 1 in lookup ' + \
+-                         'file %s' % (self.lookup_file_name)
++        raise Exception('Empty categorical attribute value 1 in lookup ' + \
++                         'file %s' % (self.lookup_file_name))
+       basefunctions.check_is_positive('cate_attr1_count', cate_attr1_count)
+ 
+       if (cate_attr1_val in cate_val1_dict):
+-        raise Exception, 'Attribute value "%s" occurs twice in ' % \
++        raise Exception('Attribute value "%s" occurs twice in ' % \
+                          (cate_attr1_val) + 'lookup file %s' % \
+-                         (self.lookup_file_name)
++                         (self.lookup_file_name))
+ 
+       cate_val1_dict[cate_attr1_val] = cate_attr1_count
+ 
+@@ -1192,24 +1192,24 @@
+         try:
+           cate_attr2_count = int(rec_list[1])
+         except:
+-          raise Exception, 'Value count given for categorical attribute 2 ' + \
+-                           'is not an integer number: %s' % (rec_list[1])
++          raise Exception('Value count given for categorical attribute 2 ' + \
++                           'is not an integer number: %s' % (rec_list[1]))
+         cont_attr_funct = rec_list[2].strip()
+ 
+         if (cate_attr2_val == ''):
+-          raise Exception, 'Empty categorical attribute 2 value in lookup ' + \
+-                           'file %s' % (self.lookup_file_name)
++          raise Exception('Empty categorical attribute 2 value in lookup ' + \
++                           'file %s' % (self.lookup_file_name))
+         basefunctions.check_is_positive('cate_attr2_count', cate_attr2_count)
+ 
+         if (cate_attr2_val in this_cate_val2_dict):
+-          raise Exception, 'Attribute value "%s" occurs twice in ' % \
++          raise Exception('Attribute value "%s" occurs twice in ' % \
+                            (cate_attr2_val) + 'lookup file %s' % \
+-                           (self.lookup_file_name)
++                           (self.lookup_file_name))
+ 
+         if (cont_attr_funct not in ['uniform','normal']):
+-          raise Exception, 'Illegal continuous attribute function ' + \
++          raise Exception('Illegal continuous attribute function ' + \
+                            'given: "%s"' % (cont_attr_funct) + \
+-                           ' in lookup file %s' % (self.lookup_file_name)
++                           ' in lookup file %s' % (self.lookup_file_name))
+ 
+         this_cate_val2_dict[cate_attr2_val] = cate_attr2_count
+ 
+@@ -1259,7 +1259,7 @@
+       #
+       cate_attr2_val_list = []
+ 
+-      for (cate_attr2_val, val2_count) in this_cate_val2_dict.iteritems():
++      for (cate_attr2_val, val2_count) in this_cate_val2_dict.items():
+ 
+         # Append value as many times as given in their counts
+         #
+@@ -1280,7 +1280,7 @@
+     #
+     cate_attr1_val_list = []
+ 
+-    for (cate_attr1_val, val1_count) in cate_val1_dict.iteritems():
++    for (cate_attr1_val, val1_count) in cate_val1_dict.items():
+ 
+       # Append value as many times as given in their counts
+       #
+@@ -1346,7 +1346,7 @@
+         assert cont_attr_val <= max_val
+ 
+     else:
+-      raise Exception, ('Illegal continuous function given:', funct_name)
++      raise Exception('Illegal continuous function given:', funct_name)
+ 
+     cont_attr_val_str = basefunctions.float_to_str(cont_attr_val,
+                                                    self.continuous_value_type)
+@@ -1422,7 +1422,7 @@
+     self.number_of_atttributes = 2
+     self.attribute_type =        'Compound-Continuous-Continuous'
+ 
+-    for (keyword, value) in kwargs.items():
++    for (keyword, value) in list(kwargs.items()):
+ 
+       if (keyword.startswith('continuous1_a')):
+         basefunctions.check_is_non_empty_string('continuous1_attribute_name',
+@@ -1463,8 +1463,8 @@
+         self.continuous2_value_type = value
+ 
+       else:
+-        raise Exception, 'Illegal constructor argument keyword: "%s"' % \
+-              (str(keyword))
++        raise Exception('Illegal constructor argument keyword: "%s"' % \
++              (str(keyword)))
+ 
+     # Check if the necessary variables have been set
+     #
+@@ -1484,7 +1484,7 @@
+                                             self.continuous2_value_type)
+ 
+     if (self.continuous1_attribute_name == self.continuous2_attribute_name):
+-      raise Exception, 'Both attribute names are the same'
++      raise Exception('Both attribute names are the same')
+ 
+     basefunctions.check_is_valid_format_str('continuous1_value_type',
+                                             self.continuous1_value_type)
+@@ -1495,14 +1495,14 @@
+     #
+     funct_ret = self.continuous2_function(1.0)
+     if (not isinstance(funct_ret, float)):
+-      raise Exception, ('Function provided for attribute 2 does not return' + \
++      raise Exception('Function provided for attribute 2 does not return' + \
+                         ' a floating-point value:', type(funct_ret))
+ 
+     # Check type and number of parameters given for attribute 1 functions
+     #
+     if (self.continuous1_funct_name not in ['uniform','normal']):
+-      raise Exception, 'Illegal continuous attribute 1 function given: "%s"' % \
+-                         (self.continuous1_funct_name)
++      raise Exception('Illegal continuous attribute 1 function given: "%s"' % \
++                         (self.continuous1_funct_name))
+ 
+     # Get function parameters from file data
+     #
+@@ -1594,7 +1594,7 @@
+         assert cont_attr1_val <= max_val
+ 
+     else:
+-      raise Exception, ('Illegal continuous function given:', funct_name)
++      raise Exception('Illegal continuous function given:', funct_name)
+ 
+     # Generate the second attribute value
+     #
+@@ -1678,7 +1678,7 @@
+     #
+     self.rec_dict = {}
+ 
+-    for (keyword, value) in kwargs.items():  # Process keyword arguments
++    for (keyword, value) in list(kwargs.items()):  # Process keyword arguments
+ 
+       if (keyword.startswith('output')):
+         basefunctions.check_is_non_empty_string('output_file_name', value)
+@@ -1705,7 +1705,7 @@
+       elif (keyword.startswith('attribute_name')):
+         basefunctions.check_is_list('attribute_name_list', value)
+         if not value:
+-          raise Exception, 'attribute_name_list is empty: %s' % (type(value)) 
++          raise Exception('attribute_name_list is empty: %s' % (type(value))) 
+         self.attribute_name_list = value
+ 
+       elif (keyword.startswith('attribute_data')):
+@@ -1717,8 +1717,8 @@
+         self.unicode_encoding = value
+ 
+       else:
+-        raise Exception, 'Illegal constructor argument keyword: "%s"' % \
+-              (str(keyword))
++        raise Exception('Illegal constructor argument keyword: "%s"' % \
++              (str(keyword)))
+ 
+     # Check if the necessary variables have been set
+     #
+@@ -1753,10 +1753,10 @@
+     attr_name_set = set()
+     for attr_name in self.attribute_name_list:
+       if (attr_name == self.rec_id_attr_name):
+-        raise Exception, 'Attribute given has the same name as the record ' + \
+-                         'identifier attribute'
++        raise Exception('Attribute given has the same name as the record ' + \
++                         'identifier attribute')
+       if (attr_name in attr_name_set):
+-        raise Exception, 'Attribute name "%s" is given twice' % (attr_name)
++        raise Exception('Attribute name "%s" is given twice' % (attr_name))
+       attr_name_set.add(attr_name)
+     assert len(attr_name_set) == len(self.attribute_name_list)
+ 
+@@ -1796,11 +1796,11 @@
+       for attr_name in [attr1_name, attr2_name, attr3_name]:
+         if (attr_name != ''):
+           if (attr_name == self.rec_id_attr_name):
+-            raise Exception, 'Attribute given has the same name as the ' + \
+-                             'record identifier attribute'
++            raise Exception('Attribute given has the same name as the ' + \
++                             'record identifier attribute')
+           if (attr_name in attr_name_set):
+-            raise Exception, 'Attribute name "%s" is given twice' % \
+-                             (attr_name) + ' in attribute data definitions'
++            raise Exception('Attribute name "%s" is given twice' % \
++                             (attr_name) + ' in attribute data definitions')
+           attr_name_set.add(attr_name)
+ 
+     # Check that there is an attribute definition provided for each attribute
+@@ -1835,8 +1835,8 @@
+             found_attr_name = True
+ 
+       if (found_attr_name == False):
+-        raise Exception, 'No attribute data available for attribute "%s"' % \
+-                         (attr_name)
++        raise Exception('No attribute data available for attribute "%s"' % \
++                         (attr_name))
+ 
+   # ---------------------------------------------------------------------------
+ 
+@@ -1855,10 +1855,10 @@
+ 
+     num_rec_num_digit = len(str(self.number_of_records))-1  # For digit padding
+ 
+-    print
+-    print 'Generate records with attributes:'
+-    print ' ', attr_name_list
+-    print
++    print()
++    print('Generate records with attributes:')
++    print(' ', attr_name_list)
++    print()
+ 
+     for rec_id in range(self.number_of_records):
+       rec_id_str = 'rec-%s-org' % (str(rec_id).zfill(num_rec_num_digit))
+@@ -1909,20 +1909,20 @@
+       #
+       for attr_name in attr_name_list:
+         attr_val = this_rec_dict.get(attr_name, miss_val_str)
+-        assert isinstance(attr_val, str) or isinstance(attr_val, unicode), \
++        assert isinstance(attr_val, str) or isinstance(attr_val, str), \
+                attr_val
+         this_rec_list.append(attr_val)
+ 
+       rec_dict[rec_id_str] = this_rec_list
+ 
+-      print 'Generated record with ID: %s' % (rec_id_str)
+-      print '  %s' % (str(this_rec_list))
+-      print
+-
+-    print 'Generated %d records' % (self.number_of_records)
+-    print
+-    print '------------------------------------------------------------------'
+-    print
++      print('Generated record with ID: %s' % (rec_id_str))
++      print('  %s' % (str(this_rec_list)))
++      print()
++
++    print('Generated %d records' % (self.number_of_records))
++    print()
++    print('------------------------------------------------------------------')
++    print()
+ 
+     return rec_dict
+ 
+@@ -1932,7 +1932,7 @@
+     """Write the generated records into the defined output file.
+     """
+ 
+-    rec_id_list = self.rec_dict.keys()
++    rec_id_list = list(self.rec_dict.keys())
+     rec_id_list.sort()
+ 
+     # Convert record dictionary into a list, with record identifier added
+--- a/geco-data-generator-corruptor/corruptor.py
++++ b/geco-data-generator-corruptor/corruptor.py
+@@ -108,15 +108,15 @@
+     # Process the keyword argument (all keywords specific to a certain data
+     # generator type were processed in the derived class constructor)
+     #
+-    for (keyword, value) in base_kwargs.items():
++    for (keyword, value) in list(base_kwargs.items()):
+ 
+       if (keyword.startswith('position')):
+         basefunctions.check_is_function_or_method('position_function', value)
+         self.position_function = value
+ 
+       else:
+-        raise Exception, 'Illegal constructor argument keyword: "%s"' % \
+-              (str(keyword))
++        raise Exception('Illegal constructor argument keyword: "%s"' % \
++              (str(keyword)))
+ 
+     basefunctions.check_is_function_or_method('position_function',
+                                               self.position_function)
+@@ -125,9 +125,9 @@
+     #
+     pos = self.position_function('test')
+     if ((not isinstance(pos, int)) or (pos < 0) or (pos > 3)):
+-      raise Exception, 'Position function returns an illegal value (either' + \
++      raise Exception('Position function returns an illegal value (either' + \
+                        'not an integer or and integer out of range: %s' % \
+-                       (str(pos))
++                       (str(pos)))
+ 
+   # ---------------------------------------------------------------------------
+ 
+@@ -137,7 +137,7 @@
+        See implementations in derived classes for details.
+     """
+ 
+-    raise Exception, 'Override abstract method in derived class'
++    raise Exception('Override abstract method in derived class')
+ 
+ # =============================================================================
+ 
+@@ -173,7 +173,7 @@
+     #
+     base_kwargs = {}  # Dictionary, will contain unprocessed arguments
+ 
+-    for (keyword, value) in kwargs.items():
++    for (keyword, value) in list(kwargs.items()):
+ 
+       if (keyword.startswith('miss')):
+         basefunctions.check_is_string('missing_val', value)
+@@ -233,7 +233,7 @@
+     #
+     base_kwargs = {}  # Dictionary, will contain unprocessed arguments
+ 
+-    for (keyword, value) in kwargs.items():
++    for (keyword, value) in list(kwargs.items()):
+ 
+       if (keyword.startswith('char')):
+         basefunctions.check_is_function_or_method('char_set_funct', value)
+@@ -276,7 +276,7 @@
+ 
+     if (abs((self.insert_prob + self.delete_prob + self.substitute_prob + \
+          self.transpose_prob) - 1.0) > 0.0000001):
+-      raise Exception, 'The four edit probabilities do not sum to 1.0'
++      raise Exception('The four edit probabilities do not sum to 1.0')
+ 
+     # Calculate the probability ranges for the four edit operations
+     #
+@@ -411,7 +411,7 @@
+     #
+     base_kwargs = {}  # Dictionary, will contain unprocessed arguments
+ 
+-    for (keyword, value) in kwargs.items():
++    for (keyword, value) in list(kwargs.items()):
+ 
+       if (keyword.startswith('row')):
+         basefunctions.check_is_normalised('row_prob', value)
+@@ -432,8 +432,8 @@
+     basefunctions.check_is_normalised('col_prob', self.col_prob)
+ 
+     if (abs((self.row_prob + self.col_prob) - 1.0) > 0.0000001):
+-      raise Exception, 'Sum of row and column probablities does not sum ' + \
+-                       'to 1.0'
++      raise Exception('Sum of row and column probablities does not sum ' + \
++                       'to 1.0')
+ 
+     # Keyboard substitutions gives two dictionaries with the neigbouring keys
+     # for all leters both for rows and columns (based on ideas implemented by
+@@ -563,7 +563,7 @@
+     #
+     base_kwargs = {}  # Dictionary, will contain unprocessed arguments
+ 
+-    for (keyword, value) in kwargs.items():
++    for (keyword, value) in list(kwargs.items()):
+ 
+       if (keyword.startswith('look')):
+         basefunctions.check_is_non_empty_string('lookup_file_name', value)
+@@ -601,20 +601,20 @@
+     #
+     for rec_list in lookup_file_data:
+       if (len(rec_list) != 2):
+-        raise Exception, 'Illegal format in OCR variations lookup file ' + \
+-                         '%s: %s' % (self.lookup_file_name, str(rec_list))
++        raise Exception('Illegal format in OCR variations lookup file ' + \
++                         '%s: %s' % (self.lookup_file_name, str(rec_list)))
+       org_val = rec_list[0].strip()
+       var_val = rec_list[1].strip()
+ 
+       if (org_val == ''):
+-        raise Exception, 'Empty original OCR value in lookup file %s' % \
+-                         (self.lookup_file_name)
++        raise Exception('Empty original OCR value in lookup file %s' % \
++                         (self.lookup_file_name))
+       if (var_val == ''):
+-        raise Exception, 'Empty OCR variation value in lookup file %s' % \
+-                         (self.lookup_file_name)
++        raise Exception('Empty OCR variation value in lookup file %s' % \
++                         (self.lookup_file_name))
+       if (org_val == var_val):
+-        raise Exception, 'OCR variation is the same as original value in ' + \
+-                         'lookup file %s' % (self.lookup_file_name)
++        raise Exception('OCR variation is the same as original value in ' + \
++                         'lookup file %s' % (self.lookup_file_name))
+ 
+       # Now insert the OCR original value and variation twice (with original
+       # and variation both as key and value), i.e. swapped
+@@ -670,8 +670,8 @@
+         # Randomly select one of the possible modifications that can be applied
+         #
+         mod_to_apply = random.choice(mod_options)
+-        assert mod_to_apply[0] in self.ocr_val_dict.keys()
+-        assert mod_to_apply[2] in self.ocr_val_dict.keys()
++        assert mod_to_apply[0] in list(self.ocr_val_dict.keys())
++        assert mod_to_apply[2] in list(self.ocr_val_dict.keys())
+ 
+         mod_str = in_str[:mod_pos] + mod_to_apply[2] + \
+                   in_str[mod_pos+mod_to_apply[1]:]
+@@ -754,7 +754,7 @@
+     #
+     base_kwargs = {}  # Dictionary, will contain unprocessed arguments
+ 
+-    for (keyword, value) in kwargs.items():
++    for (keyword, value) in list(kwargs.items()):
+ 
+       if (keyword.startswith('look')):
+         basefunctions.check_is_non_empty_string('lookup_file_name', value)
+@@ -794,16 +794,16 @@
+     #
+     for rec_list in lookup_file_data:
+       if (len(rec_list) != 7):
+-        raise Exception, 'Illegal format in phonetic lookup file %s: %s' \
+-                         % (self.lookup_file_name, str(rec_list))
++        raise Exception('Illegal format in phonetic lookup file %s: %s' \
++                         % (self.lookup_file_name, str(rec_list)))
+       val_tuple = ()
+       for val in rec_list:
+         if (val != ''):
+           val = val.strip()
+           val_tuple += val,
+         else:
+-          raise Exception, 'Empty value in phonetic lookup file %s" %s' % \
+-                           (self.lookup_file_name, str(rec_list))
++          raise Exception('Empty value in phonetic lookup file %s" %s' % \
++                           (self.lookup_file_name, str(rec_list)))
+       self.replace_table.append(val_tuple)
+ 
+   # ---------------------------------------------------------------------------
+@@ -1261,7 +1261,7 @@
+     #
+     base_kwargs = {}  # Dictionary, will contain unprocessed arguments
+ 
+-    for (keyword, value) in kwargs.items():
++    for (keyword, value) in list(kwargs.items()):
+ 
+       if (keyword.startswith('look')):
+         basefunctions.check_is_non_empty_string('lookup_file_name', value)
+@@ -1301,20 +1301,20 @@
+     #
+     for rec_list in lookup_file_data:
+       if (len(rec_list) != 2):
+-        raise Exception, 'Illegal format in misspellings lookup file %s: %s' \
+-                         % (self.lookup_file_name, str(rec_list))
++        raise Exception('Illegal format in misspellings lookup file %s: %s' \
++                         % (self.lookup_file_name, str(rec_list)))
+ 
+       org_val =  rec_list[0].strip()
+       if (org_val == ''):
+-        raise Exception, 'Empty original attribute value in lookup file %s' % \
+-                         (self.lookup_file_name)
++        raise Exception('Empty original attribute value in lookup file %s' % \
++                         (self.lookup_file_name))
+       misspell_val = rec_list[1].strip()
+       if (misspell_val == ''):
+-        raise Exception, 'Empty misspelled attribute value in lookup ' + \
+-                         'file %s' % (self.lookup_file_name)
++        raise Exception('Empty misspelled attribute value in lookup ' + \
++                         'file %s' % (self.lookup_file_name))
+       if (org_val == misspell_val):
+-        raise Exception, 'Misspelled value is the same as original value' + \
+-                         ' in lookup file %s' % (self.lookup_file_name)
++        raise Exception('Misspelled value is the same as original value' + \
++                         ' in lookup file %s' % (self.lookup_file_name))
+ 
+       this_org_val_list = self.misspell_dict.get(org_val, [])
+       this_org_val_list.append(misspell_val)
+@@ -1436,7 +1436,7 @@
+ 
+     # Process the keyword arguments
+     #
+-    for (keyword, value) in kwargs.items():
++    for (keyword, value) in list(kwargs.items()):
+ 
+       if (keyword.startswith('number_of_m')):
+         basefunctions.check_is_integer('number_of_mod_records', value)
+@@ -1459,8 +1459,8 @@
+ 
+       elif (keyword.startswith('num_dup_')):
+         if (value not in ['uniform', 'poisson', 'zipf']):
+-          raise Exception, 'Illegal value given for "num_dup_dist": %s' % \
+-                           (str(value))
++          raise Exception('Illegal value given for "num_dup_dist": %s' % \
++                           (str(value)))
+         self.num_dup_dist = value
+ 
+       elif (keyword.startswith('num_mod_per_r')):
+@@ -1482,8 +1482,8 @@
+         self.attr_mod_data_dict = value
+ 
+       else:
+-        raise Exception, 'Illegal constructor argument keyword: "%s"' % \
+-              (str(keyword))
++        raise Exception('Illegal constructor argument keyword: "%s"' % \
++              (str(keyword)))
+ 
+     # Check if the necessary variables have been set
+     #
+@@ -1511,8 +1511,8 @@
+     basefunctions.check_is_positive('max_num_mod_per_attr',
+                                    self.max_num_mod_per_attr)
+     if (self.max_num_mod_per_attr > self.num_mod_per_rec):
+-      raise Exception, 'Number of modifications per record must be larger' + \
+-                       ' than maximum number of modifications per attribute'
++      raise Exception('Number of modifications per record must be larger' + \
++                       ' than maximum number of modifications per attribute')
+     basefunctions.check_is_dictionary('attr_mod_prob_dict',
+                                 self.attr_mod_prob_dict)
+     basefunctions.check_is_dictionary('attr_mod_data_dict',
+@@ -1524,15 +1524,15 @@
+     #
+     if (self.number_of_mod_records > self.number_of_org_records * \
+                                      self.max_num_dup_per_rec):
+-      raise Exception, 'Desired number of duplicates cannot be generated ' + \
++      raise Exception('Desired number of duplicates cannot be generated ' + \
+                        'with given number of original records and maximum' + \
+-                       ' number of duplicates per original record'
++                       ' number of duplicates per original record')
+ 
+     # Check if there are enough attributes given for modifications - - - - - -
+     #
+     if (len(self.attr_mod_prob_dict) < self.num_mod_per_rec):
+-      raise Exception, 'Not enough attribute modifications given to obtain' + \
+-                       ' the desired number of modifications per record'
++      raise Exception('Not enough attribute modifications given to obtain' + \
++                       ' the desired number of modifications per record')
+ 
+     # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     # Create a distribution for the number of duplicates for an original record
+@@ -1600,29 +1600,29 @@
+         self.prob_dist_list.append((num_dup,
+                                     zipf_num[i]+self.prob_dist_list[-1][1]))
+ 
+-    print 'Probability distribution for number of duplicates per record:'
+-    print self.prob_dist_list
++    print('Probability distribution for number of duplicates per record:')
++    print(self.prob_dist_list)
+ 
+     # Check probability list for attributes and dictionary for attributes - - -
+     # if they sum to 1.0
+     #
+     attr_prob_sum = sum(self.attr_mod_prob_dict.values())
+     if (abs(attr_prob_sum - 1.0) > 0.0000001):
+-      raise Exception, 'Attribute modification probabilities do not sum ' + \
+-                       'to 1.0: %f' % (attr_prob_sum)
++      raise Exception('Attribute modification probabilities do not sum ' + \
++                       'to 1.0: %f' % (attr_prob_sum))
+     for attr_name in self.attr_mod_prob_dict:
+       assert self.attr_mod_prob_dict[attr_name] >= 0.0, \
+              'Negative probability given in "attr_mod_prob_dict"'
+       if attr_name not in self.attribute_name_list:
+-        raise Exception, 'Attribute name "%s" in "attr_mod_prob_dict" not ' % \
+-                         (attr_name) + 'listed in "attribute_name_list"'
++        raise Exception('Attribute name "%s" in "attr_mod_prob_dict" not ' % \
++                         (attr_name) + 'listed in "attribute_name_list"')
+ 
+     # Check details of attribute modification data dictionary
+     #
+-    for (attr_name, attr_mod_data_list) in self.attr_mod_data_dict.items():
++    for (attr_name, attr_mod_data_list) in list(self.attr_mod_data_dict.items()):
+       if attr_name not in self.attribute_name_list:
+-        raise Exception, 'Attribute name "%s" in "attr_mod_data_dict" not ' % \
+-                         (attr_name) + 'listed in "attribute_name_list"'
++        raise Exception('Attribute name "%s" in "attr_mod_data_dict" not ' % \
++                         (attr_name) + 'listed in "attribute_name_list"')
+       basefunctions.check_is_list('attr_mod_data_dict entry',
+                                   attr_mod_data_list)
+       prob_sum = 0.0
+@@ -1635,14 +1635,14 @@
+                                           list_elem[0])
+         prob_sum += list_elem[0]
+       if (abs(prob_sum - 1.0) > 0.0000001):
+-        raise Exception, 'Probability sum is no 1.0 for attribute "%s"' % \
+-                         (attr_name)
++        raise Exception('Probability sum is no 1.0 for attribute "%s"' % \
++                         (attr_name))
+ 
+     # Generate a list with attribute probabilities summed for easy selection
+     #
+     self.attr_mod_prob_list = []
+     prob_sum = 0
+-    for (attr_name, attr_prob) in self.attr_mod_prob_dict.items():
++    for (attr_name, attr_prob) in list(self.attr_mod_prob_dict.items()):
+       prob_sum += attr_prob
+       self.attr_mod_prob_list.append([prob_sum, attr_name])
+     #print self.attr_mod_prob_list
+@@ -1666,7 +1666,7 @@
+                            # records, value their number of duplicates
+     total_num_dups = 0     # Total number of duplicates generated
+ 
+-    org_rec_id_list = rec_dict.keys()
++    org_rec_id_list = list(rec_dict.keys())
+     random.shuffle(org_rec_id_list)
+ 
+     org_rec_i = 0  # Loop counter over which record to assign duplicates to
+@@ -1700,7 +1700,7 @@
+     # Deal with the case where every original record has a number of duplicates
+     # but not enough duplicates are generated in total
+     #
+-    org_rec_id_list = rec_dict.keys()
++    org_rec_id_list = list(rec_dict.keys())
+     random.shuffle(org_rec_id_list)
+ 
+     while (total_num_dups < self.number_of_mod_records):
+@@ -1717,29 +1717,29 @@
+     # Generate a histogram of number of duplicates per record
+     #
+     dup_histo = {}
+-    for (org_rec_id_to_mod, num_dups) in dup_rec_num_dict.iteritems():
++    for (org_rec_id_to_mod, num_dups) in dup_rec_num_dict.items():
+       dup_count = dup_histo.get(num_dups, 0) + 1
+       dup_histo[num_dups] = dup_count
+-    print 'Distribution of number of original records with certain number ' + \
+-          'of duplicates:'
+-    dup_histo_keys = dup_histo.keys()
++    print('Distribution of number of original records with certain number ' + \
++          'of duplicates:')
++    dup_histo_keys = list(dup_histo.keys())
+     dup_histo_keys.sort()
+     for num_dups in dup_histo_keys:
+-      print ' Number of records with %d duplicates: %d' % \
+-            (num_dups, dup_histo[num_dups])
+-    print
++      print(' Number of records with %d duplicates: %d' % \
++            (num_dups, dup_histo[num_dups]))
++    print()
+ 
+     num_dup_rec_created = 0  # Count how many duplicate records have been
+                              # generated
+ 
+     # Main loop over all original records for which to generate duplicates - -
+     #
+-    for (org_rec_id_to_mod, num_dups) in dup_rec_num_dict.iteritems():
++    for (org_rec_id_to_mod, num_dups) in dup_rec_num_dict.items():
+       assert (num_dups > 0) and (num_dups <= self.max_num_dup_per_rec)
+ 
+-      print
+-      print 'Generating %d modified (duplicate) records for record "%s"' % \
+-            (num_dups, org_rec_id_to_mod)
++      print()
++      print('Generating %d modified (duplicate) records for record "%s"' % \
++            (num_dups, org_rec_id_to_mod))
+ 
+       rec_to_mod_list = rec_dict[org_rec_id_to_mod]
+ 
+@@ -1757,8 +1757,8 @@
+ 
+         org_rec_num = org_rec_id_to_mod.split('-')[1]
+         dup_rec_id = 'rec-%s-dup-%d' % (org_rec_num, d)
+-        print '  Generate identifier for duplicate record based on "%s": %s' \
+-              % (org_rec_id_to_mod, dup_rec_id)
++        print('  Generate identifier for duplicate record based on "%s": %s' \
++              % (org_rec_id_to_mod, dup_rec_id))
+ 
+         # Count the number of modifications in this record (counted as the
+         # number of modified attributes)
+@@ -1769,7 +1769,7 @@
+         # that can be modified
+         #
+         attr_mod_count_dict = {}
+-        for attr_name in self.attr_mod_prob_dict.keys():
++        for attr_name in list(self.attr_mod_prob_dict.keys()):
+           attr_mod_count_dict[attr_name] = 0
+ 
+         # Abort generating modifications after a larger number of tries to
+@@ -1818,14 +1818,14 @@
+             # record
+             #
+             if (new_attr_val != org_attr_val):
+-              print '  Selected attribute for modification:', mod_attr_name
+-              print '    Selected corruptor:', corruptor_method.name
++              print('  Selected attribute for modification:', mod_attr_name)
++              print('    Selected corruptor:', corruptor_method.name)
+ 
+               # The following weird string printing construct is to overcome
+               # problems with printing non-ASCII characters
+               #              
+-              print '      Original attribute value:', str([org_attr_val])[1:-1]
+-              print '      Modified attribute value:', str([new_attr_val])[1:-1]
++              print('      Original attribute value:', str([org_attr_val])[1:-1])
++              print('      Modified attribute value:', str([new_attr_val])[1:-1])
+ 
+               dup_rec_list[mod_attr_name_index] = new_attr_val
+ 
+@@ -1838,7 +1838,7 @@
+               #
+               num_mod_in_record = 0
+ 
+-              for num_attr_mods in attr_mod_count_dict.values():
++              for num_attr_mods in list(attr_mod_count_dict.values()):
+                 if (num_attr_mods > 0):
+                   num_mod_in_record += 1  # One more modification
+               assert num_mod_in_record <= self.num_mod_per_rec
+@@ -1856,8 +1856,8 @@
+           for check_dup_rec in this_dup_rec_list:
+             if (check_dup_rec == dup_rec_list):  # Same as a previous duplicate
+               is_diff = False
+-              print 'Same duplicate:', check_dup_rec
+-              print '               ', dup_rec_list
++              print('Same duplicate:', check_dup_rec)
++              print('               ', dup_rec_list)
+ 
+         if (is_diff == True):  # Only keep duplicate records that are different
+ 
+@@ -1868,19 +1868,19 @@
+           d += 1
+           num_dup_rec_created += 1
+ 
+-          print 'Original record:'
+-          print ' ', rec_to_mod_list
+-          print 'Record with %d modified attributes' % (num_mod_in_record),
++          print('Original record:')
++          print(' ', rec_to_mod_list)
++          print('Record with %d modified attributes' % (num_mod_in_record), end=' ')
+           attr_mod_str = '('
+           for a in self.attribute_name_list:
+             if (attr_mod_count_dict.get(a,0) > 0):
+               attr_mod_str += '%d in %s, ' % (attr_mod_count_dict[a],a)
+           attr_mod_str = attr_mod_str[:-1]+'):'
+-          print attr_mod_str
+-          print ' ', dup_rec_list
+-          print '%d of %d duplicate records generated so far' % \
+-                (num_dup_rec_created, self.number_of_mod_records)
+-          print
++          print(attr_mod_str)
++          print(' ', dup_rec_list)
++          print('%d of %d duplicate records generated so far' % \
++                (num_dup_rec_created, self.number_of_mod_records))
++          print()
+ 
+     return rec_dict
+ 

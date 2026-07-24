@@ -1,0 +1,17 @@
+{
+  "cpu_model": "AMD Ryzen 7 5800H with Radeon Graphics",
+  "physical_cores": 8,
+  "logical_cores": 16,
+  "ram_bytes": 16476839936,
+  "ram_gib": 15.345252990722656,
+  "os": "Microsoft Windows 11 Home Single Language 10.0.26200 build 26200",
+  "python": "3.10.5",
+  "python_executable": ".venv/Scripts/python.exe",
+  "python_implementation": "CPython",
+  "pandas": "2.3.3",
+  "numpy": "2.2.6",
+  "timer": "time.perf_counter inside score_candidates",
+  "timed_scope": "preparation + blocking + feature computation + scoring; excludes CSV load and threshold metrics",
+  "warmups_per_condition": 1,
+  "reported_repetitions_per_condition": 5
+}

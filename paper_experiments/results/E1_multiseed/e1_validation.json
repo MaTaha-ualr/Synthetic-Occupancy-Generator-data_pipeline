@@ -1,0 +1,15 @@
+{
+  "noise_f1_lower_all_seeds": true,
+  "low_overlap_true_links_lower_all_seeds": true,
+  "one_to_many_records_b_higher_all_seeds": true,
+  "one_to_many_candidate_pairs_higher_all_seeds": true,
+  "clean_vs_high_noise_f1_gap": 0.02121839198789628,
+  "clean_sd": 0.0002721594463711992,
+  "high_noise_sd": 0.0010122436355843774,
+  "pooled_sd": 0.0007411841680817782,
+  "gap_to_pooled_sd_ratio": 28.627691876919798,
+  "gap_exceeds_3x_pooled_sd": true,
+  "paired_gap_sd": 0.0009056461102642313,
+  "independent_truth_population_count": 10,
+  "calibrated_generator_regime": true
+}

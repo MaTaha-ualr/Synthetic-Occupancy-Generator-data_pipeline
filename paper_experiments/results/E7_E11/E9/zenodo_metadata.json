@@ -1,0 +1,29 @@
+{
+  "title": "Synthetic Occupancy Generator paper evaluation artifact: E0-E11",
+  "upload_type": "dataset",
+  "description": "Reproducible scenario configurations, evaluation code, per-seed metrics, repeated runtime measurements, external-validity diagnostics, capability comparison, and an upstream-GeCo head-to-head analysis for the Synthetic Occupancy Generator data pipeline.",
+  "creators": [
+    {
+      "name": "[REPLACE WITH PAPER AUTHOR LIST]"
+    }
+  ],
+  "version": "paper-artifact-2026.07.22",
+  "publication_date": "2026-07-22",
+  "access_right": "open",
+  "license": "other-open",
+  "keywords": [
+    "entity resolution",
+    "record linkage",
+    "synthetic population",
+    "benchmark",
+    "reproducibility"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/MaTaha-ualr/Synthetic-Occupancy-Generator-data_pipeline",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ],
+  "notes": "Replace the creator placeholder and verify the tag target before deposition. Do not add a DOI locally; use only the DOI returned by Zenodo."
+}

@@ -39,7 +39,9 @@
       "married_couple_family": 46.69385,
       "single_parent_male_householder": 5.208111,
       "single_parent_female_householder": 12.109163,
-      "nonfamily_household": 35.988876
+      "nonfamily_household": 35.988876,
+      "nonfamily_living_alone": 28.865592,
+      "nonfamily_not_alone": 7.123284
     }
   }
 }

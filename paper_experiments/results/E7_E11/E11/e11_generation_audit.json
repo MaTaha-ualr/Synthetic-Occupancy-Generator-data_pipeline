@@ -1,0 +1,172 @@
+[
+  {
+    "seed": 20260720,
+    "modifications_per_record": 5,
+    "generation_seconds": 4.060485099995276,
+    "candidate_seconds": 9.610497400004533,
+    "mean_true_pair_features": {
+      "first": 0.6124003483376728,
+      "last": 0.6153404586828995,
+      "dob": 0.7718929254302104,
+      "street": 0.7538464193288154,
+      "city": 0.2719885277246654,
+      "state": 0.5304015296367113,
+      "postal": 0.13967495219885276
+    },
+    "score_artifact": "paper_experiments\\results\\E7_E11\\E11\\scores\\geco_seed_20260720.parquet",
+    "score_sha256": "553da4f6ac06c643d8fbec83f0a8651b76d1f96055ffdb8514879981ac4f9581"
+  },
+  {
+    "seed": 20260721,
+    "modifications_per_record": 5,
+    "generation_seconds": 4.301683099998627,
+    "candidate_seconds": 8.529375300000538,
+    "mean_true_pair_features": {
+      "first": 0.6209367537979972,
+      "last": 0.6167621568224014,
+      "dob": 0.7661567877629063,
+      "street": 0.7474117395063317,
+      "city": 0.2692160611854684,
+      "state": 0.5320267686424475,
+      "postal": 0.14311663479923517
+    },
+    "score_artifact": "paper_experiments\\results\\E7_E11\\E11\\scores\\geco_seed_20260721.parquet",
+    "score_sha256": "9b9faf6fc7f21802c508fde829d483c4dd19cb4f0781d55dc34d10e6edcc5404"
+  },
+  {
+    "seed": 20260722,
+    "modifications_per_record": 5,
+    "generation_seconds": 3.781544400000712,
+    "candidate_seconds": 8.132838399993489,
+    "mean_true_pair_features": {
+      "first": 0.6123124182620944,
+      "last": 0.6181526420578801,
+      "dob": 0.7699808795411089,
+      "street": 0.7492813899209629,
+      "city": 0.26663479923518163,
+      "state": 0.5387189292543021,
+      "postal": 0.14388145315487572
+    },
+    "score_artifact": "paper_experiments\\results\\E7_E11\\E11\\scores\\geco_seed_20260722.parquet",
+    "score_sha256": "fc0411240e611b2c4af355956b9cdeaee50cfbd75cb905edb34558b49275fca7"
+  },
+  {
+    "seed": 20260723,
+    "modifications_per_record": 5,
+    "generation_seconds": 4.059712699992815,
+    "candidate_seconds": 8.082732599999872,
+    "mean_true_pair_features": {
+      "first": 0.615050350132887,
+      "last": 0.6169152558950814,
+      "dob": 0.7635755258126194,
+      "street": 0.7501108363010935,
+      "city": 0.272848948374761,
+      "state": 0.532887189292543,
+      "postal": 0.1404397705544933
+    },
+    "score_artifact": "paper_experiments\\results\\E7_E11\\E11\\scores\\geco_seed_20260723.parquet",
+    "score_sha256": "980a1106fc0f1ad7448605a296a66e56cebc8e3143d659cccaff7b0f244becad"
+  },
+  {
+    "seed": 20260724,
+    "modifications_per_record": 5,
+    "generation_seconds": 4.555342299994663,
+    "candidate_seconds": 8.184104100000695,
+    "mean_true_pair_features": {
+      "first": 0.6205494126519296,
+      "last": 0.6154773851199756,
+      "dob": 0.7641491395793499,
+      "street": 0.752765889914452,
+      "city": 0.27036328871892923,
+      "state": 0.5316443594646272,
+      "postal": 0.13996175908221797
+    },
+    "score_artifact": "paper_experiments\\results\\E7_E11\\E11\\scores\\geco_seed_20260724.parquet",
+    "score_sha256": "07bc3474616c4d2b5af14cb7e80e19d05d3c3fefffaa709d2fc8c6a508475d1e"
+  },
+  {
+    "seed": 20260725,
+    "modifications_per_record": 5,
+    "generation_seconds": 4.153474100006861,
+    "candidate_seconds": 8.199538699991535,
+    "mean_true_pair_features": {
+      "first": 0.6107377368499877,
+      "last": 0.6157532960513213,
+      "dob": 0.7677820267686425,
+      "street": 0.7516285277857652,
+      "city": 0.2729445506692161,
+      "state": 0.5350860420650095,
+      "postal": 0.14302103250478013
+    },
+    "score_artifact": "paper_experiments\\results\\E7_E11\\E11\\scores\\geco_seed_20260725.parquet",
+    "score_sha256": "042d74e9fc26ed355331d0e9990a757ff1735d8f3b9c794b3d24a94cb987e30f"
+  },
+  {
+    "seed": 20260726,
+    "modifications_per_record": 5,
+    "generation_seconds": 3.756891600001836,
+    "candidate_seconds": 8.830139300000155,
+    "mean_true_pair_features": {
+      "first": 0.6159308890602887,
+      "last": 0.621332514449754,
+      "dob": 0.7711281070745698,
+      "street": 0.7500571531143515,
+      "city": 0.269980879541109,
+      "state": 0.5349904397705545,
+      "postal": 0.1372848948374761
+    },
+    "score_artifact": "paper_experiments\\results\\E7_E11\\E11\\scores\\geco_seed_20260726.parquet",
+    "score_sha256": "409d7f97caa7c1c4cbabf08c8af378e9fd262a484ef17245f356151a6b9c25c3"
+  },
+  {
+    "seed": 20260727,
+    "modifications_per_record": 5,
+    "generation_seconds": 4.025250799997593,
+    "candidate_seconds": 8.608712900007959,
+    "mean_true_pair_features": {
+      "first": 0.6176761741867486,
+      "last": 0.6191352909448151,
+      "dob": 0.7724665391969407,
+      "street": 0.7495808777925427,
+      "city": 0.27734225621414915,
+      "state": 0.5304015296367113,
+      "postal": 0.13957934990439771
+    },
+    "score_artifact": "paper_experiments\\results\\E7_E11\\E11\\scores\\geco_seed_20260727.parquet",
+    "score_sha256": "af0b69665848f96d210052d7bd4bf6ab2fc1d3d5e313591294bd14fcb6054ed6"
+  },
+  {
+    "seed": 20260728,
+    "modifications_per_record": 5,
+    "generation_seconds": 3.696816600000602,
+    "candidate_seconds": 8.388522499997634,
+    "mean_true_pair_features": {
+      "first": 0.6141988592212378,
+      "last": 0.616471304524113,
+      "dob": 0.7665391969407266,
+      "street": 0.7459268932884082,
+      "city": 0.2696940726577438,
+      "state": 0.5347992351816444,
+      "postal": 0.14235181644359465
+    },
+    "score_artifact": "paper_experiments\\results\\E7_E11\\E11\\scores\\geco_seed_20260728.parquet",
+    "score_sha256": "ba00a845dc636b6d567a705f57c82e05c746816adb109c71c70f3425af929b8c"
+  },
+  {
+    "seed": 20260729,
+    "modifications_per_record": 5,
+    "generation_seconds": 4.25388920000114,
+    "candidate_seconds": 8.244581400009338,
+    "mean_true_pair_features": {
+      "first": 0.6153969365538371,
+      "last": 0.6145823429672179,
+      "dob": 0.7641491395793499,
+      "street": 0.7477739806955768,
+      "city": 0.27533460803059273,
+      "state": 0.537093690248566,
+      "postal": 0.13661567877629063
+    },
+    "score_artifact": "paper_experiments\\results\\E7_E11\\E11\\scores\\geco_seed_20260729.parquet",
+    "score_sha256": "2f87b2a3695cef7b5a38f8ac29a37dcd4e92444e850523da7754e60fdc650764"
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "artifact_version": "paper-artifact-2026.07.23",
+  "run_dates": {
+    "e1_e7_e8": "2026-07-22",
+    "e2": "2026-07-24",
+    "e3": "2026-07-25",
+    "e11": "2026-07-27"
+  },
+  "evaluation_seeds": [
+    20260720,
+    20260721,
+    20260722,
+    20260723,
+    20260724,
+    20260725,
+    20260726,
+    20260727,
+    20260728,
+    20260729
+  ],
+  "calibration_seed": 20260719,
+  "local_annotated_tag": "paper-artifact-2026.07.23",
+  "local_tag_target_resolution": "git rev-list -n 1 paper-artifact-2026.07.23",
+  "github_release": {
+    "published": false,
+    "url": null,
+    "reason": "No authenticated GitHub CLI account is available in this environment."
+  },
+  "zenodo_archive": {
+    "published": false,
+    "doi": null,
+    "url": null,
+    "reason": "No authenticated Zenodo deposition was available; no DOI has been invented."
+  },
+  "reference_10_ready": false,
+  "remaining_external_actions": [
+    "Push the annotated tag to the canonical GitHub remote.",
+    "Create a GitHub release from the tag.",
+    "Deposit that release on Zenodo and obtain the DOI.",
+    "Replace the explicit placeholders in REFERENCE_10_TEMPLATE.md."
+  ]
+}

@@ -35,6 +35,17 @@ propensity score. If a rate is omitted it defaults to `0.0` (that event won't fi
 The built-in priors currently cover move/cohabit/birth/divorce only; lifecycle rates
 are explicit scenario knobs.
 
+Here `p` is an annual probability in `[0, 1]`, not a published count rate.
+The conversion assumes an equal, constant discrete hazard in each simulation
+step. Public rates are converted before this formula is applied: ACS mobility
+percentages become age-specific person/household probabilities; NCHS births
+per 1,000 women become probabilities for eligible people in the corresponding
+age band; and the CDC divorce count per 1,000 total population is rescaled to
+the active-couple population at risk. A person can participate in at most one
+locked event per step, and eligibility changes and competing events can make
+achieved annual incidence differ from the input probability. Birth generation
+allows at most one birth per eligible parent per step.
+
 | Key | Default | Meaning |
 | --- | --- | --- |
 | `move_rate_pct` | `0.0` | Annual chance a solo person or couple-household changes address (`MOVE`). |
@@ -46,6 +57,9 @@ are explicit scenario knobs.
 | `name_change_rate_pct` | `0.0` | Annual chance an age-16+ person has a legal, marriage, or divorce name change (`NAME_CHANGE`). Later observed snapshots and timeline rows replay the new name. |
 | `adoption_rate_pct` | `0.0` | Annual chance an under-18 person moves into an eligible adult household as an adopted child (`ADOPTION`). The event records previous/adoptive parent keys and can update the child's surname. |
 | `use_priors_for_unspecified_rates` | `false` | When true, omitted move/cohabit/birth/divorce rates use real-world priors instead of `0.0`. Lifecycle rates currently remain explicit-only. |
+| `calibrate_to_public_targets` | `false` | Use age-specific ACS mobility and NCHS fertility hazards and convert the CDC total-population divorce rate to an eligible-couple hazard. |
+| `initialize_households_from_public_targets` | `false` | Build the initial Phase-2 family graph from checked-in ACS household-type shares instead of creating one singleton household per person. |
+| `mobility_age_0_17_pct`, `mobility_age_18_34_pct`, `mobility_age_35_64_pct`, `mobility_age_65_plus_pct` | public priors | Optional household-hazard calibration inputs. E7 measures the resulting person-level mover rates. |
 
 Lifecycle rates are part of the active event engine. They are not currently backed by
 external priors: set `death_rate_pct`, `name_change_rate_pct`, or `adoption_rate_pct`

@@ -1,0 +1,37 @@
+{
+  "seeds": [
+    20260720,
+    20260721,
+    20260722,
+    20260723,
+    20260724,
+    20260725,
+    20260726,
+    20260727,
+    20260728,
+    20260729
+  ],
+  "seed_count": 10,
+  "clean_truth_runs_found": 10,
+  "dimensions_per_seed": 1,
+  "row_count": 270,
+  "unique_phase1_population_hashes": [
+    "020415572131e3836d9595e8f4710bb3e5d11e6732d315988c950f95e8a6f394",
+    "165dc94f3ebc6f60964cf372052d0319280d5a4bddd6ee9d64f15dbabe42168c",
+    "269f470d685e576dea7f52594d7ab340f768bc59422b5ed13d025fdd5f85877f",
+    "2a675329a0c8fdebef8d062f2e691e0d252958d496a0e5216b57f36ab09d6e0a",
+    "5103fa2490851e09e425a21aae73377cecb5203581b632dca27f7ff56c6325b5",
+    "7b137e87e8cb87689f307a47c23ac259451ec9001beafb090fa2733852192985",
+    "7db07a20b6bf174620582864b11bb3bd933f93d44932473df707ec7305762a7a",
+    "956ce6cb46362ba6d35e67ec9bb92ad2fa14b4a31954ab3eaf50402beb64a440",
+    "c35f9f8d4bd974ee13ac2057c080668633ed56cbfaa6491a45297b830cf147a9",
+    "f5d635f7006ec97a8353c1a565efca8d862be50ea7c6b782871edbf58bf87506"
+  ],
+  "independent_phase1_population_count": 10,
+  "household_size_target_available": false,
+  "cohabitation_target_semantically_comparable": false,
+  "e1_cohabitation_divorce_fertility_enabled": true,
+  "summary_dimensions": 27,
+  "comparable_large_deviation_count": 0,
+  "bad_deviations_retained": false
+}

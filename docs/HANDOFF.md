@@ -31,10 +31,10 @@ SOG is a deterministic synthetic data pipeline for entity-resolution benchmarkin
 
 ## Validation Snapshot At Handoff
 
-- Date: June 22, 2026
+- Date: July 23, 2026
 - Branch: current working tree
-- Test result: `368 passed in 154.45s`
-- Command used: `python -m pytest -q phase2\tests`
+- Test result: `398 passed in 148.61s` (`369` Phase 2, `9` evaluation, `20` repository tests)
+- Command used: `python -m pytest phase2\tests evaluation\tests tests -q`
 
 ## Important Repository Rules
 
