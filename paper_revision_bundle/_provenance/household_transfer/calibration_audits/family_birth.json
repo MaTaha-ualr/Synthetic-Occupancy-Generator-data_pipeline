@@ -1,0 +1,52 @@
+{
+  "calibration_disjoint_from_evaluation": true,
+  "calibration_metrics": {
+    "f1": 0.9458568475163436,
+    "fn": 36,
+    "fp": 933,
+    "precision": 0.9007129935085666,
+    "predicted": 9397,
+    "recall": 0.995764705882353,
+    "tp": 8464
+  },
+  "calibration_scores_path": "paper_revision_bundle/_provenance/household_transfer/calibration_scores/family_birth.parquet",
+  "calibration_scores_sha256": "234dcd80e300fdedc704fa596ea42bd35e0f71fa7d97b0174f84203f3ee7f81b",
+  "calibration_seed": 20260719,
+  "candidate_pairs": 39851,
+  "candidate_recall": 0.9977647058823529,
+  "candidate_seconds": 9.517713999986881,
+  "co_resident_distinct_person_negative_pairs": 900,
+  "config_path": "paper_revision_bundle/_provenance/household_transfer/configs/paper_revision_household_family_birth_calibration_s20260719.yaml",
+  "config_sha256": "24f2612b54960254e209d84fd425c628fc827125833871ad6cab4b5da05a428b",
+  "evaluation_seeds": [
+    20260720,
+    20260721,
+    20260722,
+    20260723,
+    20260724,
+    20260725,
+    20260726,
+    20260727,
+    20260728,
+    20260729
+  ],
+  "model_path": "paper_revision_bundle/_provenance/household_transfer/models/splink_family_birth.json",
+  "model_sha256": "53268e6ded824145efdc8ae4e3dd41363bafe13ff18f9f397420227ad50d546e",
+  "negative_pairs": 31370,
+  "oracle_metrics": {
+    "oracle_f1": 0.9458568475163436,
+    "oracle_precision": 0.9007129935085666,
+    "oracle_recall": 0.995764705882353,
+    "oracle_threshold": 0.924984109417991
+  },
+  "positive_pairs": 8481,
+  "run_manifest_sha256": "12b4576c2f45269698e1de112140734233da66d55faaef1e33d79ec9b220e57a",
+  "run_path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719",
+  "scenario": "family_birth",
+  "score_label_sha256": "81006c70020a08425d741924abd1e11e7c4f64d24b8ac38076ba3af30d401f2c",
+  "seconds": 32.152540400013095,
+  "threshold": 0.924984109417991,
+  "threshold_selection": "Maximum F1 over every finite distinct observed Splink score; ties break by precision then higher threshold.",
+  "training_seed": 20260719,
+  "true_pairs": 8500
+}

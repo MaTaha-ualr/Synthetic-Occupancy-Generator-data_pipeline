@@ -1,0 +1,16 @@
+k,matcher,n_seeds,f1_mean,f1_sd,candidate_recall_mean,scoring_recall_given_candidate_mean,candidate_recall_scope
+0.0,baseline,10,0.9985589622647659,0.0003539331280120404,1.0,0.9982858606951499,shared blocking candidate recall; identical across matchers within seed/k
+0.0,learned,10,0.9996535110369109,0.00010346925003300302,1.0,0.9996717131251502,shared blocking candidate recall; identical across matchers within seed/k
+0.0,splink,10,0.9966556714310402,0.0003382924760883455,1.0,0.998225052615114,shared blocking candidate recall; identical across matchers within seed/k
+0.5,baseline,10,0.9904473379037132,0.0011469459615191817,0.9991974953847336,0.9828796626964762,shared blocking candidate recall; identical across matchers within seed/k
+0.5,learned,10,0.997251414249664,0.0004444635869444314,0.9991974953847336,0.9956072469344992,shared blocking candidate recall; identical across matchers within seed/k
+0.5,splink,10,0.9885296453893708,0.0011055058887515102,0.9991974953847336,0.9826606473593893,shared blocking candidate recall; identical across matchers within seed/k
+1.0,baseline,10,0.9807291641861351,0.001094845648652681,0.9972522994681304,0.965790149701047,shared blocking candidate recall; identical across matchers within seed/k
+1.0,learned,10,0.9931342335373097,0.0006523461940632556,0.9972522994681304,0.9893811628819659,shared blocking candidate recall; identical across matchers within seed/k
+1.0,splink,10,0.9783621498029692,0.0012422012521593807,0.9972522994681304,0.964729638527162,shared blocking candidate recall; identical across matchers within seed/k
+2.0,baseline,10,0.9556898255347427,0.001690333065937891,0.990151854473192,0.9248762206413449,shared blocking candidate recall; identical across matchers within seed/k
+2.0,learned,10,0.9793553655219147,0.0013142746698799113,0.990151854473192,0.9693756960072237,shared blocking candidate recall; identical across matchers within seed/k
+2.0,splink,10,0.9513302079832785,0.0016508351517273104,0.990151854473192,0.9201489559719811,shared blocking candidate recall; identical across matchers within seed/k
+4.0,baseline,10,0.890307338881585,0.002455153870686104,0.9631724609982186,0.8333633010392131,shared blocking candidate recall; identical across matchers within seed/k
+4.0,learned,10,0.9292876290405996,0.002303525357079026,0.9631724609982186,0.901272539917741,shared blocking candidate recall; identical across matchers within seed/k
+4.0,splink,10,0.8730401250135978,0.003002256710205197,0.9631724609982186,0.8072085473430372,shared blocking candidate recall; identical across matchers within seed/k

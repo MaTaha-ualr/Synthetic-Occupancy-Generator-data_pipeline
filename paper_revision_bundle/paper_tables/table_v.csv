@@ -1,0 +1,28 @@
+dimension,original_source_value,source_year_version,original_units_and_denominator,achieved_mean,achieved_sd,relative_deviation_pct,result_by_construction_or_emergent,estimability
+mobility_overall_pct,11.762824,"ACS 1-year 2024, table B07001",percent of residents age 1+ in the stated age group,11.369815346876338,0.3922901439179352,-3.3411079951860354,emergent,comparable
+mobility_age_0_17_pct,10.510834,"ACS 1-year 2024, table B07001",percent of residents age 1+ in the stated age group,11.134339391349783,0.5058974468184412,5.932025863502232,emergent,comparable
+mobility_age_18_34_pct,22.582798020647232,"ACS 1-year 2024, table B07001",percent of residents age 1+ in the stated age group,21.67857142857143,0.9081527156130096,-4.004050300804514,emergent,comparable
+mobility_age_35_64_pct,8.891885,"ACS 1-year 2024, table B07001",percent of residents age 1+ in the stated age group,8.482939632545932,0.4301758178931019,-4.599085204701457,emergent,comparable
+mobility_age_65_plus_pct,5.518441,"ACS 1-year 2024, table B07001",percent of residents age 1+ in the stated age group,4.819209039548023,0.7400195452856998,-12.67082425003688,emergent,comparable
+household_married_couple_family_pct,46.69385,"ACS 1-year 2024, table B11001",share of all households,46.6955153422502,0.0,0.0035665130422933,by construction,comparable
+household_single_parent_male_householder_pct,5.208111,"ACS 1-year 2024, table B11001",share of all households,5.212431156569631,0.0,0.0829505471298695,by construction,comparable
+household_single_parent_female_householder_pct,12.109163,"ACS 1-year 2024, table B11001",share of all households,12.116443745082616,1.872444516574241e-15,0.0601259152479325,by construction,comparable
+household_nonfamily_living_alone_pct,28.865592,"ACS 1-year 2024, table B11001",share of all households,28.87490165224233,0.0,0.0322517280862609,by construction,comparable
+household_nonfamily_not_alone_pct,7.123284,"ACS 1-year 2024, table B11001",share of all households,7.100708103855231,9.362222582871205e-16,-0.3169310130660078,by construction,comparable
+household_type_js_distance,0.0,"ACS 1-year 2024, table B11001",share of all households,0.0003861460238361,0.0,,by construction,comparable
+household_size_js_distance,,"ACS 1-year 2024, table B11001",not available from B11001,,0.0,,not estimable,"not estimable: source has household types, not size bins"
+cohabitation_rate_per_1000,6.1,"CDC/NCHS provisional marriage statistic, 2023","marriages per 1,000 total population",0.8657590519630174,0.3257284807524684,-85.80722865634397,emergent and not comparable,not comparable: COHABIT is not marriage
+divorce_rate_per_1000,2.4,"CDC/NCHS provisional reporting areas, 2023","divorces per 1,000 total population",2.30537238765696,0.3853139115601444,-3.942817180959994,emergent,comparable
+fertility_10-14_per_1000,0.2,"NCHS provisional 2024, VSRR No. 38 Table 1","births per 1,000 women in the named age group",0.0,0.0,-100.0,emergent,not estimable: fewer than five expected events across ten seeds
+fertility_15-19_per_1000,12.7,"NCHS provisional 2024, VSRR No. 38 Table 1","births per 1,000 women in the named age group",12.067306204626018,5.115167003217789,-4.981840908456547,emergent,comparable
+fertility_20-24_per_1000,56.7,"NCHS provisional 2024, VSRR No. 38 Table 1","births per 1,000 women in the named age group",53.878999451001015,16.247740187494646,-4.975309610227493,emergent,comparable
+fertility_25-29_per_1000,91.4,"NCHS provisional 2024, VSRR No. 38 Table 1","births per 1,000 women in the named age group",92.76965788498372,21.481560667668088,1.4985316028268156,emergent,comparable
+fertility_30-34_per_1000,95.4,"NCHS provisional 2024, VSRR No. 38 Table 1","births per 1,000 women in the named age group",104.43920280808724,10.60738018069646,9.475055354389138,emergent,comparable
+fertility_35-39_per_1000,55.0,"NCHS provisional 2024, VSRR No. 38 Table 1","births per 1,000 women in the named age group",65.37968057550492,13.032074339221998,18.87214650091804,emergent,comparable
+fertility_40-44_per_1000,12.8,"NCHS provisional 2024, VSRR No. 38 Table 1","births per 1,000 women in the named age group",9.663360715031406,3.4833597164791805,-24.504994413817148,emergent,comparable
+fertility_45-54_per_1000,1.1,"NCHS provisional 2024, VSRR No. 38 Table 1","births per 1,000 women in the named age group",1.6300193738465716,1.7227988464765442,48.183579440597406,emergent,not estimable: fewer than five expected events across ten seeds
+surname_top_10_share_pct,7.634050105744991,checked-in Phase 1 conditional Census surname pool,population share,7.568555964233164,0.491520115531406,-0.8579212947860916,by construction / sampler fidelity check,comparable
+surname_top_50_share_pct,19.77523350922551,checked-in Phase 1 conditional Census surname pool,population share,20.81940465407047,0.5395947990978519,5.280196283689062,by construction / sampler fidelity check,comparable
+surname_top_100_share_pct,27.30069456864089,checked-in Phase 1 conditional Census surname pool,population share,30.23806552349596,0.7175413189022883,10.759326827637194,by construction / sampler fidelity check,comparable
+surname_rank_slope_10_1000,-0.781669262596665,checked-in Phase 1 conditional Census surname pool,distributional summary,-0.7725003947182272,0.0179906001454528,-1.1729855985355415,by construction / sampler fidelity check,comparable
+surname_js_distance,0.0,checked-in Phase 1 conditional Census surname pool,distributional summary,0.0904640209217621,0.0091189015828398,,by construction / sampler fidelity check,comparable

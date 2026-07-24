@@ -1,0 +1,168 @@
+{
+  "bootstrap_seed": 20260723,
+  "bootstrap_unit": "paired seed",
+  "fixed_threshold_f1_loss": {
+    "percentile_ci95": [
+      0.02070562993783995,
+      0.021755018764932847
+    ],
+    "point_estimate": 0.021228885475968906
+  },
+  "formulas": {
+    "fixed_threshold_f1_loss": "clean fixed F1 - high-noise fixed F1",
+    "oracle_recovered_amount": "high-noise oracle F1 - high-noise fixed F1",
+    "recovery_percentage": "100 * mean(recovered amount) / mean(fixed loss)",
+    "unrecovered_percentage": "100 - recovery percentage"
+  },
+  "legacy_baseline_threshold_grid": [
+    0.3,
+    0.31,
+    0.32,
+    0.33,
+    0.34,
+    0.35,
+    0.36,
+    0.37,
+    0.38,
+    0.39,
+    0.4,
+    0.41,
+    0.42,
+    0.43,
+    0.44,
+    0.45,
+    0.46,
+    0.47,
+    0.48,
+    0.49,
+    0.5,
+    0.51,
+    0.52,
+    0.53,
+    0.54,
+    0.55,
+    0.56,
+    0.57,
+    0.58,
+    0.59,
+    0.6,
+    0.61,
+    0.62,
+    0.63,
+    0.64,
+    0.65,
+    0.66,
+    0.67,
+    0.68,
+    0.69,
+    0.7,
+    0.71,
+    0.72,
+    0.73,
+    0.74,
+    0.75,
+    0.76,
+    0.77,
+    0.78,
+    0.79,
+    0.8,
+    0.81,
+    0.82,
+    0.83,
+    0.84,
+    0.85,
+    0.86,
+    0.87,
+    0.88,
+    0.89,
+    0.9,
+    0.91,
+    0.92,
+    0.93,
+    0.94,
+    0.95
+  ],
+  "legacy_grid_source": "paper_experiments/evaluate_baseline.py choose_threshold; this grid applies to the E0/E1 calibration variant, not E4's exact-score oracle.",
+  "observed_per_seed_high_noise_oracle_thresholds": [
+    {
+      "on_legacy_0_01_grid": true,
+      "oracle_threshold": 0.55,
+      "seed": 20260720
+    },
+    {
+      "on_legacy_0_01_grid": true,
+      "oracle_threshold": 0.55,
+      "seed": 20260721
+    },
+    {
+      "on_legacy_0_01_grid": true,
+      "oracle_threshold": 0.55,
+      "seed": 20260722
+    },
+    {
+      "on_legacy_0_01_grid": true,
+      "oracle_threshold": 0.55,
+      "seed": 20260723
+    },
+    {
+      "on_legacy_0_01_grid": true,
+      "oracle_threshold": 0.55,
+      "seed": 20260724
+    },
+    {
+      "on_legacy_0_01_grid": true,
+      "oracle_threshold": 0.55,
+      "seed": 20260725
+    },
+    {
+      "on_legacy_0_01_grid": true,
+      "oracle_threshold": 0.55,
+      "seed": 20260726
+    },
+    {
+      "on_legacy_0_01_grid": true,
+      "oracle_threshold": 0.55,
+      "seed": 20260727
+    },
+    {
+      "on_legacy_0_01_grid": true,
+      "oracle_threshold": 0.55,
+      "seed": 20260728
+    },
+    {
+      "on_legacy_0_01_grid": true,
+      "oracle_threshold": 0.55,
+      "seed": 20260729
+    }
+  ],
+  "oracle_recovered_amount": {
+    "percentile_ci95": [
+      0.008048513566203518,
+      0.009186386836168365
+    ],
+    "point_estimate": 0.008618823029959755
+  },
+  "oracle_threshold_procedure": "evaluation.metrics.threshold_curve evaluates +infinity (no predictions) and every finite distinct observed score. oracle_from_curve removes +infinity, then maximizes F1, precision, and threshold in that order.",
+  "oracle_threshold_selection_scope": "selected separately within each seed",
+  "pooled_curve_artifact": "paper_experiments/results/E2_E6/E4/pr_curve_baseline_high_noise.csv",
+  "pooled_curve_artifact_sha256": "a6920f7cd6459f2452e328fb628d28fea16656b6c2f9f6854f6d7a190e9fe884",
+  "pooled_curve_note": "The checked-in pooled curve is separate from the per-seed oracle selection used in this bootstrap.",
+  "recovery_percentage": {
+    "percentile_ci95": [
+      38.76808108868273,
+      42.33081573899468
+    ],
+    "point_estimate": 40.599507872027765
+  },
+  "replicates": 20000,
+  "sampling": "Sample the ten paired seed indices with replacement; compute each statistic from the resampled seed means.",
+  "source_filename": "paper_experiments/results/E2_E6/E4/e1_e4_e5_per_run.csv",
+  "thresholds_not_on_legacy_grid_explanation": "Any non-grid value is valid because E4 uses every observed score boundary, not the 0.01 legacy calibration grid. The oracle is a descriptive in-sample upper bound.",
+  "unrecovered_percentage": {
+    "percentile_ci95": [
+      57.66918426100532,
+      61.23191891131727
+    ],
+    "point_estimate": 59.400492127972235
+  }
+}

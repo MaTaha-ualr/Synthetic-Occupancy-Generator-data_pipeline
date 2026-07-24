@@ -1,0 +1,414 @@
+{
+  "generated_at_utc": "2026-07-24T04:26:23Z",
+  "run_id": "2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719",
+  "scenario_id": "paper_revision_household_adoption_blended_family_calibration_s20260719",
+  "seed": 20260719,
+  "truth_counts": {
+    "truth_people": 8230,
+    "truth_households": 3933,
+    "truth_household_memberships": 10410,
+    "truth_residence_history": 10410,
+    "truth_events": 2180
+  },
+  "simulation_quality": {
+    "consistency_checks": {
+      "residence_intervals_non_overlapping": true,
+      "membership_intervals_non_overlapping": true,
+      "coupled_people_colocated": true
+    },
+    "violation_counts": {
+      "residence_overlap_or_date_order": 0,
+      "membership_overlap_or_date_order": 0,
+      "couple_colocation": 0
+    },
+    "event_counts": {
+      "ADOPTION": 2180
+    }
+  },
+  "phase2_quality": {
+    "truth_consistency": {
+      "event_age_validation": {
+        "checks_enabled": {
+          "min_marriage_age": true,
+          "fertility_age_range": true,
+          "leave_home_adult_check": true
+        },
+        "invalid_event_age_count": 0,
+        "invalid_event_age_by_rule": {},
+        "preview": []
+      },
+      "time_overlap_errors": {
+        "residence_overlap_or_date_order": 0,
+        "household_membership_overlap_or_date_order": 0,
+        "no_time_overlap_errors": true
+      },
+      "household_size_constraints": {
+        "household_size_range_config": {
+          "min": 1,
+          "max": 8
+        },
+        "households_evaluated": 3933,
+        "size_points_evaluated": 7055,
+        "violating_households": 0,
+        "violation_points": 0,
+        "peak_size_summary": {
+          "min": 1,
+          "mean": 2.347317569285533,
+          "max": 4
+        },
+        "within_config_constraints": true
+      }
+    },
+    "scenario_metrics": {
+      "event_counts": {
+        "couples_formed": 0,
+        "divorces": 0,
+        "births": 0,
+        "moves": 0,
+        "leave_home": 0,
+        "deaths": 0,
+        "name_changes": 0,
+        "adoptions": 2180
+      },
+      "lifecycle_population_counts": {
+        "people_deceased": 0,
+        "people_with_death_date": 0
+      },
+      "moves_per_person_distribution": {
+        "people_evaluated": 8230,
+        "total_moves": 0,
+        "moved_people": 0,
+        "moved_people_pct": 0.0,
+        "mean_moves_per_person": 0.0,
+        "max_moves_for_person": 0,
+        "distribution": {
+          "0": 8230
+        }
+      },
+      "household_type_shares": {
+        "shares_pct": {
+          "married_couple_family": 46.681922196796336,
+          "nonfamily_living_alone": 28.858377828629543,
+          "single_female": 12.102720569539791,
+          "nonfamily_not_alone": 7.1446732773963895,
+          "single_male": 5.212306127637936
+        },
+        "count": 3933
+      }
+    },
+    "er_benchmark_metrics": {
+      "available": true,
+      "topology": {
+        "dataset_count": 2,
+        "dataset_ids": [
+          "A",
+          "B"
+        ],
+        "relationship_mode": "one_to_one"
+      },
+      "per_dataset": {
+        "A": {
+          "row_count": 8166,
+          "entity_count": 8166,
+          "duplicate_rows": 0,
+          "duplicate_row_rate_pct": 0.0,
+          "multi_record_entity_pct": 0.0,
+          "attribute_drift": {
+            "rows": 8166,
+            "mapped_rows": 8166,
+            "unmapped_rows": 0,
+            "name_drift_count": 0,
+            "name_drift_rate_pct": 0.0,
+            "address_drift_count": 0,
+            "address_drift_rate_pct": 0.0,
+            "phone_available": true,
+            "phone_drift_count": 0,
+            "phone_drift_rate_pct": 0.0
+          },
+          "crosswalk_ambiguity_records": 0
+        },
+        "B": {
+          "row_count": 8179,
+          "entity_count": 8179,
+          "duplicate_rows": 0,
+          "duplicate_row_rate_pct": 0.0,
+          "multi_record_entity_pct": 0.0,
+          "attribute_drift": {
+            "rows": 8179,
+            "mapped_rows": 8179,
+            "unmapped_rows": 0,
+            "name_drift_count": 2126,
+            "name_drift_rate_pct": 25.993397725883362,
+            "address_drift_count": 0,
+            "address_drift_rate_pct": 0.0,
+            "phone_available": true,
+            "phone_drift_count": 0,
+            "phone_drift_rate_pct": 0.0
+          },
+          "crosswalk_ambiguity_records": 0
+        }
+      },
+      "within_file_duplicate_rates": {
+        "A": {
+          "row_count": 8166,
+          "entity_count": 8166,
+          "duplicate_rows": 0,
+          "duplicate_row_rate_pct": 0.0,
+          "multi_record_entity_pct": 0.0
+        },
+        "B": {
+          "row_count": 8179,
+          "entity_count": 8179,
+          "duplicate_rows": 0,
+          "duplicate_row_rate_pct": 0.0,
+          "multi_record_entity_pct": 0.0
+        },
+        "dataset_a": {
+          "row_count": 8166,
+          "entity_count": 8166,
+          "duplicate_rows": 0,
+          "duplicate_row_rate_pct": 0.0,
+          "multi_record_entity_pct": 0.0
+        },
+        "dataset_b": {
+          "row_count": 8179,
+          "entity_count": 8179,
+          "duplicate_rows": 0,
+          "duplicate_row_rate_pct": 0.0,
+          "multi_record_entity_pct": 0.0
+        }
+      },
+      "attribute_drift_rates": {
+        "A": {
+          "rows": 8166,
+          "mapped_rows": 8166,
+          "unmapped_rows": 0,
+          "name_drift_count": 0,
+          "name_drift_rate_pct": 0.0,
+          "address_drift_count": 0,
+          "address_drift_rate_pct": 0.0,
+          "phone_available": true,
+          "phone_drift_count": 0,
+          "phone_drift_rate_pct": 0.0
+        },
+        "B": {
+          "rows": 8179,
+          "mapped_rows": 8179,
+          "unmapped_rows": 0,
+          "name_drift_count": 2126,
+          "name_drift_rate_pct": 25.993397725883362,
+          "address_drift_count": 0,
+          "address_drift_rate_pct": 0.0,
+          "phone_available": true,
+          "phone_drift_count": 0,
+          "phone_drift_rate_pct": 0.0
+        },
+        "dataset_a": {
+          "rows": 8166,
+          "mapped_rows": 8166,
+          "unmapped_rows": 0,
+          "name_drift_count": 0,
+          "name_drift_rate_pct": 0.0,
+          "address_drift_count": 0,
+          "address_drift_rate_pct": 0.0,
+          "phone_available": true,
+          "phone_drift_count": 0,
+          "phone_drift_rate_pct": 0.0
+        },
+        "dataset_b": {
+          "rows": 8179,
+          "mapped_rows": 8179,
+          "unmapped_rows": 0,
+          "name_drift_count": 2126,
+          "name_drift_rate_pct": 25.993397725883362,
+          "address_drift_count": 0,
+          "address_drift_rate_pct": 0.0,
+          "phone_available": true,
+          "phone_drift_count": 0,
+          "phone_drift_rate_pct": 0.0
+        }
+      },
+      "crosswalk_ambiguity": {
+        "A": 0,
+        "B": 0,
+        "a_record_to_multiple_persons": 0,
+        "b_record_to_multiple_persons": 0
+      },
+      "cross_file_overlap": {
+        "dataset_ids": [
+          "A",
+          "B"
+        ],
+        "overlap_entities": 8166,
+        "a_entities": 8166,
+        "b_entities": 8179,
+        "union_entities": 8179,
+        "overlap_pct_of_union": 99.84105636385866,
+        "overlap_pct_of_a": 100.0,
+        "overlap_pct_of_b": 99.84105636385866
+      },
+      "match_cardinality_achieved": {
+        "one_to_one": 8166,
+        "one_to_many": 0,
+        "many_to_one": 0,
+        "many_to_many": 0,
+        "evaluated_overlap_entities": 8166,
+        "dataset_ids": [
+          "A",
+          "B"
+        ]
+      }
+    },
+    "quality_config": {
+      "household_size_min": 1,
+      "household_size_max": 8
+    }
+  },
+  "constraints_validation": {
+    "valid": true,
+    "violation_count": 0,
+    "violations": [],
+    "config": {
+      "min_marriage_age": 18,
+      "max_partner_age_gap": 25,
+      "partner_age_gap_distribution": null,
+      "fertility_age_min": 15,
+      "fertility_age_max": 49,
+      "allow_underage_marriage": false,
+      "allow_child_lives_alone": false,
+      "enforce_non_overlapping_residence_intervals": true
+    }
+  },
+  "observed_quality": {
+    "coverage": {
+      "base_entities": 8166,
+      "late_only_entities": 13,
+      "a_entities_base": 8166,
+      "b_entities_base": 8166,
+      "overlap_entities": 8166,
+      "a_only_entities": 0,
+      "b_only_entities": 13,
+      "late_only_in_b": 13,
+      "relationship_mode": "one_to_one",
+      "dataset_entities": {
+        "A": 8166,
+        "B": 8179
+      },
+      "candidate_entities": {
+        "A": 8166,
+        "B": 8179
+      },
+      "union_entities": 8179,
+      "all_dataset_overlap_entities": 8166,
+      "pairwise_overlap": {
+        "A__B": {
+          "dataset_ids": [
+            "A",
+            "B"
+          ],
+          "overlap_entities": 8166,
+          "union_entities": 8179,
+          "overlap_pct_of_union": 99.84105636385866
+        }
+      }
+    },
+    "datasets": {
+      "A": {
+        "rows": 8166,
+        "entities": 8166,
+        "duplicates": 0,
+        "noise_counts": {
+          "name_typo": 0,
+          "dob_shift": 0,
+          "ssn_mask": 0,
+          "phone_mask": 0,
+          "address_missing": 0,
+          "middle_name_missing": 0,
+          "phonetic_error": 0,
+          "ocr_error": 0,
+          "date_swap": 0,
+          "zip_digit_error": 0,
+          "nickname": 0,
+          "suffix_missing": 0
+        }
+      },
+      "B": {
+        "rows": 8179,
+        "entities": 8179,
+        "duplicates": 0,
+        "noise_counts": {
+          "name_typo": 0,
+          "dob_shift": 0,
+          "ssn_mask": 0,
+          "phone_mask": 0,
+          "address_missing": 0,
+          "middle_name_missing": 0,
+          "phonetic_error": 0,
+          "ocr_error": 0,
+          "date_swap": 0,
+          "zip_digit_error": 0,
+          "nickname": 0,
+          "suffix_missing": 0
+        }
+      }
+    },
+    "entity_record_map_rows": 16345,
+    "master_dataset_rows": 26755,
+    "source_dataset_rows": 16345,
+    "master_source_rows": 16345,
+    "master_timeline_rows": 10410,
+    "master_dataset_deduped_rows": 0,
+    "match_mode": "one_to_one",
+    "dataset_ids": [
+      "A",
+      "B"
+    ],
+    "dataset_count": 2,
+    "pairwise_crosswalk_rows": {
+      "A__B": 8179
+    },
+    "dataset_a": {
+      "rows": 8166,
+      "entities": 8166,
+      "duplicates": 0,
+      "noise_counts": {
+        "name_typo": 0,
+        "dob_shift": 0,
+        "ssn_mask": 0,
+        "phone_mask": 0,
+        "address_missing": 0,
+        "middle_name_missing": 0,
+        "phonetic_error": 0,
+        "ocr_error": 0,
+        "date_swap": 0,
+        "zip_digit_error": 0,
+        "nickname": 0,
+        "suffix_missing": 0
+      }
+    },
+    "dataset_b": {
+      "rows": 8179,
+      "entities": 8179,
+      "duplicates": 0,
+      "noise_counts": {
+        "name_typo": 0,
+        "dob_shift": 0,
+        "ssn_mask": 0,
+        "phone_mask": 0,
+        "address_missing": 0,
+        "middle_name_missing": 0,
+        "phonetic_error": 0,
+        "ocr_error": 0,
+        "date_swap": 0,
+        "zip_digit_error": 0,
+        "nickname": 0,
+        "suffix_missing": 0
+      }
+    },
+    "crosswalk_rows": 8179,
+    "overlap_entities": 8166,
+    "a_only_entities": 0,
+    "b_only_entities": 13
+  },
+  "status": "ok"
+}

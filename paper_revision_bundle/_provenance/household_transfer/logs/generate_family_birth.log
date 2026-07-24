@@ -1,0 +1,48 @@
+{
+  "run_id": "2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719",
+  "scenario_id": "paper_revision_household_family_birth_calibration_s20260719",
+  "seed": 20260719,
+  "run_dir": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719",
+  "truth_counts": {
+    "truth_people": 6429,
+    "truth_households": 4575,
+    "truth_household_memberships": 8509,
+    "truth_residence_history": 7807,
+    "truth_events": 1419
+  },
+  "event_counts": {
+    "COHABIT": 1040,
+    "BIRTH": 379
+  },
+  "observed_counts": {
+    "datasets": {
+      "A": 8500,
+      "B": 6400
+    },
+    "entity_record_map_rows": 14900,
+    "master_dataset_rows": 20935,
+    "master_source_rows": 13128,
+    "master_timeline_rows": 7807,
+    "crosswalk_rows": 8850,
+    "pairwise_crosswalk_rows": {
+      "A__B": 8850
+    }
+  },
+  "quality_status": "ok",
+  "validation_valid": true,
+  "paths": {
+    "run_dir": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719",
+    "datasets": {
+      "A": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719\\DatasetA.csv",
+      "B": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719\\DatasetB.csv"
+    },
+    "entity_record_map": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719\\entity_record_map.csv",
+    "master_dataset": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719\\masterDataset.csv",
+    "truth_crosswalk": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719\\truth_crosswalk.csv",
+    "pairwise_crosswalks": {},
+    "quality_report": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719\\quality_report.json",
+    "manifest": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719\\manifest.json"
+  }
+}
+
+--- STDERR ---

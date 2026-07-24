@@ -1,0 +1,640 @@
+{
+  "calculation_policy": "All calculations use unrounded per-seed CSV values. Display values are derived afterward with round-half-even Python formatting.",
+  "clean_to_high_noise_f1_difference": {
+    "clean_mean_f1_unrounded": 0.9986653970476169,
+    "difference_displayed_4dp": "0.0212",
+    "difference_unrounded": 0.021228885475968795,
+    "formula": "mean(clean baseline fixed F1) - mean(high-noise baseline fixed F1)",
+    "high_noise_mean_f1_unrounded": 0.9774365115716481,
+    "source_filenames": [
+      "paper_experiments/results/E2_E6/E4/e1_e4_e5_per_run.csv"
+    ]
+  },
+  "low_overlap_true_link_reduction": {
+    "absolute_reduction": 7265.9,
+    "clean_true_links_mean": 9516.4,
+    "formula": "mean(clean true links) - mean(low-overlap true links); percentage uses mean(clean true links) as denominator",
+    "low_overlap_true_links_mean": 2250.5,
+    "relative_reduction_pct": 76.35135135135135,
+    "source_filenames": [
+      "paper_experiments/results/E1_multiseed/e1_per_run.csv"
+    ]
+  },
+  "matcher_spread_all_fourteen_scenarios": {
+    "display_precision": 4,
+    "formula": "max of three matcher mean F1 values minus minimum",
+    "scenarios": [
+      {
+        "displayed_4dp_order": "learned > baseline > splink",
+        "displayed_4dp_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ],
+        "matcher_mean_f1_displayed_4dp": {
+          "baseline": "0.9992",
+          "learned": "0.9998",
+          "splink": "0.9974"
+        },
+        "matcher_mean_f1_unrounded": {
+          "baseline": 0.9991648382738194,
+          "learned": 0.9997689156033586,
+          "splink": 0.9974410950006349
+        },
+        "scenario": "clean_baseline_linkage",
+        "spread_displayed_4dp": "0.0023",
+        "spread_formula": "max(matcher mean F1) - min(matcher mean F1)",
+        "spread_unrounded": 0.0023278206027236292,
+        "unrounded_order": "learned > baseline > splink",
+        "unrounded_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ]
+      },
+      {
+        "displayed_4dp_order": "learned > baseline > splink",
+        "displayed_4dp_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ],
+        "matcher_mean_f1_displayed_4dp": {
+          "baseline": "0.9784",
+          "learned": "0.9940",
+          "splink": "0.9773"
+        },
+        "matcher_mean_f1_unrounded": {
+          "baseline": 0.9784200556247022,
+          "learned": 0.9939591297302774,
+          "splink": 0.977252539505338
+        },
+        "scenario": "single_movers",
+        "spread_displayed_4dp": "0.0167",
+        "spread_formula": "max(matcher mean F1) - min(matcher mean F1)",
+        "spread_unrounded": 0.016706590224939477,
+        "unrounded_order": "learned > baseline > splink",
+        "unrounded_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ]
+      },
+      {
+        "displayed_4dp_order": "learned > baseline > splink",
+        "displayed_4dp_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ],
+        "matcher_mean_f1_displayed_4dp": {
+          "baseline": "0.8702",
+          "learned": "0.8871",
+          "splink": "0.8591"
+        },
+        "matcher_mean_f1_unrounded": {
+          "baseline": 0.8702410481094722,
+          "learned": 0.8870903388540862,
+          "splink": 0.8591022072628004
+        },
+        "scenario": "couple_merge",
+        "spread_displayed_4dp": "0.0280",
+        "spread_formula": "max(matcher mean F1) - min(matcher mean F1)",
+        "spread_unrounded": 0.02798813159128577,
+        "unrounded_order": "learned > baseline > splink",
+        "unrounded_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ]
+      },
+      {
+        "displayed_4dp_order": "learned > baseline > splink",
+        "displayed_4dp_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ],
+        "matcher_mean_f1_displayed_4dp": {
+          "baseline": "0.9323",
+          "learned": "0.9377",
+          "splink": "0.8839"
+        },
+        "matcher_mean_f1_unrounded": {
+          "baseline": 0.932342579439297,
+          "learned": 0.9377437679400307,
+          "splink": 0.8838616789314445
+        },
+        "scenario": "family_birth",
+        "spread_displayed_4dp": "0.0539",
+        "spread_formula": "max(matcher mean F1) - min(matcher mean F1)",
+        "spread_unrounded": 0.053882089008586154,
+        "unrounded_order": "learned > baseline > splink",
+        "unrounded_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ]
+      },
+      {
+        "displayed_4dp_order": "learned > baseline > splink",
+        "displayed_4dp_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ],
+        "matcher_mean_f1_displayed_4dp": {
+          "baseline": "0.9910",
+          "learned": "0.9940",
+          "splink": "0.9875"
+        },
+        "matcher_mean_f1_unrounded": {
+          "baseline": 0.9910110884906101,
+          "learned": 0.9939857947685482,
+          "splink": 0.9875208680824457
+        },
+        "scenario": "divorce_custody",
+        "spread_displayed_4dp": "0.0065",
+        "spread_formula": "max(matcher mean F1) - min(matcher mean F1)",
+        "spread_unrounded": 0.006464926686102546,
+        "unrounded_order": "learned > baseline > splink",
+        "unrounded_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ]
+      },
+      {
+        "displayed_4dp_order": "learned > baseline > splink",
+        "displayed_4dp_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ],
+        "matcher_mean_f1_displayed_4dp": {
+          "baseline": "0.9907",
+          "learned": "0.9972",
+          "splink": "0.9889"
+        },
+        "matcher_mean_f1_unrounded": {
+          "baseline": 0.9906942469602574,
+          "learned": 0.9972148517645083,
+          "splink": 0.9888823310437094
+        },
+        "scenario": "roommates_split",
+        "spread_displayed_4dp": "0.0083",
+        "spread_formula": "max(matcher mean F1) - min(matcher mean F1)",
+        "spread_unrounded": 0.00833252072079893,
+        "unrounded_order": "learned > baseline > splink",
+        "unrounded_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ]
+      },
+      {
+        "displayed_4dp_order": "learned > baseline > splink",
+        "displayed_4dp_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ],
+        "matcher_mean_f1_displayed_4dp": {
+          "baseline": "0.9807",
+          "learned": "0.9931",
+          "splink": "0.9784"
+        },
+        "matcher_mean_f1_unrounded": {
+          "baseline": 0.9807291641861351,
+          "learned": 0.9931342335373097,
+          "splink": 0.9783621498029692
+        },
+        "scenario": "high_noise_identity_drift",
+        "spread_displayed_4dp": "0.0148",
+        "spread_formula": "max(matcher mean F1) - min(matcher mean F1)",
+        "spread_unrounded": 0.014772083734340469,
+        "unrounded_order": "learned > baseline > splink",
+        "unrounded_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ]
+      },
+      {
+        "displayed_4dp_order": "learned > baseline > splink",
+        "displayed_4dp_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ],
+        "matcher_mean_f1_displayed_4dp": {
+          "baseline": "0.9971",
+          "learned": "0.9988",
+          "splink": "0.9940"
+        },
+        "matcher_mean_f1_unrounded": {
+          "baseline": 0.9970652654690909,
+          "learned": 0.9988221523969806,
+          "splink": 0.9940371082334076
+        },
+        "scenario": "low_overlap_sparse_coverage",
+        "spread_displayed_4dp": "0.0048",
+        "spread_formula": "max(matcher mean F1) - min(matcher mean F1)",
+        "spread_unrounded": 0.004785044163572949,
+        "unrounded_order": "learned > baseline > splink",
+        "unrounded_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ]
+      },
+      {
+        "displayed_4dp_order": "learned > baseline > splink",
+        "displayed_4dp_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ],
+        "matcher_mean_f1_displayed_4dp": {
+          "baseline": "0.9970",
+          "learned": "0.9990",
+          "splink": "0.9945"
+        },
+        "matcher_mean_f1_unrounded": {
+          "baseline": 0.9970080371068066,
+          "learned": 0.9989678789007892,
+          "splink": 0.9944522980607896
+        },
+        "scenario": "asymmetric_source_coverage",
+        "spread_displayed_4dp": "0.0045",
+        "spread_formula": "max(matcher mean F1) - min(matcher mean F1)",
+        "spread_unrounded": 0.004515580839999589,
+        "unrounded_order": "learned > baseline > splink",
+        "unrounded_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ]
+      },
+      {
+        "displayed_4dp_order": "learned > baseline > splink",
+        "displayed_4dp_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ],
+        "matcher_mean_f1_displayed_4dp": {
+          "baseline": "0.9960",
+          "learned": "0.9983",
+          "splink": "0.9925"
+        },
+        "matcher_mean_f1_unrounded": {
+          "baseline": 0.9960222095833455,
+          "learned": 0.9982635875454828,
+          "splink": 0.992522459680756
+        },
+        "scenario": "high_duplication_dedup",
+        "spread_displayed_4dp": "0.0057",
+        "spread_formula": "max(matcher mean F1) - min(matcher mean F1)",
+        "spread_unrounded": 0.005741127864726803,
+        "unrounded_order": "learned > baseline > splink",
+        "unrounded_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ]
+      },
+      {
+        "displayed_4dp_order": "learned > baseline > splink",
+        "displayed_4dp_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ],
+        "matcher_mean_f1_displayed_4dp": {
+          "baseline": "0.9979",
+          "learned": "0.9991",
+          "splink": "0.9953"
+        },
+        "matcher_mean_f1_unrounded": {
+          "baseline": 0.9979099017716024,
+          "learned": 0.9991261511238978,
+          "splink": 0.9952594034217856
+        },
+        "scenario": "three_source_partial_overlap",
+        "spread_displayed_4dp": "0.0039",
+        "spread_formula": "max(matcher mean F1) - min(matcher mean F1)",
+        "spread_unrounded": 0.00386674770211215,
+        "unrounded_order": "learned > baseline > splink",
+        "unrounded_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ]
+      },
+      {
+        "displayed_4dp_order": "baseline = learned > splink",
+        "displayed_4dp_rank_tie_groups": [
+          [
+            "baseline",
+            "learned"
+          ],
+          [
+            "splink"
+          ]
+        ],
+        "matcher_mean_f1_displayed_4dp": {
+          "baseline": "0.9999",
+          "learned": "0.9999",
+          "splink": "0.9984"
+        },
+        "matcher_mean_f1_unrounded": {
+          "baseline": 0.9998849325567531,
+          "learned": 0.9999360687386935,
+          "splink": 0.9983659089950955
+        },
+        "scenario": "name_change_lifecycle",
+        "spread_displayed_4dp": "0.0016",
+        "spread_formula": "max(matcher mean F1) - min(matcher mean F1)",
+        "spread_unrounded": 0.0015701597435979764,
+        "unrounded_order": "learned > baseline > splink",
+        "unrounded_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ]
+      },
+      {
+        "displayed_4dp_order": "learned > baseline > splink",
+        "displayed_4dp_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ],
+        "matcher_mean_f1_displayed_4dp": {
+          "baseline": "0.9997",
+          "learned": "0.9998",
+          "splink": "0.9983"
+        },
+        "matcher_mean_f1_unrounded": {
+          "baseline": 0.9996613358179754,
+          "learned": 0.9998306041784304,
+          "splink": 0.9982523133690148
+        },
+        "scenario": "death_survivor_persistence",
+        "spread_displayed_4dp": "0.0016",
+        "spread_formula": "max(matcher mean F1) - min(matcher mean F1)",
+        "spread_unrounded": 0.0015782908094156278,
+        "unrounded_order": "learned > baseline > splink",
+        "unrounded_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ]
+      },
+      {
+        "displayed_4dp_order": "learned > baseline > splink",
+        "displayed_4dp_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ],
+        "matcher_mean_f1_displayed_4dp": {
+          "baseline": "0.8460",
+          "learned": "0.8547",
+          "splink": "0.7391"
+        },
+        "matcher_mean_f1_unrounded": {
+          "baseline": 0.8460481758729547,
+          "learned": 0.8547041623587646,
+          "splink": 0.7391133008020859
+        },
+        "scenario": "adoption_blended_family",
+        "spread_displayed_4dp": "0.1156",
+        "spread_formula": "max(matcher mean F1) - min(matcher mean F1)",
+        "spread_unrounded": 0.11559086155667864,
+        "unrounded_order": "learned > baseline > splink",
+        "unrounded_rank_tie_groups": [
+          [
+            "learned"
+          ],
+          [
+            "baseline"
+          ],
+          [
+            "splink"
+          ]
+        ]
+      }
+    ],
+    "source_filenames": [
+      "paper_experiments/results/E2_E6/E2/e2_per_run_metrics.csv"
+    ]
+  },
+  "one_to_many_runtime_increase": {
+    "e1_across_independent_seeds": {
+      "clean_mean_seconds": 11.152914199997031,
+      "experimental_unit": "ten independently generated seed populations",
+      "formula": "mean(one-to-many runtime) - mean(clean runtime)",
+      "increase_pct": 49.51047834660786,
+      "increase_seconds": 5.521861170005284,
+      "one_to_many_mean_seconds": 16.674775370002315,
+      "source_filenames": [
+        "paper_experiments/results/E1_multiseed/e1_per_run.csv"
+      ]
+    },
+    "e8_fixed_population_repeated_timing": {
+      "clean_mean_seconds": 11.078251059993637,
+      "experimental_unit": "five timed repeats on fixed seed 20260720 artifacts",
+      "formula": "mean(one-to-many repeats) - mean(clean repeats)",
+      "increase_pct": 47.739227711741556,
+      "increase_seconds": 5.288671500008785,
+      "one_to_many_mean_seconds": 16.366922560002422,
+      "source_filenames": [
+        "paper_experiments/results/E7_E11/E8/e8_runtime_repetitions.csv"
+      ]
+    }
+  },
+  "oracle_improvement": {
+    "formula": "mean(high-noise per-seed oracle F1) - mean(high-noise fixed F1)",
+    "high_noise_oracle_mean_f1_unrounded": 0.9860553346016079,
+    "improvement_displayed_4dp": "0.0086",
+    "improvement_unrounded": 0.008618823029959755,
+    "source_filenames": [
+      "paper_experiments/results/E2_E6/E4/e1_e4_e5_per_run.csv"
+    ]
+  },
+  "percentage_recovered": {
+    "formula": "100 * oracle improvement / clean-to-high-noise fixed F1 difference",
+    "source_filenames": [
+      "paper_experiments/results/E2_E6/E4/e1_e4_e5_per_run.csv"
+    ],
+    "value_displayed_1dp_pct": "40.6",
+    "value_unrounded_pct": 40.59950787202798
+  },
+  "percentage_unrecovered": {
+    "formula": "100 - percentage recovered",
+    "interpretation": "Loss not recoverable by per-seed threshold selection under this candidate generator and scoring model; not proof of intrinsic identity-evidence loss.",
+    "source_filenames": [
+      "paper_experiments/results/E2_E6/E4/e1_e4_e5_per_run.csv"
+    ],
+    "value_displayed_1dp_pct": "59.4",
+    "value_unrounded_pct": 59.40049212797202
+  }
+}

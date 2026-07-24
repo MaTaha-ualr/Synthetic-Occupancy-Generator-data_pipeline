@@ -1,0 +1,61 @@
+{
+  "generated_at_utc": "2026-07-24T04:26:14+00:00",
+  "scenario_id": "paper_revision_household_adoption_blended_family_calibration_s20260719",
+  "selection_seed": 20260719,
+  "selection_config": {
+    "sample_mode": "count",
+    "sample_value": 10000.0,
+    "age_bins": [
+      "age_0_17",
+      "age_18_34",
+      "age_35_64"
+    ],
+    "genders": [],
+    "ethnicities": [],
+    "residence_types": [],
+    "redundancy_profiles": [],
+    "mobility_propensity_buckets": [],
+    "mobility_low_max": 0.09,
+    "mobility_high_min": 0.18,
+    "trait_low_max": 0.33,
+    "trait_high_min": 0.66
+  },
+  "counts": {
+    "entity_total": 10000,
+    "after_age_bins": 8230,
+    "after_genders": 8230,
+    "after_ethnicities": 8230,
+    "after_residence_types": 8230,
+    "after_redundancy_profiles": 8230,
+    "after_mobility_propensity_buckets": 8230,
+    "candidate_entities": 8230,
+    "selected_entities": 8230
+  },
+  "selected_personkey_sha256": "5ce5d7f59d3e47d7d9f83801f385ef286e51c9c423f4cb457c792750e5f65dba",
+  "selected_personkey_preview": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "8",
+    "9",
+    "10",
+    "12",
+    "13",
+    "16",
+    "17",
+    "18",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25"
+  ],
+  "run_id": "2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719",
+  "scenario_yaml_path": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\configs\\paper_revision_household_adoption_blended_family_calibration_s20260719.yaml",
+  "phase1_csv_path": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_experiments\\results\\E1_multiseed\\phase1_populations\\phase1_seed_20260719.csv",
+  "scenario_population_path": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719\\scenario_population.parquet"
+}

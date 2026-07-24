@@ -1,0 +1,362 @@
+{
+  "baseline": {
+    "all_training_and_calibration_data_disjoint_from_evaluation_seeds": true,
+    "calibration_seed": 20260719,
+    "candidate_generation_blocking_rules": [
+      "exact normalized DOB when nonempty",
+      "Soundex(last name) + first-name initial when both nonempty",
+      "Soundex(first name) + Soundex(last name) when both nonempty",
+      "exact normalized postal code + Soundex(last name) when both nonempty",
+      "birth year + Soundex(last name) when both nonempty"
+    ],
+    "class_weighting": "not applicable",
+    "co_resident_distinct_person_negatives_in_training": false,
+    "evaluation_seeds": [
+      20260720,
+      20260721,
+      20260722,
+      20260723,
+      20260724,
+      20260725,
+      20260726,
+      20260727,
+      20260728,
+      20260729
+    ],
+    "evidence": [
+      "paper_experiments/run_e2.py calibrate() uses only clean seed 20260719",
+      "paper_experiments/run_e2.py evaluate() uses only seeds 20260720-20260729",
+      "models/thresholds.json records calibration_seed=20260719"
+    ],
+    "features": [
+      {
+        "name": "first_name",
+        "similarity": "set bigram Dice",
+        "weight": 0.2
+      },
+      {
+        "name": "last_name",
+        "similarity": "set bigram Dice",
+        "weight": 0.25
+      },
+      {
+        "name": "date_of_birth",
+        "similarity": {
+          "exact": 1.0,
+          "month_day_transposition_same_year": 0.85,
+          "otherwise": 0.0,
+          "same_year_and_same_month_or_day": 0.65,
+          "same_year_only": 0.35
+        },
+        "weight": 0.2
+      },
+      {
+        "name": "street",
+        "similarity": "set bigram Dice",
+        "weight": 0.15
+      },
+      {
+        "name": "city",
+        "similarity": "nonempty exact match",
+        "weight": 0.05
+      },
+      {
+        "name": "state",
+        "similarity": "nonempty exact match",
+        "weight": 0.05
+      },
+      {
+        "name": "postal",
+        "similarity": "nonempty exact match",
+        "weight": 0.1
+      }
+    ],
+    "frozen_threshold": 0.65,
+    "hard_negative_procedure": "none",
+    "hyperparameters": {
+      "field_weights_sum": 1.0,
+      "score_range": [
+        0.0,
+        1.0
+      ]
+    },
+    "missing_value_handling": "Missing/unparseable fields contribute similarity 0. Weights are not renormalized.",
+    "model_class": "deterministic weighted sum",
+    "negative_sampling_procedure": "not applicable; no learned parameters",
+    "no_evaluation_output_informed_tuning": true,
+    "normalization": "Uppercase; remove all characters outside A-Z and 0-9. DOB is parsed to year/month/day where possible.",
+    "package_and_version": {
+      "package": "repository code",
+      "version": "67195a1b86dfe2b1bf20eb41133dfc90cf4e56d9"
+    },
+    "threshold_search_grid_or_procedure": "Paper-fixed threshold inherited from E0. The legacy calibration grid is 0.30, 0.31, ..., 0.95, maximizing F1 then precision then threshold.",
+    "training_negative_count": 0,
+    "training_pair_count": 0,
+    "training_positive_count": 0,
+    "training_seed": 20260719
+  },
+  "calibration_source": {
+    "run_manifest_sha256": "638c85d694d3727c152c075116ae4ab0a05cf2ae6e35f10a1e1122c1a274dbf5",
+    "run_path": "phase2/runs/2026-07-24_e2_clean_baseline_linkage_s20260719_seed20260719",
+    "thresholds_source": "paper_experiments/results/E2_E6/E2/models/thresholds.json",
+    "thresholds_source_sha256": "d9af8e92d1cd31fb8b137182a37843f1a642fcaa2257dbabf090f14183448f53"
+  },
+  "household_transfer_splink": {
+    "design": "For each named scenario, train a new Splink model and select its threshold on scenario-specific seed 20260719, then freeze both for evaluation seeds 20260720-20260729.",
+    "scenarios": {
+      "adoption_blended_family": {
+        "calibration_audit_path": "paper_revision_bundle/_provenance/household_transfer/calibration_audits/adoption_blended_family.json",
+        "calibration_disjoint_from_evaluation": true,
+        "calibration_seed": 20260719,
+        "candidate_pairs": 45687,
+        "co_resident_distinct_person_negative_pairs": 2170,
+        "evaluation_output_informed_tuning": false,
+        "evaluation_seeds": [
+          20260720,
+          20260721,
+          20260722,
+          20260723,
+          20260724,
+          20260725,
+          20260726,
+          20260727,
+          20260728,
+          20260729
+        ],
+        "frozen_scenario_threshold": 8.29844182591372e-12,
+        "model_path": "paper_revision_bundle/_provenance/household_transfer/models/splink_adoption_blended_family.json",
+        "model_sha256": "289182b902f38824c5e6b7471e7e653419b3f4e2238c0fb4460d24b77b33601e",
+        "negative_pairs": 37521,
+        "positive_pairs": 8166,
+        "threshold_search_procedure": "Maximum F1 over every finite distinct observed Splink score; ties break by precision then higher threshold.",
+        "untrained_level_behavior": "Splink 4.0.16 predict() warns and uses library defaults for comparison levels whose m-probability was not observed during EM.",
+        "untrained_m_probability_levels": [
+          {
+            "comparison": "street",
+            "level": "Jaro-Winkler distance of street >= 0.92"
+          }
+        ]
+      },
+      "couple_merge": {
+        "calibration_audit_path": "paper_revision_bundle/_provenance/household_transfer/calibration_audits/couple_merge.json",
+        "calibration_disjoint_from_evaluation": true,
+        "calibration_seed": 20260719,
+        "candidate_pairs": 45267,
+        "co_resident_distinct_person_negative_pairs": 280,
+        "evaluation_output_informed_tuning": false,
+        "evaluation_seeds": [
+          20260720,
+          20260721,
+          20260722,
+          20260723,
+          20260724,
+          20260725,
+          20260726,
+          20260727,
+          20260728,
+          20260729
+        ],
+        "frozen_scenario_threshold": 0.9449243505406807,
+        "model_path": "paper_revision_bundle/_provenance/household_transfer/models/splink_couple_merge.json",
+        "model_sha256": "648bfe37ae79bb6e99bfe539a287d2ec46898f4a74bb0e20330371e113161bab",
+        "negative_pairs": 34829,
+        "positive_pairs": 10438,
+        "threshold_search_procedure": "Maximum F1 over every finite distinct observed Splink score; ties break by precision then higher threshold.",
+        "untrained_level_behavior": "Splink 4.0.16 predict() warns and uses library defaults for comparison levels whose m-probability was not observed during EM.",
+        "untrained_m_probability_levels": [
+          {
+            "comparison": "street",
+            "level": "Jaro-Winkler distance of street >= 0.92"
+          }
+        ]
+      },
+      "family_birth": {
+        "calibration_audit_path": "paper_revision_bundle/_provenance/household_transfer/calibration_audits/family_birth.json",
+        "calibration_disjoint_from_evaluation": true,
+        "calibration_seed": 20260719,
+        "candidate_pairs": 39851,
+        "co_resident_distinct_person_negative_pairs": 900,
+        "evaluation_output_informed_tuning": false,
+        "evaluation_seeds": [
+          20260720,
+          20260721,
+          20260722,
+          20260723,
+          20260724,
+          20260725,
+          20260726,
+          20260727,
+          20260728,
+          20260729
+        ],
+        "frozen_scenario_threshold": 0.924984109417991,
+        "model_path": "paper_revision_bundle/_provenance/household_transfer/models/splink_family_birth.json",
+        "model_sha256": "53268e6ded824145efdc8ae4e3dd41363bafe13ff18f9f397420227ad50d546e",
+        "negative_pairs": 31370,
+        "positive_pairs": 8481,
+        "threshold_search_procedure": "Maximum F1 over every finite distinct observed Splink score; ties break by precision then higher threshold.",
+        "untrained_level_behavior": "Splink 4.0.16 predict() warns and uses library defaults for comparison levels whose m-probability was not observed during EM.",
+        "untrained_m_probability_levels": [
+          {
+            "comparison": "street",
+            "level": "Jaro-Winkler distance of street >= 0.92"
+          }
+        ]
+      }
+    }
+  },
+  "learned": {
+    "all_training_and_calibration_data_disjoint_from_evaluation_seeds": true,
+    "calibration_seed": 20260719,
+    "candidate_generation_blocking_rules": [
+      "exact normalized DOB when nonempty",
+      "Soundex(last name) + first-name initial when both nonempty",
+      "Soundex(first name) + Soundex(last name) when both nonempty",
+      "exact normalized postal code + Soundex(last name) when both nonempty",
+      "birth year + Soundex(last name) when both nonempty"
+    ],
+    "class_weighting": "balanced (inverse-frequency class weights)",
+    "co_resident_distinct_person_negative_count": 60,
+    "co_resident_distinct_person_negatives_in_training": true,
+    "evaluation_seeds": [
+      20260720,
+      20260721,
+      20260722,
+      20260723,
+      20260724,
+      20260725,
+      20260726,
+      20260727,
+      20260728,
+      20260729
+    ],
+    "evidence": [
+      "paper_experiments/run_e2.py calibrate() uses only clean seed 20260719",
+      "paper_experiments/run_e2.py evaluate() uses only seeds 20260720-20260729",
+      "models/thresholds.json records calibration_seed=20260719"
+    ],
+    "features": [
+      "first bigram-Dice similarity",
+      "last bigram-Dice similarity",
+      "DOB graded similarity",
+      "street bigram-Dice similarity",
+      "city nonempty exact similarity",
+      "state nonempty exact similarity",
+      "postal nonempty exact similarity",
+      "seven additional indicators, one for each base feature == 0.0"
+    ],
+    "frozen_threshold": 0.6500030591266042,
+    "hard_negative_procedure": "No explicit mining. All blocking-induced candidate negatives are used.",
+    "hyperparameters": {
+      "class_weight": "balanced",
+      "classifier": "sklearn.linear_model.LogisticRegression",
+      "max_iter": 2000,
+      "other_parameters": "scikit-learn 1.7.2 defaults",
+      "random_state": 20260719
+    },
+    "missing_value_handling": "Missing fields produce base similarity 0 and corresponding zero-proxy 1. StandardScaler is fitted on all 14 columns.",
+    "model_artifact": "paper_experiments/results/E2_E6/E2/models/learned.joblib",
+    "model_artifact_sha256": "de99a1692c2e57d19cba2f5dfc2408356a9ef1d58918de346e3256b39d3fce67",
+    "model_class": "sklearn.pipeline.Pipeline(StandardScaler, LogisticRegression)",
+    "negative_sampling_procedure": "No downsampling: all shared-blocking candidates from clean seed 20260719 are used.",
+    "no_evaluation_output_informed_tuning": true,
+    "package_and_version": {
+      "package": "scikit-learn",
+      "version": "1.7.2"
+    },
+    "similarity_definitions": "The seven base values are identical to the baseline components. The second seven are executable zero-value proxies, not pure missingness indicators: exact dissimilarity and missingness both map to 1.",
+    "threshold_search_grid_or_procedure": "Every finite distinct observed calibration probability; maximize F1, then precision, then higher threshold. Not a fixed decimal grid.",
+    "training_negative_count": 56402,
+    "training_pair_count": 65924,
+    "training_positive_count": 9522,
+    "training_seed": 20260719
+  },
+  "protocol_version": 1,
+  "shared_candidate_generation": {
+    "calibration_candidate_pairs": 65924,
+    "calibration_co_resident_distinct_person_negative_pairs": 60,
+    "calibration_negative_pairs": 56402,
+    "calibration_positive_pairs": 9522,
+    "rules": [
+      "exact normalized DOB when nonempty",
+      "Soundex(last name) + first-name initial when both nonempty",
+      "Soundex(first name) + Soundex(last name) when both nonempty",
+      "exact normalized postal code + Soundex(last name) when both nonempty",
+      "birth year + Soundex(last name) when both nonempty"
+    ],
+    "source": "evaluation/metrics.py:build_candidates and paper_experiments/evaluate_baseline.py:blocking_keys",
+    "union_and_deduplication": "Candidate pairs are the set union over all blocking keys. Link runs retain cross-source pairs; dedupe runs retain within-source pairs."
+  },
+  "splink": {
+    "all_training_and_calibration_data_disjoint_from_evaluation_seeds": true,
+    "calibration_seed": 20260719,
+    "candidate_generation_blocking_rules": [
+      "exact normalized DOB when nonempty",
+      "Soundex(last name) + first-name initial when both nonempty",
+      "Soundex(first name) + Soundex(last name) when both nonempty",
+      "exact normalized postal code + Soundex(last name) when both nonempty",
+      "birth year + Soundex(last name) when both nonempty"
+    ],
+    "class_weighting": "not applicable to Fellegi-Sunter EM",
+    "co_resident_distinct_person_negative_count": 60,
+    "co_resident_distinct_person_negatives_in_threshold_calibration": true,
+    "evaluation_seeds": [
+      20260720,
+      20260721,
+      20260722,
+      20260723,
+      20260724,
+      20260725,
+      20260726,
+      20260727,
+      20260728,
+      20260729
+    ],
+    "evidence": [
+      "paper_experiments/run_e2.py calibrate() uses only clean seed 20260719",
+      "paper_experiments/run_e2.py evaluate() uses only seeds 20260720-20260729",
+      "models/thresholds.json records calibration_seed=20260719"
+    ],
+    "features": [
+      "first: Jaro-Winkler levels >=0.92, >=0.80, else",
+      "last: Jaro-Winkler levels >=0.92, >=0.80, else",
+      "dob_norm: exact match",
+      "street: Jaro-Winkler levels >=0.92, >=0.75, else",
+      "postal: exact match"
+    ],
+    "frozen_threshold": 0.9986013472769922,
+    "hard_negative_procedure": "No explicit mining. Threshold calibration includes every shared-blocking candidate, so blocking-induced near negatives are retained.",
+    "hyperparameters": {
+      "em_blocking_passes": [
+        "exact nonempty dob_norm",
+        "exact nonempty postal"
+      ],
+      "fix_probability_two_random_records_match": true,
+      "link_type": "dedupe_only",
+      "max_iterations": 100,
+      "probability_two_random_records_match": 0.001,
+      "u_estimation_max_pairs": 10000000,
+      "u_estimation_seed": 20260719
+    },
+    "missing_value_handling": "Empty normalized values do not enter blocking rules. Splink comparison levels use the library's generated null levels.",
+    "model_artifact": "paper_experiments/results/E2_E6/E2/models/splink.json",
+    "model_artifact_sha256": "9791592e123f0b8b4d7601d894b71dc0e47608c4097172fbbf227fa2c0fce7c2",
+    "model_class": "Splink Fellegi-Sunter probabilistic linkage model (DuckDB backend)",
+    "negative_sampling_procedure": "u probabilities use Splink random sampling capped at 10,000,000 pairs; EM uses the two stated exact-match blocks.",
+    "no_evaluation_output_informed_tuning": true,
+    "package_and_version": {
+      "duckdb": "1.5.4",
+      "splink": "4.0.16"
+    },
+    "similarity_definitions": "Splink 4 comparison-library JaroWinklerAtThresholds and ExactMatch. City and state are intentionally omitted because they were nested with postal and produced non-identifiable EM behavior.",
+    "threshold_calibration_negative_count": 56402,
+    "threshold_calibration_pair_count": 65924,
+    "threshold_calibration_positive_count": 9522,
+    "threshold_search_grid_or_procedure": "Every finite distinct observed calibration score; maximize F1, then precision, then higher threshold. This is not a fixed decimal grid.",
+    "training_negative_count": null,
+    "training_pair_count": null,
+    "training_pair_count_explanation": "Splink training is unsupervised. The saved model does not expose the realized random-u and EM comparison-row counts; no labeled positive/negative training counts exist.",
+    "training_positive_count": null,
+    "training_seed": 20260719
+  }
+}

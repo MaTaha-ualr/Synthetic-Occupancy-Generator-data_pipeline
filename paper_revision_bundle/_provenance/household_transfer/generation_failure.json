@@ -1,0 +1,10 @@
+{
+  "command": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\.venv\\Scripts\\python.exe C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\phase2\\scripts\\run_phase2_pipeline.py --scenario-yaml C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\configs\\paper_revision_household_adoption_blended_family_calibration_s20260719.yaml --runs-root C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs --run-date 2026-07-23 --rebuild-population --no-progress",
+  "kind": "calibration_generation",
+  "log_path": "paper_revision_bundle/_provenance/household_transfer/logs/generate_adoption_blended_family.log",
+  "return_code": 1,
+  "run_path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719",
+  "scenario": "adoption_blended_family",
+  "seconds": 2.5368382000015117,
+  "status": "failed"
+}

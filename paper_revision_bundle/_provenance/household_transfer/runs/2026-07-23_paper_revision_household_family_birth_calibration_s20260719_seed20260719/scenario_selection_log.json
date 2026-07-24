@@ -1,0 +1,60 @@
+{
+  "generated_at_utc": "2026-07-24T04:24:32+00:00",
+  "scenario_id": "paper_revision_household_family_birth_calibration_s20260719",
+  "selection_seed": 20260719,
+  "selection_config": {
+    "sample_mode": "count",
+    "sample_value": 6050.0,
+    "age_bins": [
+      "age_18_34",
+      "age_35_64"
+    ],
+    "genders": [],
+    "ethnicities": [],
+    "residence_types": [],
+    "redundancy_profiles": [],
+    "mobility_propensity_buckets": [],
+    "mobility_low_max": 0.09,
+    "mobility_high_min": 0.18,
+    "trait_low_max": 0.33,
+    "trait_high_min": 0.66
+  },
+  "counts": {
+    "entity_total": 10000,
+    "after_age_bins": 6050,
+    "after_genders": 6050,
+    "after_ethnicities": 6050,
+    "after_residence_types": 6050,
+    "after_redundancy_profiles": 6050,
+    "after_mobility_propensity_buckets": 6050,
+    "candidate_entities": 6050,
+    "selected_entities": 6050
+  },
+  "selected_personkey_sha256": "2dce4f4b0604eaf98f857874782a42125417ea5955dbd75859638f37202354d7",
+  "selected_personkey_preview": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "8",
+    "10",
+    "12",
+    "16",
+    "18",
+    "20",
+    "21",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "30",
+    "31"
+  ],
+  "run_id": "2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719",
+  "scenario_yaml_path": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\configs\\paper_revision_household_family_birth_calibration_s20260719.yaml",
+  "phase1_csv_path": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_experiments\\results\\E1_multiseed\\phase1_populations\\phase1_seed_20260719.csv",
+  "scenario_population_path": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719\\scenario_population.parquet"
+}

@@ -1,0 +1,52 @@
+{
+  "calibration_disjoint_from_evaluation": true,
+  "calibration_metrics": {
+    "f1": 0.8811619243021436,
+    "fn": 6,
+    "fp": 2195,
+    "precision": 0.7880251086431675,
+    "predicted": 10355,
+    "recall": 0.9992652461425422,
+    "tp": 8160
+  },
+  "calibration_scores_path": "paper_revision_bundle/_provenance/household_transfer/calibration_scores/adoption_blended_family.parquet",
+  "calibration_scores_sha256": "aa893c395ea1d91fa1daa987250a24f9d9693cbaef1189c88073f5ce7f4165fc",
+  "calibration_seed": 20260719,
+  "candidate_pairs": 45687,
+  "candidate_recall": 1.0,
+  "candidate_seconds": 10.135754699993413,
+  "co_resident_distinct_person_negative_pairs": 2170,
+  "config_path": "paper_revision_bundle/_provenance/household_transfer/configs/paper_revision_household_adoption_blended_family_calibration_s20260719.yaml",
+  "config_sha256": "68f5e9f4e65486dc2d9c6d646695f18aef424d421a50fcd025e4b216a78272a1",
+  "evaluation_seeds": [
+    20260720,
+    20260721,
+    20260722,
+    20260723,
+    20260724,
+    20260725,
+    20260726,
+    20260727,
+    20260728,
+    20260729
+  ],
+  "model_path": "paper_revision_bundle/_provenance/household_transfer/models/splink_adoption_blended_family.json",
+  "model_sha256": "289182b902f38824c5e6b7471e7e653419b3f4e2238c0fb4460d24b77b33601e",
+  "negative_pairs": 37521,
+  "oracle_metrics": {
+    "oracle_f1": 0.8811619243021436,
+    "oracle_precision": 0.7880251086431675,
+    "oracle_recall": 0.9992652461425422,
+    "oracle_threshold": 8.29844182591372e-12
+  },
+  "positive_pairs": 8166,
+  "run_manifest_sha256": "7c284c61bdba59dff83c7afd75c5cdf4c51b09c5628c08853851f08d4d6cbb2f",
+  "run_path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719",
+  "scenario": "adoption_blended_family",
+  "score_label_sha256": "35246b782987489ceabe34d86c7a3ce1f470e685f6b144109227f578478bccc6",
+  "seconds": 36.60455630000797,
+  "threshold": 8.29844182591372e-12,
+  "threshold_selection": "Maximum F1 over every finite distinct observed Splink score; ties break by precision then higher threshold.",
+  "training_seed": 20260719,
+  "true_pairs": 8166
+}

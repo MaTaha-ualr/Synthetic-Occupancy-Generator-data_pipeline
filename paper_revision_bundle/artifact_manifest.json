@@ -1,0 +1,979 @@
+{
+  "bundle_artifact_count_excluding_manifest": 159,
+  "bundle_artifacts_excluding_manifest": [
+    {
+      "bytes": 2235,
+      "path": "paper_revision_bundle/_provenance/household_transfer/calibration_audits/adoption_blended_family.json",
+      "sha256": "697317819a19507d85ed975ea645a6f0df4b14a98852e39a95a37db0970b748d"
+    },
+    {
+      "bytes": 2194,
+      "path": "paper_revision_bundle/_provenance/household_transfer/calibration_audits/couple_merge.json",
+      "sha256": "cce09d5bd630d58b9f57b8cf1e84538a9d3b8e6ebe995583be60c868c856f882"
+    },
+    {
+      "bytes": 2185,
+      "path": "paper_revision_bundle/_provenance/household_transfer/calibration_audits/family_birth.json",
+      "sha256": "51dac77554f5f3251161e25af211efc3955299bb1917cac28be526276933468e"
+    },
+    {
+      "bytes": 172422,
+      "path": "paper_revision_bundle/_provenance/household_transfer/calibration_scores/adoption_blended_family.parquet",
+      "sha256": "aa893c395ea1d91fa1daa987250a24f9d9693cbaef1189c88073f5ce7f4165fc"
+    },
+    {
+      "bytes": 161441,
+      "path": "paper_revision_bundle/_provenance/household_transfer/calibration_scores/couple_merge.parquet",
+      "sha256": "3902f7a1ba5a0881df76ad153e299eb2beb880e9ad77b1ff6bc7a0c31a9a58d6"
+    },
+    {
+      "bytes": 158257,
+      "path": "paper_revision_bundle/_provenance/household_transfer/calibration_scores/family_birth.parquet",
+      "sha256": "234dcd80e300fdedc704fa596ea42bd35e0f71fa7d97b0174f84203f3ee7f81b"
+    },
+    {
+      "bytes": 2069,
+      "path": "paper_revision_bundle/_provenance/household_transfer/configs/paper_revision_household_adoption_blended_family_calibration_s20260719.yaml",
+      "sha256": "68f5e9f4e65486dc2d9c6d646695f18aef424d421a50fcd025e4b216a78272a1"
+    },
+    {
+      "bytes": 2114,
+      "path": "paper_revision_bundle/_provenance/household_transfer/configs/paper_revision_household_couple_merge_calibration_s20260719.yaml",
+      "sha256": "c8f8cbcef6a0d19b1d3c0f13bf6941e47493788440546e08cacbbb5e23bb7afb"
+    },
+    {
+      "bytes": 2114,
+      "path": "paper_revision_bundle/_provenance/household_transfer/configs/paper_revision_household_family_birth_calibration_s20260719.yaml",
+      "sha256": "24f2612b54960254e209d84fd425c628fc827125833871ad6cab4b5da05a428b"
+    },
+    {
+      "bytes": 1333,
+      "path": "paper_revision_bundle/_provenance/household_transfer/generation_failure.json",
+      "sha256": "42337b94ab340ef4e11dc0af2a55067ba0713f5c64406353f1d5e454f23b032f"
+    },
+    {
+      "bytes": 11617,
+      "path": "paper_revision_bundle/_provenance/household_transfer/household_transfer_run.json",
+      "sha256": "186b3d0ea4498c6e1c40db541b08badc6eb2fe8921b961214611688f99e4129e"
+    },
+    {
+      "bytes": 3842,
+      "path": "paper_revision_bundle/_provenance/household_transfer/logs/generate_adoption_blended_family.log",
+      "sha256": "64fb8d67ad714442d985cf5fdf9ff9e804fe85d9a48fed8134cfb43ab43a2854"
+    },
+    {
+      "bytes": 3741,
+      "path": "paper_revision_bundle/_provenance/household_transfer/logs/generate_couple_merge.log",
+      "sha256": "b86457a2ed10171c586fb7b385afa02cb85f2e392c7c424cf39efcfccc278614"
+    },
+    {
+      "bytes": 3736,
+      "path": "paper_revision_bundle/_provenance/household_transfer/logs/generate_family_birth.log",
+      "sha256": "b1f137fea42ddc68bce05874b8069f8f00c4f499f9888c2a91bb2448bb08d269"
+    },
+    {
+      "bytes": 10432,
+      "path": "paper_revision_bundle/_provenance/household_transfer/models/splink_adoption_blended_family.json",
+      "sha256": "289182b902f38824c5e6b7471e7e653419b3f4e2238c0fb4460d24b77b33601e"
+    },
+    {
+      "bytes": 10420,
+      "path": "paper_revision_bundle/_provenance/household_transfer/models/splink_couple_merge.json",
+      "sha256": "648bfe37ae79bb6e99bfe539a287d2ec46898f4a74bb0e20330371e113161bab"
+    },
+    {
+      "bytes": 10419,
+      "path": "paper_revision_bundle/_provenance/household_transfer/models/splink_family_birth.json",
+      "sha256": "53268e6ded824145efdc8ae4e3dd41363bafe13ff18f9f397420227ad50d546e"
+    },
+    {
+      "bytes": 4472,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/adoption_blended_family/seed_20260720.json",
+      "sha256": "69c96bcd2f80b8711e29cf43716da8c2a943a121c328ed11039bf76068c9426e"
+    },
+    {
+      "bytes": 4492,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/adoption_blended_family/seed_20260721.json",
+      "sha256": "323c580b593ac113fcf778797a0d553a0e5147f5dae36a9ae65f856e96a0620f"
+    },
+    {
+      "bytes": 4489,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/adoption_blended_family/seed_20260722.json",
+      "sha256": "434e8cae5c800bb014b83cef633127f98d395075a70a662fccec3710b1f609ee"
+    },
+    {
+      "bytes": 4459,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/adoption_blended_family/seed_20260723.json",
+      "sha256": "4485018f9b40e88e8b2459f660c0d2955547878aa50ebb2bad8d32b86b49d49b"
+    },
+    {
+      "bytes": 4506,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/adoption_blended_family/seed_20260724.json",
+      "sha256": "409da8f1a402dc047d9f2a067d8f844d109e33955f934fcabaf0f9f7a08754a5"
+    },
+    {
+      "bytes": 4488,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/adoption_blended_family/seed_20260725.json",
+      "sha256": "001b864643c9c5413d9096497fca67cdf127d809a12d3cd5dd3ced8e7dd3af90"
+    },
+    {
+      "bytes": 4503,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/adoption_blended_family/seed_20260726.json",
+      "sha256": "3e59a29b34dbbd9d7ca5fb7768d4b12d2dfa298e02066f74a713a797c0d26621"
+    },
+    {
+      "bytes": 4488,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/adoption_blended_family/seed_20260727.json",
+      "sha256": "6a8d514eba549ed4e224de6f2d66fe560933be2ee8cce986502ee62c0bbca5a6"
+    },
+    {
+      "bytes": 4473,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/adoption_blended_family/seed_20260728.json",
+      "sha256": "7cecd9532dccd3503984c9d79e68a87c2d6782099c9ee4feade8cb2b4c9acac7"
+    },
+    {
+      "bytes": 4489,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/adoption_blended_family/seed_20260729.json",
+      "sha256": "3f8bab71b89649aa7386c625008a76c05ca4515b9b5dc89c7ae6d1e21af00c35"
+    },
+    {
+      "bytes": 3509,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/clean_baseline_linkage/seed_20260720.json",
+      "sha256": "df24b2c61b1d6549daa8c77bb195d03cbf4e5d0ae81370f27613d4d57ea00983"
+    },
+    {
+      "bytes": 3491,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/clean_baseline_linkage/seed_20260721.json",
+      "sha256": "812db8ea556563277b9f7dacd729e820ef521fd5287078d34213c1b822bc7919"
+    },
+    {
+      "bytes": 3503,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/clean_baseline_linkage/seed_20260722.json",
+      "sha256": "a3408addc6ac51ab5f80a0073596319dfda304c169bb36e8a7de85718b562358"
+    },
+    {
+      "bytes": 3556,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/clean_baseline_linkage/seed_20260723.json",
+      "sha256": "e4eb87f5ae92119a1ea6816de043afa9d59d192706312715af2eca6330ef6df2"
+    },
+    {
+      "bytes": 3417,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/clean_baseline_linkage/seed_20260724.json",
+      "sha256": "28c571bd5abc6238fc281dc7d1538e8c87d9bf2ce7493ffb85e21749479de4d8"
+    },
+    {
+      "bytes": 3558,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/clean_baseline_linkage/seed_20260725.json",
+      "sha256": "f3fafe3f6d948ea49b2967deeb6083feb49e80d5d9c4193c8247a35de593480d"
+    },
+    {
+      "bytes": 3496,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/clean_baseline_linkage/seed_20260726.json",
+      "sha256": "b6f14fa98b922f458a1f1333c60dc46f208bee0a7d251892029e0f510d839877"
+    },
+    {
+      "bytes": 3491,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/clean_baseline_linkage/seed_20260727.json",
+      "sha256": "08a520128ba1a251b3dd02ba851382a22914da0063736215bb41111524ef7271"
+    },
+    {
+      "bytes": 3524,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/clean_baseline_linkage/seed_20260728.json",
+      "sha256": "6639bbecca5196d4483b14349693a409870e6154e5f2d9050cd88864d32223f7"
+    },
+    {
+      "bytes": 3509,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/clean_baseline_linkage/seed_20260729.json",
+      "sha256": "64118456f9d8be635ecb0ce13311cefba08ba56c7b67facae86c9358a274f171"
+    },
+    {
+      "bytes": 4495,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/couple_merge/seed_20260720.json",
+      "sha256": "7f50f6be976d68302ac97d2a4d62a2645e14160d2f17447f3ea9cb32c6edd285"
+    },
+    {
+      "bytes": 4468,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/couple_merge/seed_20260721.json",
+      "sha256": "de110b707ccb2886d6628a6f6d99472313535ee36ed0107f6b3b1b2934d144c4"
+    },
+    {
+      "bytes": 4466,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/couple_merge/seed_20260722.json",
+      "sha256": "8aac27f270ac61fc39a56df91f20b6a9f4b8c4ac4353f598107e89f3f3e430e6"
+    },
+    {
+      "bytes": 4481,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/couple_merge/seed_20260723.json",
+      "sha256": "e782ff0354b91ffc9a59103342275c928cd7a21d3e43fd3cf1904cfa7bdd7ecb"
+    },
+    {
+      "bytes": 4467,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/couple_merge/seed_20260724.json",
+      "sha256": "8f1c5ebad084f7341aec14ad5bbbbc28716f66d7f8e3b8059ed9ea15ec65be61"
+    },
+    {
+      "bytes": 4493,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/couple_merge/seed_20260725.json",
+      "sha256": "0c9bc74f52d3aa4d30d61c68b1a0519661985bbc0f678bd41305fb8e15a8e30f"
+    },
+    {
+      "bytes": 4455,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/couple_merge/seed_20260726.json",
+      "sha256": "dd6f436e200cafb6ee3e005009335e4f020110df2ec7625ac984f1bf3bce9a9c"
+    },
+    {
+      "bytes": 4450,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/couple_merge/seed_20260727.json",
+      "sha256": "beafdff64217c25b45a279efe8d59634513afaaae41fcf74070b01f82b2cc12c"
+    },
+    {
+      "bytes": 4483,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/couple_merge/seed_20260728.json",
+      "sha256": "d8b7c3e800359810ded65aacb60343ba904ed813280636ea6729c6764b3ab4ba"
+    },
+    {
+      "bytes": 4479,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/couple_merge/seed_20260729.json",
+      "sha256": "0e00f2bd7eed6d309fe27a891b1631fbb9d0900689d3c4667be5e8dc049fa1f3"
+    },
+    {
+      "bytes": 3550,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/divorce_custody/seed_20260720.json",
+      "sha256": "173a1cc208ca592968de869d64ae9b066abc6cde0b89fa908e53063634bc1d6f"
+    },
+    {
+      "bytes": 3561,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/divorce_custody/seed_20260721.json",
+      "sha256": "c19c7c23bddec64ba8239a4708a49af6e1685e40c88781de0417cf8537e95492"
+    },
+    {
+      "bytes": 3548,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/divorce_custody/seed_20260722.json",
+      "sha256": "0c3156ef25631a4c8ed6543fc19059ac940a682d412abd2366843ab36768f274"
+    },
+    {
+      "bytes": 3565,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/divorce_custody/seed_20260723.json",
+      "sha256": "eb3a96bcf0df3b55d7ec6d721e429c01d797587e97248864305178721af7027d"
+    },
+    {
+      "bytes": 3528,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/divorce_custody/seed_20260724.json",
+      "sha256": "85f9e5200f512d8ffee0eb259fd35fd335a6cce3390c803581425e7e7c746223"
+    },
+    {
+      "bytes": 3559,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/divorce_custody/seed_20260725.json",
+      "sha256": "aabe061e23a73c84f02b7e5cd3265a76396c1f26770dde012900b152ab8b3d0d"
+    },
+    {
+      "bytes": 3563,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/divorce_custody/seed_20260726.json",
+      "sha256": "f5abe45b6f6d0a155e7394ebd1cc6eeb137e5b084390de304d55b0232b1c6119"
+    },
+    {
+      "bytes": 3559,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/divorce_custody/seed_20260727.json",
+      "sha256": "459c0976718dc98d4e0e4b40ad58e8fbe39741371eda0bdf3741e415dc542819"
+    },
+    {
+      "bytes": 3564,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/divorce_custody/seed_20260728.json",
+      "sha256": "09d6a336161eed644a07350c8b1e765ff3e1a5bcae390dc724ba644420fff4b0"
+    },
+    {
+      "bytes": 3548,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/divorce_custody/seed_20260729.json",
+      "sha256": "adf3c0a854555162053a3af44c41ca4289265b129a2fe8cd465a88db25461b55"
+    },
+    {
+      "bytes": 4470,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/family_birth/seed_20260720.json",
+      "sha256": "135682d4f08929a4fa0e0d78880576b9a1d7e65d96d1dbedfd3318290dcc111a"
+    },
+    {
+      "bytes": 4476,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/family_birth/seed_20260721.json",
+      "sha256": "3732dede409643a0fc0e2bababe2adebe4d28fdecb873f155b08ad0dd32b08da"
+    },
+    {
+      "bytes": 4477,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/family_birth/seed_20260722.json",
+      "sha256": "5e58bd443d532cf1979447cc2f14ce51cd24f0fd8c4e3d4d7ea0da76bd3ab582"
+    },
+    {
+      "bytes": 4475,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/family_birth/seed_20260723.json",
+      "sha256": "9e2b12c9df8e1318b4eb4771231821b3194a5589a1ff6603f2f02193001d2f12"
+    },
+    {
+      "bytes": 4477,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/family_birth/seed_20260724.json",
+      "sha256": "3218fd3c842c80f145c00d9615c8ebe0509a255a3c6a29813d55a1d9aeff15c7"
+    },
+    {
+      "bytes": 4488,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/family_birth/seed_20260725.json",
+      "sha256": "ceef38cd70169fc86388e689d68e17055af43de517a488c8b92ddf87088fc2e8"
+    },
+    {
+      "bytes": 4441,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/family_birth/seed_20260726.json",
+      "sha256": "b320409f885e6072e4ee88b42d04715fe1f885ad0a6571aa31ebcf9b6f0da97e"
+    },
+    {
+      "bytes": 4471,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/family_birth/seed_20260727.json",
+      "sha256": "3856e836b90d305e4d80ae6d29013890021080a877d660144be7a8767b406880"
+    },
+    {
+      "bytes": 4505,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/family_birth/seed_20260728.json",
+      "sha256": "c67e64b1ce9bd054db4db6aa1c738cc2e8d92934d851cdd45132904ea1fa70dc"
+    },
+    {
+      "bytes": 4440,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/family_birth/seed_20260729.json",
+      "sha256": "dbe42da1a5dd8a4e99c6a9761f1eb89aee32d28acfae1145c184d8bd56f1cfa5"
+    },
+    {
+      "bytes": 3545,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/roommates_split/seed_20260720.json",
+      "sha256": "ea18cfbdf9adf2f5b42c95649e4f98a218ed711a8975710f8c15aadd5b785acf"
+    },
+    {
+      "bytes": 3550,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/roommates_split/seed_20260721.json",
+      "sha256": "010c63c7bf0201db19970b90e12be1779679bee968b534c4a6afef564a3f2512"
+    },
+    {
+      "bytes": 3525,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/roommates_split/seed_20260722.json",
+      "sha256": "1bc636db3a13cf098553a569a85f423a046f48d20fe0256e51adce3788f947c8"
+    },
+    {
+      "bytes": 3537,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/roommates_split/seed_20260723.json",
+      "sha256": "8d753d4731c14cda9ae99162941e1a170811d3e74408f2b66cef32e1d83ee721"
+    },
+    {
+      "bytes": 3487,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/roommates_split/seed_20260724.json",
+      "sha256": "95601035918a5226d244110653a2883fc0f7698da080b69e512cb312d26052fa"
+    },
+    {
+      "bytes": 3534,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/roommates_split/seed_20260725.json",
+      "sha256": "20cced9eed015299827673e3278b9324c1ce0e9d5c3dcf19c8ee8a79118ba778"
+    },
+    {
+      "bytes": 3540,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/roommates_split/seed_20260726.json",
+      "sha256": "80f60b660303eb9c904523a5687ac87bca6aca730599aa73db8855783fda2c0a"
+    },
+    {
+      "bytes": 3552,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/roommates_split/seed_20260727.json",
+      "sha256": "c258f584f8d444c1407f10a3cd275c2864279ff7dc673557556f77bfb0cc117f"
+    },
+    {
+      "bytes": 3536,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/roommates_split/seed_20260728.json",
+      "sha256": "cd33a7ce86ebdd4ebaee86a64b9ed0f30964f3ea12ac8975c8c9f274547b334f"
+    },
+    {
+      "bytes": 3537,
+      "path": "paper_revision_bundle/_provenance/household_transfer/per_run/roommates_split/seed_20260729.json",
+      "sha256": "79d1c7bd0ae01d96cbe9a9d03aacec62693a9108c2c60e3ba1a4075bfaf79e4c"
+    },
+    {
+      "bytes": 1647148,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/DatasetA.csv",
+      "sha256": "7aef8cbbec67a6323f4ef38a36d2c5de26b1ccc82ae0bc66c0be7e6d0dcc61d4"
+    },
+    {
+      "bytes": 1649755,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/DatasetB.csv",
+      "sha256": "3286a3c2ba357e420d493ce3514a3c234ed8af050d018a89ef43d04a8ca33de8"
+    },
+    {
+      "bytes": 325135,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/entity_record_map.csv",
+      "sha256": "ba82ece129116fc76b43ed5f46c4e2f0bac3bba057aebb92b1b7a5b3d844491e"
+    },
+    {
+      "bytes": 8151,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/manifest.json",
+      "sha256": "7c284c61bdba59dff83c7afd75c5cdf4c51b09c5628c08853851f08d4d6cbb2f"
+    },
+    {
+      "bytes": 6539137,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/masterDataset.csv",
+      "sha256": "d73d1912c91fa629a459554f6aca66eed0ab7d321283b2fba612ac2d92fc5167"
+    },
+    {
+      "bytes": 11747,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/quality_report.json",
+      "sha256": "97c6076d22cccea460cea72747dc4a271aded8461304e31a9cae280ac58eb1d2"
+    },
+    {
+      "bytes": 3818,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/README.md",
+      "sha256": "68897871dfc4a3b69b128a10bc51fad8efb8c42687e9471282f5d256186142b6"
+    },
+    {
+      "bytes": 2119,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/scenario.yaml",
+      "sha256": "d82082110ae454cdfab37c615a4d09977f793581ab43f15c7472203ff3f07dae"
+    },
+    {
+      "bytes": 312144,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/scenario_population.parquet",
+      "sha256": "5397b77a968666b81f1c5c1872d2e6638b57f8f9026cfed8b28252cb4f4b2fd3"
+    },
+    {
+      "bytes": 2293,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/scenario_selection_log.json",
+      "sha256": "367865ce819865c7b76c34d29d20af85d38a21f29223543955df9187a7d37bde"
+    },
+    {
+      "bytes": 244364,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/truth_crosswalk.csv",
+      "sha256": "b5fe89eba27545f4aad8e617510c02c4c1e1710860a57e56ecbc8531f686b0a6"
+    },
+    {
+      "bytes": 261965,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/truth_events.parquet",
+      "sha256": "022c9ed62cbc89fd1a3018503d1a40f19a6041e033be6689f7a2e15c11e441ae"
+    },
+    {
+      "bytes": 102904,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/truth_household_memberships.parquet",
+      "sha256": "49d941d3fde40f6148083c543123e9b446a239379967fb4fd8cf209b3a258638"
+    },
+    {
+      "bytes": 28837,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/truth_households.parquet",
+      "sha256": "383b3f639f3874c4827e613d5699807d47fba14e2889f49b64778dc24c5a19f1"
+    },
+    {
+      "bytes": 455693,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/truth_people.parquet",
+      "sha256": "930a95999130f02d50fb7f030a2b7c655160039eca41a2279b9ad34921bee30b"
+    },
+    {
+      "bytes": 99781,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719/truth_residence_history.parquet",
+      "sha256": "59bab07b5a5547e7dae022bd6a4f494bca560d0f1ef8ad7edb582b2e6e5de1df"
+    },
+    {
+      "bytes": 1104732,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/DatasetA.csv",
+      "sha256": "8f001680f66d55fc74ea815b31f6b3140130b2022796286201ee64e54dc89fd2"
+    },
+    {
+      "bytes": 2186586,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/DatasetB.csv",
+      "sha256": "eef973b8214f427ae19db2604e4b7948a52298e2ab1a2d6173c6a317bc50abea"
+    },
+    {
+      "bytes": 328940,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/entity_record_map.csv",
+      "sha256": "71be87fbd85e4d3ff5a17231f3afff374de20000c4e8867e4b490381d5765f75"
+    },
+    {
+      "bytes": 7987,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/manifest.json",
+      "sha256": "fcaeaebf23a85c6435cfa62c40e5793b6cb32279a682e0580bf845bc69824cab"
+    },
+    {
+      "bytes": 6898169,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/masterDataset.csv",
+      "sha256": "accfd80d42f7f90a58002dddaaea83640a5904fdfee4572961445b5693de1684"
+    },
+    {
+      "bytes": 12313,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/quality_report.json",
+      "sha256": "d89f370a6b497986d110bc0caa61b4847bbffd84af8bd5e5c045aeb4f480bd81"
+    },
+    {
+      "bytes": 3808,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/README.md",
+      "sha256": "8331b3e3e3c34fd87b92fa4b328124f5cb5a1865d63a40ea1bbe49d9107cf030"
+    },
+    {
+      "bytes": 2116,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/scenario.yaml",
+      "sha256": "20ca165b2b561146d19b623ecde1579567a1479b24f278c0a10cc823622f0150"
+    },
+    {
+      "bytes": 231378,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/scenario_population.parquet",
+      "sha256": "171db1f531ea17e1671b478bd90769db8c14dd185af8a235ae0f657eaf94f879"
+    },
+    {
+      "bytes": 2230,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/scenario_selection_log.json",
+      "sha256": "b04458bb08d75a9762c32f172dc01271d2a5f2880d0b65136a9c5a33d502fa65"
+    },
+    {
+      "bytes": 323626,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/truth_crosswalk.csv",
+      "sha256": "3f27fadd69323918e7d323e7f9a0aed9482fd38387b545213c81270dcf76eb3e"
+    },
+    {
+      "bytes": 161963,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/truth_events.parquet",
+      "sha256": "7d05f3d950916d50c48780eac6ed63207e9752c81cf1ca0d07cd8269cab74ac4"
+    },
+    {
+      "bytes": 97434,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/truth_household_memberships.parquet",
+      "sha256": "ee6d3668672a0229dc78c155856413cf9d084b08164b24f6b3dc20fa497d987d"
+    },
+    {
+      "bytes": 37190,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/truth_households.parquet",
+      "sha256": "0adf9a6b2966df7486232b323010ecebc5eb804d727ea4802a36945b8193bf92"
+    },
+    {
+      "bytes": 340571,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/truth_people.parquet",
+      "sha256": "20a1cd153ef0bd5ab210dfbd5cc9111ef6947b6ebee8ad6a83ebafa41d7fc15f"
+    },
+    {
+      "bytes": 134312,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_couple_merge_calibration_s20260719_seed20260719/truth_residence_history.parquet",
+      "sha256": "34e652287a7ede6164bf9181efda00ad31ca6a5db2346d7e5ed1080efea09c89"
+    },
+    {
+      "bytes": 1695456,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/DatasetA.csv",
+      "sha256": "736eaac72b9f9c396c9fda2cc06187a7d040c612e1f9211c87acd2ed0e37f988"
+    },
+    {
+      "bytes": 1260779,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/DatasetB.csv",
+      "sha256": "99fdad6497b81d6772f2ef19b8527b342280d969753e14dbb8460bbe358a684e"
+    },
+    {
+      "bytes": 300552,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/entity_record_map.csv",
+      "sha256": "b06e3e6345db445c2370ab59bdd9e0a210067cac92a48ad8e2ca0e7aade31e2b"
+    },
+    {
+      "bytes": 7981,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/manifest.json",
+      "sha256": "12b4576c2f45269698e1de112140734233da66d55faaef1e33d79ec9b220e57a"
+    },
+    {
+      "bytes": 5058167,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/masterDataset.csv",
+      "sha256": "e6da2f2e53321902381f56ed9d3268d9c88712d270f2f57771f3bb36df1cd266"
+    },
+    {
+      "bytes": 12075,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/quality_report.json",
+      "sha256": "127da7e9cee13f25110309d3cfa02dfceb5c4115baff36734aa8a0f9de1e71d1"
+    },
+    {
+      "bytes": 3807,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/README.md",
+      "sha256": "a01362e1c99056ecf5dc787e50f932119edbdb1370a3ff1ed7d89b29f8db6f3f"
+    },
+    {
+      "bytes": 2116,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/scenario.yaml",
+      "sha256": "2060b87db33b936ec3a5cc50604acaefdc73f32141a34f2caae47b3110aef3ef"
+    },
+    {
+      "bytes": 231378,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/scenario_population.parquet",
+      "sha256": "01e84dcea5df7062a92e6374710ba77c6b90a97f3c3b7b4f46b5518d6fa71597"
+    },
+    {
+      "bytes": 2230,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/scenario_selection_log.json",
+      "sha256": "5328713ff082bd76efd5490350bd4792b2235a16b1d604c35df88ae6d2536390"
+    },
+    {
+      "bytes": 264871,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/truth_crosswalk.csv",
+      "sha256": "2d22c275355a5dc820d610e89361503d3165bde720c9a53e0c8a7e82169c4df3"
+    },
+    {
+      "bytes": 82348,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/truth_events.parquet",
+      "sha256": "b48cec0762ad5c662a220e12a063715ba24250a2158a2604c36b4d96a0f55a42"
+    },
+    {
+      "bytes": 94349,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/truth_household_memberships.parquet",
+      "sha256": "a06e688ea9553faa0b716bbcaae460d1a90234bb3606fb5ab971423893163d03"
+    },
+    {
+      "bytes": 34727,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/truth_households.parquet",
+      "sha256": "5179154d26b68db757afb16daaeea443549fe804885126e62c9b7779a93c106b"
+    },
+    {
+      "bytes": 354519,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/truth_people.parquet",
+      "sha256": "76f5e2b3ee16ba937a17dce0319182cd0e0809b0e2fa2e850b3b8142a23b552f"
+    },
+    {
+      "bytes": 84018,
+      "path": "paper_revision_bundle/_provenance/household_transfer/runs/2026-07-23_paper_revision_household_family_birth_calibration_s20260719_seed20260719/truth_residence_history.parquet",
+      "sha256": "ed9a4ddbcbda4df6268471bf68d4fa82b4250686ed4d265f06d6741af39c110f"
+    },
+    {
+      "bytes": 53265,
+      "path": "paper_revision_bundle/_provenance/pytest.xml",
+      "sha256": "fe80d45b0844d61af7a502973116673ebac3b824297e67924b735e841dddd0cf"
+    },
+    {
+      "bytes": 191932,
+      "path": "paper_revision_bundle/cluster_metrics.csv",
+      "sha256": "ac1fb5db5b53d556a48102507240201d31f0cd07c48c1f2bb1fb2dd3292619b9"
+    },
+    {
+      "bytes": 642716,
+      "path": "paper_revision_bundle/config_mapping.csv",
+      "sha256": "7c9e755f400236ec03ad510662e50f2181305058793ddd5086de044198b2d5ea"
+    },
+    {
+      "bytes": 18675,
+      "path": "paper_revision_bundle/derived_claims.json",
+      "sha256": "4a8974892946e2b32d0bd608ee8ccb4e09b5fcb61f913c3294182d78815906db"
+    },
+    {
+      "bytes": 116959,
+      "path": "paper_revision_bundle/household_full_matrix.csv",
+      "sha256": "2a8019e3a4cfe60f8c0902a27a556accec3b0a8196279e6ed5974db589a893c4"
+    },
+    {
+      "bytes": 49353,
+      "path": "paper_revision_bundle/household_transfer_experiment.csv",
+      "sha256": "7d90cb8f5f7facbb8465795b6b56a9456e148216e289bc615d1332d84db33b0d"
+    },
+    {
+      "bytes": 16068,
+      "path": "paper_revision_bundle/matcher_protocol.json",
+      "sha256": "005167881c65cacce17790919a85f0f6325fd5c675c967f3853bd19c396b3dd2"
+    },
+    {
+      "bytes": 34162,
+      "path": "paper_revision_bundle/noise_trend.csv",
+      "sha256": "1853e64933b4686ab3a9785c880e3a7be6bdaf1151a93c71cc900e0f638488a8"
+    },
+    {
+      "bytes": 4220,
+      "path": "paper_revision_bundle/oracle_bootstrap.json",
+      "sha256": "c3a58c2d2526faf2a3d40f54f1ec4a6d15527f74351325eef17fd3a154d16c93"
+    },
+    {
+      "bytes": 105680,
+      "path": "paper_revision_bundle/paired_statistics.csv",
+      "sha256": "a93029a431516f7ca6d1c913339b4b5f55bf7738bb3cadca33b550301748b78a"
+    },
+    {
+      "bytes": 2591,
+      "path": "paper_revision_bundle/paper_tables/figure_2_data.csv",
+      "sha256": "bf261e87853307492af4f13ed4c0a9fcfe0312620067b7a17e14e4e7275e2efa"
+    },
+    {
+      "bytes": 2010,
+      "path": "paper_revision_bundle/paper_tables/figure_2_data.docx",
+      "sha256": "f82eef30b65972ce219fb5aeb222dab25215861a24ae14346c66cebd993918f1"
+    },
+    {
+      "bytes": 3284,
+      "path": "paper_revision_bundle/paper_tables/figure_2_data.tex",
+      "sha256": "620b1c159d0055982b0dc8714e9f139a94f6a210c91d16901762a8e6fc655283"
+    },
+    {
+      "bytes": 992,
+      "path": "paper_revision_bundle/paper_tables/table_i.csv",
+      "sha256": "42be069d82e9a5f07848425c32d9d01d2b9e0d59453f7ae655352ea084669e25"
+    },
+    {
+      "bytes": 1720,
+      "path": "paper_revision_bundle/paper_tables/table_i.docx",
+      "sha256": "daeec07826113c84dc75b1b17c824a585d48d4827d01be06de1fe13b0e1deda4"
+    },
+    {
+      "bytes": 1619,
+      "path": "paper_revision_bundle/paper_tables/table_i.tex",
+      "sha256": "9fcaecaae7f70f5d80eb904c4e4872e52000b1b17aba565909a0078a44bca022"
+    },
+    {
+      "bytes": 5499,
+      "path": "paper_revision_bundle/paper_tables/table_ii.csv",
+      "sha256": "8d8d0afbbd79440d80b9fabd2a71539a486b3cee701d84f401c392f7947d9676"
+    },
+    {
+      "bytes": 3726,
+      "path": "paper_revision_bundle/paper_tables/table_ii.docx",
+      "sha256": "4a5cb94ed32a44217b687fdd20d9afabb21352b85e1184be8ed0da2022af15c2"
+    },
+    {
+      "bytes": 6689,
+      "path": "paper_revision_bundle/paper_tables/table_ii.tex",
+      "sha256": "bfae5b3ce969eb8ea0c7bf6c4532ef8dd4333308e2f074a1301ef7117b487027"
+    },
+    {
+      "bytes": 2591,
+      "path": "paper_revision_bundle/paper_tables/table_iii.csv",
+      "sha256": "bf261e87853307492af4f13ed4c0a9fcfe0312620067b7a17e14e4e7275e2efa"
+    },
+    {
+      "bytes": 2006,
+      "path": "paper_revision_bundle/paper_tables/table_iii.docx",
+      "sha256": "a8c45caffea02054ca2d51e9571098ae83f53a972f1175c96ef2d60791d85e3c"
+    },
+    {
+      "bytes": 3301,
+      "path": "paper_revision_bundle/paper_tables/table_iii.tex",
+      "sha256": "f0f5a59b2bdec0818c829cec953d99bcfc822d987c9c7e48c118996a563f06b7"
+    },
+    {
+      "bytes": 3035,
+      "path": "paper_revision_bundle/paper_tables/table_iv.csv",
+      "sha256": "84c6e36e99b07fde4ef220352d0d0bdd5e5b6b16683f4791473b75ab1632e925"
+    },
+    {
+      "bytes": 2577,
+      "path": "paper_revision_bundle/paper_tables/table_iv.docx",
+      "sha256": "f6210ab7ca7edf9e01b80fd8f7cbdcfde7ca5a0590b1ec2f5fd4ff675f494deb"
+    },
+    {
+      "bytes": 4071,
+      "path": "paper_revision_bundle/paper_tables/table_iv.tex",
+      "sha256": "883ed9f025ea99ca363b171f9fea45617813d901b29196d34833c486e54a2cdc"
+    },
+    {
+      "bytes": 5547,
+      "path": "paper_revision_bundle/paper_tables/table_v.csv",
+      "sha256": "7dfea82d1ca1921432a789540a0146d22b42ed7a78c8d71ee8b6b6b98ab28d42"
+    },
+    {
+      "bytes": 3175,
+      "path": "paper_revision_bundle/paper_tables/table_v.docx",
+      "sha256": "9bf55f673947fe05365a3bcdc3b353fed5505416dbc03188bb4928d72c8c0c34"
+    },
+    {
+      "bytes": 6602,
+      "path": "paper_revision_bundle/paper_tables/table_v.tex",
+      "sha256": "96c3e33ab5a44f42f5894bed249100e8e15b9d67e768f9e8febc45694e4cff97"
+    },
+    {
+      "bytes": 1623,
+      "path": "paper_revision_bundle/paper_tables/table_vi.csv",
+      "sha256": "e3c04ffeadef424ee401b2366e04b294f95fb1764863607df333e5e50ad9b046"
+    },
+    {
+      "bytes": 2020,
+      "path": "paper_revision_bundle/paper_tables/table_vi.docx",
+      "sha256": "69eff5dcc54ccfca9f411d268fd305debac305cb6459ac11d4029cdc2e7528b5"
+    },
+    {
+      "bytes": 2194,
+      "path": "paper_revision_bundle/paper_tables/table_vi.tex",
+      "sha256": "98462bb47a5bd587047dd46efc1c5f5a833f11465d68dee1c7c26eb31163eba7"
+    },
+    {
+      "bytes": 36057,
+      "path": "paper_revision_bundle/public_target_conversion.csv",
+      "sha256": "c08a6104c0115e833e9d9bf964814cd23dc59d7baf64c3804396f5d499289d7d"
+    },
+    {
+      "bytes": 10066,
+      "path": "paper_revision_bundle/README.md",
+      "sha256": "6cb75192bd1a5c65bc44251e6609b5b5c400dcc0b0be578177e3350d55129144"
+    },
+    {
+      "bytes": 8533,
+      "path": "paper_revision_bundle/runtime_results.csv",
+      "sha256": "62d1e6f44039c8fd97b120d9a5fa606f905f69326137e9c8728ff81157a9bb63"
+    }
+  ],
+  "generated_at_utc": "2026-07-24T06:12:57.537539+00:00",
+  "git": {
+    "all_tags_at_generation_commit": [
+      "paper-artifact-2026.07.23"
+    ],
+    "branch": "main",
+    "commit_sha": "67195a1b86dfe2b1bf20eb41133dfc90cf4e56d9",
+    "commit_sha_role": "head_at_generation",
+    "dirty_at_generation": true,
+    "release": {
+      "authoritative_release_commit_command": "git rev-list -n 1 paper-artifact-2026.07.23",
+      "expected_post_tag_worktree_status": "clean",
+      "final_commit_sha_embedded": false,
+      "final_commit_sha_explanation": "A tracked file cannot contain the SHA of its own containing commit because that SHA depends on the file bytes. The annotated release tag is the authoritative final commit identifier and is checked by the release validator.",
+      "payload_commit_role": "HEAD at bundle generation",
+      "payload_commit_sha": "67195a1b86dfe2b1bf20eb41133dfc90cf4e56d9",
+      "tag": "paper-artifact-2026.07.23"
+    },
+    "release_tag": "paper-artifact-2026.07.23",
+    "status_at_generation": "dirty",
+    "status_porcelain_at_generation": [
+      "?? paper_experiments/build_paper_revision_bundle.py",
+      "?? paper_experiments/run_household_transfer.py",
+      "?? paper_experiments/validate_paper_revision_bundle.py",
+      "?? paper_revision_bundle/"
+    ]
+  },
+  "historical_result_files_overwritten": false,
+  "runtime": {
+    "learned_model_library": {
+      "package": "scikit-learn",
+      "version": "1.7.2"
+    },
+    "os": {
+      "machine": "AMD64",
+      "platform": "Windows-10-10.0.26200-SP0",
+      "processor": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+      "release": "10",
+      "system": "Windows",
+      "version": "10.0.26200"
+    },
+    "package_versions": {
+      "PyYAML": "6.0.3",
+      "duckdb": "1.5.4",
+      "joblib": "1.5.3",
+      "matplotlib": "3.10.9",
+      "networkx": "3.4.2",
+      "numpy": "2.2.6",
+      "pandas": "2.3.3",
+      "psutil": null,
+      "pyarrow": "24.0.0",
+      "pytest": "8.4.2",
+      "scikit-learn": "1.7.2",
+      "scipy": "1.15.3",
+      "splink": "4.0.16"
+    },
+    "python_executable": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\.venv\\Scripts\\python.exe",
+    "python_implementation": "CPython",
+    "python_version": "3.10.5",
+    "splink": {
+      "backend": "DuckDB",
+      "duckdb_version": "1.5.4",
+      "version": "4.0.16"
+    }
+  },
+  "source_artifacts": [
+    {
+      "bytes": 27398,
+      "path": "paper_experiments/run_household_transfer.py",
+      "sha256": "fd0b0a3e234ef03a25938c6f425f06be611a442d130c186a60a4b73004f05728"
+    },
+    {
+      "bytes": 94276,
+      "path": "paper_experiments/build_paper_revision_bundle.py",
+      "sha256": "0a8e982b656061cb53b549700001da5314c0c8a6a6f6245649f8454f0407ffde"
+    },
+    {
+      "bytes": 10752,
+      "path": "paper_experiments/validate_paper_revision_bundle.py",
+      "sha256": "0ad7681b390f20082bd08677b25d1747129785c5a874c9fd4665be2020025eb1"
+    },
+    {
+      "bytes": 943,
+      "path": "evaluation/baseline_matcher.py",
+      "sha256": "a11af109e31a310a8cd03fb94641083dc9039014ebd0d9ff05291529ac82ac4d"
+    },
+    {
+      "bytes": 5896,
+      "path": "evaluation/matchers.py",
+      "sha256": "6237c152af4d2ccf72019469cb0d1977e7c0b31e88234dc0b25101a001d868fc"
+    },
+    {
+      "bytes": 12408,
+      "path": "evaluation/metrics.py",
+      "sha256": "cdcb6d97725952b0b2e5b925257b32e15ab84722e4c1a067130a0208ca0ffb01"
+    },
+    {
+      "bytes": 80966,
+      "path": "phase2/src/sog_phase2/simulator.py",
+      "sha256": "7b07588a2972fd6d229745e845a5b92544cc99668a5a85f7b4922dd6bb3010da"
+    },
+    {
+      "bytes": 21539,
+      "path": "paper_experiments/results/E1_multiseed/e1_per_run.csv",
+      "sha256": "1cc53a5d0ce89457ed6b589c8ba2fa6429ff808df0a37a7765276980fc24c42b"
+    },
+    {
+      "bytes": 13198,
+      "path": "paper_experiments/results/E1_multiseed/e1_artifact_hashes.csv",
+      "sha256": "9f291d3ed7957e4e1d375e500b7b3d1df259f8f845b46e315126539ae90c5648"
+    },
+    {
+      "bytes": 262644,
+      "path": "paper_experiments/results/E2_E6/E2/e2_per_run_metrics.csv",
+      "sha256": "39ff9c8d0d927aaf25996046f5aba3bb484719cadf75863241f17d216f58fb5c"
+    },
+    {
+      "bytes": 939,
+      "path": "paper_experiments/results/E2_E6/E2/models/thresholds.json",
+      "sha256": "d9af8e92d1cd31fb8b137182a37843f1a642fcaa2257dbabf090f14183448f53"
+    },
+    {
+      "bytes": 10428,
+      "path": "paper_experiments/results/E2_E6/E2/models/splink.json",
+      "sha256": "9791592e123f0b8b4d7601d894b71dc0e47608c4097172fbbf227fa2c0fce7c2"
+    },
+    {
+      "bytes": 1809,
+      "path": "paper_experiments/results/E2_E6/E2/models/learned.joblib",
+      "sha256": "de99a1692c2e57d19cba2f5dfc2408356a9ef1d58918de346e3256b39d3fce67"
+    },
+    {
+      "bytes": 21676,
+      "path": "paper_experiments/results/E2_E6/E3/e3_per_run.csv",
+      "sha256": "81335ac428e07fc2b5448e0eadfc86f4542a6504996529eafda63bd08a195579"
+    },
+    {
+      "bytes": 49447,
+      "path": "paper_experiments/results/E2_E6/E4/e1_e4_e5_per_run.csv",
+      "sha256": "4c54a6c4b9bff1142f05b27e0fb6c9811a30cd578a36ffbd60cb0f586d0472ca"
+    },
+    {
+      "bytes": 46238,
+      "path": "paper_experiments/results/E7_E11/E7/e7_per_seed.csv",
+      "sha256": "539876d12e279b553b5b1d4c82d3548ec338f8a90dba3da4f3af74d41fba97d8"
+    },
+    {
+      "bytes": 5220,
+      "path": "paper_experiments/results/E7_E11/E7/e7_summary.csv",
+      "sha256": "a31795cabd0b0c6afd4c04db85643ff60ef5a339f9ff27a4bb51cf1aec32b171"
+    },
+    {
+      "bytes": 2490,
+      "path": "paper_experiments/results/E7_E11/E8/e8_runtime_repetitions.csv",
+      "sha256": "6acd90858f38b4e5c3c87af833dd01dc8d3eb491df65f3654500d7f24be87a7e"
+    },
+    {
+      "bytes": 657,
+      "path": "paper_experiments/results/E7_E11/E8/e8_hardware.json",
+      "sha256": "24303a1eed6a14bf49f18ec8f90fd6ee54fa34fc2c36add2f6598818e615c712"
+    },
+    {
+      "bytes": 1625,
+      "path": "paper_experiments/results/E7_E11/E10/e10_capability_matrix.csv",
+      "sha256": "3ed8670c80c66147a6e35a661a0e26d830b8eb69a9ef75c34505390f12d1e88c"
+    }
+  ],
+  "tests": {
+    "errors": 0,
+    "exact_command": ".venv\\Scripts\\python.exe -m pytest evaluation/tests phase2/tests -q --junitxml=paper_revision_bundle/_provenance/pytest.xml",
+    "failed": 0,
+    "failures": 0,
+    "junit_path": "paper_revision_bundle/_provenance/pytest.xml",
+    "junit_sha256": "fe80d45b0844d61af7a502973116673ebac3b824297e67924b735e841dddd0cf",
+    "passed": 378,
+    "skipped": 0,
+    "time_seconds": 143.929,
+    "total": 378
+  }
+}

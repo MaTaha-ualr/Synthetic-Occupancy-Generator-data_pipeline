@@ -1,0 +1,110 @@
+{
+  "generated_at_utc": "2026-07-24T04:26:23Z",
+  "run_id": "2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719",
+  "scenario_id": "paper_revision_household_adoption_blended_family_calibration_s20260719",
+  "seed": 20260719,
+  "phase1_input_csv": "paper_experiments/results/E1_multiseed/phase1_populations/phase1_seed_20260719.csv",
+  "phase1_input_manifest": "paper_experiments/results/E1_multiseed/phase1_populations/phase1_seed_20260719.manifest.json",
+  "phase1_input_csv_resolved": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_experiments\\results\\E1_multiseed\\phase1_populations\\phase1_seed_20260719.csv",
+  "phase1_input_manifest_resolved": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_experiments\\results\\E1_multiseed\\phase1_populations\\phase1_seed_20260719.manifest.json",
+  "scenario_yaml_source_path": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\configs\\paper_revision_household_adoption_blended_family_calibration_s20260719.yaml",
+  "scenario_population_path": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719\\scenario_population.parquet",
+  "truth_outputs": {
+    "truth_people": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719\\truth_people.parquet",
+    "truth_households": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719\\truth_households.parquet",
+    "truth_household_memberships": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719\\truth_household_memberships.parquet",
+    "truth_residence_history": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719\\truth_residence_history.parquet",
+    "truth_events": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719\\truth_events.parquet"
+  },
+  "simulation_meta": {
+    "scenario_id": "paper_revision_household_adoption_blended_family_calibration_s20260719",
+    "seed": 20260719,
+    "config": {
+      "granularity": "monthly",
+      "start_date": "2026-01-01",
+      "periods": 1
+    },
+    "step_event_probabilities": {
+      "move_rate_pct": 0.0,
+      "cohabit_rate_pct": 0.0,
+      "birth_rate_pct": 0.0,
+      "divorce_rate_pct": 0.0,
+      "leave_home_rate_pct": 0.0,
+      "death_rate_pct": 0.0,
+      "name_change_rate_pct": 0.0,
+      "adoption_rate_pct": 1.0
+    },
+    "annual_rate_pct_inputs": {
+      "move_rate_pct": 0.0,
+      "cohabit_rate_pct": 0.0,
+      "birth_rate_pct": 0.0,
+      "divorce_rate_pct": 0.0,
+      "leave_home_rate_pct": 0.0,
+      "death_rate_pct": 0.0,
+      "name_change_rate_pct": 0.0,
+      "adoption_rate_pct": 100.0
+    }
+  },
+  "observed_outputs": {
+    "datasets": [
+      {
+        "dataset_id": "A",
+        "filename": "DatasetA.csv",
+        "path": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719\\DatasetA.csv"
+      },
+      {
+        "dataset_id": "B",
+        "filename": "DatasetB.csv",
+        "path": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719\\DatasetB.csv"
+      }
+    ],
+    "entity_record_map": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719\\entity_record_map.csv",
+    "master_dataset": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719\\masterDataset.csv",
+    "truth_crosswalk": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719\\truth_crosswalk.csv",
+    "pairwise_crosswalks": [],
+    "dataset_a": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719\\DatasetA.csv",
+    "dataset_b": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\runs\\2026-07-23_paper_revision_household_adoption_blended_family_calibration_s20260719_seed20260719\\DatasetB.csv"
+  },
+  "emission_meta": {
+    "scenario_yaml_path": "C:\\Users\\Rudra\\Downloads\\Synthetic-Occupancy-Generator-data_pipeline-main\\Synthetic-Occupancy-Generator-data_pipeline-main\\paper_revision_bundle\\_provenance\\household_transfer\\configs\\paper_revision_household_adoption_blended_family_calibration_s20260719.yaml",
+    "simulation_start_date": "2026-01-01",
+    "simulation_end_date": "2026-02-01",
+    "crossfile_match_mode": "one_to_one",
+    "dataset_ids": [
+      "A",
+      "B"
+    ],
+    "coverage": {
+      "base_entities": 8166,
+      "late_only_entities": 13,
+      "a_entities_base": 8166,
+      "b_entities_base": 8166,
+      "overlap_entities": 8166,
+      "a_only_entities": 0,
+      "b_only_entities": 13,
+      "late_only_in_b": 13,
+      "relationship_mode": "one_to_one",
+      "dataset_entities": {
+        "A": 8166,
+        "B": 8179
+      },
+      "candidate_entities": {
+        "A": 8166,
+        "B": 8179
+      },
+      "union_entities": 8179,
+      "all_dataset_overlap_entities": 8166,
+      "pairwise_overlap": {
+        "A__B": {
+          "dataset_ids": [
+            "A",
+            "B"
+          ],
+          "overlap_entities": 8166,
+          "union_entities": 8179,
+          "overlap_pct_of_union": 99.84105636385866
+        }
+      }
+    }
+  }
+}
