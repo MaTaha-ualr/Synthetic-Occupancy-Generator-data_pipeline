@@ -13,6 +13,7 @@
   `fb66cc61395794a4dbea22b27e6c2eb5850f43a7`
 - Artifact commit: the commit targeted by the annotated tag. Resolve it with
   `git rev-list -n 1 paper-artifact-2026.07.23`.
+- Corrected source-and-results revision: `72e03b299a48d8129aeec09b24e0cccdfc784687`.
 
 The E1 four-condition configurations and the E2 fourteen-scenario
 configurations are retained under `paper_experiments/results/E1_multiseed/`
