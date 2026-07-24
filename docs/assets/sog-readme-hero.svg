@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420" role="img" aria-labelledby="title description">
+  <title id="title">Synthetic Occupancy Generator</title>
+  <desc id="description">A dark technical banner showing the SOG pipeline from population generation through life events to observed data and truth artifacts.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="0.55" stop-color="#172554"/>
+      <stop offset="1" stop-color="#312e81"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#818cf8"/>
+      <stop offset="0.55" stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#fbbf24"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.05"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#6366f1" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#6366f1" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="38" height="38" patternUnits="userSpaceOnUse">
+      <path d="M 38 0 L 0 0 0 38" fill="none" stroke="#c7d2fe" stroke-opacity="0.075" stroke-width="1"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="15" flood-color="#020617" flood-opacity="0.32"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="420" rx="24" fill="url(#background)"/>
+  <rect width="1200" height="420" rx="24" fill="url(#grid)"/>
+  <circle cx="1040" cy="42" r="270" fill="url(#glow)"/>
+  <circle cx="76" cy="388" r="180" fill="url(#glow)" opacity="0.55"/>
+
+  <g transform="translate(70 57)">
+    <g aria-hidden="true">
+      <path d="M13 19 L34 7 L55 19 L55 43 L34 55 L13 43 Z" fill="none" stroke="#a5b4fc" stroke-width="3"/>
+      <circle cx="13" cy="19" r="5" fill="#818cf8"/>
+      <circle cx="55" cy="19" r="5" fill="#60a5fa"/>
+      <circle cx="34" cy="55" r="5" fill="#fbbf24"/>
+    </g>
+    <text x="78" y="29" fill="#c7d2fe" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="3.2">SOG BENCHMARK STUDIO</text>
+  </g>
+
+  <text x="70" y="156" fill="#f8fafc" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="51" font-weight="800" letter-spacing="-1.5">Synthetic Occupancy</text>
+  <text x="70" y="216" fill="url(#brand)" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="51" font-weight="800" letter-spacing="-1.5">Generator</text>
+  <text x="72" y="258" fill="#cbd5e1" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18">
+    Reproducible populations, life events, observed records, and truth
+  </text>
+  <text x="72" y="286" fill="#cbd5e1" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="18">
+    for rigorous entity-resolution research.
+  </text>
+
+  <g transform="translate(70 328)" font-family="Inter, Segoe UI, Arial, sans-serif">
+    <rect width="156" height="42" rx="21" fill="#ffffff" fill-opacity="0.10" stroke="#c7d2fe" stroke-opacity="0.30"/>
+    <circle cx="22" cy="21" r="5" fill="#10b981"/>
+    <text x="36" y="27" fill="#e2e8f0" font-size="13" font-weight="650">14 scenarios</text>
+
+    <rect x="170" width="176" height="42" rx="21" fill="#ffffff" fill-opacity="0.10" stroke="#c7d2fe" stroke-opacity="0.30"/>
+    <circle cx="192" cy="21" r="5" fill="#60a5fa"/>
+    <text x="206" y="27" fill="#e2e8f0" font-size="13" font-weight="650">Truth-aware outputs</text>
+
+    <rect x="360" width="177" height="42" rx="21" fill="#ffffff" fill-opacity="0.10" stroke="#c7d2fe" stroke-opacity="0.30"/>
+    <circle cx="382" cy="21" r="5" fill="#fbbf24"/>
+    <text x="396" y="27" fill="#e2e8f0" font-size="13" font-weight="650">Release validated</text>
+  </g>
+
+  <g transform="translate(735 69)" filter="url(#shadow)" font-family="Inter, Segoe UI, Arial, sans-serif">
+    <rect width="395" height="282" rx="20" fill="url(#panel)" stroke="#c7d2fe" stroke-opacity="0.20"/>
+    <text x="28" y="37" fill="#a5b4fc" font-size="12" font-weight="700" letter-spacing="2.2">REPRODUCIBLE DATA FLOW</text>
+
+    <g transform="translate(28 62)">
+      <rect width="148" height="72" rx="13" fill="#0f172a" fill-opacity="0.67" stroke="#818cf8" stroke-opacity="0.65"/>
+      <text x="18" y="28" fill="#a5b4fc" font-size="11" font-weight="700" letter-spacing="1.4">PHASE 1</text>
+      <text x="18" y="52" fill="#f8fafc" font-size="16" font-weight="700">Population</text>
+
+      <path d="M158 36 H188" stroke="#94a3b8" stroke-width="2"/>
+      <path d="M182 30 L190 36 L182 42" fill="none" stroke="#94a3b8" stroke-width="2"/>
+
+      <rect x="198" width="141" height="72" rx="13" fill="#0f172a" fill-opacity="0.67" stroke="#60a5fa" stroke-opacity="0.65"/>
+      <text x="216" y="28" fill="#93c5fd" font-size="11" font-weight="700" letter-spacing="1.4">PHASE 2</text>
+      <text x="216" y="52" fill="#f8fafc" font-size="16" font-weight="700">Life events</text>
+    </g>
+
+    <path d="M197 142 V165" stroke="#94a3b8" stroke-width="2"/>
+    <path d="M191 159 L197 167 L203 159" fill="none" stroke="#94a3b8" stroke-width="2"/>
+
+    <g transform="translate(28 171)">
+      <rect width="148" height="72" rx="13" fill="#0f172a" fill-opacity="0.67" stroke="#10b981" stroke-opacity="0.65"/>
+      <text x="18" y="28" fill="#6ee7b7" font-size="11" font-weight="700" letter-spacing="1.4">OBSERVED</text>
+      <text x="18" y="52" fill="#f8fafc" font-size="16" font-weight="700">Datasets</text>
+
+      <path d="M158 36 H188" stroke="#94a3b8" stroke-width="2"/>
+      <path d="M182 30 L190 36 L182 42" fill="none" stroke="#94a3b8" stroke-width="2"/>
+
+      <rect x="198" width="141" height="72" rx="13" fill="#0f172a" fill-opacity="0.67" stroke="#fbbf24" stroke-opacity="0.70"/>
+      <text x="216" y="28" fill="#fde68a" font-size="11" font-weight="700" letter-spacing="1.4">GROUND TRUTH</text>
+      <text x="216" y="52" fill="#f8fafc" font-size="16" font-weight="700">Evaluation</text>
+    </g>
+  </g>
+</svg>
