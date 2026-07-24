@@ -33,24 +33,17 @@ Synthetic Occupancy Generator (SOG) creates a baseline population, simulates hou
 
 SOG is designed for work where **how the data changed** matters as much as the final rows: matcher benchmarking, lifecycle linkage, household reconstruction, deduplication, and reproducible research.
 
-## From population to benchmark
+## System architecture
 
-```mermaid
-flowchart LR
-    A["Phase 1<br/>Baseline population"] --> B["Phase 2<br/>Scenario simulation"]
-    B --> C["Observed datasets<br/>A · B · optional C"]
-    B --> D["Truth layer<br/>people · households · events"]
-    C --> E["Entity-resolution<br/>evaluation"]
-    D --> E
-    E --> F["Metrics · tables<br/>quality · provenance"]
+SOG carries configuration and provenance through every stage—from population construction and longitudinal truth simulation to noisy source emission, deterministic linkage maps, and research-ready benchmark artifacts.
 
-    classDef primary fill:#eef2ff,stroke:#4f46e5,color:#1e1b4b,stroke-width:2px;
-    classDef truth fill:#fffbeb,stroke:#f59e0b,color:#451a03,stroke-width:2px;
-    classDef output fill:#ecfdf5,stroke:#059669,color:#052e16,stroke-width:2px;
-    class A,B,C primary;
-    class D truth;
-    class E,F output;
-```
+<p align="center">
+  <a href="docs/assets/figure%201.png">
+    <img src="docs/assets/figure%201.png" alt="Figure 1: SOG end-to-end architecture covering configuration, population generation, truth simulation, observed data emission, linkage mapping, validation, and benchmark outputs" width="100%">
+  </a>
+</p>
+
+<p align="center"><sub><strong>Figure 1.</strong> End-to-end SOG architecture. Select the image to inspect the full-resolution diagram.</sub></p>
 
 ### Core capabilities
 
