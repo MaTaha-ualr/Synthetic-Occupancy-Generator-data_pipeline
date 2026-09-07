@@ -138,6 +138,10 @@ def _parse_date(value: Any) -> date | None:
     text = str(value).strip() if value is not None else ""
     if not text:
         return None
+    try:
+        return date.fromisoformat(text)
+    except ValueError:
+        pass
     parsed = pd.to_datetime(text, errors="coerce")
     if pd.isna(parsed):
         return None

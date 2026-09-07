@@ -15,6 +15,7 @@ from typing import Any
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SCENARIOS_DIR = PROJECT_ROOT / "phase2" / "scenarios"
 RUNS_ROOT = PROJECT_ROOT / "phase2" / "runs"
+SOG_TOOLS_API_VERSION = 2
 
 _src_dir = str(PROJECT_ROOT / "phase2" / "src")
 if _src_dir not in sys.path:
@@ -253,6 +254,77 @@ def _validate_scenario_dict(scenario: dict) -> list[str]:
     except ImportError as exc:
         errors.append(f"Import error during validation: {exc}")
     return errors
+
+
+def validate_scenario_payload(scenario: dict[str, Any]) -> dict[str, Any]:
+    """Validate an in-memory scenario through the existing Phase-2 validators.
+
+    This is the public, read-only entry point used by proposal-based authoring
+    layers.  It deliberately performs no file writes and does not resolve or
+    execute a pipeline run.
+    """
+    if not isinstance(scenario, dict):
+        return {"valid": False, "errors": ["Scenario payload must be a mapping"]}
+    errors = _validate_scenario_dict(scenario)
+    return {
+        "valid": len(errors) == 0,
+        "errors": errors,
+        "scenario_id": scenario.get("scenario_id", ""),
+    }
+
+
+def validate_scenario_runtime_inputs(
+    scenario: dict[str, Any],
+    *,
+    project_root: Path | None = None,
+) -> dict[str, Any]:
+    """Preflight external Phase-1 inputs with the pipeline's path resolver."""
+    root = Path(project_root or PROJECT_ROOT).resolve()
+    errors: list[str] = []
+    configured: dict[str, str] = {}
+    resolved: dict[str, str] = {}
+    phase1 = scenario.get("phase1", {}) if isinstance(scenario, dict) else {}
+    if not isinstance(phase1, dict):
+        return {
+            "valid": False,
+            "errors": ["scenario.phase1 must be a mapping"],
+            "configured_paths": configured,
+            "resolved_paths": resolved,
+        }
+
+    import importlib
+
+    pipeline = importlib.import_module("sog_phase2.pipeline")
+    if not hasattr(pipeline, "resolve_phase1_input_path"):
+        pipeline = importlib.reload(pipeline)
+    resolve_phase1_input_path = pipeline.resolve_phase1_input_path
+
+    for field, label in (
+        ("data_path", "Phase-1 CSV"),
+        ("manifest_path", "Phase-1 manifest"),
+    ):
+        value = str(phase1.get(field, "")).strip()
+        configured[field] = value
+        if not value:
+            errors.append(f"scenario.phase1.{field} is required")
+            continue
+        path = resolve_phase1_input_path(root, value)
+        resolved[field] = str(path)
+        if not path.is_file():
+            errors.append(f"{label} not found: {path}")
+
+    return {
+        "valid": not errors,
+        "errors": errors,
+        "configured_paths": configured,
+        "resolved_paths": resolved,
+        "used_compatibility_fallback": any(
+            configured.get(field)
+            and str((root / configured[field]).resolve()) != resolved.get(field)
+            for field in configured
+            if field in resolved
+        ),
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -547,6 +619,20 @@ def submit_run_async(
     if not yaml_path.exists():
         return {"error": f"Scenario not found: {scenario_id}"}
 
+    import yaml
+
+    try:
+        scenario = yaml.safe_load(yaml_path.read_text(encoding="utf-8")) or {}
+    except Exception as exc:
+        return {"error": f"Scenario YAML could not be read: {exc}"}
+    preflight = validate_scenario_runtime_inputs(scenario)
+    if not preflight["valid"]:
+        return {
+            "error": "Scenario runtime preflight failed: "
+            + "; ".join(preflight["errors"]),
+            "preflight": preflight,
+        }
+
     job_id = submit_run(
         scenario_yaml_path=yaml_path,
         scenario_id=scenario_id,
@@ -556,6 +642,7 @@ def submit_run_async(
         "job_id": job_id,
         "scenario_id": scenario_id,
         "status": "submitted",
+        "preflight": preflight,
         "message": f"Job {job_id} submitted. Use poll_run_status to check progress.",
     }
 

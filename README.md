@@ -3,60 +3,79 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/MaTaha-ualr/Synthetic-Occupancy-Generator-data_pipeline/tree/paper-artifact-2026.07.24"><img alt="Release paper-artifact-2026.07.24" src="https://img.shields.io/badge/release-paper--artifact--2026.07.24-4f46e5?style=flat-square"></a>
-  <a href="paper_revision_bundle/README.md"><img alt="Release checks: 378 passed" src="https://img.shields.io/badge/release_checks-378_passed-059669?style=flat-square"></a>
-  <a href="phase2/scenarios/README.md"><img alt="14 canonical scenarios" src="https://img.shields.io/badge/scenarios-14-2563eb?style=flat-square"></a>
+  <a href="https://github.com/MaTaha-ualr/Synthetic-Occupancy-Generator-data_pipeline/tree/paper-artifact-2026.07.24"><img alt="Frozen paper artifact" src="https://img.shields.io/badge/paper_artifact-2026.07.24-4f46e5?style=flat-square"></a>
+  <a href="phase2/scenarios/README.md"><img alt="14 canonical scenarios" src="https://img.shields.io/badge/canonical_scenarios-14-2563eb?style=flat-square"></a>
+  <a href="#validation"><img alt="439 repository tests passed" src="https://img.shields.io/badge/repository_tests-439_passed-059669?style=flat-square"></a>
   <a href="docs/BEGINNER_GUIDE.md"><img alt="Python 3.10 or newer" src="https://img.shields.io/badge/python-3.10%2B-f59e0b?style=flat-square"></a>
   <a href="LICENSE"><img alt="MIT License" src="https://img.shields.io/badge/license-MIT-334155?style=flat-square"></a>
 </p>
 
 <p align="center">
-  <strong>A two-phase synthetic data pipeline for building realistic, inspectable, and repeatable entity-resolution benchmarks.</strong>
+  <strong>Deterministic synthetic populations, longitudinal truth, and noisy multi-source records for entity-resolution research.</strong>
 </p>
 
 <p align="center">
   <a href="#quick-start">Quick start</a> ·
   <a href="#benchmark-studio">Benchmark Studio</a> ·
-  <a href="#reproducibility-release">Reproducibility release</a> ·
+  <a href="#population-scaling-benchmark">Scaling benchmark</a> ·
+  <a href="#reproducibility-release">Paper artifact</a> ·
   <a href="#documentation">Documentation</a>
 </p>
 
 ---
 
-## What SOG does
+## Why SOG
 
-Synthetic Occupancy Generator (SOG) creates a baseline population, simulates household and life events, emits noisy multi-source records, and preserves the truth needed to evaluate entity-resolution systems.
+Synthetic Occupancy Generator (SOG) builds an inspectable baseline population, simulates household and life events, emits imperfect observations into multiple sources, and preserves the ground truth required to evaluate entity-resolution systems.
 
-| Build realistic populations | Stress linkage systems | Measure against truth |
+| Population construction | Linkage stress | Evaluation truth |
 |---|---|---|
-| Generate people, households, addresses, and demographic attributes from configurable inputs. | Exercise identity drift, sparse overlap, duplication, household change, and multi-source coverage. | Export entity mappings, event histories, household histories, manifests, and quality reports. |
+| People, households, addresses, demographics, and configurable name distributions | Identity drift, missingness, overlap, duplication, household change, and source-specific corruption | Entity-record mappings, event histories, residence histories, manifests, checksums, and quality reports |
 
-SOG is designed for work where **how the data changed** matters as much as the final rows: matcher benchmarking, lifecycle linkage, household reconstruction, deduplication, and reproducible research.
+The pipeline is intended for deduplication, cross-source linkage, longitudinal identity resolution, household reconstruction, matcher benchmarking, and reproducible research.
 
-## System architecture
+## Architecture
 
-SOG carries configuration and provenance through every stage—from population construction and longitudinal truth simulation to noisy source emission, deterministic linkage maps, and research-ready benchmark artifacts.
+SOG keeps configuration, truth, and observations separate throughout the workflow. A validated YAML scenario is always the authoritative experiment specification.
+
+```text
+Phase 1 configuration
+        │
+        ▼
+Baseline people + households + addresses
+        │
+        ▼
+Validated canonical or approved working YAML
+        │
+        ▼
+Phase 2 truth simulation ──► events + histories + entity truth
+        │
+        ▼
+Source emission ───────────► noisy observations + linkage maps
+        │
+        ▼
+Output-contract validation + manifests + benchmark artifacts
+```
 
 <p align="center">
   <a href="docs/assets/figure%201.png">
-    <img src="docs/assets/figure%201.png" alt="Figure 1: SOG end-to-end architecture covering configuration, population generation, truth simulation, observed data emission, linkage mapping, validation, and benchmark outputs" width="100%">
+    <img src="docs/assets/figure%201.png" alt="SOG end-to-end architecture" width="100%">
   </a>
 </p>
 
-<p align="center"><sub><strong>Figure 1.</strong> End-to-end SOG architecture. Select the image to inspect the full-resolution diagram.</sub></p>
+### Highlights
 
-### Core capabilities
-
-- **Deterministic generation** — seeded Phase 1 and Phase 2 workflows with explicit manifests.
-- **Fourteen canonical scenarios** — clean linkage, movers, household transitions, sparse coverage, duplication, name change, death persistence, and more.
-- **Truth-aware output contracts** — person, household, membership, residence, event, and entity-record mappings.
-- **Configurable observation noise** — field corruption, missingness, overlap, duplication, topology, and cardinality controls.
-- **Research-ready evaluation** — baseline, learned, and Splink matcher workflows with pairwise and cluster metrics.
-- **Local Benchmark Studio** — Streamlit-assisted scenario drafting, execution, charting, and export.
+- Seeded Phase 1 and Phase 2 workflows with recorded configuration and provenance.
+- Fourteen unchanged canonical scenarios covering clean linkage, movers, household transitions, sparse coverage, duplication, name change, death persistence, and related stressors.
+- Truth-aware output contracts for people, households, memberships, residences, events, and entity-record mappings.
+- Configurable field corruption, missingness, overlap, duplication, topology, and cardinality.
+- Baseline, learned, and Splink evaluation workflows with pairwise and cluster metrics.
+- A local Streamlit Benchmark Studio for guided authoring, validation, execution, inspection, and export.
+- An optional proposal-only natural-language layer that cannot bypass validation or write generated data.
 
 ## Quick start
 
-### 1. Create the environment
+### 1. Install
 
 ```powershell
 git clone https://github.com/MaTaha-ualr/Synthetic-Occupancy-Generator-data_pipeline.git
@@ -68,55 +87,85 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-### 2. Build the baseline population
+### 2. Generate the Phase 1 population
 
 ```powershell
 python phase1/scripts/build_prepared.py
 python phase1/scripts/generate_phase1.py --overwrite
-
-Copy-Item phase1/outputs/Phase1_people_addresses.csv `
-  phase1/outputs_phase1/Phase1_people_addresses.csv -Force
-Copy-Item phase1/outputs/Phase1_people_addresses.manifest.json `
-  phase1/outputs_phase1/Phase1_people_addresses.manifest.json -Force
-Copy-Item phase1/outputs/Phase1_people_addresses.quality_report.json `
-  phase1/outputs_phase1/Phase1_people_addresses.quality_report.json -Force
 ```
 
-### 3. Run and validate a scenario
+Phase 2 resolves the generated `phase1/outputs` files automatically, including scenarios that retain the historical `phase1/outputs_phase1` path.
+
+### 3. Run a validated Phase 2 scenario
 
 ```powershell
 python phase2/scripts/build_phase2_params.py
 python phase2/scripts/run_phase2_pipeline.py `
-  --scenario single_movers `
+  --scenario clean_baseline_linkage `
   --run-date 2026-03-10
 ```
 
-The run directory contains the observed datasets, truth tables, resolved scenario, manifest, quality report, and a run-specific README.
-
-> [!TIP]
-> Start with [`single_movers`](phase2/scenarios/single_movers.yaml), then use the [scenario support matrix](phase2/docs/SCENARIO_SUPPORT_MATRIX.md) to choose the event surface and linkage stress you need.
+Each run directory contains observed datasets, truth tables, the resolved scenario, manifest, quality report, and a run-specific README. Begin with [`clean_baseline_linkage`](phase2/scenarios/clean_baseline_linkage.yaml), then use the [scenario support matrix](phase2/docs/SCENARIO_SUPPORT_MATRIX.md) to select other benchmark conditions.
 
 ## Benchmark Studio
 
-The local Streamlit interface provides a guided workspace for scenario configuration, async execution, result inspection, charting, and export.
+Launch the local interface:
 
 ```powershell
 .\run_frontend.ps1
 ```
 
-Then open [http://localhost:8501](http://localhost:8501). For agent-assisted workflows, set `ANTHROPIC_API_KEY` in the environment or enter it in the application when prompted.
+Open [http://localhost:8501](http://localhost:8501). The interface places experiment authoring and review in the primary canvas, with workflow status, provider setup, session information, and the YAML authority boundary in a supporting rail.
 
-| Configure | Run | Analyze | Export |
-|---|---|---|---|
-| Draft and edit scenario parameters | Launch and monitor pipeline jobs | Inspect quality and difficulty charts | Package artifacts and reports |
+### Optional natural-language authoring
 
-See the [frontend runbook](docs/FRONTEND_RUNBOOK.md) for startup, runtime-state, and troubleshooting details.
+Copy [`.env.example`](.env.example) to `.env`, then provide an NVIDIA developer key through `NVIDIA_API_KEY` or the masked field in the interface. The default provider model is `nvidia/nemotron-3.5-lightning-30b-a3b`; the endpoint and model remain configurable. `ANTHROPIC_API_KEY` is optional and is used only for the separate conversational analysis/export assistant.
+
+```text
+Plain-English requirements
+        ↓
+Read-only structured proposal
+        ↓
+Existing schema + semantic validation
+        ↓
+Explicit user approval
+        ↓
+Resolved canonical YAML
+        ↓
+Existing deterministic SOG pipeline
+```
+
+The model has no generation tools and cannot modify truth tables, records, events, or benchmark outputs. See the [scenario authoring security and validation guide](docs/SCENARIO_AUTHORING.md) and [frontend runbook](docs/FRONTEND_RUNBOOK.md).
+
+## Population-scaling benchmark
+
+[`experiments/run_scaling_benchmark.py`](experiments/run_scaling_benchmark.py) provides a resumable benchmark across 10,000, 50,000, 100,000, 250,000, 500,000, and 1,000,000 requested people using three fixed seeds, a 1.4 records-per-person Phase 1 target, and the unchanged `clean_baseline_linkage` scenario.
+
+```powershell
+# Complete or resume all planned runs
+python experiments/run_scaling_benchmark.py
+
+# Rebuild reports from recorded rows without rerunning generation
+python experiments/run_scaling_benchmark.py --report-only
+```
+
+The checked-in baseline is intentionally transparent about incomplete measurements: all three primary seeds completed through 500,000 people; the 1,000,000-person runs are not reported as measured. Reproducibility reruns completed through 250,000 people, and the 250,000-person checksum mismatch is retained as a finding rather than hidden. No paper result or extrapolated value is substituted for a missing run.
+
+| Benchmark artifact | Purpose |
+|---|---|
+| [scaling results](experiments/scaling_results.csv) | Per-run population, throughput, memory, artifact, validation, name-collision, duplication, and overlap metrics |
+| [scaling summary](experiments/scaling_summary.csv) | Aggregate metrics by requested population |
+| [reproducibility checks](experiments/scaling_reproducibility.csv) | Same-seed truth and output checksum comparisons |
+| [environment](experiments/scaling_environment.json) | CPU, RAM, OS, Python, dependencies, Git revision, and benchmark configuration |
+| [report](experiments/scaling_report.md) | Human-readable results, name-collision table, limitations, and reproduction commands |
+
+Generated trial payloads belong under the gitignored `experiments/scaling_artifacts/` directory. The summarized CSV, JSON, and Markdown evidence above is versioned.
 
 ## Reproducibility release
 
-The current paper artifact is frozen at [`paper-artifact-2026.07.24`](https://github.com/MaTaha-ualr/Synthetic-Occupancy-Generator-data_pipeline/tree/paper-artifact-2026.07.24).
+The paper evidence remains frozen at [`paper-artifact-2026.07.24`](https://github.com/MaTaha-ualr/Synthetic-Occupancy-Generator-data_pipeline/tree/paper-artifact-2026.07.24). This feature release does not rewrite its canonical scenarios or benchmark results.
 
-| Release evidence | Validated result |
+| Frozen release evidence | Validated result |
 |---|---:|
 | Evaluation and Phase 2 tests | 378 passed |
 | Hashed bundle outputs | 159 |
@@ -130,16 +179,17 @@ Start with the [paper revision bundle](paper_revision_bundle/README.md), then in
 
 ## Documentation
 
-| If you want to… | Start here |
+| Goal | Start here |
 |---|---|
-| Understand the complete system | [SOG Bible](docs/SOG_BIBLE.md) · [PDF](The_SOG_Bible_v2.pdf) |
+| Understand the system | [SOG Bible](docs/SOG_BIBLE.md) · [PDF](The_SOG_Bible_v2.pdf) |
 | Follow a guided demonstration | [Professor walkthrough](docs/SOG_PROFESSOR_WALKTHROUGH.md) |
-| Get running for the first time | [Beginner guide](docs/BEGINNER_GUIDE.md) |
+| Install and run SOG | [Beginner guide](docs/BEGINNER_GUIDE.md) |
 | Configure Phase 1 | [Phase 1 guide](phase1/README.md) |
-| Run Phase 2 scenarios | [Phase 2 guide](phase2/README.md) |
-| Choose an ER benchmark | [Scenario use cases](phase2/docs/SCENARIO_USE_CASES_AND_TESTING.md) |
-| Tune parameters safely | [Parameter tuning playbook](docs/reference/PARAMETER_TUNING_PLAYBOOK.md) |
+| Work with Phase 2 | [Phase 2 guide](phase2/README.md) |
+| Choose a canonical scenario | [Scenario use cases](phase2/docs/SCENARIO_USE_CASES_AND_TESTING.md) |
+| Tune parameters | [Parameter tuning playbook](docs/reference/PARAMETER_TUNING_PLAYBOOK.md) |
 | Operate the frontend | [Frontend runbook](docs/FRONTEND_RUNBOOK.md) |
+| Author from plain English | [Scenario authoring guide](docs/SCENARIO_AUTHORING.md) |
 | Review ownership and status | [Handoff](docs/HANDOFF.md) |
 
 <details>
@@ -148,10 +198,11 @@ Start with the [paper revision bundle](paper_revision_bundle/README.md), then in
 ```text
 .
 ├── phase1/                  baseline population generation
-├── phase2/                  event simulation, observation, truth, and validation
-├── evaluation/              matcher protocols and metrics
-├── frontend/                Streamlit Benchmark Studio
-├── paper_experiments/       reproducible experiment runners and results
+├── phase2/                  truth simulation, source emission, and validation
+├── evaluation/              matcher protocols and evaluation metrics
+├── frontend/                local Streamlit Benchmark Studio
+├── experiments/             population-scaling runner and summarized evidence
+├── paper_experiments/       frozen paper experiment runners and results
 ├── paper_revision_bundle/   frozen paper evidence and editable tables
 ├── docs/                    guides, references, and architecture notes
 ├── tests/                   frontend and orchestration tests
@@ -163,18 +214,24 @@ Start with the [paper revision bundle](paper_revision_bundle/README.md), then in
 
 ## Validation
 
-Run the full repository suite:
+Run the active repository suite:
 
 ```powershell
 python -m pytest -q
 ```
 
-Validate the frozen paper bundle and release contract:
+The release-preparation run completed with **439 tests passed**.
+
+Validate the frozen paper bundle and release contract separately:
 
 ```powershell
 python paper_experiments/validate_paper_revision_bundle.py `
   --release-tag paper-artifact-2026.07.24
 ```
+
+## Maintainer
+
+Maintained by **Ammar Ahmed Taha Mohammed** ([@MaTaha-ualr](https://github.com/MaTaha-ualr)).
 
 ## License
 

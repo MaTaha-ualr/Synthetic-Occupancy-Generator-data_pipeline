@@ -10,6 +10,8 @@ pyarrow>=14.0
 openpyxl>=3.1
 requests>=2.31
 streamlit>=1.39
+# Streamlit's Starlette server imports gzip APIs first exposed in 0.46.0.
+starlette>=0.46.0,<2
 anthropic>=0.30
 python-dotenv>=1.0
 matplotlib>=3.8

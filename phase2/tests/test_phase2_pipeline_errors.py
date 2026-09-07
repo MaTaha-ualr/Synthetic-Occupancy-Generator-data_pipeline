@@ -13,7 +13,7 @@ import yaml
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(PROJECT_ROOT / "phase2" / "src"))
 
-from sog_phase2.pipeline import run_scenario_pipeline
+from sog_phase2.pipeline import resolve_phase1_input_path, run_scenario_pipeline
 
 
 def _write_phase2_params(project_root: Path) -> None:
@@ -114,6 +114,19 @@ def test_pipeline_raises_on_missing_phase1_csv(tmp_path: Path) -> None:
             runs_root=project_root / "phase2" / "runs",
             project_root=project_root,
         )
+
+
+def test_canonical_phase1_path_falls_back_to_generated_outputs(tmp_path: Path) -> None:
+    generated = tmp_path / "phase1" / "outputs" / "Phase1_people_addresses.csv"
+    generated.parent.mkdir(parents=True)
+    generated.write_text("PersonKey\nP1\n", encoding="utf-8")
+
+    resolved = resolve_phase1_input_path(
+        tmp_path,
+        "phase1/outputs_phase1/Phase1_people_addresses.csv",
+    )
+
+    assert resolved == generated.resolve()
 
 
 # ---------------------------------------------------------------------------

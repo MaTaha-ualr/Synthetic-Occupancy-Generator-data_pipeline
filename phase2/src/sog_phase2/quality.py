@@ -65,7 +65,14 @@ def _text(value: Any) -> str:
 
 
 def _parse_date(value: Any) -> date | None:
-    parsed = pd.to_datetime(_text(value), errors="coerce")
+    text = _text(value)
+    if not text:
+        return None
+    try:
+        return date.fromisoformat(text)
+    except ValueError:
+        pass
+    parsed = pd.to_datetime(text, errors="coerce")
     if pd.isna(parsed):
         return None
     return parsed.date()

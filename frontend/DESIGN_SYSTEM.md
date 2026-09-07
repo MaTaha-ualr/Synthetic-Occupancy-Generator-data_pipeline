@@ -1,238 +1,123 @@
-# SOG Benchmark Studio - Design System
+# SOG Benchmark Studio design system
 
-A production-ready design system for the Synthetic Occupancy Generator frontend.
+This document describes the production Streamlit interface in `frontend/chatbot.py`.
+The live `APP_CSS` tokens remain the implementation source of truth.
 
----
+## Design direction
 
-## 🎨 Design Philosophy
+The studio uses a quiet application-shell aesthetic: a cool neutral canvas, a
+dedicated navigation and system-status rail, white working surfaces, and cobalt
+actions. The experiment canvas is visually primary; provider and session details
+remain available without competing with the authoring task.
 
-### Visual Identity
-- **Modern & Professional**: Clean lines, purposeful whitespace, refined interactions
-- **Scientific Precision**: Monospace fonts for data, clear visual hierarchy
-- **Approachable**: Warm accent colors (amber) balance the technical indigo primary
+## Product principles
 
-### Design Influences
-- Linear.app (precision & clarity)
-- Notion (approachable density)
-- Vercel (modern developer tools)
-- Stripe (polished interactions)
+1. **Task first** — the Scenario Composer belongs in the first working viewport;
+   introductory content must not delay the primary task.
+2. **One dominant action** — each stage exposes one clear next action: generate,
+   approve, or run.
+3. **Progressive disclosure** — resolved targets appear first; raw JSON, YAML,
+   provider settings, and optional analysis remain behind tabs or expanders.
+4. **Readable before decorative** — normal text maintains AA contrast, short line
+   lengths, visible labels, and comfortable spacing.
+5. **Quiet density** — use compact status summaries and remove repeated marketing
+   cards, descriptions, and controls that do not advance the workflow.
 
----
+## Color system
 
-## 📐 Color System
+### Neutral surfaces and text
 
-### Neutral: Slate
-Used for text, backgrounds, and UI chrome.
+| Token | Value | Use |
+| --- | --- | --- |
+| `--sog-paper` | `#f3eee7` | Main warm page background |
+| `--sog-paper-strong` | `#fbf8f4` | Elevated light surfaces |
+| `--sog-ink` | `#121922` | Primary text |
+| `--sog-ink-soft` | `#55606c` | Secondary text |
+| `--sog-ink-faint` | `#626d79` | Captions and placeholders; AA contrast on paper |
+| `--sog-line` | `rgba(18, 25, 34, 0.10)` | Subtle borders |
+| `--sog-line-strong` | `rgba(18, 25, 34, 0.16)` | Input and emphasis borders |
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--slate-50` | `#f8fafc` | Page background |
-| `--slate-100` | `#f1f5f9` | Card backgrounds |
-| `--slate-200` | `#e2e8f0` | Borders, dividers |
-| `--slate-500` | `#64748b` | Secondary text |
-| `--slate-700` | `#334155` | Primary text |
-| `--slate-900` | `#0f172a` | Hero backgrounds |
+### Brand and actions
 
-### Primary: Indigo
-Used for primary actions, active states, and brand elements.
+| Token | Value | Use |
+| --- | --- | --- |
+| `--sog-navy` | `#0f1724` | Hero and code surfaces |
+| `--sog-navy-2` | `#162235` | Hero gradient midpoint |
+| `--sog-navy-3` | `#223451` | Hero gradient endpoint |
+| `--sog-blue` | `#2754ff` | Primary actions, links, and focus identity |
+| Cobalt endpoint | `#4669ed` | Accessible primary-button gradient endpoint |
+| `--sog-copper` | `#f1683f` | Restrained accent and progress emphasis |
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--indigo-500` | `#6366f1` | Primary buttons |
-| `--indigo-600` | `#4f46e5` | Button hover |
-| `--indigo-100` | `#e0e7ff` | Light backgrounds |
+Semantic states use dark readable text on lightly tinted surfaces:
 
-### Accent: Amber
-Used for highlights, warnings, and secondary emphasis.
+- Success: `#17633e` text with a pale green surface.
+- Warning or disconnected: `#8b3c24` text with a pale copper surface.
+- Errors and information use Streamlit alerts restyled to match the card system.
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| `--amber-400` | `#fbbf24` | Highlights |
-| `--amber-500` | `#f59e0b` | Warnings, active states |
+White button text maintains at least WCAG AA contrast across the cobalt gradient.
+Normal faint text also maintains AA contrast against the paper canvas.
 
-### Semantic Colors
-- **Success**: `#10b981` (green)
-- **Warning**: `#f59e0b` (amber)
-- **Error**: `#ef4444` (red)
-- **Info**: `#3b82f6` (blue)
+## Typography
 
----
+| Role | Family | Use |
+| --- | --- | --- |
+| Display and headings | Sora | Hero, section, and card titles |
+| Interface body | Manrope | Controls, paragraphs, and supporting copy |
+| Data and status | IBM Plex Mono | Seeds, labels, badges, paths, and technical values |
 
-## 🔤 Typography
+The Google Fonts import is progressive: browser fallbacks remain usable if the
+remote font request is unavailable.
 
-### Font Stack
-```css
-/* Primary */
-font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+## Core components
 
-/* Monospace (data, code) */
-font-family: "JetBrains Mono", "Fira Code", monospace;
-```
+### Application shell and status rail
 
-### Type Scale
+- The left rail owns product identity, workflow orientation, session state,
+  provider setup, and the authoritative-YAML boundary.
+- The main page begins directly with the authoring goal and experiment canvas.
+- On smaller screens, Streamlit collapses the supporting rail and the canvas
+  becomes a single-column workflow.
 
-| Level | Size | Weight | Usage |
-|-------|------|--------|-------|
-| Display | 3.5rem (56px) | 800 | Hero headlines |
-| H1 | 1.875rem (30px) | 700 | Page titles |
-| H2 | 1.25rem (20px) | 700 | Section headers |
-| H3 | 1rem (16px) | 600 | Card titles |
-| Body | 0.9375rem (15px) | 400 | Paragraphs |
-| Small | 0.875rem (14px) | 400 | Secondary text |
-| Caption | 0.75rem (12px) | 500 | Labels, badges |
-| Mono | 0.8125rem (13px) | 400 | Code, data |
+### Scenario Composer
 
----
+- A compact process line communicates proposal, validation, and deterministic generation.
+- NVIDIA setup lives in the supporting rail instead of interrupting the experiment brief.
+- The authority note stays visible beside session context rather than occupying the main canvas.
+- The editor and review surface use a two-column desktop layout and Streamlit's responsive stacking.
 
-## 🧩 Spacing System
+### Resolved experiment targets
 
-Based on 4px increments:
+The decision summary begins with values derived from the candidate YAML through
+the same emission parser used by the runtime. Population, exact record counts,
+overlap, schedule, seed, and A/B identity-noise values appear before the model's
+advisory summary, assumptions, and warnings.
 
-| Token | Value |
-|-------|-------|
-| `--space-1` | 0.25rem (4px) |
-| `--space-2` | 0.5rem (8px) |
-| `--space-3` | 0.75rem (12px) |
-| `--space-4` | 1rem (16px) |
-| `--space-5` | 1.25rem (20px) |
-| `--space-6` | 1.5rem (24px) |
-| `--space-8` | 2rem (32px) |
-| `--space-10` | 2.5rem (40px) |
-| `--space-12` | 3rem (48px) |
+### Controls and states
 
----
+- Primary controls use the AA-safe cobalt gradient.
+- Inputs use strong neutral borders and high-contrast placeholders.
+- Buttons, inputs, text areas, and expanders have visible keyboard focus rings.
+- Success, failure, empty, approval, and background-progress states remain inline.
 
-## 🎯 Components
+## Spacing and shape
 
-### Hero Section
-- Dark gradient background (slate-900 to indigo-950)
-- Subtle grid pattern overlay
-- Gradient text accent (indigo to amber)
-- Stats row with uppercase labels
-- Glassmorphism status card
+- Page width: `1240px` maximum, beside the application rail.
+- Major surfaces: `12px` to `16px` radii.
+- Controls: `9px` to `10px` radii.
+- Cards use cool neutral borders and minimal shadows to keep the interface tool-like.
+- The layout stacks at `960px`; target cards also collapse to one column.
 
-### Feature Cards
-- White background with slate-200 border
-- 3px gradient top border on hover
-- Icon in gradient container
-- Example code block with left accent
-- Smooth hover lift animation
+## Accessibility checks
 
-### Status Card
-- Glassmorphism effect (blur + transparency)
-- Animated status badge with pulse
-- 2-column grid for stats
-- Monospace labels
+- Use semantic headings, sections, tables, buttons, labels, and alerts.
+- Do not communicate validation state through color alone; always include text.
+- Preserve a visible `:focus-visible` outline for keyboard navigation.
+- Keep normal text at a contrast ratio of at least 4.5:1.
+- Keep every API-key field masked and explain where the credential is used.
 
-### Progress Card
-- Gradient top border
-- Percentage badge
-- Animated progress bar
-- Stage indicator
+## Authoritative files
 
-### Tags
-- Rounded pills with icon + text
-- Category colors:
-  - Default: Indigo tint
-  - Amber: For warnings/high noise
-
----
-
-## ✨ Interactions
-
-### Hover States
-```css
-/* Cards */
-transform: translateY(-2px);
-box-shadow: var(--shadow-lg);
-border-color: var(--indigo-200);
-
-/* Buttons */
-transform: translateY(-1px);
-box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
-
-/* Links */
-color: var(--indigo-600);
-```
-
-### Transitions
-- Default: `all 0.2s ease`
-- Progress bars: `width 0.3s ease`
-
-### Animations
-- Status pulse: 2s infinite opacity cycle
-- Progress fill: Smooth width transition
-
----
-
-## 📱 Responsive Breakpoints
-
-| Breakpoint | Width | Adjustments |
-|------------|-------|-------------|
-| Desktop | > 968px | Full layout |
-| Mobile | ≤ 968px | Stack grids, reduce padding |
-
----
-
-## 🖼️ Visual Assets
-
-### Logo
-SVG-based with gradient fill. Represents:
-- Two overlapping entities (entity resolution)
-- Connection/relationship visualization
-- Small amber dot for "active" state
-
-### Icons
-Use emoji for simplicity and cross-platform compatibility:
-- 🧬 Logo/mark
-- ⚡ Quick actions
-- ⚙️ Configure
-- 📊 Analyze
-- 📦 Export
-- 🔐 Security
-- 💬 Chat
-- 🔀 Scenario
-
-### Background Patterns
-- CSS grid pattern (40px cells)
-- Radial gradients for glow effects
-- Subtle noise texture (optional)
-
----
-
-## 🚀 Implementation Notes
-
-### CSS Architecture
-- CSS custom properties for theming
-- Mobile-first responsive design
-- BEM-like naming: `.sog-{component}-{element}`
-
-### Performance
-- Single CSS injection via `st.markdown()`
-- SVG icons inlined (no external requests)
-- GPU-accelerated transforms
-
-### Accessibility
-- WCAG AA color contrast ratios
-- Focus states on interactive elements
-- Semantic HTML structure
-
----
-
-## 🔄 Migration from Old Design
-
-| Old | New |
-|-----|-----|
-| Paper/warm background | Slate cool background |
-| Navy hero | Slate-900 hero |
-| Sora font | Inter font |
-| Copper accent | Amber accent |
-| `sog-` prefix kept | Same prefix, new styles |
-
----
-
-## 📚 Files
-
-- `chatbot_production.py` - New main app
-- `visualizations/theme.py` - Color system
-- `DESIGN_SYSTEM.md` - This documentation
+- `frontend/chatbot_production.py` — production Streamlit entry point.
+- `frontend/chatbot.py` — live layout, interactions, and `APP_CSS` theme.
+- `frontend/scenario_authoring.py` — proposal contract and resolved-target review data.
+- `frontend/visualizations/theme.py` — chart-specific visual theme.

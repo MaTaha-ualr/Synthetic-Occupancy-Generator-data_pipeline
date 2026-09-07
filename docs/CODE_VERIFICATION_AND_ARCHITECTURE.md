@@ -258,20 +258,25 @@ stuck on module cache).
 - `chatbot.py` — the live app (UI, chat loop, custom CSS "Benchmark Studio"
   theme). `chatbot_v2.py` / `chatbot_clean.py` are alternate/earlier variants.
 - `pipeline_bridge.py` — thin **synchronous** wrapper over
-  `sog_phase2.pipeline.run_scenario_pipeline` (runs in-process inside an
-  `st.spinner`; no job queue).
+  `sog_phase2.pipeline.run_scenario_pipeline`; `async_runner.py` invokes that
+  bridge in a background thread and persists job status to disk.
 - `async_runner.py`, `session_manager.py`, `presets.py` — run management, session
   state, scenario presets.
 - `agents/` — an Anthropic-tool-using assistant split into `orchestrator.py`
   routing to `config_agent`, `run_agent`, `analyst_agent`, `export_agent` (all
   extending `base.py`).
+- `scenario_authoring.py` — optional NVIDIA-backed, proposal-first authoring.
+  The model has no tools; strict allowlisting, the existing validators, an
+  explicit approval action, and proposal/template checksums guard the creation
+  of session-scoped working YAML.
 - `sog_tools.py` — the tool surface the agents call to inspect scenarios, launch
   runs, and read results.
 - `visualizations/` — Plotly/matplotlib charts (`demographics`, `difficulty`,
   `quality`) with a shared `theme.py`.
 
-Requires `ANTHROPIC_API_KEY` (read via `.env`/`python-dotenv`) for the chat
-assistant; the pipeline itself runs without it.
+`NVIDIA_API_KEY` enables plain-English scenario proposals. `ANTHROPIC_API_KEY`
+enables the legacy conversational analysis/export assistant. Both are optional;
+the deterministic pipeline itself runs without either one.
 
 ---
 

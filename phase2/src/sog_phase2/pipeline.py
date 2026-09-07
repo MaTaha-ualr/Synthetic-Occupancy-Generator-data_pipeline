@@ -25,24 +25,57 @@ import yaml
 # Path helpers (extracted from generate_phase2_truth.py:22-42)
 # ---------------------------------------------------------------------------
 
-def _resolve_with_legacy_fallback(project_root: Path, configured_path: str) -> Path:
+def resolve_phase1_input_path(project_root: Path, configured_path: str) -> Path:
+    """Resolve configured Phase-1 input paths across supported output layouts."""
     candidate = (project_root / configured_path).resolve()
     if candidate.exists():
         return candidate
-    legacy_map = {
-        "outputs_phase1/Phase1_people_addresses.csv": "phase1/outputs_phase1/Phase1_people_addresses.csv",
-        "outputs_phase1/Phase1_people_addresses.manifest.json": "phase1/outputs_phase1/Phase1_people_addresses.manifest.json",
-        "outputs_phase1/Phase1_people_addresses.quality_report.json": "phase1/outputs_phase1/Phase1_people_addresses.quality_report.json",
-        "outputs/Phase1_people_addresses.csv": "phase1/outputs_phase1/Phase1_people_addresses.csv",
-        "outputs/Phase1_people_addresses.manifest.json": "phase1/outputs_phase1/Phase1_people_addresses.manifest.json",
-        "outputs/Phase1_people_addresses.quality_report.json": "phase1/outputs_phase1/Phase1_people_addresses.quality_report.json",
+    fallback_map = {
+        "phase1/outputs_phase1/Phase1_people_addresses.csv": (
+            "phase1/outputs/Phase1_people_addresses.csv",
+        ),
+        "phase1/outputs_phase1/Phase1_people_addresses.manifest.json": (
+            "phase1/outputs/Phase1_people_addresses.manifest.json",
+        ),
+        "phase1/outputs_phase1/Phase1_people_addresses.quality_report.json": (
+            "phase1/outputs/Phase1_people_addresses.quality_report.json",
+        ),
+        "outputs_phase1/Phase1_people_addresses.csv": (
+            "phase1/outputs_phase1/Phase1_people_addresses.csv",
+            "phase1/outputs/Phase1_people_addresses.csv",
+        ),
+        "outputs_phase1/Phase1_people_addresses.manifest.json": (
+            "phase1/outputs_phase1/Phase1_people_addresses.manifest.json",
+            "phase1/outputs/Phase1_people_addresses.manifest.json",
+        ),
+        "outputs_phase1/Phase1_people_addresses.quality_report.json": (
+            "phase1/outputs_phase1/Phase1_people_addresses.quality_report.json",
+            "phase1/outputs/Phase1_people_addresses.quality_report.json",
+        ),
+        "outputs/Phase1_people_addresses.csv": (
+            "phase1/outputs/Phase1_people_addresses.csv",
+            "phase1/outputs_phase1/Phase1_people_addresses.csv",
+        ),
+        "outputs/Phase1_people_addresses.manifest.json": (
+            "phase1/outputs/Phase1_people_addresses.manifest.json",
+            "phase1/outputs_phase1/Phase1_people_addresses.manifest.json",
+        ),
+        "outputs/Phase1_people_addresses.quality_report.json": (
+            "phase1/outputs/Phase1_people_addresses.quality_report.json",
+            "phase1/outputs_phase1/Phase1_people_addresses.quality_report.json",
+        ),
     }
     normalized = configured_path.replace("\\", "/")
-    if normalized in legacy_map:
-        legacy_candidate = (project_root / legacy_map[normalized]).resolve()
-        if legacy_candidate.exists():
-            return legacy_candidate
+    for fallback in fallback_map.get(normalized, ()):
+        fallback_candidate = (project_root / fallback).resolve()
+        if fallback_candidate.exists():
+            return fallback_candidate
     return candidate
+
+
+def _resolve_with_legacy_fallback(project_root: Path, configured_path: str) -> Path:
+    """Backward-compatible private alias used by existing pipeline code."""
+    return resolve_phase1_input_path(project_root, configured_path)
 
 
 # ---------------------------------------------------------------------------

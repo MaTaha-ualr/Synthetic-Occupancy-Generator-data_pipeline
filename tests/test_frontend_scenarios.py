@@ -92,6 +92,57 @@ def _seed_template(scenarios_dir: Path, scenario_id: str = "template") -> None:
     )
 
 
+def test_runtime_input_preflight_uses_generated_phase1_fallback(tmp_path):
+    generated_dir = tmp_path / "phase1" / "outputs"
+    generated_dir.mkdir(parents=True)
+    csv_path = generated_dir / "Phase1_people_addresses.csv"
+    manifest_path = generated_dir / "Phase1_people_addresses.manifest.json"
+    csv_path.write_text("PersonKey\nP1\n", encoding="utf-8")
+    manifest_path.write_text("{}\n", encoding="utf-8")
+    scenario = {
+        "phase1": {
+            "data_path": "phase1/outputs_phase1/Phase1_people_addresses.csv",
+            "manifest_path": (
+                "phase1/outputs_phase1/Phase1_people_addresses.manifest.json"
+            ),
+        }
+    }
+
+    preflight = sog_tools.validate_scenario_runtime_inputs(
+        scenario,
+        project_root=tmp_path,
+    )
+
+    assert preflight["valid"] is True
+    assert preflight["used_compatibility_fallback"] is True
+    assert preflight["resolved_paths"]["data_path"] == str(csv_path.resolve())
+    assert preflight["resolved_paths"]["manifest_path"] == str(
+        manifest_path.resolve()
+    )
+
+
+def test_submit_run_blocks_missing_phase1_before_background_job(monkeypatch, tmp_path):
+    scenarios_dir = tmp_path / "phase2" / "scenarios"
+    _seed_template(scenarios_dir)
+    monkeypatch.setattr(sog_tools, "SCENARIOS_DIR", scenarios_dir)
+    monkeypatch.setattr(sog_tools, "PROJECT_ROOT", tmp_path)
+    submitted = False
+
+    def fail_if_submitted(**kwargs):
+        nonlocal submitted
+        submitted = True
+        raise AssertionError("background job should not be submitted")
+
+    async_runner = __import__("async_runner")
+    monkeypatch.setattr(async_runner, "submit_run", fail_if_submitted)
+
+    result = sog_tools.submit_run_async("template", session_id="", overwrite=False)
+
+    assert submitted is False
+    assert "runtime preflight failed" in result["error"]
+    assert "Phase-1 CSV not found" in result["error"]
+
+
 def test_update_scenario_preserves_existing_working_copy(monkeypatch, tmp_path):
     scenarios_dir = tmp_path / "phase2" / "scenarios"
     _seed_template(scenarios_dir)

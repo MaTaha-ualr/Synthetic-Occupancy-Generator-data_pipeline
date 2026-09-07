@@ -1,0 +1,69 @@
+{
+  "generated_at_utc": "2026-09-07T04:26:02+00:00",
+  "benchmark_status": "unoptimized_baseline",
+  "repository_root": ".",
+  "git_commit": "caf629e5e0dfaffe386daf473ce9cda52b5bf76a",
+  "git_commit_available": true,
+  "git_worktree_dirty": true,
+  "git_note": "Base commit recorded; use source_tree_sha256 for the exact benchmark source state.",
+  "source_tree_sha256": "ebd4f5e420f701cda847d737c8eebf54ffbe941b669e44bdb5d580a34de84efb",
+  "source_tree_file_count": 202,
+  "canonical_phase1_config": "phase1/configs/phase1.yaml",
+  "canonical_phase1_config_sha256": "2ab8648fa0a02dbeeedf8600871b38f97898761aba37845459b00ecf21afee87",
+  "canonical_scenario": "phase2/scenarios/clean_baseline_linkage.yaml",
+  "canonical_scenario_sha256": "047e824ca590e65a926b86f011551327e3533f625fbf91919e3a1859bd27572f",
+  "population_sizes": [
+    10000,
+    50000,
+    100000,
+    250000,
+    500000,
+    1000000
+  ],
+  "seeds": [
+    20260829,
+    20260830,
+    20260831
+  ],
+  "reproducibility_seed": 20260829,
+  "records_to_people_ratio": 1.4,
+  "cpu": {
+    "model": "AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD",
+    "physical_cores": 8,
+    "logical_cores": 16
+  },
+  "ram": {
+    "total_bytes": 16476839936,
+    "total_gib": 15.345252990722656
+  },
+  "os": {
+    "platform": "Windows-10-10.0.26200-SP0",
+    "system": "Windows",
+    "release": "10",
+    "version": "10.0.26200",
+    "machine": "AMD64"
+  },
+  "python": {
+    "version": "3.10.5",
+    "implementation": "CPython",
+    "executable": "C:\\Python310\\python.exe"
+  },
+  "dependencies": {
+    "numpy": "1.26.4",
+    "pandas": "2.2.3",
+    "pyarrow": "24.0.0",
+    "duckdb": "1.5.5",
+    "PyYAML": "6.0.3",
+    "psutil": "6.0.0",
+    "pytest": "8.3.4",
+    "networkx": "3.4.2",
+    "scipy": "1.15.3",
+    "scikit-learn": "1.7.2"
+  },
+  "artifact_volume": {
+    "path": "experiments/scaling_artifacts",
+    "total_bytes": 951820742656,
+    "free_bytes_at_start": 263057211392,
+    "free_gib_at_start": 244.99111938476562
+  }
+}

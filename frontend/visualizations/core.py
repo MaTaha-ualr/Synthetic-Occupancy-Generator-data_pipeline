@@ -150,6 +150,13 @@ class ChartGenerator:
         if hasattr(fig, "write_html"):
             if path.suffix.lower() == ".html":
                 fig.write_html(str(path), include_plotlyjs="cdn", full_html=True)
+                # Plotly 7 adds a doctype before the document while older
+                # versions began directly with <html>.  Keep the frontend's
+                # established artifact contract stable across both versions.
+                html = path.read_text(encoding="utf-8").lstrip()
+                doctype = "<!doctype html>"
+                if html[: len(doctype)].lower() == doctype:
+                    path.write_text(html[len(doctype) :].lstrip(), encoding="utf-8")
                 return
             try:
                 fig.write_image(str(path))

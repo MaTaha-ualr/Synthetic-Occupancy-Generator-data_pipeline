@@ -785,10 +785,14 @@ def parse_emission_config(raw: dict[str, Any] | None) -> EmissionConfig:
 
 
 def _age_on_snapshot(dob_text: str, snapshot: date, fallback_age: int) -> int:
-    parsed = pd.to_datetime(str(dob_text).strip(), errors="coerce")
-    if pd.isna(parsed):
-        return int(fallback_age)
-    dob = parsed.date()
+    text = str(dob_text).strip()
+    try:
+        dob = date.fromisoformat(text)
+    except ValueError:
+        parsed = pd.to_datetime(text, errors="coerce")
+        if pd.isna(parsed):
+            return int(fallback_age)
+        dob = parsed.date()
     years = snapshot.year - dob.year
     if (snapshot.month, snapshot.day) < (dob.month, dob.day):
         years -= 1
@@ -1503,6 +1507,17 @@ def _build_dataset_rows(
     rng: np.random.Generator,
 ) -> tuple[pd.DataFrame, dict[str, list[str]], dict[str, Any]]:
     nickname_map = _load_nickname_map()
+    # ``snapshot_df`` has one logical row per person in normal operation.  The
+    # previous loop rebuilt a full boolean mask for every emitted person, which
+    # made population scaling quadratic.  Preserve the old ``iloc[0]`` behavior
+    # for any accidental duplicate PersonKey by retaining the first row once,
+    # then use an O(1) indexed lookup.  This does not consume RNG state or alter
+    # output ordering/payload semantics.
+    snapshot_lookup = snapshot_df.copy()
+    snapshot_lookup["_PersonKeyLookup"] = snapshot_lookup["PersonKey"].astype(str)
+    snapshot_lookup = snapshot_lookup.drop_duplicates(
+        subset=["_PersonKeyLookup"], keep="first"
+    ).set_index("_PersonKeyLookup", drop=False)
     rows: list[dict[str, Any]] = []
     person_to_records: dict[str, list[str]] = {}
     record_counter = 0
@@ -1522,10 +1537,10 @@ def _build_dataset_rows(
     }
 
     for person_key in sorted(record_counts.keys(), key=_stable_key):
-        row_df = snapshot_df[snapshot_df["PersonKey"].astype(str) == str(person_key)]
-        if row_df.empty:
+        lookup_key = str(person_key)
+        if lookup_key not in snapshot_lookup.index:
             continue
-        base = row_df.iloc[0]
+        base = snapshot_lookup.loc[lookup_key]
         for dup_idx in range(record_counts[person_key]):
             record_counter += 1
             record_key = f"{dataset_id}-{record_counter:09d}"
@@ -1735,9 +1750,25 @@ def _build_residence_timeline_master_rows(
         kind="mergesort",
     )
 
+    base_people = truth_people_df.copy()
+    base_people["PersonKey"] = base_people["PersonKey"].astype(str).str.strip()
+    base_people_lookup = {
+        _text(row.get("PersonKey")): row
+        for _, row in base_people.iterrows()
+        if _text(row.get("PersonKey"))
+    }
+    lifecycle_event_types = {"COHABIT", "NAME_CHANGE", "ADOPTION"}
+    has_lifecycle_name_events = bool(
+        truth_events_df is not None
+        and not truth_events_df.empty
+        and "EventType" in truth_events_df.columns
+        and truth_events_df["EventType"].astype(str).str.upper().isin(lifecycle_event_types).any()
+    )
     people_cache: dict[str, dict[str, pd.Series]] = {}
 
     def people_by_date(snapshot_date: date) -> dict[str, pd.Series]:
+        if not has_lifecycle_name_events:
+            return base_people_lookup
         cache_key = snapshot_date.isoformat()
         if cache_key not in people_cache:
             snapshot_people = _apply_lifecycle_name_events_for_snapshot(

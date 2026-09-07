@@ -2,6 +2,10 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
 
 # Virtual environments
 .venv/
@@ -49,9 +53,19 @@ paper_experiments/results/**/calibration_scores.parquet
 paper_experiments/results/paper_experiment_*
 paper_test_results.txt
 
+# Reproducible scaling benchmark intermediates (summary exports remain versioned)
+experiments/scaling_artifacts/
+
 # OS/editor
 .DS_Store
 Thumbs.db
 
 # Secrets - never commit
 .env
+.env.*
+!.env.example
+
+# Packaging/build output
+build/
+dist/
+*.egg-info/
